@@ -2,7 +2,7 @@
 
 This is the working area for the IETF [CORE Working Group](https://datatracker.ietf.org/wg/core/documents/) Internet-Draft, "Constrained Application Protocol (CoAP) Block-Wise Transfer Options for Faster Transmission".
 
-* [Editor's Copy](https://core-wg.github.io/new-block/#go.draft-ietf-core-new-block.html)
+* [Editor's Copy](https://core-wg.github.io/new-block/#go.draft-ietf-core-new-block.html) [![Build Status](https://travis-ci.org/core-wg/new-block.svg?branch=master)](https://travis-ci.org/core-wg/new-block)
 * [Working Group Draft](https://tools.ietf.org/html/draft-ietf-core-new-block)
 * [Compare Editor's Copy to Working Group Draft](https://core-wg.github.io/new-block/#go.draft-ietf-core-new-block.diff)
 
