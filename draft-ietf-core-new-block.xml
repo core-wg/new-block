@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-bosh-core-new-block-latest" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-core-new-block-latest" ipr="trust200902">
   <front>
     <title abbrev="New Block-Wise Transfer Options">Constrained Application
     Protocol (CoAP) Block-Wise Transfer Options for Faster
@@ -577,10 +577,10 @@
           title="Structure of the Missing Blocks Payload">
           <artwork align="center"><![CDATA[TBA3-payload = (request-tag, missing-block-list)
 ; A copy of the opaque Request-Tag value
-request-tag = bstr 
+request-tag = bstr
 missing-block-list = [1 * missing-block-number]
 ; A unique block number not received
-missing-block-number = uint      
+missing-block-number = uint
 ]]></artwork>
         </figure></t>
 
@@ -702,13 +702,13 @@ X<--: Message loss
        Client      Server
          |          |
              ...
-         |<---------+ NON TBA3 M:0xf2 T:0xe3 [Missing 1,2 for RT=11] 
+         |<---------+ NON TBA3 M:0xf2 T:0xe3 [Missing 1,2 for RT=11]
          +--------->| NON PUT /path M:0x09 T:0xe4 RT=11 B3:1/1/1024
          +--->X     | NON PUT /path M:0x0a T:0xe5 RT=11 B3:2/1/1024
          |          |
          |<---------+ NON TBA3 M:0xf3 T:0xe4 [Missing 2 for RT=11]
          +--------->| NON PUT /path M:0x0b T:0xe6 RT=11 B3:2/1/1024
-         |<---------+ NON 2.04 M:0xf4 T:0xe6 
+         |<---------+ NON 2.04 M:0xf4 T:0xe6
          |          |
              ...
 ]]></artwork>
