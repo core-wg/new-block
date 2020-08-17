@@ -413,7 +413,7 @@
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Boucadair, M. and J. Shallow" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-bosh-core-new-block-latest" />
+  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-core-new-block-latest" />
   <meta name="dct.issued" scheme="ISO8601" content="2020-17" />
   <meta name="dct.abstract" content="This document specifies new Constrained Application Protocol (CoAP) Block-Wise transfer options: Block3 and Block4 Options. These options are similar to the CoAP Block1 and Block2 Options, but enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission. " />
   <meta name="description" content="This document specifies new Constrained Application Protocol (CoAP) Block-Wise transfer options: Block3 and Block4 Options. These options are similar to the CoAP Block1 and Block2 Options, but enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission. " />
@@ -447,7 +447,7 @@
   </table>
 
   <p class="title">Constrained Application Protocol (CoAP) Block-Wise Transfer Options for Faster Transmission<br />
-  <span class="filename">draft-bosh-core-new-block-latest</span></p>
+  <span class="filename">draft-ietf-core-new-block-latest</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>This document specifies new Constrained Application Protocol (CoAP) Block-Wise transfer options: Block3 and Block4 Options.</p>
@@ -661,10 +661,10 @@
 <div id="cddl"></div>
 <pre>TBA3-payload = (request-tag, missing-block-list)
 ; A copy of the opaque Request-Tag value
-request-tag = bstr 
+request-tag = bstr
 missing-block-list = [1 * missing-block-number]
 ; A unique block number not received
-missing-block-number = uint      
+missing-block-number = uint
 </pre>
 <p class="figure">Figure 1: Structure of the Missing Blocks Payload</p>
 <p id="rfc.section.4.p.5">The Concise Data Definition Language <a href="#RFC8610" class="xref">[RFC8610]</a> for the data describing these missing blocks is as follows:</p>
@@ -739,13 +739,13 @@ X&lt;--: Message loss
        Client      Server
          |          |
              ...
-         |&lt;---------+ NON TBA3 M:0xf2 T:0xe3 [Missing 1,2 for RT=11] 
+         |&lt;---------+ NON TBA3 M:0xf2 T:0xe3 [Missing 1,2 for RT=11]
          +---------&gt;| NON PUT /path M:0x09 T:0xe4 RT=11 B3:1/1/1024
          +---&gt;X     | NON PUT /path M:0x0a T:0xe5 RT=11 B3:2/1/1024
          |          |
          |&lt;---------+ NON TBA3 M:0xf3 T:0xe4 [Missing 2 for RT=11]
          +---------&gt;| NON PUT /path M:0x0b T:0xe6 RT=11 B3:2/1/1024
-         |&lt;---------+ NON 2.04 M:0xf4 T:0xe6 
+         |&lt;---------+ NON 2.04 M:0xf4 T:0xe6
          |          |
              ...
 </pre>

@@ -10,7 +10,7 @@ Expires: February 18, 2021                               August 17, 2020
 
 Constrained Application Protocol (CoAP) Block-Wise Transfer Options for
                           Faster Transmission
-                    draft-bosh-core-new-block-latest
+                    draft-ietf-core-new-block-latest
 
 Abstract
 
