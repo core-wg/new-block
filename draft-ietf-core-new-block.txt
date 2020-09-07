@@ -5,7 +5,7 @@
 CORE                                                        M. Boucadair
 Internet-Draft                                                    Orange
 Intended status: Standards Track                              J. Shallow
-Expires: February 26, 2021                               August 25, 2020
+Expires: March 11, 2021                                September 7, 2020
 
 
 Constrained Application Protocol (CoAP) Block-Wise Transfer Options for
@@ -18,9 +18,10 @@ Abstract
    Block-Wise transfer options: Block3 and Block4 Options.
 
    These options are similar to the CoAP Block1 and Block2 Options, but
-   enable faster transmission rates for large amounts of data with less
-   packet interchanges as well as supporting faster recovery should any
-   of the blocks get lost in transmission.
+   not a replacement for them, but do enable faster transmission rates
+   for large amounts of data with less packet interchanges as well as
+   supporting faster recovery should any of the blocks get lost in
+   transmission.
 
 Status of This Memo
 
@@ -37,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 26, 2021.
+   This Internet-Draft will expire on March 11, 2021.
 
 Copyright Notice
 
@@ -49,15 +50,15 @@ Copyright Notice
    (https://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
-   to this document.  Code Components extracted from this document must
 
 
 
-Boucadair & Shallow     Expires February 26, 2021               [Page 1]
+Boucadair & Shallow      Expires March 11, 2021                 [Page 1]
 
-Internet-Draft       New Block-Wise Transfer Options         August 2020
+Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
+   to this document.  Code Components extracted from this document must
    include Simplified BSD License text as described in Section 4.e of
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
@@ -65,40 +66,53 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
-     1.1.  Existing CoAP Block-Wise Transfer Options . . . . . . . .   2
-     1.2.  New CoAP Block-Wise Transfer Options  . . . . . . . . . .   3
-     1.3.  New CoAP Response Code  . . . . . . . . . . . . . . . . .   4
-     1.4.  Applicability Scope . . . . . . . . . . . . . . . . . . .   4
-   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   3.  The Block3 and Block4 Options . . . . . . . . . . . . . . . .   5
-     3.1.  Properties of Block3 and Block4 Options . . . . . . . . .   5
-     3.2.  Structure of Block3 and Block4 Options  . . . . . . . . .   6
+     1.1.  Existing CoAP Block-Wise Transfer Options . . . . . . . .   3
+     1.2.  Alternative CoAP Block-Wise Transfer Options  . . . . . .   3
+     1.3.  An Updated CoAP Response Code . . . . . . . . . . . . . .   4
+     1.4.  Applicability Scope . . . . . . . . . . . . . . . . . . .   5
+   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   5
+   3.  The Block3 and Block4 Options . . . . . . . . . . . . . . . .   6
+     3.1.  Properties of Block3 and Block4 Options . . . . . . . . .   6
+     3.2.  Structure of Block3 and Block4 Options  . . . . . . . . .   7
      3.3.  Using the Block3 Option . . . . . . . . . . . . . . . . .   7
      3.4.  Using the Block 4 Option  . . . . . . . . . . . . . . . .   9
-     3.5.  Working with Observe and Block4 Options . . . . . . . . .  11
-     3.6.  Working with Size1 and Size2 Options  . . . . . . . . . .  11
+     3.5.  Working with Observe and Block4 Options . . . . . . . . .  10
+     3.6.  Working with Size1 and Size2 Options  . . . . . . . . . .  10
      3.7.  Use of Block3 and Block4 Options Together . . . . . . . .  11
-   4.  TBA3 (Missing Payloads) Response Code . . . . . . . . . . . .  11
-   5.  Caching Considerations  . . . . . . . . . . . . . . . . . . .  12
-   6.  HTTP-Mapping Considerations . . . . . . . . . . . . . . . . .  13
-   7.  Examples of Selective Block Recovery  . . . . . . . . . . . .  13
-     7.1.  Block3 Option: Non-Confirmable Example  . . . . . . . . .  13
-     7.2.  Block4 Option: Non-Confirmable Example  . . . . . . . . .  15
-   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  16
-     8.1.  New CoAP Options  . . . . . . . . . . . . . . . . . . . .  16
-     8.2.  New CoAP Response Code  . . . . . . . . . . . . . . . . .  17
-     8.3.  New Content Format  . . . . . . . . . . . . . . . . . . .  17
-   9.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
-   10. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  17
-   11. References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
-     11.1.  Normative References . . . . . . . . . . . . . . . . . .  18
-     11.2.  Informative References . . . . . . . . . . . . . . . . .  19
-   Appendix A.  Examples with Confirmable Messages . . . . . . . . .  19
+   4.  The Use of 4.08 (Request Entity Incomplete) Response Code . .  11
+   5.  The Use of Tokens . . . . . . . . . . . . . . . . . . . . . .  12
+   6.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  12
+   7.  Caching Considerations  . . . . . . . . . . . . . . . . . . .  13
+   8.  HTTP-Mapping Considerations . . . . . . . . . . . . . . . . .  14
+   9.  Examples of Selective Block Recovery  . . . . . . . . . . . .  14
+     9.1.  Block3 Option: Non-Confirmable Example  . . . . . . . . .  14
+     9.2.  Block4 Option: Non-Confirmable Example  . . . . . . . . .  15
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
+     10.1.  New CoAP Options . . . . . . . . . . . . . . . . . . . .  17
+     10.2.  New Content Format . . . . . . . . . . . . . . . . . . .  18
+   11. Security Considerations . . . . . . . . . . . . . . . . . . .  18
+   12. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  18
+   13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+     13.1.  Normative References . . . . . . . . . . . . . . . . . .  18
+     13.2.  Informative References . . . . . . . . . . . . . . . . .  20
+   Appendix A.  Examples with Confirmable Messages . . . . . . . . .  20
      A.1.  Block3 Option . . . . . . . . . . . . . . . . . . . . . .  20
-     A.2.  Block4 Option . . . . . . . . . . . . . . . . . . . . . .  21
+     A.2.  Block4 Option . . . . . . . . . . . . . . . . . . . . . .  22
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23
 
 1.  Introduction
+
+
+
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                 [Page 2]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
 
 1.1.  Existing CoAP Block-Wise Transfer Options
 
@@ -106,14 +120,6 @@ Table of Contents
    inspired by HTTP, was designed to use UDP instead of TCP.  The
    message layer of CoAP over UDP includes support for reliable
    delivery, simple congestion control, and flow control.  [RFC7959]
-
-
-
-Boucadair & Shallow     Expires February 26, 2021               [Page 2]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
    introduced the CoAP Block1 and Block2 Options to handle data records
    that cannot fit in a single IP packet, so not having to rely on IP
    fragmentation and further updated by [RFC8323] for use over TCP, TLS,
@@ -127,33 +133,59 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    controlled by Round Trip Times (RTTs).
 
    There is a requirement for these blocks of data to be transmitted at
-   higher rates under network conditions where there may be transient
-   packet loss.  An example is when a network is subject to a
+   higher rates under network conditions where there may be asymmetrical
+   transient packet loss.  An example is when a network is subject to a
    Distributed Denial of Service (DDoS) attack and there is a need for
    DDoS mitigation agents relying upon CoAP to communicate with each
    other (e.g., [I-D.ietf-dots-telemetry]).  As a reminder, [RFC7959]
    recommends use of Confirmable (CON) responses to handle potential
    packet loss; which does not work with a flooded pipe DDoS situation.
 
-1.2.  New CoAP Block-Wise Transfer Options
+1.2.  Alternative CoAP Block-Wise Transfer Options
 
    This document introduces the CoAP Block3 and Block4 Options.  These
    options are similar in operation to the CoAP Block1 and Block2
-   Options respectively, but enable faster transmissions of sets of
-   blocks of data with less packet interchanges as well as supporting
-   faster recovery should any of the Blocks get lost in transmission.
+   Options respectively, they are not a replacement for them, but have
+   the following benefits:
+
+   o  They can operate in environments where packet loss is highly
+      asymmetrical.
+
+   o  They enable faster transmissions of sets of blocks of data with
+      less packet interchanges.
+
+   o  They support faster recovery should any of the Blocks get lost in
+      transmission.
+
+   There are the following disadvantages over using CoAP Block 1 and
+   Block2 Options:
+
+   o  Loss of lock-stepping so payloads are not always received in the
+      correct (block ascending) order.
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                 [Page 3]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
+   o  Additional congestion control measures need to be put in place.
 
    Using Non-confirmable (NON) messages, the faster transmissions occur
    as all the Blocks can be transmitted serially (as are IP fragmented
    packets) without having to wait for an acknowledgement or next
    request from the remote CoAP peer.  Recovery of missing Blocks is
    faster in that multiple missing Blocks can be requested in a single
-   CoAP packet.
+   CoAP packet.  Even if there is asymmetrical packet loss, a body can
+   still be sent and received by the peer whether the body compromises
+   of a single or multiple payloads assuming no recovery is required.
 
    Note that the same performance benefits can be applied to Confirmable
    messages if the value of NSTART is increased from 1 (Section 4.7 of
-   [RFC7252]).  Some sample examples with Confirmable messages are
-   provided in Appendix A.
+   [RFC7252]).  However, the asymmetrical packet loss is not a benefit
+   here.  Some sample examples with Confirmable messages are provided in
+   Appendix A.
 
    There is little, if any, benefit of using these options with CoAP
    running over a reliable connection [RFC8323].  In this case, there is
@@ -162,20 +194,13 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    A CoAP endpoint can acknowledge all or a subset of the blocks.
    Concretely, the receiving CoAP endpoint informs the CoAP endpoint
    sender either successful receipt or reports on all blocks in the body
-
-
-
-Boucadair & Shallow     Expires February 26, 2021               [Page 3]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
    that have been not yet been received.  The CoAP endpoint sender will
    then retransmit only the blocks that have been lost in transmission.
 
-   Block3 and Block4 Options are used instead of Block1 and Block2
-   Options respectively because the transmission semantics and usage
-   have changed.
+   Block3 and Block4 Options can be used instead of Block1 and Block2
+   Options respectively when the different transmission semantics are
+   required.  If the option is not supported by a peer, then
+   transmissions can fall back to using Block1 and Block2 respectively.
 
    The deviations from Block1 and Block2 Options are specified in
    Section 3.  Pointers to appropriate [RFC7959] sections are provided.
@@ -184,28 +209,49 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    Section 5.8 of [RFC7252] and the new CoAP methods, FETCH, PATCH, and
    iPATCH introduced in [RFC8132].
 
-1.3.  New CoAP Response Code
+1.3.  An Updated CoAP Response Code
 
-   This document defines a new CoAP Response Code (Section 5.9 of
-   [RFC7252]), called TBA3 (Missing payloads), to report on payloads
-   using the Block3 Option that are not received by the server.
+   This document updates the 4.08 (Request Entity Incomplete) by
+   defining an additional message format for reporting on payloads using
+   the Block3 Option that are not received by the server.
 
    See Section 4 for more details.
 
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                 [Page 4]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
 1.4.  Applicability Scope
 
-   The mechanism specified in the document includes guards to prevent a
-   CoAP agent from overloading the network by adopting an aggressive
-   sending rate.  These guards MUST be followed in addition to the
-   existing CoAP congestion control as specified in Section 4.7 of
-   [RFC7252].
+   The block-wise transfer specified in [RFC7959] covers the general
+   case, but falls short in situations where packet loss is highly
+   asymmetrical.  The mechanism specified in the document provides
+   roughly similar features to the Block1/Block2 Options.  It provides
+   additional properties that are tailored towards the intended use
+   case.  Concretely, this mechanism primarily targets applications such
+   as DDoS Open Threat Signaling (DOTS) that can't use Confirmable (CON)
+   responses to handle potential packet loss and that support
+   application-specific mechanisms to assess whether the remote peer is
+   able to handle the messages sent by a CoAP endpoint (e.g., DOTS
+   heartbeats in Section 4.7 of [RFC8782]).
 
-   This mechanism primarily targets applications such as DDoS Open
-   Threat Signaling (DOTS) that can't use Confirmable (CON) responses to
-   handle potential packet loss and that support application-specific
-   mechanisms to assess whether the remote peer is able to handle the
-   messages sent by a CoAP endpoint (e.g., DOTS heartbeats in
-   Section 4.7 of [RFC8782]).
+   The mechanism includes guards to prevent a CoAP agent from
+   overloading the network by adopting an aggressive sending rate.
+   These guards MUST be followed in addition to the existing CoAP
+   congestion control as specified in Section 4.7 of [RFC7252].  See
+   Section 6 for more details.
+
+   This mechanism is not intended for general CoAP usage, and any use
+   outside the intended use case should be carefully weighed against the
+   loss of interoperability with generic CoAP applications.  It is hoped
+   that the experience gained with this mechanism can feed future
+   extensions of the block-wise mechanism that will both generally
+   applicable and serve this particular use case.
 
 2.  Terminology
 
@@ -218,19 +264,23 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    Readers should be familiar with the terms and concepts defined in
    [RFC7252].
 
-
-
-
-Boucadair & Shallow     Expires February 26, 2021               [Page 4]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
    The terms "payload" and "body" are defined in [RFC7959].  The term
    "payload" is thus used for the content of a single CoAP message
    (i.e., a single block being transferred), while the term "body" is
    used for the entire resource representation that is being transferred
    in a block-wise fashion.
+
+
+
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                 [Page 5]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
 
 3.  The Block3 and Block4 Options
 
@@ -265,29 +315,30 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    (Section 5.5 of [RFC7252]).
 
    To indicate support for Block4 responses, the CoAP client MUST
-   include the Block4 Option in a GET or similar requests so that the
-   server knows that the client supports this Block4 functionality
-   should it needs to send back a body that spans multiple payloads.
-   Otherwise, the server would use the Block2 Option (if supported) to
-   send back a message body that is too large to fit into a single IP
-   packet [RFC7959].
+   include either the Block4 Option in a GET or similar request, or the
+   Block3 Option in a PUT or similar request, so that the server knows
+   that the client supports this Block4 functionality should it needs to
+   send back a body that spans multiple payloads.  Otherwise, the server
+   would use the Block2 Option (if supported) to send back a message
+   body that is too large to fit into a single IP packet [RFC7959].
 
    If Block3 Option is present in a request or Block4 Option in a
    response (i.e., in that message to the payload of which it pertains),
-
-
-
-Boucadair & Shallow     Expires February 26, 2021               [Page 5]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
    it indicates a block-wise transfer and describes how this specific
    block-wise payload forms part of the entire body being transferred.
    If it is present in the opposite direction, it provides additional
    control on how that payload will be formed or was processed.
 
-   Implementation of Block3 (or Block4) Option is intended to be
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                 [Page 6]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
+   Implementation of the Block3 and Block4 Options is intended to be
    optional.  However, when it is present in a CoAP message, it MUST be
    processed (or the message rejected).  Therefore, Block3 and Block4
    Options are identified as Critical options.
@@ -300,11 +351,6 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    missing Blocks, but not otherwise.  Except that case, any request
    carrying multiple Block3 (or Block4) Options MUST be handled
    following the procedure specified in Section 5.4.5 of [RFC7252].
-
-   PROBING_RATE parameter in CoAP indicates the average data rate that
-   must not be exceeded by a CoAP endpoint in sending to a peer endpoint
-   that does not respond.  The body of blocks will be subjected to
-   PROBING_RATE (Section 4.7 of [RFC7252]).
 
    The Block3 and Block4 Options, like the Block1 and Block2 Options,
    are both a class E and a class U in terms of OSCORE processing (see
@@ -330,14 +376,6 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    which would indicate a size of the block (SZX) of 0, and thus a size
    value of 16 bytes, there is no specific explicit size implied by the
    absence of the option -- the size is left unspecified.  (As for any
-
-
-
-Boucadair & Shallow     Expires February 26, 2021               [Page 6]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
    uint, the explicit value 0 is efficiently indicated by a zero-length
    option; this, therefore, is different in semantics from the absence
    of the option).
@@ -348,65 +386,33 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    amount of data to the server using the POST, PUT, PATCH, or iPATCH
    methods where the data and headers do not fit into a single packet.
 
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                 [Page 7]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
    When Block3 Option is used, the client MUST include Request-Tag
    Option [I-D.ietf-core-echo-request-tag].  The Request-Tag value MUST
    be the same for all of the blocks in the body of data that is being
-   transferred.  It is also used to identify a particular block that
-   needs to be re-transmitted.  The Request-Tag is opaque in nature, but
-   it is RECOMMENDED that the client treats it as an unsigned integer of
-   8 bytes in length.  An implementation may want to consider limiting
-   this to 4 bytes to reduce packet overhead size.  The server still
-   treats it as an opaque entity.  The Request-Tag value MUST be
-   different for distinct bodies or sets of blocks of data and SHOULD be
-   incremented whenever a new body of data is being transmitted for a
-   CoAP session between peers.  The initial Request-Tag value SHOULD be
-   randomly generated by the client.
-
-   The client sends all the individual payloads of the body using Block3
-   and Request-Tag Options, only expecting a response when all the
-   payloads have been sent.  It is RECOMMENDED that after transmission
-   of every set of MAX_PAYLOADS payloads of a single body, a delay is
-   introduced of ACK_TIMEOUT (Section 4.8.2 of [RFC7252]) before the
-   next set of payload transmissions to manage potential congestion
-   issues.  MAX_PAYLOADS should be configurable with a default value of
-   10.
-
-      Note: The default value is chosen for reasons similar to those
-      discussed in Section 5 of [RFC6928].
-
-   For NON transmissions, it is permissible, but not required, to send
-   the ultimate payload of a MAX_PAYLOADS set as a Confirmable packet.
-   If a Confirmable packet is used, then the client MUST wait for the
-   ACK to be returned before sending the next set of payloads, which can
-   be in time terms less than the ACK_TIMEOUT delay.
-
-   Also, for NON transmissions, it is permissible, but not required, to
-   send a Confirmable packet for the final payload of a body (that is, M
-   bit unset).  If a Confirmable packet is used, then the client MUST
-   wait for the 2.01 (Created) or 2.04 (Changed) Response Codes to be
-   returned for successful transmission, or TBA3 (Missing Payloads)
-   Response Code to then resend the missing blocks (if any).
-
-
-
-Boucadair & Shallow     Expires February 26, 2021               [Page 7]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
-   With NON transmission, the server acknowledges receipt of all of the
-   payloads that make up the body or can respond at any time during the
-   receipt of the payloads to acknowledge that some of the payloads have
-   arrived, but others are missing.  It is RECOMMENDED that, unless
-   there are receipt issues, the server only responds when the final
-   payload (i.e., M bit unset) is received.
+   transferred.  It is also used to identify a particular block of a
+   body that needs to be re-transmitted.  The Request-Tag is opaque in
+   nature, but it is RECOMMENDED that the client treats it as an
+   unsigned integer of 8 bytes in length.  An implementation may want to
+   consider limiting this to 4 bytes to reduce packet overhead size.
+   The server still treats it as an opaque entity.  The Request-Tag
+   value MUST be different for distinct bodies or sets of blocks of data
+   and SHOULD be incremented whenever a new body of data is being
+   transmitted for a CoAP session between peers.  The initial Request-
+   Tag value SHOULD be randomly generated by the client.
 
    For Confirmable transmission, the server MUST continue to acknowledge
    each packet.  NSTART will also need to be increased from the default
    (1) to get faster transmission rates.
 
-   Tokens MUST be included.  Each individual payload of the body MUST
-   have a different Token value.
+   Each individual payload of the body is treated as a new request.
 
    A 2.01 (Created) or 2.04 (Changed) Response Code indicates successful
    receipt of the entire body.  The 2.31 (Continue) Response Code MUST
@@ -419,44 +425,39 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    A 4.02 (Bad Option) Response Code MUST be returned if the server does
    not support the Block3 Option.
 
-   Use of 4.08 (Request Entity Incomplete) Response Code is discouraged
-   when using Block3 Option because packets may arrive out of sequence;
-   TBA3 (Missing Payloads) Response Code (Section 4) SHOULD be used
-   instead.  However, 4.08 (Request Entity Incomplete) Response Code is
-   still valid to reject a Content-Format mismatch.
-
    A 4.13 (Request Entity Too Large) Response Code can be returned under
    similar conditions to those discussed in Section 2.9.3 of [RFC7959].
 
-   A TBA3 (Missing Payloads) Response Code indicates that some of the
-   payloads are missing and need to be resent.  The client then re-
-   transmits the missing payloads using the Request-Tag and Block3 to
-   specify the block number, SZX, and M bit as appropriate.  The
-   Request-Tag value to use is determined from the payload of the TBA3
-   (Missing Payloads) Response Code.  If the client dos not recognize
-   the Request-Tag, the client can ignore this response.  As discussed
-   above, the sending of the list of missing blocks is subject to
-   MAX_PAYLOADS.
+   A 4.08 (Request Entity Incomplete) Response Code returned without
+   Content-Type "application/missing-blocks+cbor-seq" (Section 10.2) is
+   handled as in Section 2.9.2 [RFC7959].
+
+   A 4.08 (Request Entity Incomplete) Response Code returned with
+   Content-Type "application/missing-blocks+cbor-seq" indicates that
+   some of the payloads are missing and need to be resent.  The client
+   then re- transmits the missing payloads using the Request-Tag and
+   Block3 to specify the block number, SZX, and M bit as appropriate.
+   The Request-Tag value to use is determined from the payload of the
+   4.08 (Request Entity Incomplete) Response Code.  If the client does
+   not recognize the Request-Tag, the client can ignore this response.
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                 [Page 8]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
 
    If the server has not received the final payload (i.e., a block with
    M bit unset), but one or other payloads have been received, it SHOULD
    wait for up to MAX_TRANSMIT_SPAN (Section 4.8.2 of [RFC7252]) before
-   sending the TBA3 (Missing Payloads) Response Code.  However, this
-
-
-
-Boucadair & Shallow     Expires February 26, 2021               [Page 8]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
-   timer MAY be reduced to two times ACK_TIMEOUT before sending a TBA3
-   (Missing Payloads) Response Code to cover the situation where
-   MAX_PAYLOADS has been triggered by the client causing a break in
-   transmission.
-
-   In all cases, multiple TBA3 (Missing Payloads) Response Codes are
-   traffic limited by PROBING_RATE.
+   sending the 4.08 (Request Entity Incomplete) Response Code.  However,
+   this timer MAY be reduced to two times ACK_TIMEOUT before sending a
+   4.08 (Request Entity Incomplete) Response Code to cover the situation
+   where MAX_PAYLOADS has been triggered by the client causing a break
+   in transmission.
 
    If the client transmits a new body of data with a new Request-Tag to
    the same resource on a server, the server MUST remove any partially
@@ -472,9 +473,10 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
    Support for the receipt of Block4 Option by the client is indicated
    by using the Block4 Option in the GET, POST, PUT, FETCH, PATCH or
-   iPATCH request.  If the Block4 Option is not included in the request,
-   the server MUST NOT send data using the Block4 Option, but can use
-   Block2 if supported instead.
+   iPATCH request, or by using the Block3 request in the POST, PUT,
+   PATCH, and iPATCH request.  If support for the Block4 option in not
+   indicated, the server MUST NOT send data using the Block4 Option, but
+   can use Block2, if supported, instead.
 
    In a request, the Block4 MUST always have the M bit set to 0.
 
@@ -482,10 +484,6 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    the same ETag (Section 5.10.6 of [RFC7252]) for the same body.  The
    server MUST NOT use the same ETag value for different representations
    of a resource.
-
-   The sending of the payloads is subject to MAX_PAYLOADS.  If
-   MAX_PAYLOADS is exceeded, the server MUST introduce an ACK_TIMEOUT
-   delay before transmitting the next set of payloads.
 
    The ETag is opaque in nature, but it is RECOMMENDED that the server
    treats it as an unsigned integer of 8 bytes in length.  An
@@ -496,42 +494,26 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    data is being transmitted for a CoAP session between peers.  The
    initial ETag value SHOULD be randomly generated by the server.
 
-   For NON transmission, it is permissible, but not required, to send
-   the ultimate payload of a MAX_PAYLOADS set as a Confirmable packet.
-
-
-
-Boucadair & Shallow     Expires February 26, 2021               [Page 9]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
-   If a Confirmable packet is used, then the server MUST wait for the
-   ACK to be received before sending the next set of payloads, which can
-   be in time terms less than the ACK_TIMEOUT delay.
-
-   Also, for NON transmission, it is permissible, but not required, to
-   send a Confirmable packet for the final payload of a body (i.e., M
-   bit unset).  If a Confirmable packet is used, the server MUST wait
-   for the ACK to be returned for successful transmission.
-
    If the client detects that some of the payloads are missing, the
    missing payloads are requested by issuing a new GET, POST, PUT,
    FETCH, PATCH, or iPATCH request that contains one or more Block4
-   Options that define the missing blocks.  A new Token value MUST be
-   used for this request.  The rate of requests for missing blocks is
-   subject to PROBING_RATE.  The ETag Option MUST NOT be used in the
-   request as the server could respond with a 2.03 (Valid Response) with
-   no payload.  If the server responds with a different ETag Option
-   value (as the resource representation has changed), then the client
-   SHOULD drop all the payloads for the current body that are no longer
-   valid.
+   Options that define the missing blocks.
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                 [Page 9]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
+   The ETag Option MUST NOT be used in the request as the server could
+   respond with a 2.03 (Valid Response) with no payload.  If the server
+   responds with a different ETag Option value (as the resource
+   representation has changed), then the client SHOULD drop all the
+   payloads for the current body that are no longer valid.
 
    The client may elect to request the missing blocks or just ignore the
    partial body.
-
-   All the payload responses to a specific GET, POST, PUT, FETCH, PATCH,
-   or iPATCH request MUST have the same Token value as in the request.
 
    With NON transmission, the client only needs to indicate that some of
    the payloads are missing by issuing a GET, POST, PUT, FETCH, PATCH,
@@ -539,14 +521,12 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
    For Confirmable transmission, the client SHOULD continue to
    acknowledge each packet as well as issuing a separate GET, POST, PUT,
-   FETCH, PATCH, or iPATCH for the missing blocks.  NSTART will also
-   need to be increased from the default (1) to get faster transmission
-   rates.
+   FETCH, PATCH, or iPATCH for the missing blocks.
 
    If the server transmits a new body of data (e.g., a triggered
-   Observe) with a new ETag to the same client with the same Token
-   value, the client MUST remove any partially received body held for a
-   previous ETag for that Token.
+   Observe) with a new ETag to the same client as an additional
+   response, the client MUST remove any partially received body held for
+   a previous ETag.
 
    If the client receives a duplicate block with the same ETag, it
    SHOULD silently ignore the packet.
@@ -555,28 +535,16 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    up to EXCHANGE_LIFETIME (Section 4.8.2 of [RFC7252]) or as defined by
    the Max-Age Option whichever is the less.
 
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 10]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
 3.5.  Working with Observe and Block4 Options
 
    As the blocks of the body are sent without waiting for
    acknowledgement of the individual blocks, the Observe value [RFC7641]
    MUST be the same for all the blocks of the same body.
 
-   Likewise, the Tokens MUST all have the same value for all the blocks
-   of the same body.  This is so that if any of the blocks get lost
-   during transmission (including the first one), the receiving CoAP
-   endpoint can take the appropriate decisions as to how to continue
-   (implementation specific).
-
-   If the client requests missing blocks, the client MUST use a
-   different Token; all repeated missing blocks for that new request
-   MUST use the new Token.
+   If the client requests missing blocks, this is treated as a new
+   request.  The Observe value may change but MUST still be reported.
+   If the ETag value changes then the previously received partial body
+   should be destroyed and the whole body re-requested.
 
 3.6.  Working with Size1 and Size2 Options
 
@@ -584,9 +552,23 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    the size of the representation transferred in requests and Size2 for
    indicating the size of the representation transferred in responses.
 
-   It is RECOMMENDED that the Size1 Option is used with the Block3
-   Option.  It is also RECOMMENDED that the Size2 Option is used with
-   the Block4 Option.
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 10]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
+   The Size1 or Size2 option values MUST exactly represent the size of
+   the data on the body so that any missing data can easily be
+   determined.
+
+   The Size1 Option MUST be used with the Block3 Option when used in a
+   request.  The Size2 Option MUST be used with the Block4 Option when
+   used in a response.
 
    If Size1 or Size2 Options are used, they MUST be used in all payloads
    of the body and MUST have the same value.
@@ -596,40 +578,47 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    The behavior is similar to the one defined in Section 3.3 of
    [RFC7959] with Block3 substituted for Block1 and Block4 for Block2.
 
-4.  TBA3 (Missing Payloads) Response Code
+4.  The Use of 4.08 (Request Entity Incomplete) Response Code
 
-   TBA3 (Missing Payloads) Response Code is a new client error status
-   code (Section 5.9.2 of [RFC7252]) used to indicate that the server
-   has not received all of the blocks of the request body that it needs
-   to proceed.
+   4.08 (Request Entity Incomplete) Response Code has a new Content-Type
+   "application/missing-blocks+cbor-seq" used to indicate that the
+   server has not received all of the blocks of the request body that it
+   needs to proceed.
 
    Likely causes are the client has not sent all blocks, some blocks
    were dropped during transmission, or the client has sent them
    sufficiently long ago that the server has already discarded them.
 
-   The data payload of the TBA3 (Missing Payloads) Response Code is
-   encoded as a CBOR Sequence [RFC8742].  First is CBOR encoded Request-
-   Tag followed by 1 or more missing CBOR encoded missing block numbers.
-
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 11]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
-   The missing block numbers MUST be unique per TBA3 (Missing Payloads)
-   when created by the server; the client SHOULD drop any duplicates in
-   the same TBA3 (Missing Payloads) message.
+   The data payload of the 4.08 (Request Entity Incomplete) Response
+   Code is encoded as a CBOR Sequence [RFC8742].  First is CBOR encoded
+   Request-Tag followed by 1 or more missing CBOR encoded missing block
+   numbers.  The missing block numbers MUST be unique in each 4.08
+   (Request Entity Incomplete) when created by the server; the client
+   SHOULD drop any duplicates in the same 4.08 (Request Entity
+   Incomplete) message.
 
    The Content-Format Option (Section 5.10.3 of [RFC7252]) MUST be used
-   in the TBA3 (Missing Payloads) Response Code.  It MUST be set to
-   "application/missing-blocks+cbor-seq" (see Section 8.3).
+   in the 4.08 (Request Entity Incomplete) Response Code.  It MUST be
+   set to "application/missing-blocks+cbor-seq" (see Section 10.2).
 
    The Concise Data Definition Language [RFC8610] for the data
    describing these missing blocks is as follows:
 
-             TBA3-payload = (request-tag, missing-block-list)
+
+
+
+
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 11]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
+             4.08-payload = (request-tag, missing-block-list)
              ; A copy of the opaque Request-Tag value
              request-tag = bstr
              missing-block-list = [1 * missing-block-number]
@@ -638,15 +627,67 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
              Figure 1: Structure of the Missing Blocks Payload
 
-   If the size of the TBA3 (Missing Payloads) response packet is larger
-   than that defined by Section 4.6 [RFC7252], then the number of
-   missing blocks MUST be limited so that the response can fit into a
-   single packet.  If necessary, multiple TBA3 (Missing Payloads)
-   Response Codes can be sent back; each covering a Request-Tag and a
-   unique set of missing blocks.  The same Token can be used for the
-   multiple TBA3 (missing Payloads) if this is the case.
+   If the size of the 4.08 (Request Entity Incomplete) response packet
+   is larger than that defined by Section 4.6 [RFC7252], then the number
+   of missing blocks MUST be limited so that the response can fit into a
+   single packet.  If this is the case, then the server can send
+   subsequent 4.08 (Request Entity Incomplete) responses containing the
+   missing blocks on receipt of a new request providing a missing
+   payload with the same Request-Tag.
 
-5.  Caching Considerations
+5.  The Use of Tokens
+
+   Each new request MUST use a unique Token (Section 4 of
+   [I-D.ietf-core-echo-request-tag]).  Additional responses may use the
+   same Token.
+
+6.  Congestion Control
+
+   PROBING_RATE parameter in CoAP indicates the average data rate that
+   must not be exceeded by a CoAP endpoint in sending to a peer endpoint
+   that does not respond.  The body of blocks will be subjected to
+   PROBING_RATE (Section 4.7 of [RFC7252]).
+
+   Each NON 4.08 (Request Entity Incomplete) Response Codes is subjected
+   to PROBING_RATE.
+
+   Each NON GET or similar request using Block4 Option is subjected to
+   PROBING_RATE.
+
+   As the sending of many payloads of a single body may itself cause
+   congestion, it is RECOMMENDED that after transmission of every set of
+   MAX_PAYLOADS payloads of a single body, a delay is introduced of
+   ACK_TIMEOUT (Section 4.8.2 of [RFC7252]) before the next set of
+   payload transmissions to manage potential congestion issues.
+   MAX_PAYLOADS should be configurable with a default value of 10.
+
+      Note: The default value is chosen for reasons similar to those
+      discussed in Section 5 of [RFC6928].
+
+   For NON transmissions, it is permissible, but not required, to send
+   the ultimate payload of a MAX_PAYLOADS set as a Confirmable packet.
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 12]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
+   If a Confirmable packet is used, then the transmitting peer MUST wait
+   for the ACK to be returned before sending the next set of payloads,
+   which can be in time terms less than the ACK_TIMEOUT delay.
+
+   Also, for NON transmissions, it is permissible, but not required, to
+   send a Confirmable packet for the final payload of a body (that is, M
+   bit unset).  If a Confirmable packet is used, then the transmitting
+   peer MUST wait for the appropriate response to be returned for
+   successful transmission, or respond to requests for the missing
+   blocks (if any).
+
+   The sending of the set of missing blocks is subject to MAX_PAYLOADS.
+
+7.  Caching Considerations
 
    The Block3 and Block4 Options are part of the cache key.  As such, a
    CoAP proxy that does not understand the Block3 and Block4 Options
@@ -666,14 +707,6 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    cache in a set as a server would send all the Block4s.  If one or
    more requested blocks are not available in the cache, the proxy
    SHOULD update the GET request by removing the blocks that it can
-
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 12]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
    serve from the cache, and then forward on the request to the next
    hop.
 
@@ -685,7 +718,19 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    How long a CoAP endpoint (or proxy) keeps the body in its cache is
    implementation specific (e.g., it may be based on Max-Age).
 
-6.  HTTP-Mapping Considerations
+
+
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 13]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
+8.  HTTP-Mapping Considerations
 
    As a reminder, the basic normative requirements on HTTP/CoAP mappings
    are defined in Section 10 of [RFC7252].  The implementation
@@ -693,7 +738,7 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
    The rules defined in Section 5 of [RFC7959] are to be followed.
 
-7.  Examples of Selective Block Recovery
+9.  Examples of Selective Block Recovery
 
    This section provides some sample flows to illustrate the use of
    Block3 and Block4 Options.  Figure 2 lists the conventions that are
@@ -714,21 +759,10 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
                   Figure 2: Notations Used in the Figures
 
-7.1.  Block3 Option: Non-Confirmable Example
+9.1.  Block3 Option: Non-Confirmable Example
 
    Figure 3 depicts an example of a NON PUT request conveying Block3
    Option.  All the blocks are received by the server.
-
-
-
-
-
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 13]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
 
            CoAP        CoAP
           Client      Server
@@ -741,6 +775,16 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
                 ...
 
     Figure 3: Example of NON Request with Block3 Option (Without Loss)
+
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 14]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
 
    Consider now a scenario where a new body of data is to be sent by the
    client, but some blocks are dropped in transmission as illustrated in
@@ -766,11 +810,11 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
           Client      Server
             |          |
                 ...
-            |<---------+ NON TBA3 M:0xf2 T:0xe3 [Missing 1,2 for RT=11]
+            |<---------+ NON 4.08 M:0xf2 T:0xe3 [Missing 1,2 for RT=11]
             +--------->| NON PUT /path M:0x09 T:0xe4 RT=11 B3:1/1/1024
             +--->X     | NON PUT /path M:0x0a T:0xe5 RT=11 B3:2/1/1024
             |          |
-            |<---------+ NON TBA3 M:0xf3 T:0xe4 [Missing 2 for RT=11]
+            |<---------+ NON 4.08 M:0xf3 T:0xe4 [Missing 2 for RT=11]
             +--------->| NON PUT /path M:0x0b T:0xe6 RT=11 B3:2/1/1024
             |<---------+ NON 2.04 M:0xf4 T:0xe6
             |          |
@@ -778,25 +822,26 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
    Figure 5: Example of NON Request with Block3 Option (Blocks Recovery)
 
-
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 14]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
    Under high levels of traffic loss, the client can elect not to retry
    sending missing blocks of data.  This decision is implementation
    specific.
 
-7.2.  Block4 Option: Non-Confirmable Example
+9.2.  Block4 Option: Non-Confirmable Example
 
    Figure 6 illustrates the example of Block4 Option.  The client sends
    a NON GET carrying an Observe and a Block4 Options.  The Block4
    Option indicates a size hint (1024 bytes).  This request is replied
    by the server using four (4) blocks that are transmitted to the
    client without any loss.  Each of these blocks carries a Block4
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 15]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
    Option.  The same process is repeated when an Observe is triggered,
    but no loss is experienced by any of the notification blocks.
 
@@ -837,9 +882,20 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
 
 
-Boucadair & Shallow     Expires February 26, 2021              [Page 15]
+
+
+
+
+
+
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 16]
 
-Internet-Draft       New Block-Wise Transfer Options         August 2020
+Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
            CoAP        CoAP
@@ -871,9 +927,9 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    getting missing blocks of data.  This decision is implementation
    specific.
 
-8.  IANA Considerations
+10.  IANA Considerations
 
-8.1.  New CoAP Options
+10.1.  New CoAP Options
 
    IANA is requested to add the following entries to the "CoAP Option
    Numbers" sub-registry available at https://www.iana.org/assignments/
@@ -893,29 +949,12 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
 
 
-Boucadair & Shallow     Expires February 26, 2021              [Page 16]
+Boucadair & Shallow      Expires March 11, 2021                [Page 17]
 
-Internet-Draft       New Block-Wise Transfer Options         August 2020
+Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
-8.2.  New CoAP Response Code
-
-   IANA is requested to add the following entry to the "CoAP Response
-   Codes" sub-registry available at https://www.iana.org/assignments/
-   core-parameters/core-parameters.xhtml#response-codes:
-
-                  +------+------------------+-----------+
-                  | Code | Description      | Reference |
-                  +======+==================+===========+
-                  | TBA3 | Missing Payloads | [RFCXXXX] |
-                  +------+------------------+-----------+
-
-                  Table 3: New CoAP Response Code
-
-   This document suggests 4.19 (TBA3) as a value to be assigned for the
-   new Response Code.
-
-8.3.  New Content Format
+10.2.  New Content Format
 
    This document requests IANA to register the CoAP Content-Format ID
    for the "application/missing-blocks+cbor-seq" media type in the "CoAP
@@ -925,10 +964,10 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
    o  Media Type: application/missing-blocks+cbor-seq
    o  Encoding: -
-   o  Id: TBD4
+   o  Id: TBD3
    o  Reference: [RFCXXXX]
 
-9.  Security Considerations
+11.  Security Considerations
 
    Security considerations discussed in Section 9 of [RFC7959] should be
    taken into account.
@@ -936,7 +975,7 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
    Security considerations related to the use of Request-Tag are
    discussed in Section 5 of [I-D.ietf-core-echo-request-tag].
 
-10.  Acknowledgements
+12.  Acknowledgements
 
    Thanks to Achim Kraus and Jim Schaad for the comments on the mailing
    list.
@@ -947,16 +986,9 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
    Some text from [RFC7959] is reused for readers convenience.
 
+13.  References
 
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 17]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
-11.  References
-
-11.1.  Normative References
+13.1.  Normative References
 
    [I-D.ietf-core-echo-request-tag]
               Amsuess, C., Mattsson, J., and G. Selander, "CoAP: Echo,
@@ -967,6 +999,16 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
+
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 18]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
 
    [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
               Application Protocol (CoAP)", RFC 7252,
@@ -998,18 +1040,6 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-
-
-
-
-
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 18]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
    [RFC8323]  Bormann, C., Lemay, S., Tschofenig, H., Hartke, K.,
               Silverajan, B., and B. Raymor, Ed., "CoAP (Constrained
               Application Protocol) over TCP, TLS, and WebSockets",
@@ -1025,7 +1055,18 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
               Sequences", RFC 8742, DOI 10.17487/RFC8742, February 2020,
               <https://www.rfc-editor.org/info/rfc8742>.
 
-11.2.  Informative References
+
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 19]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
+13.2.  Informative References
 
    [I-D.ietf-dots-telemetry]
               Boucadair, M., Reddy.K, T., Doron, E., chenmeiling, c.,
@@ -1057,19 +1098,29 @@ Appendix A.  Examples with Confirmable Messages
    The notations provided in Figure 2 are used in the following
    subsections.
 
-
-
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 19]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
 A.1.  Block3 Option
 
    Let's now consider the use Block3 Option with a CON request as shown
    in Figure 8.  All the blocks are acknowledged (ACK).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 20]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
 
            CoAP        CoAP
           Client      Server
@@ -1114,17 +1165,18 @@ A.1.  Block3 Option
 
    Figure 9: Example of CON Request with Block3 Option (Blocks Recovery)
 
-
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 20]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
-
    It is implementation dependent as to whether a CoAP session is
    terminated following acknowledge retry timeout, or whether the CoAP
    session continues to be used under such adverse traffic conditions.
+
+
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 21]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
 
    If there is likely to be the possibility of network transient losses,
    then the use of Non-confirmable traffic should be considered.
@@ -1133,50 +1185,6 @@ A.2.  Block4 Option
 
    An example of the use of Block4 Option with Confirmable messages is
    shown in Figure 10.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 21]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
 
           Client      Server
             |          |
@@ -1218,21 +1226,20 @@ Internet-Draft       New Block-Wise Transfer Options         August 2020
 
         Figure 10: Example of CON Notifications with Block4 Option
 
+
+
+
+Boucadair & Shallow      Expires March 11, 2021                [Page 22]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
    It is implementation-dependent as to whether a CoAP session is
    terminated following acknowledge retry timeout, or whether the CoAP
    session continues to be used under such adverse traffic conditions.
 
    If there is likely to be the possibility of network transient losses,
    then the use of Non-confirmable traffic should be considered.
-
-
-
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 22]
-
-Internet-Draft       New Block-Wise Transfer Options         August 2020
-
 
 Authors' Addresses
 
@@ -1278,11 +1285,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-Boucadair & Shallow     Expires February 26, 2021              [Page 23]
+Boucadair & Shallow      Expires March 11, 2021                [Page 23]

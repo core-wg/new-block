@@ -376,8 +376,8 @@
   <link href="#rfc.toc" rel="Contents">
 <link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
 <link href="#rfc.section.1.1" rel="Chapter" title="1.1 Existing CoAP Block-Wise Transfer Options">
-<link href="#rfc.section.1.2" rel="Chapter" title="1.2 New CoAP Block-Wise Transfer Options">
-<link href="#rfc.section.1.3" rel="Chapter" title="1.3 New CoAP Response Code">
+<link href="#rfc.section.1.2" rel="Chapter" title="1.2 Alternative CoAP Block-Wise Transfer Options">
+<link href="#rfc.section.1.3" rel="Chapter" title="1.3 An Updated CoAP Response Code">
 <link href="#rfc.section.1.4" rel="Chapter" title="1.4 Applicability Scope">
 <link href="#rfc.section.2" rel="Chapter" title="2 Terminology">
 <link href="#rfc.section.3" rel="Chapter" title="3 The Block3 and Block4 Options">
@@ -388,21 +388,22 @@
 <link href="#rfc.section.3.5" rel="Chapter" title="3.5 Working with Observe and Block4 Options">
 <link href="#rfc.section.3.6" rel="Chapter" title="3.6 Working with Size1 and Size2 Options">
 <link href="#rfc.section.3.7" rel="Chapter" title="3.7 Use of Block3 and Block4 Options Together">
-<link href="#rfc.section.4" rel="Chapter" title="4 TBA3 (Missing Payloads) Response Code">
-<link href="#rfc.section.5" rel="Chapter" title="5 Caching Considerations">
-<link href="#rfc.section.6" rel="Chapter" title="6 HTTP-Mapping Considerations">
-<link href="#rfc.section.7" rel="Chapter" title="7 Examples of Selective Block Recovery">
-<link href="#rfc.section.7.1" rel="Chapter" title="7.1 Block3 Option: Non-Confirmable Example">
-<link href="#rfc.section.7.2" rel="Chapter" title="7.2 Block4 Option: Non-Confirmable Example">
-<link href="#rfc.section.8" rel="Chapter" title="8 IANA Considerations">
-<link href="#rfc.section.8.1" rel="Chapter" title="8.1 New CoAP Options">
-<link href="#rfc.section.8.2" rel="Chapter" title="8.2 New CoAP Response Code">
-<link href="#rfc.section.8.3" rel="Chapter" title="8.3 New Content Format">
-<link href="#rfc.section.9" rel="Chapter" title="9 Security Considerations">
-<link href="#rfc.section.10" rel="Chapter" title="10 Acknowledgements">
-<link href="#rfc.references" rel="Chapter" title="11 References">
-<link href="#rfc.references.1" rel="Chapter" title="11.1 Normative References">
-<link href="#rfc.references.2" rel="Chapter" title="11.2 Informative References">
+<link href="#rfc.section.4" rel="Chapter" title="4 The Use of 4.08 (Request Entity Incomplete) Response Code">
+<link href="#rfc.section.5" rel="Chapter" title="5 The Use of Tokens">
+<link href="#rfc.section.6" rel="Chapter" title="6 Congestion Control">
+<link href="#rfc.section.7" rel="Chapter" title="7 Caching Considerations">
+<link href="#rfc.section.8" rel="Chapter" title="8 HTTP-Mapping Considerations">
+<link href="#rfc.section.9" rel="Chapter" title="9 Examples of Selective Block Recovery">
+<link href="#rfc.section.9.1" rel="Chapter" title="9.1 Block3 Option: Non-Confirmable Example">
+<link href="#rfc.section.9.2" rel="Chapter" title="9.2 Block4 Option: Non-Confirmable Example">
+<link href="#rfc.section.10" rel="Chapter" title="10 IANA Considerations">
+<link href="#rfc.section.10.1" rel="Chapter" title="10.1 New CoAP Options">
+<link href="#rfc.section.10.2" rel="Chapter" title="10.2 New Content Format">
+<link href="#rfc.section.11" rel="Chapter" title="11 Security Considerations">
+<link href="#rfc.section.12" rel="Chapter" title="12 Acknowledgements">
+<link href="#rfc.references" rel="Chapter" title="13 References">
+<link href="#rfc.references.1" rel="Chapter" title="13.1 Normative References">
+<link href="#rfc.references.2" rel="Chapter" title="13.2 Informative References">
 <link href="#rfc.appendix.A" rel="Chapter" title="A Examples with Confirmable Messages">
 <link href="#rfc.appendix.A.1" rel="Chapter" title="A.1 Block3 Option">
 <link href="#rfc.appendix.A.2" rel="Chapter" title="A.2 Block4 Option">
@@ -414,9 +415,9 @@
 
   <meta name="dct.creator" content="Boucadair, M. and J. Shallow" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-core-new-block-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2020-25" />
-  <meta name="dct.abstract" content="This document specifies new Constrained Application Protocol (CoAP) Block-Wise transfer options: Block3 and Block4 Options. These options are similar to the CoAP Block1 and Block2 Options, but enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission. " />
-  <meta name="description" content="This document specifies new Constrained Application Protocol (CoAP) Block-Wise transfer options: Block3 and Block4 Options. These options are similar to the CoAP Block1 and Block2 Options, but enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission. " />
+  <meta name="dct.issued" scheme="ISO8601" content="2020-07" />
+  <meta name="dct.abstract" content="This document specifies new Constrained Application Protocol (CoAP) Block-Wise transfer options: Block3 and Block4 Options. These options are similar to the CoAP Block1 and Block2 Options, but not a replacement for them, but do enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission.  " />
+  <meta name="description" content="This document specifies new Constrained Application Protocol (CoAP) Block-Wise transfer options: Block3 and Block4 Options. These options are similar to the CoAP Block1 and Block2 Options, but not a replacement for them, but do enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission.  " />
 
 </head>
 
@@ -438,8 +439,8 @@
 <td class="right">J. Shallow</td>
 </tr>
 <tr>
-<td class="left">Expires: February 26, 2021</td>
-<td class="right">August 25, 2020</td>
+<td class="left">Expires: March 11, 2021</td>
+<td class="right">September 7, 2020</td>
 </tr>
 
     	
@@ -451,12 +452,12 @@
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>This document specifies new Constrained Application Protocol (CoAP) Block-Wise transfer options: Block3 and Block4 Options.</p>
-<p>These options are similar to the CoAP Block1 and Block2 Options, but enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission.</p>
+<p>These options are similar to the CoAP Block1 and Block2 Options, but not a replacement for them, but do enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission. </p>
 <h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on February 26, 2021.</p>
+<p>This Internet-Draft will expire on March 11, 2021.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2020 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -470,9 +471,9 @@
 </li>
 <ul><li>1.1.   <a href="#rfc.section.1.1">Existing CoAP Block-Wise Transfer Options</a>
 </li>
-<li>1.2.   <a href="#rfc.section.1.2">New CoAP Block-Wise Transfer Options</a>
+<li>1.2.   <a href="#rfc.section.1.2">Alternative CoAP Block-Wise Transfer Options</a>
 </li>
-<li>1.3.   <a href="#rfc.section.1.3">New CoAP Response Code</a>
+<li>1.3.   <a href="#rfc.section.1.3">An Updated CoAP Response Code</a>
 </li>
 <li>1.4.   <a href="#rfc.section.1.4">Applicability Scope</a>
 </li>
@@ -494,35 +495,37 @@
 </li>
 <li>3.7.   <a href="#rfc.section.3.7">Use of Block3 and Block4 Options Together</a>
 </li>
-</ul><li>4.   <a href="#rfc.section.4">TBA3 (Missing Payloads) Response Code</a>
+</ul><li>4.   <a href="#rfc.section.4">The Use of 4.08 (Request Entity Incomplete) Response Code</a>
 </li>
-<li>5.   <a href="#rfc.section.5">Caching Considerations</a>
+<li>5.   <a href="#rfc.section.5">The Use of Tokens</a>
 </li>
-<li>6.   <a href="#rfc.section.6">HTTP-Mapping Considerations</a>
+<li>6.   <a href="#rfc.section.6">Congestion Control</a>
 </li>
-<li>7.   <a href="#rfc.section.7">Examples of Selective Block Recovery</a>
+<li>7.   <a href="#rfc.section.7">Caching Considerations</a>
 </li>
-<ul><li>7.1.   <a href="#rfc.section.7.1">Block3 Option: Non-Confirmable Example</a>
+<li>8.   <a href="#rfc.section.8">HTTP-Mapping Considerations</a>
 </li>
-<li>7.2.   <a href="#rfc.section.7.2">Block4 Option: Non-Confirmable Example</a>
+<li>9.   <a href="#rfc.section.9">Examples of Selective Block Recovery</a>
 </li>
-</ul><li>8.   <a href="#rfc.section.8">IANA Considerations</a>
+<ul><li>9.1.   <a href="#rfc.section.9.1">Block3 Option: Non-Confirmable Example</a>
 </li>
-<ul><li>8.1.   <a href="#rfc.section.8.1">New CoAP Options</a>
+<li>9.2.   <a href="#rfc.section.9.2">Block4 Option: Non-Confirmable Example</a>
 </li>
-<li>8.2.   <a href="#rfc.section.8.2">New CoAP Response Code</a>
+</ul><li>10.   <a href="#rfc.section.10">IANA Considerations</a>
 </li>
-<li>8.3.   <a href="#rfc.section.8.3">New Content Format</a>
+<ul><li>10.1.   <a href="#rfc.section.10.1">New CoAP Options</a>
 </li>
-</ul><li>9.   <a href="#rfc.section.9">Security Considerations</a>
+<li>10.2.   <a href="#rfc.section.10.2">New Content Format</a>
 </li>
-<li>10.   <a href="#rfc.section.10">Acknowledgements</a>
+</ul><li>11.   <a href="#rfc.section.11">Security Considerations</a>
 </li>
-<li>11.   <a href="#rfc.references">References</a>
+<li>12.   <a href="#rfc.section.12">Acknowledgements</a>
 </li>
-<ul><li>11.1.   <a href="#rfc.references.1">Normative References</a>
+<li>13.   <a href="#rfc.references">References</a>
 </li>
-<li>11.2.   <a href="#rfc.references.2">Informative References</a>
+<ul><li>13.1.   <a href="#rfc.references.1">Normative References</a>
+</li>
+<li>13.2.   <a href="#rfc.references.2">Informative References</a>
 </li>
 </ul><li>Appendix A.   <a href="#rfc.appendix.A">Examples with Confirmable Messages</a>
 </li>
@@ -543,25 +546,39 @@
 <a href="#rfc.section.1.1">1.1.</a> Existing CoAP Block-Wise Transfer Options</h1>
 <p id="rfc.section.1.1.p.1">The Constrained Application Protocol (CoAP) <a href="#RFC7252" class="xref">[RFC7252]</a>, although inspired by HTTP, was designed to use UDP instead of TCP. The message layer of CoAP over UDP includes support for reliable delivery, simple congestion control, and flow control. <a href="#RFC7959" class="xref">[RFC7959]</a> introduced the CoAP Block1 and Block2 Options to handle data records that cannot fit in a single IP packet, so not having to rely on IP fragmentation and further updated by <a href="#RFC8323" class="xref">[RFC8323]</a> for use over TCP, TLS, and Websockets.</p>
 <p id="rfc.section.1.1.p.2">The CoAP Block1 and Block2 Options work well in environments where there are no or minimal packet losses. These options operate synchronously where each block has to be requested and can only ask for (or send) the next block when the request for the previous block has completed. Packet, and hence block transmission rate, is controlled by Round Trip Times (RTTs).</p>
-<p id="rfc.section.1.1.p.3">There is a requirement for these blocks of data to be transmitted at higher rates under network conditions where there may be transient packet loss. An example is when a network is subject to a Distributed Denial of Service (DDoS) attack and there is a need for DDoS mitigation agents relying upon CoAP to communicate with each other (e.g., <a href="#I-D.ietf-dots-telemetry" class="xref">[I-D.ietf-dots-telemetry]</a>). As a reminder, <a href="#RFC7959" class="xref">[RFC7959]</a> recommends use of Confirmable (CON) responses to handle potential packet loss; which does not work with a flooded pipe DDoS situation.</p>
+<p id="rfc.section.1.1.p.3">There is a requirement for these blocks of data to be transmitted at higher rates under network conditions where there may be asymmetrical transient packet loss. An example is when a network is subject to a Distributed Denial of Service (DDoS) attack and there is a need for DDoS mitigation agents relying upon CoAP to communicate with each other (e.g., <a href="#I-D.ietf-dots-telemetry" class="xref">[I-D.ietf-dots-telemetry]</a>). As a reminder, <a href="#RFC7959" class="xref">[RFC7959]</a> recommends use of Confirmable (CON) responses to handle potential packet loss; which does not work with a flooded pipe DDoS situation.</p>
 <h1 id="rfc.section.1.2">
-<a href="#rfc.section.1.2">1.2.</a> New CoAP Block-Wise Transfer Options</h1>
-<p id="rfc.section.1.2.p.1">This document introduces the CoAP Block3 and Block4 Options. These options are similar in operation to the CoAP Block1 and Block2 Options respectively, but enable faster transmissions of sets of blocks of data with less packet interchanges as well as supporting faster recovery should any of the Blocks get lost in transmission.</p>
-<p id="rfc.section.1.2.p.2">Using Non-confirmable (NON) messages, the faster transmissions occur as all the Blocks can be transmitted serially (as are IP fragmented packets) without having to wait for an acknowledgement or next request from the remote CoAP peer. Recovery of missing Blocks is faster in that multiple missing Blocks can be requested in a single CoAP packet.</p>
-<p id="rfc.section.1.2.p.3">Note that the same performance benefits can be applied to Confirmable messages if the value of NSTART is increased from 1 (Section 4.7 of <a href="#RFC7252" class="xref">[RFC7252]</a>). Some sample examples with Confirmable messages are provided in <a href="#CON" class="xref">Appendix A</a>.</p>
-<p id="rfc.section.1.2.p.4">There is little, if any, benefit of using these options with CoAP running over a reliable connection <a href="#RFC8323" class="xref">[RFC8323]</a>. In this case, there is no differentiation between Confirmable and NON as they are not used.</p>
-<p id="rfc.section.1.2.p.5">A CoAP endpoint can acknowledge all or a subset of the blocks.  Concretely, the receiving CoAP endpoint informs the CoAP endpoint sender either successful receipt or reports on all blocks in the body that have been not yet been received. The CoAP endpoint sender will then retransmit only the blocks that have been lost in transmission.</p>
-<p id="rfc.section.1.2.p.6">Block3 and Block4 Options are used instead of Block1 and Block2 Options respectively because the transmission semantics and usage have changed.</p>
-<p id="rfc.section.1.2.p.7">The deviations from Block1 and Block2 Options are specified in <a href="#spec" class="xref">Section 3</a>. Pointers to appropriate <a href="#RFC7959" class="xref">[RFC7959]</a> sections are provided.</p>
-<p id="rfc.section.1.2.p.8">The specification refers to the base CoAP methods defined in Section 5.8 of <a href="#RFC7252" class="xref">[RFC7252]</a> and the new CoAP methods, FETCH, PATCH, and iPATCH introduced in <a href="#RFC8132" class="xref">[RFC8132]</a>.</p>
+<a href="#rfc.section.1.2">1.2.</a> Alternative CoAP Block-Wise Transfer Options</h1>
+<p id="rfc.section.1.2.p.1">This document introduces the CoAP Block3 and Block4 Options. These options are similar in operation to the CoAP Block1 and Block2 Options respectively, they are not a replacement for them, but have the following benefits:</p>
+<p></p>
+
+<ul>
+<li>They can operate in environments where packet loss is highly asymmetrical. </li>
+<li>They enable faster transmissions of sets of blocks of data with less packet interchanges. </li>
+<li>They support faster recovery should any of the Blocks get lost in transmission. </li>
+</ul>
+<p id="rfc.section.1.2.p.3">There are the following disadvantages over using CoAP Block 1 and Block2 Options:</p>
+
+<ul>
+<li>Loss of lock-stepping so payloads are not always received in the correct (block ascending) order. </li>
+<li>Additional congestion control measures need to be put in place.  </li>
+</ul>
+<p id="rfc.section.1.2.p.4">Using Non-confirmable (NON) messages, the faster transmissions occur as all the Blocks can be transmitted serially (as are IP fragmented packets) without having to wait for an acknowledgement or next request from the remote CoAP peer. Recovery of missing Blocks is faster in that multiple missing Blocks can be requested in a single CoAP packet. Even if there is asymmetrical packet loss, a body can still be sent and received by the peer whether the body compromises of a single or multiple payloads assuming no recovery is required.</p>
+<p id="rfc.section.1.2.p.5">Note that the same performance benefits can be applied to Confirmable messages if the value of NSTART is increased from 1 (Section 4.7 of <a href="#RFC7252" class="xref">[RFC7252]</a>). However, the asymmetrical packet loss is not a benefit here. Some sample examples with Confirmable messages are provided in <a href="#CON" class="xref">Appendix A</a>.</p>
+<p id="rfc.section.1.2.p.6">There is little, if any, benefit of using these options with CoAP running over a reliable connection <a href="#RFC8323" class="xref">[RFC8323]</a>. In this case, there is no differentiation between Confirmable and NON as they are not used.</p>
+<p id="rfc.section.1.2.p.7">A CoAP endpoint can acknowledge all or a subset of the blocks.  Concretely, the receiving CoAP endpoint informs the CoAP endpoint sender either successful receipt or reports on all blocks in the body that have been not yet been received. The CoAP endpoint sender will then retransmit only the blocks that have been lost in transmission.</p>
+<p id="rfc.section.1.2.p.8">Block3 and Block4 Options can be used instead of Block1 and Block2 Options respectively when the different transmission semantics are required. If the option is not supported by a peer, then transmissions can fall back to using Block1 and Block2 respectively. </p>
+<p id="rfc.section.1.2.p.9">The deviations from Block1 and Block2 Options are specified in <a href="#spec" class="xref">Section 3</a>. Pointers to appropriate <a href="#RFC7959" class="xref">[RFC7959]</a> sections are provided.</p>
+<p id="rfc.section.1.2.p.10">The specification refers to the base CoAP methods defined in Section 5.8 of <a href="#RFC7252" class="xref">[RFC7252]</a> and the new CoAP methods, FETCH, PATCH, and iPATCH introduced in <a href="#RFC8132" class="xref">[RFC8132]</a>.</p>
 <h1 id="rfc.section.1.3">
-<a href="#rfc.section.1.3">1.3.</a> New CoAP Response Code</h1>
-<p id="rfc.section.1.3.p.1">This document defines a new CoAP Response Code (Section 5.9 of <a href="#RFC7252" class="xref">[RFC7252]</a>), called TBA3 (Missing payloads), to report on payloads using the Block3 Option that are not received by the server.</p>
+<a href="#rfc.section.1.3">1.3.</a> An Updated CoAP Response Code</h1>
+<p id="rfc.section.1.3.p.1">This document updates the 4.08 (Request Entity Incomplete) by defining an additional message format for reporting on payloads using the Block3 Option that are not received by the server. </p>
 <p id="rfc.section.1.3.p.2">See <a href="#code" class="xref">Section 4</a> for more details.</p>
 <h1 id="rfc.section.1.4">
 <a href="#rfc.section.1.4">1.4.</a> Applicability Scope</h1>
-<p id="rfc.section.1.4.p.1">The mechanism specified in the document includes guards to prevent a CoAP agent from overloading the network by adopting an aggressive sending rate. These guards MUST be followed in addition to the existing CoAP congestion control as specified in Section 4.7 of <a href="#RFC7252" class="xref">[RFC7252]</a>.</p>
-<p id="rfc.section.1.4.p.2">This mechanism primarily targets applications such as DDoS Open Threat Signaling (DOTS) that can't use Confirmable (CON) responses to handle potential packet loss and that support application-specific mechanisms to assess whether the remote peer is able to handle the messages sent by a CoAP endpoint (e.g., DOTS heartbeats in Section 4.7 of <a href="#RFC8782" class="xref">[RFC8782]</a>).</p>
+<p id="rfc.section.1.4.p.1">The block-wise transfer specified in <a href="#RFC7959" class="xref">[RFC7959]</a> covers the general case, but falls short in situations where packet loss is highly asymmetrical. The mechanism specified in the document provides roughly similar features to the Block1/Block2 Options. It provides additional properties that are tailored towards the intended use case. Concretely, this mechanism primarily targets applications such as DDoS Open Threat Signaling (DOTS) that can't use Confirmable (CON) responses to handle potential packet loss and that support application-specific mechanisms to assess whether the remote peer is able to handle the messages sent by a CoAP endpoint (e.g., DOTS heartbeats in Section 4.7 of <a href="#RFC8782" class="xref">[RFC8782]</a>).</p>
+<p id="rfc.section.1.4.p.2">The mechanism includes guards to prevent a CoAP agent from overloading the network by adopting an aggressive sending rate. These guards MUST be followed in addition to the existing CoAP congestion control as specified in Section 4.7 of <a href="#RFC7252" class="xref">[RFC7252]</a>.  See <a href="#cc" class="xref">Section 6</a> for more details.</p>
+<p id="rfc.section.1.4.p.3">This mechanism is not intended for general CoAP usage, and any use outside the intended use case should be carefully weighed against the loss of interoperability with generic CoAP applications. It is hoped that the experience gained with this mechanism can feed future extensions of the block-wise mechanism that will both generally applicable and serve this particular use case. </p>
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#notation" id="notation">Terminology</a>
 </h1>
@@ -586,13 +603,12 @@
 <p></p>
 <p id="rfc.section.3.1.p.3">The Block3 and Block4 Options can be present in both the request and response messages. The Block3 Option pertains to the request payload and the Block4 Option pertains to the response payload. The Content-Format Option applies to the body, not to the payload (i.e., it must be the same for all payloads of the same body).</p>
 <p id="rfc.section.3.1.p.4">Block3 is useful with the payload-bearing POST, PUT, PATCH, and iPATCH requests and their responses (2.01 and 2.04). Block4 Option is useful with GET, POST, PUT, FETCH, PATCH, and iPATCH requests and their payload-bearing responses (2.01, 2.03, 2.04, and 2.05) (Section 5.5 of <a href="#RFC7252" class="xref">[RFC7252]</a>).</p>
-<p id="rfc.section.3.1.p.5">To indicate support for Block4 responses, the CoAP client MUST include the Block4 Option in a GET or similar requests so that the server knows that the client supports this Block4 functionality should it needs to send back a body that spans multiple payloads. Otherwise, the server would use the Block2 Option (if supported) to send back a message body that is too large to fit into a single IP packet <a href="#RFC7959" class="xref">[RFC7959]</a>.</p>
+<p id="rfc.section.3.1.p.5">To indicate support for Block4 responses, the CoAP client MUST include either the Block4 Option in a GET or similar request, or the Block3 Option in a PUT or similar request, so that the server knows that the client supports this Block4 functionality should it needs to send back a body that spans multiple payloads. Otherwise, the server would use the Block2 Option (if supported) to send back a message body that is too large to fit into a single IP packet <a href="#RFC7959" class="xref">[RFC7959]</a>.</p>
 <p id="rfc.section.3.1.p.6">If Block3 Option is present in a request or Block4 Option in a response (i.e., in that message to the payload of which it pertains), it indicates a block-wise transfer and describes how this specific block-wise payload forms part of the entire body being transferred. If it is present in the opposite direction, it provides additional control on how that payload will be formed or was processed.</p>
-<p id="rfc.section.3.1.p.7">Implementation of Block3 (or Block4) Option is intended to be optional. However, when it is present in a CoAP message, it MUST be processed (or the message rejected). Therefore, Block3 and Block4 Options are identified as Critical options.</p>
+<p id="rfc.section.3.1.p.7">Implementation of the Block3 and Block4 Options is intended to be optional. However, when it is present in a CoAP message, it MUST be processed (or the message rejected). Therefore, Block3 and Block4 Options are identified as Critical options.</p>
 <p id="rfc.section.3.1.p.8">The Block3 and Block4 Options are safe to forward. That is, a CoAP proxy that does not understand the Block3 (or Block4) Option should forward the option on.</p>
 <p id="rfc.section.3.1.p.9">The Block4 Option is repeatable when requesting re-transmission of missing Blocks, but not otherwise. Except that case, any request carrying multiple Block3 (or Block4) Options MUST be handled following the procedure specified in Section 5.4.5 of <a href="#RFC7252" class="xref">[RFC7252]</a>.</p>
-<p id="rfc.section.3.1.p.10">PROBING_RATE parameter in CoAP indicates the average data rate that must not be exceeded by a CoAP endpoint in sending to a peer endpoint that does not respond. The body of blocks will be subjected to PROBING_RATE (Section 4.7 of <a href="#RFC7252" class="xref">[RFC7252]</a>).</p>
-<p id="rfc.section.3.1.p.11">The Block3 and Block4 Options, like the Block1 and Block2 Options, are both a class E and a class U in terms of OSCORE processing (see Section 4.1 of <a href="#RFC8613" class="xref">[RFC8613]</a>): The Block3 (or Block4) Option MAY be an Inner or Outer option. The Inner and Outer values are therefore independent of each other. The Inner option is encrypted and integrity protected between clients and servers, and provides message body identification in case of end-to-end fragmentation of requests.  The Outer option is visible to proxies and labels message bodies in case of hop-by-hop fragmentation of requests.</p>
+<p id="rfc.section.3.1.p.10">The Block3 and Block4 Options, like the Block1 and Block2 Options, are both a class E and a class U in terms of OSCORE processing (see Section 4.1 of <a href="#RFC8613" class="xref">[RFC8613]</a>): The Block3 (or Block4) Option MAY be an Inner or Outer option. The Inner and Outer values are therefore independent of each other. The Inner option is encrypted and integrity protected between clients and servers, and provides message body identification in case of end-to-end fragmentation of requests.  The Outer option is visible to proxies and labels message bodies in case of hop-by-hop fragmentation of requests.</p>
 <h1 id="rfc.section.3.2">
 <a href="#rfc.section.3.2">3.2.</a> Structure of Block3 and Block4 Options</h1>
 <p id="rfc.section.3.2.p.1">The structure of Block3 and Block4 Options follows the structure defined in Section 2.2 of <a href="#RFC7959" class="xref">[RFC7959]</a>.</p>
@@ -600,66 +616,56 @@
 <h1 id="rfc.section.3.3">
 <a href="#rfc.section.3.3">3.3.</a> Using the Block3 Option </h1>
 <p id="rfc.section.3.3.p.1">The Block3 Option is used when the client wants to send a large amount of data to the server using the POST, PUT, PATCH, or iPATCH methods where the data and headers do not fit into a single packet.</p>
-<p id="rfc.section.3.3.p.2">When Block3 Option is used, the client MUST include Request-Tag Option <a href="#I-D.ietf-core-echo-request-tag" class="xref">[I-D.ietf-core-echo-request-tag]</a>. The Request-Tag value MUST be the same for all of the blocks in the body of data that is being transferred. It is also used to identify a particular block that needs to be re-transmitted. The Request-Tag is opaque in nature, but it is RECOMMENDED that the client treats it as an unsigned integer of 8 bytes in length. An implementation may want to consider limiting this to 4 bytes to reduce packet overhead size.  The server still treats it as an opaque entity. The Request-Tag value MUST be different for distinct bodies or sets of blocks of data and SHOULD be incremented whenever a new body of data is being transmitted for a CoAP session between peers. The initial Request-Tag value SHOULD be randomly generated by the client.</p>
-<p id="rfc.section.3.3.p.3">The client sends all the individual payloads of the body using Block3 and Request-Tag Options, only expecting a response when all the payloads have been sent. It is RECOMMENDED that after transmission of every set of MAX_PAYLOADS payloads of a single body, a delay is introduced of ACK_TIMEOUT (Section 4.8.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>) before the next set of payload transmissions to manage potential congestion issues. MAX_PAYLOADS should be configurable with a default value of 10.</p>
-
-<ul class="empty"><li>Note: The default value is chosen for reasons similar to those discussed in Section 5 of <a href="#RFC6928" class="xref">[RFC6928]</a>.</li></ul>
-<p id="rfc.section.3.3.p.4">For NON transmissions, it is permissible, but not required, to send the ultimate payload of a MAX_PAYLOADS set as a Confirmable packet. If a Confirmable packet is used, then the client MUST wait for the ACK to be returned before sending the next set of payloads, which can be in time terms less than the ACK_TIMEOUT delay.</p>
-<p id="rfc.section.3.3.p.5">Also, for NON transmissions, it is permissible, but not required, to send a Confirmable packet for the final payload of a body (that is, M bit unset). If a Confirmable packet is used, then the client MUST wait for the 2.01 (Created) or 2.04 (Changed) Response Codes to be returned for successful transmission, or TBA3 (Missing Payloads) Response Code to then resend the missing blocks (if any).</p>
-<p id="rfc.section.3.3.p.6">With NON transmission, the server acknowledges receipt of all of the payloads that make up the body or can respond at any time during the receipt of the payloads to acknowledge that some of the payloads have arrived, but others are missing. It is RECOMMENDED that, unless there are receipt issues, the server only responds when the final payload (i.e., M bit unset) is received.</p>
-<p id="rfc.section.3.3.p.7">For Confirmable transmission, the server MUST continue to acknowledge each packet. NSTART will also need to be increased from the default (1) to get faster transmission rates.</p>
-<p id="rfc.section.3.3.p.8">Tokens MUST be included. Each individual payload of the body MUST have a different Token value.</p>
-<p id="rfc.section.3.3.p.9">A 2.01 (Created) or 2.04 (Changed) Response Code indicates successful receipt of the entire body. The 2.31 (Continue) Response Code MUST NOT be used.</p>
-<p id="rfc.section.3.3.p.10">A 4.00 (Bad Request) Response Code MUST be returned if the request does not include a Request-Tag Option but does include a Block3 option.</p>
-<p id="rfc.section.3.3.p.11">A 4.02 (Bad Option) Response Code MUST be returned if the server does not support the Block3 Option.</p>
-<p id="rfc.section.3.3.p.12">Use of 4.08 (Request Entity Incomplete) Response Code is discouraged when using Block3 Option because packets may arrive out of sequence; TBA3 (Missing Payloads) Response Code (<a href="#code" class="xref">Section 4</a>) SHOULD be used instead. However, 4.08 (Request Entity Incomplete) Response Code is still valid to reject a Content-Format mismatch.</p>
-<p id="rfc.section.3.3.p.13">A 4.13 (Request Entity Too Large) Response Code can be returned under similar conditions to those discussed in Section 2.9.3 of <a href="#RFC7959" class="xref">[RFC7959]</a>.</p>
-<p id="rfc.section.3.3.p.14">A TBA3 (Missing Payloads) Response Code indicates that some of the payloads are missing and need to be resent. The client then re-transmits the missing payloads using the Request-Tag and Block3 to specify the block number, SZX, and M bit as appropriate. The Request-Tag value to use is determined from the payload of the TBA3 (Missing Payloads) Response Code. If the client dos not recognize the Request-Tag, the client can ignore this response. As discussed above, the sending of the list of missing blocks is subject to MAX_PAYLOADS.</p>
-<p id="rfc.section.3.3.p.15">If the server has not received the final payload (i.e., a block with M bit unset), but one or other payloads have been received, it SHOULD wait for up to MAX_TRANSMIT_SPAN (Section 4.8.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>) before sending the TBA3 (Missing Payloads) Response Code. However, this timer MAY be reduced to two times ACK_TIMEOUT before sending a TBA3 (Missing Payloads) Response Code to cover the situation where MAX_PAYLOADS has been triggered by the client causing a break in transmission.</p>
-<p id="rfc.section.3.3.p.16">In all cases, multiple TBA3 (Missing Payloads) Response Codes are traffic limited by PROBING_RATE.</p>
-<p id="rfc.section.3.3.p.17">If the client transmits a new body of data with a new Request-Tag to the same resource on a server, the server MUST remove any partially received body held for a previous Request-Tag for that resource. </p>
-<p id="rfc.section.3.3.p.18">If the server receives a duplicate block with the same Request-Tag, it SHOULD silently ignore the packet.</p>
-<p id="rfc.section.3.3.p.19">A server SHOULD only maintain a partial body (missing payloads) for up to EXCHANGE_LIFETIME (Section 4.8.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>).</p>
+<p id="rfc.section.3.3.p.2">When Block3 Option is used, the client MUST include Request-Tag Option <a href="#I-D.ietf-core-echo-request-tag" class="xref">[I-D.ietf-core-echo-request-tag]</a>. The Request-Tag value MUST be the same for all of the blocks in the body of data that is being transferred. It is also used to identify a particular block of a body that needs to be re-transmitted. The Request-Tag is opaque in nature, but it is RECOMMENDED that the client treats it as an unsigned integer of 8 bytes in length. An implementation may want to consider limiting this to 4 bytes to reduce packet overhead size. The server still treats it as an opaque entity.  The Request-Tag value MUST be different for distinct bodies or sets of blocks of data and SHOULD be incremented whenever a new body of data is being transmitted for a CoAP session between peers. The initial Request-Tag value SHOULD be randomly generated by the client.</p>
+<p id="rfc.section.3.3.p.3">For Confirmable transmission, the server MUST continue to acknowledge each packet. NSTART will also need to be increased from the default (1) to get faster transmission rates.</p>
+<p id="rfc.section.3.3.p.4">Each individual payload of the body is treated as a new request.</p>
+<p id="rfc.section.3.3.p.5">A 2.01 (Created) or 2.04 (Changed) Response Code indicates successful receipt of the entire body. The 2.31 (Continue) Response Code MUST NOT be used.</p>
+<p id="rfc.section.3.3.p.6">A 4.00 (Bad Request) Response Code MUST be returned if the request does not include a Request-Tag Option but does include a Block3 option.</p>
+<p id="rfc.section.3.3.p.7">A 4.02 (Bad Option) Response Code MUST be returned if the server does not support the Block3 Option.</p>
+<p id="rfc.section.3.3.p.8">A 4.13 (Request Entity Too Large) Response Code can be returned under similar conditions to those discussed in Section 2.9.3 of <a href="#RFC7959" class="xref">[RFC7959]</a>.</p>
+<p id="rfc.section.3.3.p.9">A 4.08 (Request Entity Incomplete) Response Code returned without Content-Type "application/missing-blocks+cbor-seq" (<a href="#new-format" class="xref">Section 10.2</a>) is handled as in Section 2.9.2 <a href="#RFC7959" class="xref">[RFC7959]</a>.</p>
+<p id="rfc.section.3.3.p.10">A 4.08 (Request Entity Incomplete) Response Code returned with Content-Type "application/missing-blocks+cbor-seq" indicates that some of the payloads are missing and need to be resent. The client then re- transmits the missing payloads using the Request-Tag and Block3 to specify the block number, SZX, and M bit as appropriate. The Request-Tag value to use is determined from the payload of the 4.08 (Request Entity Incomplete) Response Code. If the client does not recognize the Request-Tag, the client can ignore this response. </p>
+<p id="rfc.section.3.3.p.11">If the server has not received the final payload (i.e., a block with M bit unset), but one or other payloads have been received, it SHOULD wait for up to MAX_TRANSMIT_SPAN (Section 4.8.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>) before sending the 4.08 (Request Entity Incomplete) Response Code. However, this timer MAY be reduced to two times ACK_TIMEOUT before sending a 4.08 (Request Entity Incomplete) Response Code to cover the situation where MAX_PAYLOADS has been triggered by the client causing a break in transmission.</p>
+<p id="rfc.section.3.3.p.12">If the client transmits a new body of data with a new Request-Tag to the same resource on a server, the server MUST remove any partially received body held for a previous Request-Tag for that resource.</p>
+<p id="rfc.section.3.3.p.13">If the server receives a duplicate block with the same Request-Tag, it SHOULD silently ignore the packet.</p>
+<p id="rfc.section.3.3.p.14">A server SHOULD only maintain a partial body (missing payloads) for up to EXCHANGE_LIFETIME (Section 4.8.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>).</p>
 <h1 id="rfc.section.3.4">
 <a href="#rfc.section.3.4">3.4.</a> Using the Block 4 Option</h1>
-<p id="rfc.section.3.4.p.1">Support for the receipt of Block4 Option by the client is indicated by using the Block4 Option in the GET, POST, PUT, FETCH, PATCH or iPATCH request. If the Block4 Option is not included in the request, the server MUST NOT send data using the Block4 Option, but can use Block2 if supported instead.</p>
+<p id="rfc.section.3.4.p.1">Support for the receipt of Block4 Option by the client is indicated by using the Block4 Option in the GET, POST, PUT, FETCH, PATCH or iPATCH request, or by using the Block3 request in the POST, PUT, PATCH, and iPATCH request. If support for the Block4 option in not indicated, the server MUST NOT send data using the Block4 Option, but can use Block2, if supported, instead. </p>
 <p id="rfc.section.3.4.p.2">In a request, the Block4 MUST always have the M bit set to 0.</p>
 <p id="rfc.section.3.4.p.3">The payloads sent back from the server as a response MUST all have the same ETag (Section 5.10.6 of <a href="#RFC7252" class="xref">[RFC7252]</a>) for the same body. The server MUST NOT use the same ETag value for different representations of a resource.</p>
-<p id="rfc.section.3.4.p.4">The sending of the payloads is subject to MAX_PAYLOADS. If MAX_PAYLOADS is exceeded, the server MUST introduce an ACK_TIMEOUT delay before transmitting the next set of payloads.</p>
-<p id="rfc.section.3.4.p.5">The ETag is opaque in nature, but it is RECOMMENDED that the server treats it as an unsigned integer of 8 bytes in length. An implementation may want to consider limiting this to 4 bytes to reduce packet overhead size. The client still treats it as an opaque entity.  The ETag value MUST be different for distinct bodies or sets of blocks of data and SHOULD be incremented whenever a new body of data is being transmitted for a CoAP session between peers. The initial ETag value SHOULD be randomly generated by the server.</p>
-<p id="rfc.section.3.4.p.6">For NON transmission, it is permissible, but not required, to send the ultimate payload of a MAX_PAYLOADS set as a Confirmable packet. If a Confirmable packet is used, then the server MUST wait for the ACK to be received before sending the next set of payloads, which can be in time terms less than the ACK_TIMEOUT delay.</p>
-<p id="rfc.section.3.4.p.7">Also, for NON transmission, it is permissible, but not required, to send a Confirmable packet for the final payload of a body (i.e., M bit unset). If a Confirmable packet is used, the server MUST wait for the ACK to be returned for successful transmission.</p>
-<p id="rfc.section.3.4.p.8">If the client detects that some of the payloads are missing, the missing payloads are requested by issuing a new GET, POST, PUT, FETCH, PATCH, or iPATCH request that contains one or more Block4 Options that define the missing blocks. A new Token value MUST be used for this request. The rate of requests for missing blocks is subject to PROBING_RATE. The ETag Option MUST NOT be used in the request as the server could respond with a 2.03 (Valid Response) with no payload. If the server responds with a different ETag Option value (as the resource representation has changed), then the client SHOULD drop all the payloads for the current body that are no longer valid.</p>
-<p id="rfc.section.3.4.p.9">The client may elect to request the missing blocks or just ignore the partial body.</p>
-<p id="rfc.section.3.4.p.10">All the payload responses to a specific GET, POST, PUT, FETCH, PATCH, or iPATCH request MUST have the same Token value as in the request.</p>
-<p id="rfc.section.3.4.p.11">With NON transmission, the client only needs to indicate that some of the payloads are missing by issuing a GET, POST, PUT, FETCH, PATCH, or iPATCH request for the missing blocks.</p>
-<p id="rfc.section.3.4.p.12">For Confirmable transmission, the client SHOULD continue to acknowledge each packet as well as issuing a separate GET, POST, PUT, FETCH, PATCH, or iPATCH for the missing blocks. NSTART will also need to be increased from the default (1) to get faster transmission rates.</p>
-<p id="rfc.section.3.4.p.13">If the server transmits a new body of data (e.g., a triggered Observe) with a new ETag to the same client with the same Token value, the client MUST remove any partially received body held for a previous ETag for that Token.</p>
-<p id="rfc.section.3.4.p.14">If the client receives a duplicate block with the same ETag, it SHOULD silently ignore the packet.</p>
-<p id="rfc.section.3.4.p.15">A client SHOULD only maintain a partial body (missing payloads) for up to EXCHANGE_LIFETIME (Section 4.8.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>) or as defined by the Max-Age Option whichever is the less.</p>
+<p id="rfc.section.3.4.p.4">The ETag is opaque in nature, but it is RECOMMENDED that the server treats it as an unsigned integer of 8 bytes in length. An implementation may want to consider limiting this to 4 bytes to reduce packet overhead size. The client still treats it as an opaque entity.  The ETag value MUST be different for distinct bodies or sets of blocks of data and SHOULD be incremented whenever a new body of data is being transmitted for a CoAP session between peers. The initial ETag value SHOULD be randomly generated by the server.</p>
+<p id="rfc.section.3.4.p.5">If the client detects that some of the payloads are missing, the missing payloads are requested by issuing a new GET, POST, PUT, FETCH, PATCH, or iPATCH request that contains one or more Block4 Options that define the missing blocks.</p>
+<p id="rfc.section.3.4.p.6">The ETag Option MUST NOT be used in the request as the server could respond with a 2.03 (Valid Response) with no payload. If the server responds with a different ETag Option value (as the resource representation has changed), then the client SHOULD drop all the payloads for the current body that are no longer valid.</p>
+<p id="rfc.section.3.4.p.7">The client may elect to request the missing blocks or just ignore the partial body.</p>
+<p id="rfc.section.3.4.p.8">With NON transmission, the client only needs to indicate that some of the payloads are missing by issuing a GET, POST, PUT, FETCH, PATCH, or iPATCH request for the missing blocks.</p>
+<p id="rfc.section.3.4.p.9">For Confirmable transmission, the client SHOULD continue to acknowledge each packet as well as issuing a separate GET, POST, PUT, FETCH, PATCH, or iPATCH for the missing blocks. </p>
+<p id="rfc.section.3.4.p.10">If the server transmits a new body of data (e.g., a triggered Observe) with a new ETag to the same client as an additional response, the client MUST remove any partially received body held for a previous ETag.</p>
+<p id="rfc.section.3.4.p.11">If the client receives a duplicate block with the same ETag, it SHOULD silently ignore the packet.</p>
+<p id="rfc.section.3.4.p.12">A client SHOULD only maintain a partial body (missing payloads) for up to EXCHANGE_LIFETIME (Section 4.8.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>) or as defined by the Max-Age Option whichever is the less.</p>
 <h1 id="rfc.section.3.5">
 <a href="#rfc.section.3.5">3.5.</a> Working with Observe and Block4 Options</h1>
-<p id="rfc.section.3.5.p.1">As the blocks of the body are sent without waiting for acknowledgement of the individual blocks, the Observe value <a href="#RFC7641" class="xref">[RFC7641]</a> MUST be the same for all the blocks of the same body.</p>
-<p id="rfc.section.3.5.p.2">Likewise, the Tokens MUST all have the same value for all the blocks of the same body. This is so that if any of the blocks get lost during transmission (including the first one), the receiving CoAP endpoint can take the appropriate decisions as to how to continue (implementation specific).</p>
-<p id="rfc.section.3.5.p.3">If the client requests missing blocks, the client MUST use a different Token; all repeated missing blocks for that new request MUST use the new Token.</p>
+<p id="rfc.section.3.5.p.1">As the blocks of the body are sent without waiting for acknowledgement of the individual blocks, the Observe value <a href="#RFC7641" class="xref">[RFC7641]</a> MUST be the same for all the blocks of the same body. </p>
+<p id="rfc.section.3.5.p.2">If the client requests missing blocks, this is treated as a new request. The Observe value may change but MUST still be reported. If the ETag value changes then the previously received partial body should be destroyed and the whole body re-requested.</p>
 <h1 id="rfc.section.3.6">
 <a href="#rfc.section.3.6">3.6.</a> Working with Size1 and Size2 Options</h1>
 <p id="rfc.section.3.6.p.1">Section 4 of <a href="#RFC7959" class="xref">[RFC7959]</a> defines two CoAP options: Size1 for indicating the size of the representation transferred in requests and Size2 for indicating the size of the representation transferred in responses.</p>
-<p id="rfc.section.3.6.p.2">It is RECOMMENDED that the Size1 Option is used with the Block3 Option. It is also RECOMMENDED that the Size2 Option is used with the Block4 Option.</p>
-<p id="rfc.section.3.6.p.3">If Size1 or Size2 Options are used, they MUST be used in all payloads of the body and MUST have the same value.</p>
+<p id="rfc.section.3.6.p.2">The Size1 or Size2 option values MUST exactly represent the size of the data on the body so that any missing data can easily be determined.</p>
+<p id="rfc.section.3.6.p.3">The Size1 Option MUST be used with the Block3 Option when used in a request. The Size2 Option MUST be used with the Block4 Option when used in a response. </p>
+<p id="rfc.section.3.6.p.4">If Size1 or Size2 Options are used, they MUST be used in all payloads of the body and MUST have the same value.</p>
 <h1 id="rfc.section.3.7">
 <a href="#rfc.section.3.7">3.7.</a> Use of Block3 and Block4 Options Together</h1>
 <p id="rfc.section.3.7.p.1">The behavior is similar to the one defined in Section 3.3 of <a href="#RFC7959" class="xref">[RFC7959]</a> with Block3 substituted for Block1 and Block4 for Block2.</p>
 <h1 id="rfc.section.4">
-<a href="#rfc.section.4">4.</a> <a href="#code" id="code">TBA3 (Missing Payloads) Response Code</a>
+<a href="#rfc.section.4">4.</a> <a href="#code" id="code">The Use of 4.08 (Request Entity Incomplete) Response Code</a>
 </h1>
-<p id="rfc.section.4.p.1">TBA3 (Missing Payloads) Response Code is a new client error status code (Section 5.9.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>) used to indicate that the server has not received all of the blocks of the request body that it needs to proceed.</p>
+<p id="rfc.section.4.p.1">4.08 (Request Entity Incomplete) Response Code has a new Content-Type "application/missing-blocks+cbor-seq" used to indicate that the server has not received all of the blocks of the request body that it needs to proceed. </p>
 <p id="rfc.section.4.p.2">Likely causes are the client has not sent all blocks, some blocks were dropped during transmission, or the client has sent them sufficiently long ago that the server has already discarded them.</p>
-<p id="rfc.section.4.p.3">The data payload of the TBA3 (Missing Payloads) Response Code is encoded as a CBOR Sequence <a href="#RFC8742" class="xref">[RFC8742]</a>. First is CBOR encoded Request-Tag followed by 1 or more missing CBOR encoded missing block numbers. The missing block numbers MUST be unique per TBA3 (Missing Payloads) when created by the server; the client SHOULD drop any duplicates in the same TBA3 (Missing Payloads) message.</p>
-<p id="rfc.section.4.p.4">The Content-Format Option (Section 5.10.3 of <a href="#RFC7252" class="xref">[RFC7252]</a>) MUST be used in the TBA3 (Missing Payloads) Response Code. It MUST be set to "application/missing-blocks+cbor-seq" (see <a href="#new-format" class="xref">Section 8.3</a>).</p>
+<p id="rfc.section.4.p.3">The data payload of the 4.08 (Request Entity Incomplete) Response Code is encoded as a CBOR Sequence <a href="#RFC8742" class="xref">[RFC8742]</a>. First is CBOR encoded Request-Tag followed by 1 or more missing CBOR encoded missing block numbers. The missing block numbers MUST be unique in each 4.08 (Request Entity Incomplete) when created by the server; the client SHOULD drop any duplicates in the same 4.08 (Request Entity Incomplete) message.</p>
+<p id="rfc.section.4.p.4">The Content-Format Option (Section 5.10.3 of <a href="#RFC7252" class="xref">[RFC7252]</a>) MUST be used in the 4.08 (Request Entity Incomplete) Response Code. It MUST be set to "application/missing-blocks+cbor-seq" (see <a href="#new-format" class="xref">Section 10.2</a>).</p>
 <div id="rfc.figure.1"></div>
 <div id="cddl"></div>
-<pre>TBA3-payload = (request-tag, missing-block-list)
+<pre>4.08-payload = (request-tag, missing-block-list)
 ; A copy of the opaque Request-Tag value
 request-tag = bstr
 missing-block-list = [1 * missing-block-number]
@@ -668,21 +674,36 @@ missing-block-number = uint
 </pre>
 <p class="figure">Figure 1: Structure of the Missing Blocks Payload</p>
 <p id="rfc.section.4.p.5">The Concise Data Definition Language <a href="#RFC8610" class="xref">[RFC8610]</a> for the data describing these missing blocks is as follows:</p>
-<p id="rfc.section.4.p.6">If the size of the TBA3 (Missing Payloads) response packet is larger than that defined by Section 4.6 <a href="#RFC7252" class="xref">[RFC7252]</a>, then the number of missing blocks MUST be limited so that the response can fit into a single packet. If necessary, multiple TBA3 (Missing Payloads) Response Codes can be sent back; each covering a Request-Tag and a unique set of missing blocks. The same Token can be used for the multiple TBA3 (missing Payloads) if this is the case.</p>
+<p id="rfc.section.4.p.6">If the size of the 4.08 (Request Entity Incomplete) response packet is larger than that defined by Section 4.6 <a href="#RFC7252" class="xref">[RFC7252]</a>, then the number of missing blocks MUST be limited so that the response can fit into a single packet. If this is the case, then the server can send subsequent 4.08 (Request Entity Incomplete) responses containing the missing blocks on receipt of a new request providing a missing payload with the same Request-Tag.</p>
 <h1 id="rfc.section.5">
-<a href="#rfc.section.5">5.</a> Caching Considerations</h1>
-<p id="rfc.section.5.p.1">The Block3 and Block4 Options are part of the cache key. As such, a CoAP proxy that does not understand the Block3 and Block4 Options must follow the recommendations in Section 5.7.1 of <a href="#RFC7252" class="xref">[RFC7252]</a> for caching.</p>
-<p id="rfc.section.5.p.2">This specification does not require a proxy to obtain the complete representation before it serves parts of it to the client. Otherwise, the considerations discussed in Section 2.10 of <a href="#RFC7959" class="xref">[RFC7959]</a> apply for the Block3 and Block4 Options (with Block3 substituted for Block1 and Block4 substituted for Block2) for proxies that support Block3 and Block4 Options.</p>
-<p id="rfc.section.5.p.3">A proxy that supports Block4 Option MUST be prepared to receive a GET or similar message indicating one or more missing blocks. The proxy can serve from its cache missing blocks that are available in its cache in a set as a server would send all the Block4s. If one or more requested blocks are not available in the cache, the proxy SHOULD update the GET request by removing the blocks that it can serve from the cache, and then forward on the request to the next hop.</p>
-<p id="rfc.section.5.p.4">Alternatively, the original request unmodified (from the missing block perspective) MAY be forwarded on to the server. All the responses are then passed back to the client with the cache getting updated.</p>
-<p id="rfc.section.5.p.5">How long a CoAP endpoint (or proxy) keeps the body in its cache is implementation specific (e.g., it may be based on Max-Age).</p>
+<a href="#rfc.section.5">5.</a> The Use of Tokens</h1>
+<p id="rfc.section.5.p.1">Each new request MUST use a unique Token (Section 4 of <a href="#I-D.ietf-core-echo-request-tag" class="xref">[I-D.ietf-core-echo-request-tag]</a>). Additional responses may use the same Token.</p>
 <h1 id="rfc.section.6">
-<a href="#rfc.section.6">6.</a> HTTP-Mapping Considerations</h1>
-<p id="rfc.section.6.p.1">As a reminder, the basic normative requirements on HTTP/CoAP mappings are defined in Section 10 of <a href="#RFC7252" class="xref">[RFC7252]</a>. The implementation guidelines for HTTP/CoAP mappings are elaborated in <a href="#RFC8075" class="xref">[RFC8075]</a>.</p>
-<p id="rfc.section.6.p.2">The rules defined in Section 5 of <a href="#RFC7959" class="xref">[RFC7959]</a> are to be followed.</p>
+<a href="#rfc.section.6">6.</a> <a href="#cc" id="cc">Congestion Control</a>
+</h1>
+<p id="rfc.section.6.p.1">PROBING_RATE parameter in CoAP indicates the average data rate that must not be exceeded by a CoAP endpoint in sending to a peer endpoint that does not respond. The body of blocks will be subjected to PROBING_RATE (Section 4.7 of <a href="#RFC7252" class="xref">[RFC7252]</a>).</p>
+<p id="rfc.section.6.p.2">Each NON 4.08 (Request Entity Incomplete) Response Codes is subjected to PROBING_RATE.</p>
+<p id="rfc.section.6.p.3">Each NON GET or similar request using Block4 Option is subjected to PROBING_RATE.</p>
+<p id="rfc.section.6.p.4">As the sending of many payloads of a single body may itself cause congestion, it is RECOMMENDED that after transmission of every set of MAX_PAYLOADS payloads of a single body, a delay is introduced of ACK_TIMEOUT (Section 4.8.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>) before the next set of payload transmissions to manage potential congestion issues.  MAX_PAYLOADS should be configurable with a default value of 10. </p>
+
+<ul class="empty"><li>Note: The default value is chosen for reasons similar to those discussed in Section 5 of <a href="#RFC6928" class="xref">[RFC6928]</a>. </li></ul>
+<p id="rfc.section.6.p.5">For NON transmissions, it is permissible, but not required, to send the ultimate payload of a MAX_PAYLOADS set as a Confirmable packet. If a Confirmable packet is used, then the transmitting peer MUST wait for the ACK to be returned before sending the next set of payloads, which can be in time terms less than the ACK_TIMEOUT delay. </p>
+<p id="rfc.section.6.p.6">Also, for NON transmissions, it is permissible, but not required, to send a Confirmable packet for the final payload of a body (that is, M bit unset). If a Confirmable packet is used, then the transmitting peer MUST wait for the appropriate response to be returned for successful transmission, or respond to requests for the missing blocks (if any).  </p>
+<p id="rfc.section.6.p.7">The sending of the set of missing blocks is subject to MAX_PAYLOADS.  </p>
 <h1 id="rfc.section.7">
-<a href="#rfc.section.7">7.</a> Examples of Selective Block Recovery</h1>
-<p id="rfc.section.7.p.1">This section provides some sample flows to illustrate the use of Block3 and Block4 Options. <a href="#legend" class="xref">Figure 2</a> lists the conventions that are used in the following subsections.</p>
+<a href="#rfc.section.7">7.</a> Caching Considerations</h1>
+<p id="rfc.section.7.p.1">The Block3 and Block4 Options are part of the cache key. As such, a CoAP proxy that does not understand the Block3 and Block4 Options must follow the recommendations in Section 5.7.1 of <a href="#RFC7252" class="xref">[RFC7252]</a> for caching.</p>
+<p id="rfc.section.7.p.2">This specification does not require a proxy to obtain the complete representation before it serves parts of it to the client. Otherwise, the considerations discussed in Section 2.10 of <a href="#RFC7959" class="xref">[RFC7959]</a> apply for the Block3 and Block4 Options (with Block3 substituted for Block1 and Block4 substituted for Block2) for proxies that support Block3 and Block4 Options.</p>
+<p id="rfc.section.7.p.3">A proxy that supports Block4 Option MUST be prepared to receive a GET or similar message indicating one or more missing blocks. The proxy can serve from its cache missing blocks that are available in its cache in a set as a server would send all the Block4s. If one or more requested blocks are not available in the cache, the proxy SHOULD update the GET request by removing the blocks that it can serve from the cache, and then forward on the request to the next hop.</p>
+<p id="rfc.section.7.p.4">Alternatively, the original request unmodified (from the missing block perspective) MAY be forwarded on to the server. All the responses are then passed back to the client with the cache getting updated.</p>
+<p id="rfc.section.7.p.5">How long a CoAP endpoint (or proxy) keeps the body in its cache is implementation specific (e.g., it may be based on Max-Age).</p>
+<h1 id="rfc.section.8">
+<a href="#rfc.section.8">8.</a> HTTP-Mapping Considerations</h1>
+<p id="rfc.section.8.p.1">As a reminder, the basic normative requirements on HTTP/CoAP mappings are defined in Section 10 of <a href="#RFC7252" class="xref">[RFC7252]</a>. The implementation guidelines for HTTP/CoAP mappings are elaborated in <a href="#RFC8075" class="xref">[RFC8075]</a>.</p>
+<p id="rfc.section.8.p.2">The rules defined in Section 5 of <a href="#RFC7959" class="xref">[RFC7959]</a> are to be followed.</p>
+<h1 id="rfc.section.9">
+<a href="#rfc.section.9">9.</a> Examples of Selective Block Recovery</h1>
+<p id="rfc.section.9.p.1">This section provides some sample flows to illustrate the use of Block3 and Block4 Options. <a href="#legend" class="xref">Figure 2</a> lists the conventions that are used in the following subsections.</p>
 <div id="rfc.figure.2"></div>
 <div id="legend"></div>
 <pre>   T: Token value
@@ -700,8 +721,8 @@ X&lt;--: Message loss
 </pre>
 <p class="figure">Figure 2: Notations Used in the Figures</p>
 <p></p>
-<h1 id="rfc.section.7.1">
-<a href="#rfc.section.7.1">7.1.</a> Block3 Option: Non-Confirmable Example</h1>
+<h1 id="rfc.section.9.1">
+<a href="#rfc.section.9.1">9.1.</a> Block3 Option: Non-Confirmable Example</h1>
 <p><a href="#B3non" class="xref">Figure 3</a> depicts an example of a NON PUT request conveying Block3 Option. All the blocks are received by the server.</p>
 <div id="rfc.figure.3"></div>
 <div id="B3non"></div>
@@ -717,7 +738,7 @@ X&lt;--: Message loss
 </pre>
 <p class="figure">Figure 3: Example of NON Request with Block3 Option (Without Loss)</p>
 <p></p>
-<p id="rfc.section.7.1.p.3">Consider now a scenario where a new body of data is to be sent by the client, but some blocks are dropped in transmission as illustrated in <a href="#B3non1" class="xref">Figure 4</a>.</p>
+<p id="rfc.section.9.1.p.3">Consider now a scenario where a new body of data is to be sent by the client, but some blocks are dropped in transmission as illustrated in <a href="#B3non1" class="xref">Figure 4</a>.</p>
 <div id="rfc.figure.4"></div>
 <div id="B3non1"></div>
 <pre>        CoAP        CoAP
@@ -732,18 +753,18 @@ X&lt;--: Message loss
 </pre>
 <p class="figure">Figure 4: Example of NON Request with Block3 Option (With Loss)</p>
 <p></p>
-<p id="rfc.section.7.1.p.5">The server realizes that some blocks are missing and asks for the missing ones in one go (<a href="#B3non2" class="xref">Figure 5</a>). It does so by indicating which blocks have been received in the data portion of the response.</p>
+<p id="rfc.section.9.1.p.5">The server realizes that some blocks are missing and asks for the missing ones in one go (<a href="#B3non2" class="xref">Figure 5</a>). It does so by indicating which blocks have been received in the data portion of the response.</p>
 <div id="rfc.figure.5"></div>
 <div id="B3non2"></div>
 <pre>        CoAP        CoAP
        Client      Server
          |          |
              ...
-         |&lt;---------+ NON TBA3 M:0xf2 T:0xe3 [Missing 1,2 for RT=11]
+         |&lt;---------+ NON 4.08 M:0xf2 T:0xe3 [Missing 1,2 for RT=11]
          +---------&gt;| NON PUT /path M:0x09 T:0xe4 RT=11 B3:1/1/1024
          +---&gt;X     | NON PUT /path M:0x0a T:0xe5 RT=11 B3:2/1/1024
          |          |
-         |&lt;---------+ NON TBA3 M:0xf3 T:0xe4 [Missing 2 for RT=11]
+         |&lt;---------+ NON 4.08 M:0xf3 T:0xe4 [Missing 2 for RT=11]
          +---------&gt;| NON PUT /path M:0x0b T:0xe6 RT=11 B3:2/1/1024
          |&lt;---------+ NON 2.04 M:0xf4 T:0xe6
          |          |
@@ -751,9 +772,9 @@ X&lt;--: Message loss
 </pre>
 <p class="figure">Figure 5: Example of NON Request with Block3 Option (Blocks Recovery)</p>
 <p></p>
-<p id="rfc.section.7.1.p.7">Under high levels of traffic loss, the client can elect not to retry sending missing blocks of data. This decision is implementation specific.</p>
-<h1 id="rfc.section.7.2">
-<a href="#rfc.section.7.2">7.2.</a> Block4 Option: Non-Confirmable Example</h1>
+<p id="rfc.section.9.1.p.7">Under high levels of traffic loss, the client can elect not to retry sending missing blocks of data. This decision is implementation specific.</p>
+<h1 id="rfc.section.9.2">
+<a href="#rfc.section.9.2">9.2.</a> Block4 Option: Non-Confirmable Example</h1>
 <p><a href="#nonb4" class="xref">Figure 6</a> illustrates the example of Block4 Option. The client sends a NON GET carrying an Observe and a Block4 Options. The Block4 Option indicates a size hint (1024 bytes). This request is replied by the server using four (4) blocks that are transmitted to the client without any loss. Each of these blocks carries a Block4 Option. The same process is repeated when an Observe is triggered, but no loss is experienced by any of the notification blocks.</p>
 <div id="rfc.figure.6"></div>
 <div id="nonb4"></div>
@@ -803,13 +824,13 @@ X&lt;--: Message loss
 </pre>
 <p class="figure">Figure 7: Example of NON Notifications with Block4 Option (Blocks Recovery)</p>
 <p></p>
-<p id="rfc.section.7.2.p.5">Under high levels of traffic loss, the client can elect not to retry getting missing blocks of data. This decision is implementation specific.</p>
-<h1 id="rfc.section.8">
-<a href="#rfc.section.8">8.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
+<p id="rfc.section.9.2.p.5">Under high levels of traffic loss, the client can elect not to retry getting missing blocks of data. This decision is implementation specific.</p>
+<h1 id="rfc.section.10">
+<a href="#rfc.section.10">10.</a> <a href="#IANA" id="IANA">IANA Considerations</a>
 </h1>
-<h1 id="rfc.section.8.1">
-<a href="#rfc.section.8.1">8.1.</a> New CoAP Options</h1>
-<p id="rfc.section.8.1.p.1">IANA is requested to add the following entries to the "CoAP Option Numbers" sub-registry available at https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers:</p>
+<h1 id="rfc.section.10.1">
+<a href="#rfc.section.10.1">10.1.</a> New CoAP Options</h1>
+<p id="rfc.section.10.1.p.1">IANA is requested to add the following entries to the "CoAP Option Numbers" sub-registry available at https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers:</p>
 <pre>+--------+------------------+-----------+
 | Number | Name             | Reference |
 +========+==================+===========+
@@ -819,43 +840,31 @@ X&lt;--: Message loss
 
 Table 2: CoAP Block3 and Block4 Option Numbers</pre>
 <p></p>
-<p id="rfc.section.8.1.p.3">This document suggests 21 (TBA1) and 25 (TBA2) as a values to be assigned for the new option numbers.</p>
-<h1 id="rfc.section.8.2">
-<a href="#rfc.section.8.2">8.2.</a> New CoAP Response Code</h1>
-<p id="rfc.section.8.2.p.1">IANA is requested to add the following entry to the "CoAP Response Codes" sub-registry available at https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#response-codes:</p>
-<pre>+------+------------------+-----------+
-| Code | Description      | Reference |
-+======+==================+===========+
-| TBA3 | Missing Payloads | [RFCXXXX] |
-+------+------------------+-----------+
-
-Table 3: New CoAP Response Code</pre>
-<p></p>
-<p id="rfc.section.8.2.p.3">This document suggests 4.19 (TBA3) as a value to be assigned for the new Response Code.</p>
-<h1 id="rfc.section.8.3">
-<a href="#rfc.section.8.3">8.3.</a> <a href="#new-format" id="new-format">New Content Format</a>
+<p id="rfc.section.10.1.p.3">This document suggests 21 (TBA1) and 25 (TBA2) as a values to be assigned for the new option numbers.</p>
+<h1 id="rfc.section.10.2">
+<a href="#rfc.section.10.2">10.2.</a> <a href="#new-format" id="new-format">New Content Format</a>
 </h1>
-<p id="rfc.section.8.3.p.1">This document requests IANA to register the CoAP Content-Format ID for the "application/missing-blocks+cbor-seq" media type in the "CoAP Content-Formats" registry available at https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats:</p>
+<p id="rfc.section.10.2.p.1">This document requests IANA to register the CoAP Content-Format ID for the "application/missing-blocks+cbor-seq" media type in the "CoAP Content-Formats" registry available at https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats:</p>
 <pre>o  Media Type: application/missing-blocks+cbor-seq
 o  Encoding: -
-o  Id: TBD4
+o  Id: TBD3
 o  Reference: [RFCXXXX]</pre>
 <p></p>
-<h1 id="rfc.section.9">
-<a href="#rfc.section.9">9.</a> <a href="#security" id="security">Security Considerations</a>
+<h1 id="rfc.section.11">
+<a href="#rfc.section.11">11.</a> <a href="#security" id="security">Security Considerations</a>
 </h1>
-<p id="rfc.section.9.p.1">Security considerations discussed in Section 9 of <a href="#RFC7959" class="xref">[RFC7959]</a> should be taken into account.</p>
-<p id="rfc.section.9.p.2">Security considerations related to the use of Request-Tag are discussed in Section 5 of <a href="#I-D.ietf-core-echo-request-tag" class="xref">[I-D.ietf-core-echo-request-tag]</a>.</p>
-<h1 id="rfc.section.10">
-<a href="#rfc.section.10">10.</a> <a href="#ack" id="ack">Acknowledgements</a>
+<p id="rfc.section.11.p.1">Security considerations discussed in Section 9 of <a href="#RFC7959" class="xref">[RFC7959]</a> should be taken into account.</p>
+<p id="rfc.section.11.p.2">Security considerations related to the use of Request-Tag are discussed in Section 5 of <a href="#I-D.ietf-core-echo-request-tag" class="xref">[I-D.ietf-core-echo-request-tag]</a>.</p>
+<h1 id="rfc.section.12">
+<a href="#rfc.section.12">12.</a> <a href="#ack" id="ack">Acknowledgements</a>
 </h1>
-<p id="rfc.section.10.p.1">Thanks to Achim Kraus and Jim Schaad for the comments on the mailing list.</p>
-<p id="rfc.section.10.p.2">Special thanks to Christian Ams&#252;ss and Carsten Bormann for their suggestions and several reviews, which improved this specification significantly.</p>
-<p id="rfc.section.10.p.3">Some text from <a href="#RFC7959" class="xref">[RFC7959]</a> is reused for readers convenience.</p>
+<p id="rfc.section.12.p.1">Thanks to Achim Kraus and Jim Schaad for the comments on the mailing list.</p>
+<p id="rfc.section.12.p.2">Special thanks to Christian Ams&#252;ss and Carsten Bormann for their suggestions and several reviews, which improved this specification significantly.</p>
+<p id="rfc.section.12.p.3">Some text from <a href="#RFC7959" class="xref">[RFC7959]</a> is reused for readers convenience.</p>
 <h1 id="rfc.references">
-<a href="#rfc.references">11.</a> References</h1>
+<a href="#rfc.references">13.</a> References</h1>
 <h1 id="rfc.references.1">
-<a href="#rfc.references.1">11.1.</a> Normative References</h1>
+<a href="#rfc.references.1">13.1.</a> Normative References</h1>
 <table><tbody>
 <tr>
 <td class="reference"><b id="I-D.ietf-core-echo-request-tag">[I-D.ietf-core-echo-request-tag]</b></td>
@@ -914,7 +923,7 @@ o  Reference: [RFCXXXX]</pre>
 </tr>
 </tbody></table>
 <h1 id="rfc.references.2">
-<a href="#rfc.references.2">11.2.</a> Informative References</h1>
+<a href="#rfc.references.2">13.2.</a> Informative References</h1>
 <table><tbody>
 <tr>
 <td class="reference"><b id="I-D.ietf-dots-telemetry">[I-D.ietf-dots-telemetry]</b></td>
