@@ -10,7 +10,8 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-core-new-block-latest" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-core-new-block-latest"
+     ipr="trust200902">
   <front>
     <title abbrev="New Block-Wise Transfer Options">Constrained Application
     Protocol (CoAP) Block-Wise Transfer Options for Faster
@@ -93,9 +94,10 @@
       Block-Wise transfer options: Block3 and Block4 Options.</t>
 
       <t>These options are similar to the CoAP Block1 and Block2 Options, but
-      enable faster transmission rates for large amounts of data with less
-      packet interchanges as well as supporting faster recovery should any of
-      the blocks get lost in transmission.</t>
+      not a replacement for them, but do enable faster transmission rates for
+      large amounts of data with less packet interchanges as well as
+      supporting faster recovery should any of the blocks get lost in
+      transmission. </t>
     </abstract>
   </front>
 
@@ -120,33 +122,56 @@
         controlled by Round Trip Times (RTTs).</t>
 
         <t>There is a requirement for these blocks of data to be transmitted
-        at higher rates under network conditions where there may be transient
-        packet loss. An example is when a network is subject to a Distributed
-        Denial of Service (DDoS) attack and there is a need for DDoS
-        mitigation agents relying upon CoAP to communicate with each other
-        (e.g., <xref target="I-D.ietf-dots-telemetry"></xref>). As a reminder,
-        <xref target="RFC7959"></xref> recommends use of Confirmable (CON)
-        responses to handle potential packet loss; which does not work with a
-        flooded pipe DDoS situation.</t>
+        at higher rates under network conditions where there may be
+        asymmetrical transient packet loss. An example is when a network is
+        subject to a Distributed Denial of Service (DDoS) attack and there is
+        a need for DDoS mitigation agents relying upon CoAP to communicate
+        with each other (e.g., <xref
+        target="I-D.ietf-dots-telemetry"></xref>). As a reminder, <xref
+        target="RFC7959"></xref> recommends use of Confirmable (CON) responses
+        to handle potential packet loss; which does not work with a flooded
+        pipe DDoS situation.</t>
       </section>
 
-      <section title="New CoAP Block-Wise Transfer Options">
+      <section title="Alternative CoAP Block-Wise Transfer Options">
         <t>This document introduces the CoAP Block3 and Block4 Options. These
         options are similar in operation to the CoAP Block1 and Block2 Options
-        respectively, but enable faster transmissions of sets of blocks of
-        data with less packet interchanges as well as supporting faster
-        recovery should any of the Blocks get lost in transmission.</t>
+        respectively, they are not a replacement for them, but have the
+        following benefits:</t>
+
+        <t><list style="symbols">
+            <t>They can operate in environments where packet loss is highly
+            asymmetrical. </t>
+
+            <t>They enable faster transmissions of sets of blocks of data with
+            less packet interchanges. </t>
+
+            <t>They support faster recovery should any of the Blocks get lost
+            in transmission. </t>
+          </list></t>
+
+        <t>There are the following disadvantages over using CoAP Block 1 and
+        Block2 Options:<list style="symbols">
+            <t>Loss of lock-stepping so payloads are not always received in
+            the correct (block ascending) order. </t>
+
+            <t>Additional congestion control measures need to be put in place.
+            </t>
+          </list></t>
 
         <t>Using Non-confirmable (NON) messages, the faster transmissions
         occur as all the Blocks can be transmitted serially (as are IP
         fragmented packets) without having to wait for an acknowledgement or
         next request from the remote CoAP peer. Recovery of missing Blocks is
         faster in that multiple missing Blocks can be requested in a single
-        CoAP packet.</t>
+        CoAP packet. Even if there is asymmetrical packet loss, a body can
+        still be sent and received by the peer whether the body compromises of
+        a single or multiple payloads assuming no recovery is required.</t>
 
         <t>Note that the same performance benefits can be applied to
         Confirmable messages if the value of NSTART is increased from 1
-        (Section 4.7 of <xref target="RFC7252"></xref>). Some sample examples
+        (Section 4.7 of <xref target="RFC7252"></xref>). However, the
+        asymmetrical packet loss is not a benefit here. Some sample examples
         with Confirmable messages are provided in <xref
         target="CON"></xref>.</t>
 
@@ -162,9 +187,10 @@
         then retransmit only the blocks that have been lost in
         transmission.</t>
 
-        <t>Block3 and Block4 Options are used instead of Block1 and Block2
-        Options respectively because the transmission semantics and usage have
-        changed.</t>
+        <t>Block3 and Block4 Options can be used instead of Block1 and Block2
+        Options respectively when the different transmission semantics are
+        required. If the option is not supported by a peer, then transmissions
+        can fall back to using Block1 and Block2 respectively. </t>
 
         <t>The deviations from Block1 and Block2 Options are specified in
         <xref target="spec"></xref>. Pointers to appropriate <xref
@@ -176,28 +202,39 @@
         target="RFC8132"></xref>.</t>
       </section>
 
-      <section title="New CoAP Response Code">
-        <t>This document defines a new CoAP Response Code (Section 5.9 of
-        <xref target="RFC7252"></xref>), called TBA3 (Missing payloads), to
-        report on payloads using the Block3 Option that are not received by
-        the server.</t>
+      <section title="An Updated CoAP Response Code">
+        <t>This document updates the 4.08 (Request Entity Incomplete) by
+        defining an additional message format for reporting on payloads using
+        the Block3 Option that are not received by the server. </t>
 
         <t>See <xref target="code"></xref> for more details.</t>
       </section>
 
       <section title="Applicability Scope">
-        <t>The mechanism specified in the document includes guards to prevent
-        a CoAP agent from overloading the network by adopting an aggressive
-        sending rate. These guards MUST be followed in addition to the
-        existing CoAP congestion control as specified in Section 4.7 of <xref
-        target="RFC7252"></xref>.</t>
+        <t>The block-wise transfer specified in <xref target="RFC7959"></xref>
+        covers the general case, but falls short in situations where packet
+        loss is highly asymmetrical. The mechanism specified in the document
+        provides roughly similar features to the Block1/Block2 Options. It
+        provides additional properties that are tailored towards the intended
+        use case. Concretely, this mechanism primarily targets applications
+        such as DDoS Open Threat Signaling (DOTS) that can't use Confirmable
+        (CON) responses to handle potential packet loss and that support
+        application-specific mechanisms to assess whether the remote peer is
+        able to handle the messages sent by a CoAP endpoint (e.g., DOTS
+        heartbeats in Section 4.7 of <xref target="RFC8782"></xref>).</t>
 
-        <t>This mechanism primarily targets applications such as DDoS Open
-        Threat Signaling (DOTS) that can't use Confirmable (CON) responses to
-        handle potential packet loss and that support application-specific
-        mechanisms to assess whether the remote peer is able to handle the
-        messages sent by a CoAP endpoint (e.g., DOTS heartbeats in Section 4.7
-        of <xref target="RFC8782"></xref>).</t>
+        <t>The mechanism includes guards to prevent a CoAP agent from
+        overloading the network by adopting an aggressive sending rate. These
+        guards MUST be followed in addition to the existing CoAP congestion
+        control as specified in Section 4.7 of <xref target="RFC7252"></xref>.
+        See <xref target="cc"></xref> for more details.</t>
+
+        <t>This mechanism is not intended for general CoAP usage, and any use
+        outside the intended use case should be carefully weighed against the
+        loss of interoperability with generic CoAP applications. It is hoped
+        that the experience gained with this mechanism can feed future
+        extensions of the block-wise mechanism that will both generally
+        applicable and serve this particular use case. </t>
       </section>
     </section>
 
@@ -253,11 +290,12 @@
         5.5 of <xref target="RFC7252"></xref>).</t>
 
         <t>To indicate support for Block4 responses, the CoAP client MUST
-        include the Block4 Option in a GET or similar requests so that the
-        server knows that the client supports this Block4 functionality should
-        it needs to send back a body that spans multiple payloads. Otherwise,
-        the server would use the Block2 Option (if supported) to send back a
-        message body that is too large to fit into a single IP packet <xref
+        include either the Block4 Option in a GET or similar request, or the
+        Block3 Option in a PUT or similar request, so that the server knows
+        that the client supports this Block4 functionality should it needs to
+        send back a body that spans multiple payloads. Otherwise, the server
+        would use the Block2 Option (if supported) to send back a message body
+        that is too large to fit into a single IP packet <xref
         target="RFC7959"></xref>.</t>
 
         <t>If Block3 Option is present in a request or Block4 Option in a
@@ -267,7 +305,7 @@
         it is present in the opposite direction, it provides additional
         control on how that payload will be formed or was processed.</t>
 
-        <t>Implementation of Block3 (or Block4) Option is intended to be
+        <t>Implementation of the Block3 and Block4 Options is intended to be
         optional. However, when it is present in a CoAP message, it MUST be
         processed (or the message rejected). Therefore, Block3 and Block4
         Options are identified as Critical options.</t>
@@ -281,11 +319,6 @@
         carrying multiple Block3 (or Block4) Options MUST be handled following
         the procedure specified in Section 5.4.5 of <xref
         target="RFC7252"></xref>.</t>
-
-        <t>PROBING_RATE parameter in CoAP indicates the average data rate that
-        must not be exceeded by a CoAP endpoint in sending to a peer endpoint
-        that does not respond. The body of blocks will be subjected to
-        PROBING_RATE (Section 4.7 of <xref target="RFC7252"></xref>).</t>
 
         <t>The Block3 and Block4 Options, like the Block1 and Block2 Options,
         are both a class E and a class U in terms of OSCORE processing (see
@@ -326,54 +359,22 @@
         Option <xref target="I-D.ietf-core-echo-request-tag"></xref>. The
         Request-Tag value MUST be the same for all of the blocks in the body
         of data that is being transferred. It is also used to identify a
-        particular block that needs to be re-transmitted. The Request-Tag is
-        opaque in nature, but it is RECOMMENDED that the client treats it as
-        an unsigned integer of 8 bytes in length. An implementation may want
-        to consider limiting this to 4 bytes to reduce packet overhead size.
-        The server still treats it as an opaque entity. The Request-Tag value
-        MUST be different for distinct bodies or sets of blocks of data and
-        SHOULD be incremented whenever a new body of data is being transmitted
-        for a CoAP session between peers. The initial Request-Tag value SHOULD
-        be randomly generated by the client.</t>
-
-        <t>The client sends all the individual payloads of the body using
-        Block3 and Request-Tag Options, only expecting a response when all the
-        payloads have been sent. It is RECOMMENDED that after transmission of
-        every set of MAX_PAYLOADS payloads of a single body, a delay is
-        introduced of ACK_TIMEOUT (Section 4.8.2 of <xref
-        target="RFC7252"></xref>) before the next set of payload transmissions
-        to manage potential congestion issues. MAX_PAYLOADS should be
-        configurable with a default value of 10.<list style="empty">
-            <t>Note: The default value is chosen for reasons similar to those
-            discussed in Section 5 of <xref target="RFC6928"></xref>.</t>
-          </list></t>
-
-        <t>For NON transmissions, it is permissible, but not required, to send
-        the ultimate payload of a MAX_PAYLOADS set as a Confirmable packet. If
-        a Confirmable packet is used, then the client MUST wait for the ACK to
-        be returned before sending the next set of payloads, which can be in
-        time terms less than the ACK_TIMEOUT delay.</t>
-
-        <t>Also, for NON transmissions, it is permissible, but not required,
-        to send a Confirmable packet for the final payload of a body (that is,
-        M bit unset). If a Confirmable packet is used, then the client MUST
-        wait for the 2.01 (Created) or 2.04 (Changed) Response Codes to be
-        returned for successful transmission, or TBA3 (Missing Payloads)
-        Response Code to then resend the missing blocks (if any).</t>
-
-        <t>With NON transmission, the server acknowledges receipt of all of
-        the payloads that make up the body or can respond at any time during
-        the receipt of the payloads to acknowledge that some of the payloads
-        have arrived, but others are missing. It is RECOMMENDED that, unless
-        there are receipt issues, the server only responds when the final
-        payload (i.e., M bit unset) is received.</t>
+        particular block of a body that needs to be re-transmitted. The
+        Request-Tag is opaque in nature, but it is RECOMMENDED that the client
+        treats it as an unsigned integer of 8 bytes in length. An
+        implementation may want to consider limiting this to 4 bytes to reduce
+        packet overhead size. The server still treats it as an opaque entity.
+        The Request-Tag value MUST be different for distinct bodies or sets of
+        blocks of data and SHOULD be incremented whenever a new body of data
+        is being transmitted for a CoAP session between peers. The initial
+        Request-Tag value SHOULD be randomly generated by the client.</t>
 
         <t>For Confirmable transmission, the server MUST continue to
         acknowledge each packet. NSTART will also need to be increased from
         the default (1) to get faster transmission rates.</t>
 
-        <t>Tokens MUST be included. Each individual payload of the body MUST
-        have a different Token value.</t>
+        <t>Each individual payload of the body is treated as a new
+        request.</t>
 
         <t>A 2.01 (Created) or 2.04 (Changed) Response Code indicates
         successful receipt of the entire body. The 2.31 (Continue) Response
@@ -386,42 +387,36 @@
         <t>A 4.02 (Bad Option) Response Code MUST be returned if the server
         does not support the Block3 Option.</t>
 
-        <t>Use of 4.08 (Request Entity Incomplete) Response Code is
-        discouraged when using Block3 Option because packets may arrive out of
-        sequence; TBA3 (Missing Payloads) Response Code (<xref
-        target="code"></xref>) SHOULD be used instead. However, 4.08 (Request
-        Entity Incomplete) Response Code is still valid to reject a
-        Content-Format mismatch.</t>
-
         <t>A 4.13 (Request Entity Too Large) Response Code can be returned
         under similar conditions to those discussed in Section 2.9.3 of <xref
         target="RFC7959"></xref>.</t>
 
-        <t>A TBA3 (Missing Payloads) Response Code indicates that some of the
-        payloads are missing and need to be resent. The client then
-        re-transmits the missing payloads using the Request-Tag and Block3 to
+        <t>A 4.08 (Request Entity Incomplete) Response Code returned without
+        Content-Type "application/missing-blocks+cbor-seq" (<xref
+        target="new-format"></xref>) is handled as in Section 2.9.2 <xref
+        target="RFC7959"></xref>.</t>
+
+        <t>A 4.08 (Request Entity Incomplete) Response Code returned with
+        Content-Type "application/missing-blocks+cbor-seq" indicates that some
+        of the payloads are missing and need to be resent. The client then re-
+        transmits the missing payloads using the Request-Tag and Block3 to
         specify the block number, SZX, and M bit as appropriate. The
-        Request-Tag value to use is determined from the payload of the TBA3
-        (Missing Payloads) Response Code. If the client dos not recognize the
-        Request-Tag, the client can ignore this response. As discussed above,
-        the sending of the list of missing blocks is subject to
-        MAX_PAYLOADS.</t>
+        Request-Tag value to use is determined from the payload of the 4.08
+        (Request Entity Incomplete) Response Code. If the client does not
+        recognize the Request-Tag, the client can ignore this response. </t>
 
         <t>If the server has not received the final payload (i.e., a block
         with M bit unset), but one or other payloads have been received, it
         SHOULD wait for up to MAX_TRANSMIT_SPAN (Section 4.8.2 of <xref
-        target="RFC7252"></xref>) before sending the TBA3 (Missing Payloads)
-        Response Code. However, this timer MAY be reduced to two times
-        ACK_TIMEOUT before sending a TBA3 (Missing Payloads) Response Code to
-        cover the situation where MAX_PAYLOADS has been triggered by the
-        client causing a break in transmission.</t>
-
-        <t>In all cases, multiple TBA3 (Missing Payloads) Response Codes are
-        traffic limited by PROBING_RATE.</t>
+        target="RFC7252"></xref>) before sending the 4.08 (Request Entity
+        Incomplete) Response Code. However, this timer MAY be reduced to two
+        times ACK_TIMEOUT before sending a 4.08 (Request Entity Incomplete)
+        Response Code to cover the situation where MAX_PAYLOADS has been
+        triggered by the client causing a break in transmission.</t>
 
         <t>If the client transmits a new body of data with a new Request-Tag
         to the same resource on a server, the server MUST remove any partially
-        received body held for a previous Request-Tag for that resource. </t>
+        received body held for a previous Request-Tag for that resource.</t>
 
         <t>If the server receives a duplicate block with the same Request-Tag,
         it SHOULD silently ignore the packet.</t>
@@ -434,9 +429,10 @@
       <section title="Using the Block 4 Option">
         <t>Support for the receipt of Block4 Option by the client is indicated
         by using the Block4 Option in the GET, POST, PUT, FETCH, PATCH or
-        iPATCH request. If the Block4 Option is not included in the request,
-        the server MUST NOT send data using the Block4 Option, but can use
-        Block2 if supported instead.</t>
+        iPATCH request, or by using the Block3 request in the POST, PUT,
+        PATCH, and iPATCH request. If support for the Block4 option in not
+        indicated, the server MUST NOT send data using the Block4 Option, but
+        can use Block2, if supported, instead. </t>
 
         <t>In a request, the Block4 MUST always have the M bit set to 0.</t>
 
@@ -444,10 +440,6 @@
         the same ETag (Section 5.10.6 of <xref target="RFC7252"></xref>) for
         the same body. The server MUST NOT use the same ETag value for
         different representations of a resource.</t>
-
-        <t>The sending of the payloads is subject to MAX_PAYLOADS. If
-        MAX_PAYLOADS is exceeded, the server MUST introduce an ACK_TIMEOUT
-        delay before transmitting the next set of payloads.</t>
 
         <t>The ETag is opaque in nature, but it is RECOMMENDED that the server
         treats it as an unsigned integer of 8 bytes in length. An
@@ -458,34 +450,19 @@
         transmitted for a CoAP session between peers. The initial ETag value
         SHOULD be randomly generated by the server.</t>
 
-        <t>For NON transmission, it is permissible, but not required, to send
-        the ultimate payload of a MAX_PAYLOADS set as a Confirmable packet. If
-        a Confirmable packet is used, then the server MUST wait for the ACK to
-        be received before sending the next set of payloads, which can be in
-        time terms less than the ACK_TIMEOUT delay.</t>
-
-        <t>Also, for NON transmission, it is permissible, but not required, to
-        send a Confirmable packet for the final payload of a body (i.e., M bit
-        unset). If a Confirmable packet is used, the server MUST wait for the
-        ACK to be returned for successful transmission.</t>
-
         <t>If the client detects that some of the payloads are missing, the
         missing payloads are requested by issuing a new GET, POST, PUT, FETCH,
         PATCH, or iPATCH request that contains one or more Block4 Options that
-        define the missing blocks. A new Token value MUST be used for this
-        request. The rate of requests for missing blocks is subject to
-        PROBING_RATE. The ETag Option MUST NOT be used in the request as the
-        server could respond with a 2.03 (Valid Response) with no payload. If
-        the server responds with a different ETag Option value (as the
-        resource representation has changed), then the client SHOULD drop all
-        the payloads for the current body that are no longer valid.</t>
+        define the missing blocks.</t>
+
+        <t>The ETag Option MUST NOT be used in the request as the server could
+        respond with a 2.03 (Valid Response) with no payload. If the server
+        responds with a different ETag Option value (as the resource
+        representation has changed), then the client SHOULD drop all the
+        payloads for the current body that are no longer valid.</t>
 
         <t>The client may elect to request the missing blocks or just ignore
         the partial body.</t>
-
-        <t>All the payload responses to a specific GET, POST, PUT, FETCH,
-        PATCH, or iPATCH request MUST have the same Token value as in the
-        request.</t>
 
         <t>With NON transmission, the client only needs to indicate that some
         of the payloads are missing by issuing a GET, POST, PUT, FETCH, PATCH,
@@ -493,14 +470,12 @@
 
         <t>For Confirmable transmission, the client SHOULD continue to
         acknowledge each packet as well as issuing a separate GET, POST, PUT,
-        FETCH, PATCH, or iPATCH for the missing blocks. NSTART will also need
-        to be increased from the default (1) to get faster transmission
-        rates.</t>
+        FETCH, PATCH, or iPATCH for the missing blocks. </t>
 
         <t>If the server transmits a new body of data (e.g., a triggered
-        Observe) with a new ETag to the same client with the same Token value,
+        Observe) with a new ETag to the same client as an additional response,
         the client MUST remove any partially received body held for a previous
-        ETag for that Token.</t>
+        ETag.</t>
 
         <t>If the client receives a duplicate block with the same ETag, it
         SHOULD silently ignore the packet.</t>
@@ -515,17 +490,12 @@
         <t>As the blocks of the body are sent without waiting for
         acknowledgement of the individual blocks, the Observe value <xref
         target="RFC7641"></xref> MUST be the same for all the blocks of the
-        same body.</t>
+        same body. </t>
 
-        <t>Likewise, the Tokens MUST all have the same value for all the
-        blocks of the same body. This is so that if any of the blocks get lost
-        during transmission (including the first one), the receiving CoAP
-        endpoint can take the appropriate decisions as to how to continue
-        (implementation specific).</t>
-
-        <t>If the client requests missing blocks, the client MUST use a
-        different Token; all repeated missing blocks for that new request MUST
-        use the new Token.</t>
+        <t>If the client requests missing blocks, this is treated as a new
+        request. The Observe value may change but MUST still be reported. If
+        the ETag value changes then the previously received partial body
+        should be destroyed and the whole body re-requested.</t>
       </section>
 
       <section title="Working with Size1 and Size2 Options">
@@ -534,9 +504,13 @@
         transferred in requests and Size2 for indicating the size of the
         representation transferred in responses.</t>
 
-        <t>It is RECOMMENDED that the Size1 Option is used with the Block3
-        Option. It is also RECOMMENDED that the Size2 Option is used with the
-        Block4 Option.</t>
+        <t>The Size1 or Size2 option values MUST exactly represent the size of
+        the data on the body so that any missing data can easily be
+        determined.</t>
+
+        <t>The Size1 Option MUST be used with the Block3 Option when used in a
+        request. The Size2 Option MUST be used with the Block4 Option when
+        used in a response. </t>
 
         <t>If Size1 or Size2 Options are used, they MUST be used in all
         payloads of the body and MUST have the same value.</t>
@@ -549,33 +523,36 @@
       </section>
     </section>
 
-    <section anchor="code" title="TBA3 (Missing Payloads) Response Code">
-      <t>TBA3 (Missing Payloads) Response Code is a new client error status
-      code (Section 5.9.2 of <xref target="RFC7252"></xref>) used to indicate
-      that the server has not received all of the blocks of the request body
-      that it needs to proceed.</t>
+    <section anchor="code"
+             title="The Use of 4.08 (Request Entity Incomplete) Response Code">
+      <t>4.08 (Request Entity Incomplete) Response Code has a new Content-Type
+      "application/missing-blocks+cbor-seq" used to indicate that the server
+      has not received all of the blocks of the request body that it needs to
+      proceed. </t>
 
       <t>Likely causes are the client has not sent all blocks, some blocks
       were dropped during transmission, or the client has sent them
       sufficiently long ago that the server has already discarded them.</t>
 
-      <t>The data payload of the TBA3 (Missing Payloads) Response Code is
-      encoded as a CBOR Sequence <xref target="RFC8742"></xref>. First is CBOR
-      encoded Request-Tag followed by 1 or more missing CBOR encoded missing
-      block numbers. The missing block numbers MUST be unique per TBA3
-      (Missing Payloads) when created by the server; the client SHOULD drop
-      any duplicates in the same TBA3 (Missing Payloads) message.</t>
+      <t>The data payload of the 4.08 (Request Entity Incomplete) Response
+      Code is encoded as a CBOR Sequence <xref target="RFC8742"></xref>. First
+      is CBOR encoded Request-Tag followed by 1 or more missing CBOR encoded
+      missing block numbers. The missing block numbers MUST be unique in each
+      4.08 (Request Entity Incomplete) when created by the server; the client
+      SHOULD drop any duplicates in the same 4.08 (Request Entity Incomplete)
+      message.</t>
 
       <t>The Content-Format Option (Section 5.10.3 of <xref
-      target="RFC7252"></xref>) MUST be used in the TBA3 (Missing Payloads)
-      Response Code. It MUST be set to "application/missing-blocks+cbor-seq"
-      (see <xref target="new-format"></xref>).</t>
+      target="RFC7252"></xref>) MUST be used in the 4.08 (Request Entity
+      Incomplete) Response Code. It MUST be set to
+      "application/missing-blocks+cbor-seq" (see <xref
+      target="new-format"></xref>).</t>
 
       <t>The Concise Data Definition Language <xref target="RFC8610"></xref>
       for the data describing these missing blocks is as follows:<figure
           align="center" anchor="cddl"
           title="Structure of the Missing Blocks Payload">
-          <artwork align="center"><![CDATA[TBA3-payload = (request-tag, missing-block-list)
+          <artwork align="center"><![CDATA[4.08-payload = (request-tag, missing-block-list)
 ; A copy of the opaque Request-Tag value
 request-tag = bstr
 missing-block-list = [1 * missing-block-number]
@@ -584,13 +561,59 @@ missing-block-number = uint
 ]]></artwork>
         </figure></t>
 
-      <t>If the size of the TBA3 (Missing Payloads) response packet is larger
-      than that defined by Section 4.6 <xref target="RFC7252"></xref>, then
-      the number of missing blocks MUST be limited so that the response can
-      fit into a single packet. If necessary, multiple TBA3 (Missing Payloads)
-      Response Codes can be sent back; each covering a Request-Tag and a
-      unique set of missing blocks. The same Token can be used for the
-      multiple TBA3 (missing Payloads) if this is the case.</t>
+      <t>If the size of the 4.08 (Request Entity Incomplete) response packet
+      is larger than that defined by Section 4.6 <xref
+      target="RFC7252"></xref>, then the number of missing blocks MUST be
+      limited so that the response can fit into a single packet. If this is
+      the case, then the server can send subsequent 4.08 (Request Entity
+      Incomplete) responses containing the missing blocks on receipt of a new
+      request providing a missing payload with the same Request-Tag.</t>
+    </section>
+
+    <section title="The Use of Tokens">
+      <t>Each new request MUST use a unique Token (Section 4 of <xref
+      target="I-D.ietf-core-echo-request-tag"></xref>). Additional responses
+      may use the same Token.</t>
+    </section>
+
+    <section anchor="cc" title="Congestion Control">
+      <t>PROBING_RATE parameter in CoAP indicates the average data rate that
+      must not be exceeded by a CoAP endpoint in sending to a peer endpoint
+      that does not respond. The body of blocks will be subjected to
+      PROBING_RATE (Section 4.7 of <xref target="RFC7252"></xref>).</t>
+
+      <t>Each NON 4.08 (Request Entity Incomplete) Response Codes is subjected
+      to PROBING_RATE.</t>
+
+      <t>Each NON GET or similar request using Block4 Option is subjected to
+      PROBING_RATE.</t>
+
+      <t>As the sending of many payloads of a single body may itself cause
+      congestion, it is RECOMMENDED that after transmission of every set of
+      MAX_PAYLOADS payloads of a single body, a delay is introduced of
+      ACK_TIMEOUT (Section 4.8.2 of <xref target="RFC7252"></xref>) before the
+      next set of payload transmissions to manage potential congestion issues.
+      MAX_PAYLOADS should be configurable with a default value of 10. <list
+          style="empty">
+          <t>Note: The default value is chosen for reasons similar to those
+          discussed in Section 5 of <xref target="RFC6928"></xref>. </t>
+        </list></t>
+
+      <t>For NON transmissions, it is permissible, but not required, to send
+      the ultimate payload of a MAX_PAYLOADS set as a Confirmable packet. If a
+      Confirmable packet is used, then the transmitting peer MUST wait for the
+      ACK to be returned before sending the next set of payloads, which can be
+      in time terms less than the ACK_TIMEOUT delay. </t>
+
+      <t>Also, for NON transmissions, it is permissible, but not required, to
+      send a Confirmable packet for the final payload of a body (that is, M
+      bit unset). If a Confirmable packet is used, then the transmitting peer
+      MUST wait for the appropriate response to be returned for successful
+      transmission, or respond to requests for the missing blocks (if any).
+      </t>
+
+      <t>The sending of the set of missing blocks is subject to MAX_PAYLOADS.
+      </t>
     </section>
 
     <section title="Caching Considerations">
@@ -702,11 +725,11 @@ X<--: Message loss
        Client      Server
          |          |
              ...
-         |<---------+ NON TBA3 M:0xf2 T:0xe3 [Missing 1,2 for RT=11]
+         |<---------+ NON 4.08 M:0xf2 T:0xe3 [Missing 1,2 for RT=11]
          +--------->| NON PUT /path M:0x09 T:0xe4 RT=11 B3:1/1/1024
          +--->X     | NON PUT /path M:0x0a T:0xe5 RT=11 B3:2/1/1024
          |          |
-         |<---------+ NON TBA3 M:0xf3 T:0xe4 [Missing 2 for RT=11]
+         |<---------+ NON 4.08 M:0xf3 T:0xe4 [Missing 2 for RT=11]
          +--------->| NON PUT /path M:0x0b T:0xe6 RT=11 B3:2/1/1024
          |<---------+ NON 2.04 M:0xf4 T:0xe6
          |          |
@@ -808,25 +831,6 @@ Table 2: CoAP Block3 and Block4 Option Numbers]]></artwork>
         assigned for the new option numbers.</t>
       </section>
 
-      <section title="New CoAP Response Code">
-        <t>IANA is requested to add the following entry to the "CoAP Response
-        Codes" sub-registry available at
-        https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#response-codes:</t>
-
-        <t><figure align="center">
-            <artwork align="center"><![CDATA[+------+------------------+-----------+
-| Code | Description      | Reference |
-+======+==================+===========+
-| TBA3 | Missing Payloads | [RFCXXXX] |
-+------+------------------+-----------+
-
-Table 3: New CoAP Response Code]]></artwork>
-          </figure></t>
-
-        <t>This document suggests 4.19 (TBA3) as a value to be assigned for
-        the new Response Code.</t>
-      </section>
-
       <section anchor="new-format" title="New Content Format">
         <t>This document requests IANA to register the CoAP Content-Format ID
         for the "application/missing-blocks+cbor-seq" media type in the "CoAP
@@ -836,7 +840,7 @@ Table 3: New CoAP Response Code]]></artwork>
         <figure>
           <artwork><![CDATA[o  Media Type: application/missing-blocks+cbor-seq
 o  Encoding: -
-o  Id: TBD4
+o  Id: TBD3
 o  Reference: [RFCXXXX]]]></artwork>
         </figure>
 
