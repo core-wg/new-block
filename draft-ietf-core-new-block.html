@@ -384,7 +384,7 @@
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Properties of Block3 and Block4 Options">
 <link href="#rfc.section.3.2" rel="Chapter" title="3.2 Structure of Block3 and Block4 Options">
 <link href="#rfc.section.3.3" rel="Chapter" title="3.3 Using the Block3 Option">
-<link href="#rfc.section.3.4" rel="Chapter" title="3.4 Using the Block 4 Option">
+<link href="#rfc.section.3.4" rel="Chapter" title="3.4 Using the Block4 Option">
 <link href="#rfc.section.3.5" rel="Chapter" title="3.5 Working with Observe and Block4 Options">
 <link href="#rfc.section.3.6" rel="Chapter" title="3.6 Working with Size1 and Size2 Options">
 <link href="#rfc.section.3.7" rel="Chapter" title="3.7 Use of Block3 and Block4 Options Together">
@@ -415,7 +415,7 @@
 
   <meta name="dct.creator" content="Boucadair, M. and J. Shallow" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-core-new-block-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2020-07" />
+  <meta name="dct.issued" scheme="ISO8601" content="2020-08" />
   <meta name="dct.abstract" content="This document specifies alternate Constrained Application Protocol (CoAP) Block-Wise transfer options: Block3 and Block4 Options. These options are similar to the CoAP Block1 and Block2 Options, not a replacement for them, but do enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission.  " />
   <meta name="description" content="This document specifies alternate Constrained Application Protocol (CoAP) Block-Wise transfer options: Block3 and Block4 Options. These options are similar to the CoAP Block1 and Block2 Options, not a replacement for them, but do enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission.  " />
 
@@ -439,8 +439,8 @@
 <td class="right">J. Shallow</td>
 </tr>
 <tr>
-<td class="left">Expires: March 11, 2021</td>
-<td class="right">September 7, 2020</td>
+<td class="left">Expires: March 12, 2021</td>
+<td class="right">September 8, 2020</td>
 </tr>
 
     	
@@ -457,7 +457,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on March 11, 2021.</p>
+<p>This Internet-Draft will expire on March 12, 2021.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2020 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -487,7 +487,7 @@
 </li>
 <li>3.3.   <a href="#rfc.section.3.3">Using the Block3 Option</a>
 </li>
-<li>3.4.   <a href="#rfc.section.3.4">Using the Block 4 Option</a>
+<li>3.4.   <a href="#rfc.section.3.4">Using the Block4 Option</a>
 </li>
 <li>3.5.   <a href="#rfc.section.3.5">Working with Observe and Block4 Options</a>
 </li>
@@ -631,8 +631,8 @@
 <p id="rfc.section.3.3.p.14">If the server receives a duplicate block with the same Request-Tag, it SHOULD silently ignore the packet.</p>
 <p id="rfc.section.3.3.p.15">A server SHOULD only maintain a partial body (missing payloads) for up to EXCHANGE_LIFETIME (Section 4.8.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>).</p>
 <h1 id="rfc.section.3.4">
-<a href="#rfc.section.3.4">3.4.</a> Using the Block 4 Option</h1>
-<p id="rfc.section.3.4.p.1">Support for the receipt of Block4 Option by the client is indicated by using the Block4 Option in the GET, POST, PUT, FETCH, PATCH or iPATCH request, or by using the Block3 request in the POST, PUT, PATCH, and iPATCH request. If support for the Block4 Option is not Indicated by the client, the server MUST NOT send data using the Block4 Option, but can use Block2, if supported, instead. </p>
+<a href="#rfc.section.3.4">3.4.</a> Using the Block4 Option</h1>
+<p id="rfc.section.3.4.p.1">Support for the receipt of Block4 Option by the client is indicated by using the Block4 Option in the GET, POST, PUT, FETCH, PATCH, or iPATCH request. If support for the Block4 Option is not Indicated by the client, the server MUST NOT send data using the Block4 Option, but can use Block2, if supported, instead. </p>
 <p id="rfc.section.3.4.p.2">In a request, for block number 0, the M bit unset indicates the entire body is requested. If the M bit is set for block number 0, this indicates that this is a repeat request. Otherwise for a request, the Block4 Option MUST always have the M bit unset.</p>
 <p id="rfc.section.3.4.p.3">The payloads sent back from the server as a response MUST all have the same ETag (Section 5.10.6 of <a href="#RFC7252" class="xref">[RFC7252]</a>) for the same body. The server MUST NOT use the same ETag value for different representations of a resource.</p>
 <p id="rfc.section.3.4.p.4">The ETag is opaque in nature, but it is RECOMMENDED that the server treats it as an unsigned integer of 8 bytes in length. An implementation may want to consider limiting this to 4 bytes to reduce packet overhead size. The client still treats it as an opaque entity.  The ETag value MUST be different for distinct bodies or sets of blocks of data and SHOULD be incremented whenever a new body of data is being transmitted for a CoAP session between peers. The initial ETag value SHOULD be randomly generated by the server.</p>
