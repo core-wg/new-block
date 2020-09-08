@@ -429,13 +429,12 @@
         target="RFC7252"></xref>).</t>
       </section>
 
-      <section title="Using the Block 4 Option">
+      <section title="Using the Block4 Option">
         <t>Support for the receipt of Block4 Option by the client is indicated
-        by using the Block4 Option in the GET, POST, PUT, FETCH, PATCH or
-        iPATCH request, or by using the Block3 request in the POST, PUT,
-        PATCH, and iPATCH request. If support for the Block4 Option is not
-        Indicated by the client, the server MUST NOT send data using the
-        Block4 Option, but can use Block2, if supported, instead. </t>
+        by using the Block4 Option in the GET, POST, PUT, FETCH, PATCH, or
+        iPATCH request. If support for the Block4 Option is not Indicated by
+        the client, the server MUST NOT send data using the Block4 Option, but
+        can use Block2, if supported, instead. </t>
 
         <t>In a request, for block number 0, the M bit unset indicates the
         entire body is requested. If the M bit is set for block number 0, this
