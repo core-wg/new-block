@@ -86,8 +86,8 @@ Table of Contents
    7.  Caching Considerations  . . . . . . . . . . . . . . . . . . .  13
    8.  HTTP-Mapping Considerations . . . . . . . . . . . . . . . . .  14
    9.  Examples of Selective Block Recovery  . . . . . . . . . . . .  14
-     9.1.  Block3 Option: Non-Confirmable Example  . . . . . . . . .  15
-     9.2.  Block4 Option: Non-Confirmable Example  . . . . . . . . .  16
+     9.1.  Quick-Block1 Option: Non-Confirmable Example  . . . . . .  15
+     9.2.  Quick-Block2 Option: Non-Confirmable Example  . . . . . .  16
    10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  18
      10.1.  New CoAP Options . . . . . . . . . . . . . . . . . . . .  18
      10.2.  New Content Format . . . . . . . . . . . . . . . . . . .  19
@@ -453,7 +453,7 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
    A 4.08 (Request Entity Incomplete) Response Code returned with
    Content-Type "application/missing-blocks+cbor-seq" indicates that
    some of the payloads are missing and need to be resent.  The client
-   then re- transmits the missing payloads using the Request-Tag and
+   then re-transmits the missing payloads using the Request-Tag and
    Quick-Block1 to specify the block number, SZX, and M bit as
    appropriate.  The Request-Tag value to use is determined from the
    payload of the 4.08 (Request Entity Incomplete) Response Code.  If
@@ -801,7 +801,7 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
 
                   Figure 2: Notations Used in the Figures
 
-9.1.  Block3 Option: Non-Confirmable Example
+9.1.  Quick-Block1 Option: Non-Confirmable Example
 
    Figure 3 depicts an example of a NON PUT request conveying Quick-
    Block1 Option.  All the blocks are received by the server.
@@ -816,7 +816,8 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
             |<---------+ NON 2.04 M:0xf1 T:0xf3
                 ...
 
-    Figure 3: Example of NON Request with Block3 Option (Without Loss)
+    Figure 3: Example of NON Request with Quick-Block1 Option (Without
+                                   Loss)
 
    Consider now a scenario where a new body of data is to be sent by the
    client, but some blocks are dropped in transmission as illustrated in
@@ -832,8 +833,7 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
             |          |
                 ...
 
-      Figure 4: Example of NON Request with Block3 Option (With Loss)
-
+   Figure 4: Example of NON Request with Quick-Block1 Option (With Loss)
 
 
 
@@ -860,13 +860,14 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
             |          |
                 ...
 
-   Figure 5: Example of NON Request with Block3 Option (Blocks Recovery)
+     Figure 5: Example of NON Request with Quick-Block1 Option (Blocks
+                                 Recovery)
 
    Under high levels of traffic loss, the client can elect not to retry
    sending missing blocks of data.  This decision is implementation
    specific.
 
-9.2.  Block4 Option: Non-Confirmable Example
+9.2.  Quick-Block2 Option: Non-Confirmable Example
 
    Figure 6 illustrates the example of Quick-Block2 Option.  The client
    sends a NON GET carrying an Observe and a Quick-Block2 Options.  The
@@ -876,7 +877,6 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
    Quick-Block2 Option.  The same process is repeated when an Observe is
    triggered, but no loss is experienced by any of the notification
    blocks.
-
 
 
 
@@ -915,8 +915,8 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
                ...
 
 
-    Figure 6: Example of NON Notifications with Block4 Option (Without
-                                   Loss)
+      Figure 6: Example of NON Notifications with Quick-Block2 Option
+                              (Without Loss)
 
    Figure 7 shows the example of an Observe that is triggered but for
    which some notification blocks are lost.  The client detects the
@@ -976,8 +976,8 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
            |<---------+ NON 2.05 M:0xff T:0xf2 ET=23 QB2:1/1/1024
                ...
 
-     Figure 7: Example of NON Notifications with Block4 Option (Blocks
-                                 Recovery)
+      Figure 7: Example of NON Notifications with Quick-Block2 Option
+                             (Blocks Recovery)
 
    Under high levels of traffic loss, the client can elect not to retry
    getting missing blocks of data.  This decision is implementation
@@ -994,8 +994,8 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
         +--------+------------------+-----------+
         | Number | Name             | Reference |
         +========+==================+===========+
-        |  TBA1  | Quick-Block1           | [RFCXXXX] |
-        |  TBA2  | Quick-Block2           | [RFCXXXX] |
+        |  TBA1  | Quick-Block1     | [RFCXXXX] |
+        |  TBA2  | Quick-Block2     | [RFCXXXX] |
         +--------+------------------+-----------+
 
         Table 2: CoAP Quick-Block1 and Quick-Block2 Option Numbers
@@ -1191,7 +1191,8 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
             |<---------+ ACK 0.00 M:0x04
 
 
-    Figure 8: Example of CON Request with Block3 Option (Without Loss)
+    Figure 8: Example of CON Request with Quick-Block1 Option (Without
+                                   Loss)
 
    Now, suppose that a new body of data is to sent but with some blocks
    dropped in transmission as illustrated in Figure 9.  The client will
@@ -1219,13 +1220,12 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
           [[Either transmission failure (acknowledge retry timeout)
             or successfully transmitted.]]
 
-   Figure 9: Example of CON Request with Block3 Option (Blocks Recovery)
+     Figure 9: Example of CON Request with Quick-Block1 Option (Blocks
+                                 Recovery)
 
    It is implementation dependent as to whether a CoAP session is
    terminated following acknowledge retry timeout, or whether the CoAP
    session continues to be used under such adverse traffic conditions.
-
-
 
 
 
@@ -1280,7 +1280,7 @@ A.2.  Quick-Block2 Option
              [[Either transmission failure (acknowledge retry timeout)
                or successfully transmitted.]]
 
-        Figure 10: Example of CON Notifications with Block4 Option
+     Figure 10: Example of CON Notifications with Quick-Block2 Option
 
 
 

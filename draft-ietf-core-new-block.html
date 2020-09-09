@@ -394,8 +394,8 @@
 <link href="#rfc.section.7" rel="Chapter" title="7 Caching Considerations">
 <link href="#rfc.section.8" rel="Chapter" title="8 HTTP-Mapping Considerations">
 <link href="#rfc.section.9" rel="Chapter" title="9 Examples of Selective Block Recovery">
-<link href="#rfc.section.9.1" rel="Chapter" title="9.1 Block3 Option: Non-Confirmable Example">
-<link href="#rfc.section.9.2" rel="Chapter" title="9.2 Block4 Option: Non-Confirmable Example">
+<link href="#rfc.section.9.1" rel="Chapter" title="9.1 Quick-Block1 Option: Non-Confirmable Example">
+<link href="#rfc.section.9.2" rel="Chapter" title="9.2 Quick-Block2 Option: Non-Confirmable Example">
 <link href="#rfc.section.10" rel="Chapter" title="10 IANA Considerations">
 <link href="#rfc.section.10.1" rel="Chapter" title="10.1 New CoAP Options">
 <link href="#rfc.section.10.2" rel="Chapter" title="10.2 New Content Format">
@@ -507,9 +507,9 @@
 </li>
 <li>9.   <a href="#rfc.section.9">Examples of Selective Block Recovery</a>
 </li>
-<ul><li>9.1.   <a href="#rfc.section.9.1">Block3 Option: Non-Confirmable Example</a>
+<ul><li>9.1.   <a href="#rfc.section.9.1">Quick-Block1 Option: Non-Confirmable Example</a>
 </li>
-<li>9.2.   <a href="#rfc.section.9.2">Block4 Option: Non-Confirmable Example</a>
+<li>9.2.   <a href="#rfc.section.9.2">Quick-Block2 Option: Non-Confirmable Example</a>
 </li>
 </ul><li>10.   <a href="#rfc.section.10">IANA Considerations</a>
 </li>
@@ -626,7 +626,7 @@
 <p id="rfc.section.3.3.p.8">A 4.02 (Bad Option) Response Code MUST be returned if the server does not support the Quick-Block1 Option.</p>
 <p id="rfc.section.3.3.p.9">A 4.13 (Request Entity Too Large) Response Code can be returned under similar conditions to those discussed in Section 2.9.3 of <a href="#RFC7959" class="xref">[RFC7959]</a>.</p>
 <p id="rfc.section.3.3.p.10">A 4.08 (Request Entity Incomplete) Response Code returned without Content-Type "application/missing-blocks+cbor-seq" (<a href="#new-format" class="xref">Section 10.2</a>) is handled as in Section 2.9.2 <a href="#RFC7959" class="xref">[RFC7959]</a>.</p>
-<p id="rfc.section.3.3.p.11">A 4.08 (Request Entity Incomplete) Response Code returned with Content-Type "application/missing-blocks+cbor-seq" indicates that some of the payloads are missing and need to be resent. The client then re- transmits the missing payloads using the Request-Tag and Quick-Block1 to specify the block number, SZX, and M bit as appropriate. The Request-Tag value to use is determined from the payload of the 4.08 (Request Entity Incomplete) Response Code. If the client does not recognize the Request-Tag, the client can ignore this response.</p>
+<p id="rfc.section.3.3.p.11">A 4.08 (Request Entity Incomplete) Response Code returned with Content-Type "application/missing-blocks+cbor-seq" indicates that some of the payloads are missing and need to be resent. The client then re-transmits the missing payloads using the Request-Tag and Quick-Block1 to specify the block number, SZX, and M bit as appropriate. The Request-Tag value to use is determined from the payload of the 4.08 (Request Entity Incomplete) Response Code. If the client does not recognize the Request-Tag, the client can ignore this response.</p>
 <p id="rfc.section.3.3.p.12">If the server has not received all the payloads of a body, but one or more payloads have been received, it SHOULD wait for up to MAX_TRANSMIT_SPAN (Section 4.8.2 of <a href="#RFC7252" class="xref">[RFC7252]</a>) before sending the 4.08 (Request Entity Incomplete) Response Code.  However, this time MAY be reduced to two times ACK_TIMEOUT before sending a 4.08 (Request Entity Incomplete) Response Code to cover the situation where MAX_PAYLOADS has been triggered by the client causing a break in transmission.</p>
 <p id="rfc.section.3.3.p.13">If the client transmits a new body of data with a new Request-Tag to the same resource on a server, the server MUST remove any partially received body held for a previous Request-Tag for that resource.</p>
 <p id="rfc.section.3.3.p.14">If the server receives a duplicate block with the same Request-Tag, it SHOULD silently ignore the packet.</p>
@@ -726,7 +726,7 @@ X&lt;--: Message loss
 <p class="figure">Figure 2: Notations Used in the Figures</p>
 <p></p>
 <h1 id="rfc.section.9.1">
-<a href="#rfc.section.9.1">9.1.</a> Block3 Option: Non-Confirmable Example</h1>
+<a href="#rfc.section.9.1">9.1.</a> Quick-Block1 Option: Non-Confirmable Example</h1>
 <p><a href="#B3non" class="xref">Figure 3</a> depicts an example of a NON PUT request conveying Quick-Block1 Option. All the blocks are received by the server.</p>
 <div id="rfc.figure.3"></div>
 <div id="B3non"></div>
@@ -740,7 +740,7 @@ X&lt;--: Message loss
          |&lt;---------+ NON 2.04 M:0xf1 T:0xf3
              ...
 </pre>
-<p class="figure">Figure 3: Example of NON Request with Block3 Option (Without Loss)</p>
+<p class="figure">Figure 3: Example of NON Request with Quick-Block1 Option (Without Loss)</p>
 <p></p>
 <p id="rfc.section.9.1.p.3">Consider now a scenario where a new body of data is to be sent by the client, but some blocks are dropped in transmission as illustrated in <a href="#B3non1" class="xref">Figure 4</a>.</p>
 <div id="rfc.figure.4"></div>
@@ -755,7 +755,7 @@ X&lt;--: Message loss
          |          |
              ...
 </pre>
-<p class="figure">Figure 4: Example of NON Request with Block3 Option (With Loss)</p>
+<p class="figure">Figure 4: Example of NON Request with Quick-Block1 Option (With Loss)</p>
 <p></p>
 <p id="rfc.section.9.1.p.5">The server realizes that some blocks are missing and asks for the missing ones in one go (<a href="#B3non2" class="xref">Figure 5</a>). It does so by indicating which blocks have been received in the data portion of the response.</p>
 <div id="rfc.figure.5"></div>
@@ -774,11 +774,11 @@ X&lt;--: Message loss
          |          |
              ...
 </pre>
-<p class="figure">Figure 5: Example of NON Request with Block3 Option (Blocks Recovery)</p>
+<p class="figure">Figure 5: Example of NON Request with Quick-Block1 Option (Blocks Recovery)</p>
 <p></p>
 <p id="rfc.section.9.1.p.7">Under high levels of traffic loss, the client can elect not to retry sending missing blocks of data. This decision is implementation specific.</p>
 <h1 id="rfc.section.9.2">
-<a href="#rfc.section.9.2">9.2.</a> Block4 Option: Non-Confirmable Example</h1>
+<a href="#rfc.section.9.2">9.2.</a> Quick-Block2 Option: Non-Confirmable Example</h1>
 <p><a href="#nonb4" class="xref">Figure 6</a> illustrates the example of Quick-Block2 Option. The client sends a NON GET carrying an Observe and a Quick-Block2 Options. The Quick-Block2 Option indicates a size hint (1024 bytes). This request is replied by the server using four (4) blocks that are transmitted to the client without any loss. Each of these blocks carries a Quick-Block2 Option. The same process is repeated when an Observe is triggered, but no loss is experienced by any of the notification blocks.</p>
 <div id="rfc.figure.6"></div>
 <div id="nonb4"></div>
@@ -799,7 +799,7 @@ X&lt;--: Message loss
              ...
 
 </pre>
-<p class="figure">Figure 6: Example of NON Notifications with Block4 Option (Without Loss)</p>
+<p class="figure">Figure 6: Example of NON Notifications with Quick-Block2 Option (Without Loss)</p>
 <p></p>
 <p><a href="#nonb41" class="xref">Figure 7</a> shows the example of an Observe that is triggered but for which some notification blocks are lost. The client detects the missing blocks and request their retransmission. It does so by indicating the blocks that were successfully received.</p>
 <div id="rfc.figure.7"></div>
@@ -826,7 +826,7 @@ X&lt;--: Message loss
          |&lt;---------+ NON 2.05 M:0xff T:0xf2 ET=23 QB2:1/1/1024
              ...
 </pre>
-<p class="figure">Figure 7: Example of NON Notifications with Block4 Option (Blocks Recovery)</p>
+<p class="figure">Figure 7: Example of NON Notifications with Quick-Block2 Option (Blocks Recovery)</p>
 <p></p>
 <p id="rfc.section.9.2.p.5">Under high levels of traffic loss, the client can elect not to retry getting missing blocks of data. This decision is implementation specific.</p>
 <h1 id="rfc.section.10">
@@ -838,8 +838,8 @@ X&lt;--: Message loss
 <pre>+--------+------------------+-----------+
 | Number | Name             | Reference |
 +========+==================+===========+
-|  TBA1  | Quick-Block1           | [RFCXXXX] |
-|  TBA2  | Quick-Block2           | [RFCXXXX] |
+|  TBA1  | Quick-Block1     | [RFCXXXX] |
+|  TBA2  | Quick-Block2     | [RFCXXXX] |
 +--------+------------------+-----------+
 
 Table 2: CoAP Quick-Block1 and Quick-Block2 Option Numbers</pre>
@@ -973,7 +973,7 @@ o  Reference: [RFCXXXX]</pre>
          |&lt;---------+ ACK 0.00 M:0x04
 
 </pre>
-<p class="figure">Figure 8: Example of CON Request with Block3 Option (Without Loss)</p>
+<p class="figure">Figure 8: Example of CON Request with Quick-Block1 Option (Without Loss)</p>
 <p></p>
 <p id="rfc.section.A.1.p.3">Now, suppose that a new body of data is to sent but with some blocks dropped in transmission as illustrated in <a href="#con32" class="xref">Figure 9</a>. The client will retry sending blocks for which no ACK was received.</p>
 <div id="rfc.figure.9"></div>
@@ -1000,7 +1000,7 @@ o  Reference: [RFCXXXX]</pre>
        [[Either transmission failure (acknowledge retry timeout)
          or successfully transmitted.]]
 </pre>
-<p class="figure">Figure 9: Example of CON Request with Block3 Option (Blocks Recovery)</p>
+<p class="figure">Figure 9: Example of CON Request with Quick-Block1 Option (Blocks Recovery)</p>
 <p></p>
 <p id="rfc.section.A.1.p.5">If there is likely to be the possibility of network transient losses, then the use of Non-confirmable traffic should be considered.</p>
 <h1 id="rfc.appendix.A.2">
@@ -1046,7 +1046,7 @@ o  Reference: [RFCXXXX]</pre>
            [[Either transmission failure (acknowledge retry timeout)
              or successfully transmitted.]]
 </pre>
-<p class="figure">Figure 10: Example of CON Notifications with Block4 Option</p>
+<p class="figure">Figure 10: Example of CON Notifications with Quick-Block2 Option</p>
 <p></p>
 <p id="rfc.section.A.2.p.3">It is implementation-dependent as to whether a CoAP session is terminated following acknowledge retry timeout, or whether the CoAP session continues to be used under such adverse traffic conditions.</p>
 <p id="rfc.section.A.2.p.4">If there is likely to be the possibility of network transient losses, then the use of Non-confirmable traffic should be considered.</p>
