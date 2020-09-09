@@ -657,10 +657,10 @@ missing-block-number = uint
       <t>A proxy that supports Block4 Option MUST be prepared to receive a GET
       or similar message indicating one or more missing blocks. The proxy will
       serve from its cache the missing blocks that are available in its cache
-      in as the same way a server would send all the Block4s. If the cache key
-      matching body is not available in the cache, the proxy MUST request the
-      entire body from the CoAP server using the information in the cache key.
-      </t>
+      in the same way a server would send all the appropriate Block4s. If the
+      cache key matching body is not available in the cache, the proxy MUST
+      request the entire body from the CoAP server using the information in
+      the cache key. </t>
 
       <t>How long a CoAP endpoint (or proxy) keeps the body in its cache is
       implementation specific (e.g., it may be based on Max-Age).</t>
@@ -848,7 +848,7 @@ X<--: Message loss
 Table 2: CoAP Block3 and Block4 Option Numbers]]></artwork>
           </figure></t>
 
-        <t>This document suggests 19 (TBA1) and 39 (TBA2) as a values to be
+        <t>This document suggests 19 (TBA1) and 51 (TBA2) as a values to be
         assigned for the new option numbers.</t>
       </section>
 
