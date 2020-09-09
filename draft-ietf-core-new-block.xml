@@ -13,7 +13,7 @@
 <rfc category="std" docName="draft-ietf-core-new-block-latest"
      ipr="trust200902">
   <front>
-    <title abbrev="New Block-Wise Transfer Options">Constrained Application
+    <title abbrev="Quick Block-Wise Transfer Options">Constrained Application
     Protocol (CoAP) Block-Wise Transfer Options for Faster
     Transmission</title>
 
@@ -261,16 +261,16 @@
         The formatting of this table follows the one used in Table 4 of <xref
         target="RFC7252"></xref> (Section 5.10). The C, U, N, and R columns
         indicate the properties Critical, Unsafe, NoCacheKey, and Repeatable
-        defined in Section 5.4 of <xref target="RFC7252"></xref>. Only C
-        column is marked for the Block3 Option. Only C and R columns are
+        defined in Section 5.4 of <xref target="RFC7252"></xref>. Only C and U
+        columns are marked for the Block3 Option. C, U, and R columns are
         marked for the Block4 Option.</t>
 
         <t><figure align="center">
             <artwork align="center"><![CDATA[+--------+---+---+---+---+-----------+--------+--------+---------+
 | Number | C | U | N | R | Name      | Format | Length | Default |
 +========+===+===+===+===+===========+========+========+=========+
-|  TBA1  | x |   |   |   | Block3    | uint   |  0-3   | (none)  |
-|  TBA2  | x |   |   | x | Block4    | uint   |  0-3   | (none)  |
+|  TBA1  | x | x |   |   | Block3    | uint   |  0-3   | (none)  |
+|  TBA2  | x | x |   | x | Block4    | uint   |  0-3   | (none)  |
 +--------+---+---+---+---+-----------+--------+--------+---------+
 
         Table 1: CoAP Block3 and Block4 Option Properties
@@ -283,11 +283,12 @@
         Content-Format Option applies to the body, not to the payload (i.e.,
         it must be the same for all payloads of the same body).</t>
 
-        <t>Block3 is useful with the payload-bearing POST, PUT, PATCH, and
-        iPATCH requests and their responses (2.01 and 2.04). Block4 Option is
-        useful with GET, POST, PUT, FETCH, PATCH, and iPATCH requests and
-        their payload-bearing responses (2.01, 2.03, 2.04, and 2.05) (Section
-        5.5 of <xref target="RFC7252"></xref>).</t>
+        <t>Block3 Option is useful with the payload-bearing POST, PUT, PATCH,
+        and iPATCH requests and their responses (2.01 and 2.04). </t>
+
+        <t>Block4 Option is useful with GET, POST, PUT, FETCH, PATCH, and
+        iPATCH requests and their payload-bearing responses (2.01, 2.03, 2.04,
+        and 2.05) (Section 5.5 of <xref target="RFC7252"></xref>).</t>
 
         <t>To indicate support for Block4 responses, the CoAP client MUST
         include the Block4 Option in a GET or similar request, or the Block4
@@ -310,9 +311,9 @@
         processed (or the message rejected). Therefore, Block3 and Block4
         Options are identified as Critical options.</t>
 
-        <t>The Block3 and Block4 Options are safe to forward. That is, a CoAP
-        proxy that does not understand the Block3 (or Block4) Option should
-        forward the option on.</t>
+        <t>The Block3 and Block4 Options are unsafe to forward. That is, a
+        CoAP proxy that does not understand the Block3 (or Block4) Option MUST
+        reject the request or response that uses either option.</t>
 
         <t>The Block4 Option is repeatable when requesting re-transmission of
         missing Blocks, but not otherwise. Except that case, any request
@@ -621,29 +622,45 @@ missing-block-number = uint
     </section>
 
     <section title="Caching Considerations">
-      <t>The Block3 and Block4 Options are part of the cache key. As such, a
-      CoAP proxy that does not understand the Block3 and Block4 Options must
-      follow the recommendations in Section 5.7.1 of <xref
-      target="RFC7252"></xref> for caching.</t>
+      <t>Caching block based information is not straight forward in a proxy.
+      For Block3 and Block4 Options, it is expected that the proxy will
+      reassemble the body (using any appropriate recovery options for packet
+      loss) before passing on the body to the appropriate CoAP endpoint. The
+      onward transmission of the body does not require the use of the Block3
+      or Block4 Options. This means that the proxy must fully support the
+      Block3 and Block4 Options.</t>
 
-      <t>This specification does not require a proxy to obtain the complete
-      representation before it serves parts of it to the client. Otherwise,
-      the considerations discussed in Section 2.10 of <xref
-      target="RFC7959"></xref> apply for the Block3 and Block4 Options (with
-      Block3 substituted for Block1 and Block4 substituted for Block2) for
-      proxies that support Block3 and Block4 Options.</t>
+      <t>How the body is cached in the initial CoAP client (Block3) or
+      ultimate CoAP server (Block4) is implementation specific.</t>
+
+      <t>As the entire body is being cached in the proxy, the Block3 and
+      Block4 Options are not part of the cache key.</t>
+
+      <t>For Block4 responses, the ETag Option value is associated with the
+      data (and onward transmitted to the CoAP client), but is not part of the
+      cache key.</t>
+
+      <t>For requests with Block3 Option, the Request-Tag Option is associated
+      with the build up of the body from successive payloads, but is not part
+      of the cache key. For the onward transmission of the body using CoAP, a
+      new Request-Tag SHOULD be generated and used.</t>
+
+      <t>It is possible that two or more CoAP clients are concurrently
+      updating the same resource through a common proxy to the same CoAP
+      server using Block3 (or Block1) Option. If this is the case, the first
+      client to complete building the body causes that body to start
+      transmitting to the CoAP server with an appropriate Request-Tag value.
+      When the next client completes building the body, any existing partial
+      body transmission to the CoAP server is terminated and the new body
+      representation transmission starts with a new Request-Tag value.</t>
 
       <t>A proxy that supports Block4 Option MUST be prepared to receive a GET
-      or similar message indicating one or more missing blocks. The proxy can
-      serve from its cache missing blocks that are available in its cache in a
-      set as a server would send all the Block4s. If one or more requested
-      blocks are not available in the cache, the proxy SHOULD update the GET
-      request by removing the blocks that it can serve from the cache, and
-      then forward on the request to the next hop.</t>
-
-      <t>Alternatively, the original request unmodified (from the missing
-      block perspective) MAY be forwarded on to the server. All the responses
-      are then passed back to the client with the cache getting updated.</t>
+      or similar message indicating one or more missing blocks. The proxy will
+      serve from its cache the missing blocks that are available in its cache
+      in as the same way a server would send all the Block4s. If the cache key
+      matching body is not available in the cache, the proxy MUST request the
+      entire body from the CoAP server using the information in the cache key.
+      </t>
 
       <t>How long a CoAP endpoint (or proxy) keeps the body in its cache is
       implementation specific (e.g., it may be based on Max-Age).</t>
@@ -831,7 +848,7 @@ X<--: Message loss
 Table 2: CoAP Block3 and Block4 Option Numbers]]></artwork>
           </figure></t>
 
-        <t>This document suggests 21 (TBA1) and 25 (TBA2) as a values to be
+        <t>This document suggests 19 (TBA1) and 39 (TBA2) as a values to be
         assigned for the new option numbers.</t>
       </section>
 
