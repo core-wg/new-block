@@ -5,7 +5,7 @@
 CORE                                                        M. Boucadair
 Internet-Draft                                                    Orange
 Intended status: Standards Track                              J. Shallow
-Expires: March 12, 2021                                September 8, 2020
+Expires: March 13, 2021                                September 9, 2020
 
 
 Constrained Application Protocol (CoAP) Block-Wise Transfer Options for
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on March 12, 2021.
+   This Internet-Draft will expire on March 13, 2021.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                 [Page 1]
+Boucadair & Shallow      Expires March 13, 2021                 [Page 1]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -77,7 +77,7 @@ Table of Contents
      3.3.  Using the Block3 Option . . . . . . . . . . . . . . . . .   7
      3.4.  Using the Block4 Option . . . . . . . . . . . . . . . . .   9
      3.5.  Working with Observe and Block4 Options . . . . . . . . .  10
-     3.6.  Working with Size1 and Size2 Options  . . . . . . . . . .  11
+     3.6.  Working with Size1 and Size2 Options  . . . . . . . . . .  10
      3.7.  Use of Block3 and Block4 Options Together . . . . . . . .  11
    4.  The Use of 4.08 (Request Entity Incomplete) Response Code . .  11
    5.  The Use of Tokens . . . . . . . . . . . . . . . . . . . . . .  12
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                 [Page 2]
+Boucadair & Shallow      Expires March 13, 2021                 [Page 2]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -165,7 +165,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                 [Page 3]
+Boucadair & Shallow      Expires March 13, 2021                 [Page 3]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -221,7 +221,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                 [Page 4]
+Boucadair & Shallow      Expires March 13, 2021                 [Page 4]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -277,7 +277,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                 [Page 5]
+Boucadair & Shallow      Expires March 13, 2021                 [Page 5]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -315,10 +315,10 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
    (Section 5.5 of [RFC7252]).
 
    To indicate support for Block4 responses, the CoAP client MUST
-   include either the Block4 Option in a GET or similar request, or the
-   Block3 Option in a PUT or similar request, so that the server knows
-   that the client supports this Block4 functionality should it needs to
-   send back a body that spans multiple payloads.  Otherwise, the server
+   include the Block4 Option in a GET or similar request, or the Block4
+   Option in a PUT or similar request, so that the server knows that the
+   client supports this Block4 functionality should it needs to send
+   back a body that spans multiple payloads.  Otherwise, the server
    would use the Block2 Option (if supported) to send back a message
    body that is too large to fit into a single IP packet [RFC7959].
 
@@ -333,7 +333,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                 [Page 6]
+Boucadair & Shallow      Expires March 13, 2021                 [Page 6]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -389,7 +389,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                 [Page 7]
+Boucadair & Shallow      Expires March 13, 2021                 [Page 7]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -445,7 +445,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                 [Page 8]
+Boucadair & Shallow      Expires March 13, 2021                 [Page 8]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -471,12 +471,6 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 3.4.  Using the Block4 Option
 
-   Support for the receipt of Block4 Option by the client is indicated
-   by using the Block4 Option in the GET, POST, PUT, FETCH, PATCH, or
-   iPATCH request.  If support for the Block4 Option is not Indicated by
-   the client, the server MUST NOT send data using the Block4 Option,
-   but can use Block2, if supported, instead.
-
    In a request, for block number 0, the M bit unset indicates the
    entire body is requested.  If the M bit is set for block number 0,
    this indicates that this is a repeat request.  Otherwise for a
@@ -498,20 +492,20 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
    If the client detects that some of the payloads are missing, the
    missing payloads are requested by issuing a new GET, POST, PUT,
-
-
-
-Boucadair & Shallow      Expires March 12, 2021                 [Page 9]
-
-Internet-Draft       New Block-Wise Transfer Options      September 2020
-
-
    FETCH, PATCH, or iPATCH request that contains one or more Block4
    Options that define the missing blocks.
 
    The ETag Option MUST NOT be used in the request as the server could
    respond with a 2.03 (Valid Response) with no payload.  If the server
    responds with a different ETag Option value (as the resource
+
+
+
+Boucadair & Shallow      Expires March 13, 2021                 [Page 9]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
+
    representation has changed), then the client SHOULD drop all the
    payloads for the current body that are no longer valid.
 
@@ -554,19 +548,19 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
    If the ETag value changes then the previously received partial body
    should be destroyed and the whole body re-requested.
 
-
-
-
-Boucadair & Shallow      Expires March 12, 2021                [Page 10]
-
-Internet-Draft       New Block-Wise Transfer Options      September 2020
-
-
 3.6.  Working with Size1 and Size2 Options
 
    Section 4 of [RFC7959] defines two CoAP options: Size1 for indicating
    the size of the representation transferred in requests and Size2 for
    indicating the size of the representation transferred in responses.
+
+
+
+
+Boucadair & Shallow      Expires March 13, 2021                [Page 10]
+
+Internet-Draft       New Block-Wise Transfer Options      September 2020
+
 
    The Size1 or Size2 option values MUST exactly represent the size of
    the data on the body so that any missing data can easily be
@@ -613,7 +607,13 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 11]
+
+
+
+
+
+
+Boucadair & Shallow      Expires March 13, 2021                [Page 11]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -669,7 +669,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 12]
+Boucadair & Shallow      Expires March 13, 2021                [Page 12]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -725,7 +725,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 13]
+Boucadair & Shallow      Expires March 13, 2021                [Page 13]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -781,7 +781,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 14]
+Boucadair & Shallow      Expires March 13, 2021                [Page 14]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -837,7 +837,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 15]
+Boucadair & Shallow      Expires March 13, 2021                [Page 15]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -893,7 +893,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 16]
+Boucadair & Shallow      Expires March 13, 2021                [Page 16]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -949,7 +949,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 17]
+Boucadair & Shallow      Expires March 13, 2021                [Page 17]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -1005,7 +1005,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 18]
+Boucadair & Shallow      Expires March 13, 2021                [Page 18]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -1061,7 +1061,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 19]
+Boucadair & Shallow      Expires March 13, 2021                [Page 19]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -1117,7 +1117,7 @@ A.1.  Block3 Option
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 20]
+Boucadair & Shallow      Expires March 13, 2021                [Page 20]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -1173,7 +1173,7 @@ Internet-Draft       New Block-Wise Transfer Options      September 2020
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 21]
+Boucadair & Shallow      Expires March 13, 2021                [Page 21]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -1229,7 +1229,7 @@ A.2.  Block4 Option
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 22]
+Boucadair & Shallow      Expires March 13, 2021                [Page 22]
 
 Internet-Draft       New Block-Wise Transfer Options      September 2020
 
@@ -1285,4 +1285,4 @@ Authors' Addresses
 
 
 
-Boucadair & Shallow      Expires March 12, 2021                [Page 23]
+Boucadair & Shallow      Expires March 13, 2021                [Page 23]
