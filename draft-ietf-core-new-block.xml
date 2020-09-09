@@ -97,7 +97,7 @@
       a replacement for them, but do enable faster transmission rates for
       large amounts of data with less packet interchanges as well as
       supporting faster recovery should any of the blocks get lost in
-      transmission. </t>
+      transmission.</t>
     </abstract>
   </front>
 
@@ -141,22 +141,22 @@
 
         <t><list style="symbols">
             <t>They can operate in environments where packet loss is highly
-            asymmetrical. </t>
+            asymmetrical.</t>
 
             <t>They enable faster transmissions of sets of blocks of data with
-            less packet interchanges. </t>
+            less packet interchanges.</t>
 
             <t>They support faster recovery should any of the Blocks get lost
-            in transmission. </t>
+            in transmission.</t>
           </list></t>
 
         <t>There are the following disadvantages over using CoAP Block 1 and
         Block2 Options:<list style="symbols">
             <t>Loss of lock-stepping so payloads are not always received in
-            the correct (block ascending) order. </t>
+            the correct (block ascending) order.</t>
 
-            <t>Additional congestion control measures need to be put in place.
-            </t>
+            <t>Additional congestion control measures need to be put in
+            place.</t>
           </list></t>
 
         <t>Using Non-confirmable (NON) messages, the faster transmissions
@@ -190,7 +190,7 @@
         <t>Block3 and Block4 Options can be used instead of Block1 and Block2
         Options respectively when the different transmission semantics are
         required. If the option is not supported by a peer, then transmissions
-        can fall back to using Block1 and Block2 respectively. </t>
+        can fall back to using Block1 and Block2 respectively.</t>
 
         <t>The deviations from Block1 and Block2 Options are specified in
         <xref target="spec"></xref>. Pointers to appropriate <xref
@@ -205,7 +205,7 @@
       <section title="An Updated CoAP Response Code">
         <t>This document updates the 4.08 (Request Entity Incomplete) by
         defining an additional message format for reporting on payloads using
-        the Block3 Option that are not received by the server. </t>
+        the Block3 Option that are not received by the server.</t>
 
         <t>See <xref target="code"></xref> for more details.</t>
       </section>
@@ -234,7 +234,7 @@
         loss of interoperability with generic CoAP applications. It is hoped
         that the experience gained with this mechanism can feed future
         extensions of the block-wise mechanism that will both generally
-        applicable and serve this particular use case. </t>
+        applicable and serve this particular use case.</t>
       </section>
     </section>
 
@@ -290,13 +290,13 @@
         5.5 of <xref target="RFC7252"></xref>).</t>
 
         <t>To indicate support for Block4 responses, the CoAP client MUST
-        include either the Block4 Option in a GET or similar request, or the
-        Block3 Option in a PUT or similar request, so that the server knows
-        that the client supports this Block4 functionality should it needs to
-        send back a body that spans multiple payloads. Otherwise, the server
-        would use the Block2 Option (if supported) to send back a message body
-        that is too large to fit into a single IP packet <xref
-        target="RFC7959"></xref>.</t>
+        include the Block4 Option in a GET or similar request, or the Block4
+        Option in a PUT or similar request, so that the server knows that the
+        client supports this Block4 functionality should it needs to send back
+        a body that spans multiple payloads. Otherwise, the server would use
+        the Block2 Option (if supported) to send back a message body that is
+        too large to fit into a single IP packet <xref
+        target="RFC7959"></xref>. </t>
 
         <t>If Block3 Option is present in a request or Block4 Option in a
         response (i.e., in that message to the payload of which it pertains),
@@ -406,7 +406,7 @@
         specify the block number, SZX, and M bit as appropriate. The
         Request-Tag value to use is determined from the payload of the 4.08
         (Request Entity Incomplete) Response Code. If the client does not
-        recognize the Request-Tag, the client can ignore this response. </t>
+        recognize the Request-Tag, the client can ignore this response.</t>
 
         <t>If the server has not received all the payloads of a body, but one
         or more payloads have been received, it SHOULD wait for up to
@@ -430,12 +430,6 @@
       </section>
 
       <section title="Using the Block4 Option">
-        <t>Support for the receipt of Block4 Option by the client is indicated
-        by using the Block4 Option in the GET, POST, PUT, FETCH, PATCH, or
-        iPATCH request. If support for the Block4 Option is not Indicated by
-        the client, the server MUST NOT send data using the Block4 Option, but
-        can use Block2, if supported, instead. </t>
-
         <t>In a request, for block number 0, the M bit unset indicates the
         entire body is requested. If the M bit is set for block number 0, this
         indicates that this is a repeat request. Otherwise for a request, the
@@ -480,7 +474,7 @@
 
         <t>For Confirmable transmission, the client SHOULD continue to
         acknowledge each packet as well as issuing a separate GET, POST, PUT,
-        FETCH, PATCH, or iPATCH for the missing blocks. </t>
+        FETCH, PATCH, or iPATCH for the missing blocks.</t>
 
         <t>If the server transmits a new body of data (e.g., a triggered
         Observe) with a new ETag to the same client as an additional response,
@@ -500,7 +494,7 @@
         <t>As the blocks of the body are sent without waiting for
         acknowledgement of the individual blocks, the Observe value <xref
         target="RFC7641"></xref> MUST be the same for all the blocks of the
-        same body. </t>
+        same body.</t>
 
         <t>If the client requests missing blocks, this is treated as a new
         request. The Observe value may change but MUST still be reported. If
@@ -520,7 +514,7 @@
 
         <t>The Size1 Option MUST be used with the Block3 Option when used in a
         request. The Size2 Option MUST be used with the Block4 Option when
-        used in a response. </t>
+        used in a response.</t>
 
         <t>If Size1 or Size2 Options are used, they MUST be used in all
         payloads of the body and MUST have the same value.</t>
@@ -538,7 +532,7 @@
       <t>4.08 (Request Entity Incomplete) Response Code has a new Content-Type
       "application/missing-blocks+cbor-seq" used to indicate that the server
       has not received all of the blocks of the request body that it needs to
-      proceed. </t>
+      proceed.</t>
 
       <t>Likely causes are the client has not sent all blocks, some blocks
       were dropped during transmission, or the client has sent them
@@ -606,24 +600,24 @@ missing-block-number = uint
       MAX_PAYLOADS should be configurable with a default value of 10. <list
           style="empty">
           <t>Note: The default value is chosen for reasons similar to those
-          discussed in Section 5 of <xref target="RFC6928"></xref>. </t>
+          discussed in Section 5 of <xref target="RFC6928"></xref>.</t>
         </list></t>
 
       <t>For NON transmissions, it is permissible, but not required, to send
       the ultimate payload of a MAX_PAYLOADS set as a Confirmable packet. If a
       Confirmable packet is used, then the transmitting peer MUST wait for the
       ACK to be returned before sending the next set of payloads, which can be
-      in time terms less than the ACK_TIMEOUT delay. </t>
+      in time terms less than the ACK_TIMEOUT delay.</t>
 
       <t>Also, for NON transmissions, it is permissible, but not required, to
       send a Confirmable packet for the final payload of a body (that is, M
       bit unset). If a Confirmable packet is used, then the transmitting peer
       MUST wait for the appropriate response to be returned for successful
-      transmission, or respond to requests for the missing blocks (if any).
-      </t>
+      transmission, or respond to requests for the missing blocks (if
+      any).</t>
 
-      <t>The sending of the set of missing blocks is subject to MAX_PAYLOADS.
-      </t>
+      <t>The sending of the set of missing blocks is subject to
+      MAX_PAYLOADS.</t>
     </section>
 
     <section title="Caching Considerations">
