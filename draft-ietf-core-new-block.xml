@@ -410,12 +410,13 @@
 
         <t>A 4.08 (Request Entity Incomplete) Response Code returned with
         Content-Type "application/missing-blocks+cbor-seq" indicates that some
-        of the payloads are missing and need to be resent. The client then re-
-        transmits the missing payloads using the Request-Tag and Quick-Block1
-        to specify the block number, SZX, and M bit as appropriate. The
-        Request-Tag value to use is determined from the payload of the 4.08
-        (Request Entity Incomplete) Response Code. If the client does not
-        recognize the Request-Tag, the client can ignore this response.</t>
+        of the payloads are missing and need to be resent. The client then
+        re-transmits the missing payloads using the Request-Tag and
+        Quick-Block1 to specify the block number, SZX, and M bit as
+        appropriate. The Request-Tag value to use is determined from the
+        payload of the 4.08 (Request Entity Incomplete) Response Code. If the
+        client does not recognize the Request-Tag, the client can ignore this
+        response.</t>
 
         <t>If the server has not received all the payloads of a body, but one
         or more payloads have been received, it SHOULD wait for up to
@@ -706,13 +707,13 @@ X<--: Message loss
 ]]></artwork>
         </figure></t>
 
-      <section title="Block3 Option: Non-Confirmable Example">
+      <section title="Quick-Block1 Option: Non-Confirmable Example">
         <t><xref target="B3non"></xref> depicts an example of a NON PUT
         request conveying Quick-Block1 Option. All the blocks are received by
         the server.</t>
 
         <t><figure anchor="B3non"
-            title="Example of NON Request with Block3 Option (Without Loss)">
+            title="Example of NON Request with Quick-Block1 Option (Without Loss)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -730,7 +731,7 @@ X<--: Message loss
         in <xref target="B3non1"></xref>.</t>
 
         <t><figure anchor="B3non1"
-            title="Example of NON Request with Block3 Option (With Loss)">
+            title="Example of NON Request with Quick-Block1 Option (With Loss)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -749,7 +750,7 @@ X<--: Message loss
         response.</t>
 
         <t><figure anchor="B3non2"
-            title="Example of NON Request with Block3 Option (Blocks Recovery)">
+            title="Example of NON Request with Quick-Block1 Option (Blocks Recovery)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -771,7 +772,7 @@ X<--: Message loss
         specific.</t>
       </section>
 
-      <section title="Block4 Option: Non-Confirmable Example">
+      <section title="Quick-Block2 Option: Non-Confirmable Example">
         <t><xref target="nonb4"></xref> illustrates the example of
         Quick-Block2 Option. The client sends a NON GET carrying an Observe
         and a Quick-Block2 Options. The Quick-Block2 Option indicates a size
@@ -782,7 +783,7 @@ X<--: Message loss
         any of the notification blocks.</t>
 
         <t><figure anchor="nonb4"
-            title="Example of NON Notifications with Block4 Option (Without Loss)">
+            title="Example of NON Notifications with Quick-Block2 Option (Without Loss)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -808,7 +809,7 @@ X<--: Message loss
         does so by indicating the blocks that were successfully received.</t>
 
         <t><figure anchor="nonb41"
-            title="Example of NON Notifications with Block4 Option (Blocks Recovery)">
+            title="Example of NON Notifications with Quick-Block2 Option (Blocks Recovery)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -849,8 +850,8 @@ X<--: Message loss
             <artwork align="center"><![CDATA[+--------+------------------+-----------+
 | Number | Name             | Reference |
 +========+==================+===========+
-|  TBA1  | Quick-Block1           | [RFCXXXX] |
-|  TBA2  | Quick-Block2           | [RFCXXXX] |
+|  TBA1  | Quick-Block1     | [RFCXXXX] |
+|  TBA2  | Quick-Block2     | [RFCXXXX] |
 +--------+------------------+-----------+
 
 Table 2: CoAP Quick-Block1 and Quick-Block2 Option Numbers]]></artwork>
@@ -946,7 +947,7 @@ o  Reference: [RFCXXXX]]]></artwork>
         acknowledged (ACK).</t>
 
         <t><figure anchor="con3"
-            title="Example of CON Request with Block3 Option (Without Loss)">
+            title="Example of CON Request with Quick-Block1 Option (Without Loss)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -968,7 +969,7 @@ o  Reference: [RFCXXXX]]]></artwork>
         no ACK was received.</t>
 
         <t><figure anchor="con32"
-            title="Example of CON Request with Block3 Option (Blocks Recovery)">
+            title="Example of CON Request with Quick-Block1 Option (Blocks Recovery)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -1006,7 +1007,7 @@ o  Reference: [RFCXXXX]]]></artwork>
         messages is shown in <xref target="b4con"></xref>.</t>
 
         <t><figure align="center" anchor="b4con"
-            title="Example of CON Notifications with Block4 Option">
+            title="Example of CON Notifications with Quick-Block2 Option">
             <artwork align="center"><![CDATA[       Client      Server
          |          |
          +--------->| CON GET /path M:0x01 T:0xf0 O:0 QB2:0/0/1024
