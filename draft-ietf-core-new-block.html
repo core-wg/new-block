@@ -699,7 +699,7 @@ missing-block-number = uint
 <p id="rfc.section.7.p.4">For Block4 responses, the ETag Option value is associated with the data (and onward transmitted to the CoAP client), but is not part of the cache key.</p>
 <p id="rfc.section.7.p.5">For requests with Block3 Option, the Request-Tag Option is associated with the build up of the body from successive payloads, but is not part of the cache key. For the onward transmission of the body using CoAP, a new Request-Tag SHOULD be generated and used.</p>
 <p id="rfc.section.7.p.6">It is possible that two or more CoAP clients are concurrently updating the same resource through a common proxy to the same CoAP server using Block3 (or Block1) Option. If this is the case, the first client to complete building the body causes that body to start transmitting to the CoAP server with an appropriate Request-Tag value.  When the next client completes building the body, any existing partial body transmission to the CoAP server is terminated and the new body representation transmission starts with a new Request-Tag value.</p>
-<p id="rfc.section.7.p.7">A proxy that supports Block4 Option MUST be prepared to receive a GET or similar message indicating one or more missing blocks. The proxy will serve from its cache the missing blocks that are available in its cache in as the same way a server would send all the Block4s. If the cache key matching body is not available in the cache, the proxy MUST request the entire body from the CoAP server using the information in the cache key.  </p>
+<p id="rfc.section.7.p.7">A proxy that supports Block4 Option MUST be prepared to receive a GET or similar message indicating one or more missing blocks. The proxy will serve from its cache the missing blocks that are available in its cache in the same way a server would send all the appropriate Block4s. If the cache key matching body is not available in the cache, the proxy MUST request the entire body from the CoAP server using the information in the cache key. </p>
 <p id="rfc.section.7.p.8">How long a CoAP endpoint (or proxy) keeps the body in its cache is implementation specific (e.g., it may be based on Max-Age).</p>
 <h1 id="rfc.section.8">
 <a href="#rfc.section.8">8.</a> HTTP-Mapping Considerations</h1>
@@ -844,7 +844,7 @@ X&lt;--: Message loss
 
 Table 2: CoAP Block3 and Block4 Option Numbers</pre>
 <p></p>
-<p id="rfc.section.10.1.p.3">This document suggests 19 (TBA1) and 39 (TBA2) as a values to be assigned for the new option numbers.</p>
+<p id="rfc.section.10.1.p.3">This document suggests 19 (TBA1) and 51 (TBA2) as a values to be assigned for the new option numbers.</p>
 <h1 id="rfc.section.10.2">
 <a href="#rfc.section.10.2">10.2.</a> <a href="#new-format" id="new-format">New Content Format</a>
 </h1>
