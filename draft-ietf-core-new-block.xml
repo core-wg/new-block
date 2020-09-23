@@ -848,8 +848,7 @@ X<--: Message loss
     <section anchor="IANA" title="IANA Considerations">
       <section title="New CoAP Options">
         <t>IANA is requested to add the following entries to the "CoAP Option
-        Numbers" sub-registry available at
-        https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers:</t>
+        Numbers" sub-registry <xref target="Options"></xref>:</t>
 
         <t><figure align="center">
             <artwork align="center"><![CDATA[+--------+------------------+-----------+
@@ -869,8 +868,7 @@ Table 2: CoAP Quick-Block1 and Quick-Block2 Option Numbers]]></artwork>
       <section anchor="new-format" title="New Content Format">
         <t>This document requests IANA to register the CoAP Content-Format ID
         for the "application/missing-blocks+cbor-seq" media type in the "CoAP
-        Content-Formats" registry available at
-        https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats:</t>
+        Content-Formats" registry <xref target="Format"></xref>:</t>
 
         <figure>
           <artwork><![CDATA[o  Media Type: application/missing-blocks+cbor-seq
@@ -938,6 +936,32 @@ o  Reference: [RFCXXXX]]]></artwork>
       <?rfc include='reference.RFC.8782'?>
 
       <?rfc include='reference.RFC.8610'?>
+
+      <reference anchor="Format"
+                 target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats">
+        <front>
+          <title></title>
+
+          <author>
+            <organization></organization>
+          </author>
+
+          <date />
+        </front>
+      </reference>
+
+      <reference anchor="Options"
+                 target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers">
+        <front>
+          <title></title>
+
+          <author>
+            <organization></organization>
+          </author>
+
+          <date />
+        </front>
+      </reference>
     </references>
 
     <section anchor="CON" title="Examples with Confirmable Messages">
