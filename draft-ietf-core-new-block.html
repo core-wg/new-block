@@ -415,7 +415,7 @@
 
   <meta name="dct.creator" content="Boucadair, M. and J. Shallow" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-core-new-block-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2020-09" />
+  <meta name="dct.issued" scheme="ISO8601" content="2020-23" />
   <meta name="dct.abstract" content="This document specifies alternate Constrained Application Protocol (CoAP) Block-Wise transfer options: Quick-Block1 and Quick-Block2 Options. These options are similar to the CoAP Block1 and Block2 Options, not a replacement for them, but do enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission. " />
   <meta name="description" content="This document specifies alternate Constrained Application Protocol (CoAP) Block-Wise transfer options: Quick-Block1 and Quick-Block2 Options. These options are similar to the CoAP Block1 and Block2 Options, not a replacement for them, but do enable faster transmission rates for large amounts of data with less packet interchanges as well as supporting faster recovery should any of the blocks get lost in transmission. " />
 
@@ -439,8 +439,8 @@
 <td class="right">J. Shallow</td>
 </tr>
 <tr>
-<td class="left">Expires: March 13, 2021</td>
-<td class="right">September 9, 2020</td>
+<td class="left">Expires: March 27, 2021</td>
+<td class="right">September 23, 2020</td>
 </tr>
 
     	
@@ -457,7 +457,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on March 13, 2021.</p>
+<p>This Internet-Draft will expire on March 27, 2021.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2020 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -602,9 +602,9 @@
 </pre>
 <p></p>
 <p id="rfc.section.3.1.p.3">The Quick-Block1 and Quick-Block2 Options can be present in both the request and response messages. The Quick-Block1 Option pertains to the request payload and the Quick-Block2 Option pertains to the response payload. The Content-Format Option applies to the body, not to the payload (i.e., it must be the same for all payloads of the same body).</p>
-<p id="rfc.section.3.1.p.4">Quick-Block1 Option is useful with the payload-bearing POST, PUT, PATCH, and iPATCH requests and their responses (2.01 and 2.04). </p>
+<p id="rfc.section.3.1.p.4">Quick-Block1 Option is useful with the payload-bearing POST, PUT, PATCH, and iPATCH requests and their responses (2.01 and 2.04).</p>
 <p id="rfc.section.3.1.p.5">Quick-Block2 Option is useful with GET, POST, PUT, FETCH, PATCH, and iPATCH requests and their payload-bearing responses (2.01, 2.03, 2.04, and 2.05) (Section 5.5 of <a href="#RFC7252" class="xref">[RFC7252]</a>).</p>
-<p id="rfc.section.3.1.p.6">To indicate support for Quick-Block2 responses, the CoAP client MUST include the Quick-Block2 Option in a GET or similar request, or the Quick-Block2 Option in a PUT or similar request, so that the server knows that the client supports this Quick-Block2 functionality should it needs to send back a body that spans multiple payloads.  Otherwise, the server would use the Block2 Option (if supported) to send back a message body that is too large to fit into a single IP packet <a href="#RFC7959" class="xref">[RFC7959]</a>. </p>
+<p id="rfc.section.3.1.p.6">To indicate support for Quick-Block2 responses, the CoAP client MUST include the Quick-Block2 Option in a GET or similar request, or the Quick-Block2 Option in a PUT or similar request, so that the server knows that the client supports this Quick-Block2 functionality should it needs to send back a body that spans multiple payloads.  Otherwise, the server would use the Block2 Option (if supported) to send back a message body that is too large to fit into a single IP packet <a href="#RFC7959" class="xref">[RFC7959]</a>.</p>
 <p id="rfc.section.3.1.p.7">If Quick-Block1 Option is present in a request or Quick-Block2 Option in a response (i.e., in that message to the payload of which it pertains), it indicates a block-wise transfer and describes how this specific block-wise payload forms part of the entire body being transferred. If it is present in the opposite direction, it provides additional control on how that payload will be formed or was processed.</p>
 <p id="rfc.section.3.1.p.8">Implementation of the Quick-Block1 and Quick-Block2 Options is intended to be optional. However, when it is present in a CoAP message, it MUST be processed (or the message rejected). Therefore, Quick-Block1 and Quick-Block2 Options are identified as Critical options.</p>
 <p id="rfc.section.3.1.p.9">The Quick-Block1 and Quick-Block2 Options are unsafe to forward.  That is, a CoAP proxy that does not understand the Quick-Block1 (or Quick-Block2) Option MUST reject the request or response that uses either option.</p>
@@ -664,9 +664,11 @@
 <p id="rfc.section.4.p.2">Likely causes are the client has not sent all blocks, some blocks were dropped during transmission, or the client has sent them sufficiently long ago that the server has already discarded them.</p>
 <p id="rfc.section.4.p.3">The data payload of the 4.08 (Request Entity Incomplete) Response Code is encoded as a CBOR Sequence <a href="#RFC8742" class="xref">[RFC8742]</a>. First is CBOR encoded Request-Tag followed by 1 or more missing CBOR encoded missing block numbers. The missing block numbers MUST be unique in each 4.08 (Request Entity Incomplete) when created by the server; the client SHOULD drop any duplicates in the same 4.08 (Request Entity Incomplete) message.</p>
 <p id="rfc.section.4.p.4">The Content-Format Option (Section 5.10.3 of <a href="#RFC7252" class="xref">[RFC7252]</a>) MUST be used in the 4.08 (Request Entity Incomplete) Response Code. It MUST be set to "application/missing-blocks+cbor-seq" (see <a href="#new-format" class="xref">Section 10.2</a>).</p>
+<p id="rfc.section.4.p.5">The Concise Data Definition Language <a href="#RFC8610" class="xref">[RFC8610]</a> for the data describing these missing blocks is as follows:</p>
+<p></p>
 <div id="rfc.figure.1"></div>
 <div id="cddl"></div>
-<pre>4.08-payload = (request-tag, missing-block-list)
+<pre>payload = {request-tag, missing-block-list}
 ; A copy of the opaque Request-Tag value
 request-tag = bstr
 missing-block-list = [1 * missing-block-number]
@@ -674,8 +676,8 @@ missing-block-list = [1 * missing-block-number]
 missing-block-number = uint
 </pre>
 <p class="figure">Figure 1: Structure of the Missing Blocks Payload</p>
-<p id="rfc.section.4.p.5">The Concise Data Definition Language <a href="#RFC8610" class="xref">[RFC8610]</a> for the data describing these missing blocks is as follows:</p>
-<p id="rfc.section.4.p.6">If the size of the 4.08 (Request Entity Incomplete) response packet is larger than that defined by Section 4.6 <a href="#RFC7252" class="xref">[RFC7252]</a>, then the number of missing blocks MUST be limited so that the response can fit into a single packet. If this is the case, then the server can send subsequent 4.08 (Request Entity Incomplete) responses containing the missing blocks on receipt of a new request providing a missing payload with the same Request-Tag.</p>
+<p></p>
+<p id="rfc.section.4.p.8">If the size of the 4.08 (Request Entity Incomplete) response packet is larger than that defined by Section 4.6 <a href="#RFC7252" class="xref">[RFC7252]</a>, then the number of missing blocks MUST be limited so that the response can fit into a single packet. If this is the case, then the server can send subsequent 4.08 (Request Entity Incomplete) responses containing the missing blocks on receipt of a new request providing a missing payload with the same Request-Tag.</p>
 <h1 id="rfc.section.5">
 <a href="#rfc.section.5">5.</a> The Use of Tokens</h1>
 <p id="rfc.section.5.p.1">Each new request MUST use a unique Token (Section 4 of <a href="#I-D.ietf-core-echo-request-tag" class="xref">[I-D.ietf-core-echo-request-tag]</a>). Additional responses may use the same Token.</p>
@@ -699,7 +701,7 @@ missing-block-number = uint
 <p id="rfc.section.7.p.4">For Quick-Block2 responses, the ETag Option value is associated with the data (and onward transmitted to the CoAP client), but is not part of the cache key.</p>
 <p id="rfc.section.7.p.5">For requests with Quick-Block1 Option, the Request-Tag Option is associated with the build up of the body from successive payloads, but is not part of the cache key. For the onward transmission of the body using CoAP, a new Request-Tag SHOULD be generated and used.</p>
 <p id="rfc.section.7.p.6">It is possible that two or more CoAP clients are concurrently updating the same resource through a common proxy to the same CoAP server using Quick-Block1 (or Block1) Option. If this is the case, the first client to complete building the body causes that body to start transmitting to the CoAP server with an appropriate Request-Tag value.  When the next client completes building the body, any existing partial body transmission to the CoAP server is terminated and the new body representation transmission starts with a new Request-Tag value.</p>
-<p id="rfc.section.7.p.7">A proxy that supports Quick-Block2 Option MUST be prepared to receive a GET or similar message indicating one or more missing blocks. The proxy will serve from its cache the missing blocks that are available in its cache in the same way a server would send all the appropriate Quick-Block2s. If the cache key matching body is not available in the cache, the proxy MUST request the entire body from the CoAP server using the information in the cache key. </p>
+<p id="rfc.section.7.p.7">A proxy that supports Quick-Block2 Option MUST be prepared to receive a GET or similar message indicating one or more missing blocks. The proxy will serve from its cache the missing blocks that are available in its cache in the same way a server would send all the appropriate Quick-Block2s. If the cache key matching body is not available in the cache, the proxy MUST request the entire body from the CoAP server using the information in the cache key.</p>
 <p id="rfc.section.7.p.8">How long a CoAP endpoint (or proxy) keeps the body in its cache is implementation specific (e.g., it may be based on Max-Age).</p>
 <h1 id="rfc.section.8">
 <a href="#rfc.section.8">8.</a> HTTP-Mapping Considerations</h1>
@@ -970,7 +972,7 @@ o  Reference: [RFCXXXX]</pre>
          |&lt;---------+ ACK 0.00 M:0x01
          |&lt;---------+ ACK 0.00 M:0x02
          |&lt;---------+ ACK 0.00 M:0x03
-         |&lt;---------+ ACK 0.00 M:0x04
+         |&lt;---------+ ACK 2.04 M:0x04
 
 </pre>
 <p class="figure">Figure 8: Example of CON Request with Quick-Block1 Option (Without Loss)</p>
