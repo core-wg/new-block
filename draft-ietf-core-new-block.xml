@@ -287,7 +287,7 @@
         body).</t>
 
         <t>Quick-Block1 Option is useful with the payload-bearing POST, PUT,
-        PATCH, and iPATCH requests and their responses (2.01 and 2.04). </t>
+        PATCH, and iPATCH requests and their responses (2.01 and 2.04).</t>
 
         <t>Quick-Block2 Option is useful with GET, POST, PUT, FETCH, PATCH,
         and iPATCH requests and their payload-bearing responses (2.01, 2.03,
@@ -300,7 +300,7 @@
         should it needs to send back a body that spans multiple payloads.
         Otherwise, the server would use the Block2 Option (if supported) to
         send back a message body that is too large to fit into a single IP
-        packet <xref target="RFC7959"></xref>. </t>
+        packet <xref target="RFC7959"></xref>.</t>
 
         <t>If Quick-Block1 Option is present in a request or Quick-Block2
         Option in a response (i.e., in that message to the payload of which it
@@ -563,17 +563,22 @@
       target="new-format"></xref>).</t>
 
       <t>The Concise Data Definition Language <xref target="RFC8610"></xref>
-      for the data describing these missing blocks is as follows:<figure
-          align="center" anchor="cddl"
-          title="Structure of the Missing Blocks Payload">
-          <artwork align="center"><![CDATA[4.08-payload = (request-tag, missing-block-list)
+      for the data describing these missing blocks is as follows:</t>
+
+      <t></t>
+
+      <figure align="center" anchor="cddl"
+              title="Structure of the Missing Blocks Payload">
+        <artwork align="center"><![CDATA[payload = {request-tag, missing-block-list}
 ; A copy of the opaque Request-Tag value
 request-tag = bstr
 missing-block-list = [1 * missing-block-number]
 ; A unique block number not received
 missing-block-number = uint
 ]]></artwork>
-        </figure></t>
+      </figure>
+
+      <t></t>
 
       <t>If the size of the 4.08 (Request Entity Incomplete) response packet
       is larger than that defined by Section 4.6 <xref
@@ -669,7 +674,7 @@ missing-block-number = uint
       its cache in the same way a server would send all the appropriate
       Quick-Block2s. If the cache key matching body is not available in the
       cache, the proxy MUST request the entire body from the CoAP server using
-      the information in the cache key. </t>
+      the information in the cache key.</t>
 
       <t>How long a CoAP endpoint (or proxy) keeps the body in its cache is
       implementation specific (e.g., it may be based on Max-Age).</t>
@@ -958,7 +963,7 @@ o  Reference: [RFCXXXX]]]></artwork>
          |<---------+ ACK 0.00 M:0x01
          |<---------+ ACK 0.00 M:0x02
          |<---------+ ACK 0.00 M:0x03
-         |<---------+ ACK 0.00 M:0x04
+         |<---------+ ACK 2.04 M:0x04
 
 ]]></artwork>
           </figure></t>
