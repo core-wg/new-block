@@ -95,7 +95,7 @@ Table of Contents
    12. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  19
    13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  19
      13.1.  Normative References . . . . . . . . . . . . . . . . . .  19
-     13.2.  Informative References . . . . . . . . . . . . . . . . .  21
+     13.2.  Informative References . . . . . . . . . . . . . . . . .  20
    Appendix A.  Examples with Confirmable Messages . . . . . . . . .  21
      A.1.  Quick-Block1 Option . . . . . . . . . . . . . . . . . . .  21
      A.2.  Quick-Block2 Option . . . . . . . . . . . . . . . . . . .  23
@@ -988,8 +988,7 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
 10.1.  New CoAP Options
 
    IANA is requested to add the following entries to the "CoAP Option
-   Numbers" sub-registry available at https://www.iana.org/assignments/
-   core-parameters/core-parameters.xhtml#option-numbers:
+   Numbers" sub-registry [Options]:
 
         +--------+------------------+-----------+
         | Number | Name             | Reference |
@@ -1005,6 +1004,7 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
 
 
 
+
 Boucadair & Shallow      Expires March 27, 2021                [Page 18]
 
 Internet-Draft      Quick Block-Wise Transfer Options     September 2020
@@ -1014,9 +1014,7 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
 
    This document requests IANA to register the CoAP Content-Format ID
    for the "application/missing-blocks+cbor-seq" media type in the "CoAP
-   Content-Formats" registry available at
-   https://www.iana.org/assignments/core-parameters/core-
-   parameters.xhtml#content-formats:
+   Content-Formats" registry [Format]:
 
    o  Media Type: application/missing-blocks+cbor-seq
    o  Encoding: -
@@ -1056,8 +1054,10 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-
-
+   [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
+              Application Protocol (CoAP)", RFC 7252,
+              DOI 10.17487/RFC7252, June 2014,
+              <https://www.rfc-editor.org/info/rfc7252>.
 
 
 
@@ -1065,11 +1065,6 @@ Boucadair & Shallow      Expires March 27, 2021                [Page 19]
 
 Internet-Draft      Quick Block-Wise Transfer Options     September 2020
 
-
-   [RFC7252]  Shelby, Z., Hartke, K., and C. Bormann, "The Constrained
-              Application Protocol (CoAP)", RFC 7252,
-              DOI 10.17487/RFC7252, June 2014,
-              <https://www.rfc-editor.org/info/rfc7252>.
 
    [RFC7641]  Hartke, K., "Observing Resources in the Constrained
               Application Protocol (CoAP)", RFC 7641,
@@ -1111,6 +1106,11 @@ Internet-Draft      Quick Block-Wise Transfer Options     September 2020
               Sequences", RFC 8742, DOI 10.17487/RFC8742, February 2020,
               <https://www.rfc-editor.org/info/rfc8742>.
 
+13.2.  Informative References
+
+   [Format]   , <https://www.iana.org/assignments/core-parameters/core-
+              parameters.xhtml#content-formats>.
+
 
 
 
@@ -1122,13 +1122,14 @@ Boucadair & Shallow      Expires March 27, 2021                [Page 20]
 Internet-Draft      Quick Block-Wise Transfer Options     September 2020
 
 
-13.2.  Informative References
-
    [I-D.ietf-dots-telemetry]
               Boucadair, M., Reddy.K, T., Doron, E., chenmeiling, c.,
               and J. Shallow, "Distributed Denial-of-Service Open Threat
               Signaling (DOTS) Telemetry", draft-ietf-dots-telemetry-11
               (work in progress), July 2020.
+
+   [Options]  , <https://www.iana.org/assignments/core-parameters/core-
+              parameters.xhtml#option-numbers>.
 
    [RFC6928]  Chu, J., Dukkipati, N., Cheng, Y., and M. Mathis,
               "Increasing TCP's Initial Window", RFC 6928,
@@ -1158,7 +1159,6 @@ A.1.  Quick-Block1 Option
 
    Let's now consider the use Quick-Block1 Option with a CON request as
    shown in Figure 8.  All the blocks are acknowledged (ACK).
-
 
 
 
