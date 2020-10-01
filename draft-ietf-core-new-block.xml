@@ -565,15 +565,13 @@
       <t>The Concise Data Definition Language <xref target="RFC8610"></xref>
       for the data describing these missing blocks is as follows:</t>
 
-      <t></t>
-
       <figure align="center" anchor="cddl"
               title="Structure of the Missing Blocks Payload">
-        <artwork align="center"><![CDATA[payload = {request-tag, missing-block-list}
-; A copy of the opaque Request-Tag value
-request-tag = bstr
-missing-block-list = [1 * missing-block-number]
-; A unique block number not received
+        <artwork align="center"><![CDATA[; This defines an array, the elements of which are to be used 
+; in a CBOR Sequence:
+payload = [request-tag, + missing-block-number] 
+request-tag = bstr 
+; A unique block number not received:
 missing-block-number = uint
 ]]></artwork>
       </figure>
