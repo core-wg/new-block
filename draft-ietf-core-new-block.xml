@@ -293,14 +293,18 @@
         and iPATCH requests and their payload-bearing responses (2.01, 2.03,
         2.04, and 2.05) (Section 5.5 of <xref target="RFC7252"></xref>).</t>
 
+        <t>A CoAP endpoint (or proxy) MUST support either both or neither of
+        the Quick-Block1 and Quick-Block2 Options. </t>
+
         <t>To indicate support for Quick-Block2 responses, the CoAP client
-        MUST include the Quick-Block2 Option in a GET or similar request, or
-        the Quick-Block2 Option in a PUT or similar request, so that the
-        server knows that the client supports this Quick-Block2 functionality
-        should it needs to send back a body that spans multiple payloads.
-        Otherwise, the server would use the Block2 Option (if supported) to
-        send back a message body that is too large to fit into a single IP
-        packet <xref target="RFC7959"></xref>.</t>
+        MUST include the Quick-Block2 Option in a GET or similar request, the
+        Quick-Block2 Option in a PUT or similar request, or the Quick-Block1
+        Option in a PUT or similar so that the server knows that the client
+        supports this Quick-Block2 functionality should it needs to send back
+        a body that spans multiple payloads. Otherwise, the server would use
+        the Block2 Option (if supported) to send back a message body that is
+        too large to fit into a single IP packet <xref
+        target="RFC7959"></xref>.</t>
 
         <t>If Quick-Block1 Option is present in a request or Quick-Block2
         Option in a response (i.e., in that message to the payload of which it
