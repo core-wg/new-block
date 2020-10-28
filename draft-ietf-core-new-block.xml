@@ -149,6 +149,9 @@
 
             <t>They support faster recovery should any of the Blocks get lost
             in transmission.</t>
+
+            <t>They support sending an entire body using Non-confirmable (NON)
+            without requiring a response.</t>
           </list></t>
 
         <t>There are the following disadvantages over using CoAP Block 1 and
@@ -160,14 +163,14 @@
             place.</t>
           </list></t>
 
-        <t>Using Non-confirmable (NON) messages, the faster transmissions
-        occur as all the Blocks can be transmitted serially (as are IP
-        fragmented packets) without having to wait for an acknowledgement or
-        next request from the remote CoAP peer. Recovery of missing Blocks is
-        faster in that multiple missing Blocks can be requested in a single
-        CoAP packet. Even if there is asymmetrical packet loss, a body can
-        still be sent and received by the peer whether the body compromises of
-        a single or multiple payloads assuming no recovery is required.</t>
+        <t>Using NON messages, the faster transmissions occur as all the
+        Blocks can be transmitted serially (as are IP fragmented packets)
+        without having to wait for an acknowledgement or next request from the
+        remote CoAP peer. Recovery of missing Blocks is faster in that
+        multiple missing Blocks can be requested in a single CoAP packet. Even
+        if there is asymmetrical packet loss, a body can still be sent and
+        received by the peer whether the body compromises of a single or
+        multiple payloads assuming no recovery is required.</t>
 
         <t>Note that the same performance benefits can be applied to
         Confirmable messages if the value of NSTART is increased from 1
@@ -204,7 +207,7 @@
         target="RFC8132"></xref>.</t>
       </section>
 
-      <section title="An Updated CoAP Response Code">
+      <section title="Updated CoAP Response Code (4.08)">
         <t>This document updates the 4.08 (Request Entity Incomplete) by
         defining an additional message format for reporting on payloads using
         the Quick-Block1 Option that are not received by the server.</t>
@@ -215,7 +218,7 @@
       <section title="Applicability Scope">
         <t>The block-wise transfer specified in <xref target="RFC7959"></xref>
         covers the general case, but falls short in situations where packet
-        loss is highly asymmetrical. The mechanism specified in the document
+        loss is highly asymmetrical. The mechanism specified in this document
         provides roughly similar features to the Block1/Block2 Options. It
         provides additional properties that are tailored towards the intended
         use case. Concretely, this mechanism primarily targets applications
@@ -237,6 +240,10 @@
         that the experience gained with this mechanism can feed future
         extensions of the block-wise mechanism that will both generally
         applicable and serve this particular use case.</t>
+
+        <t>It is not recommended that these options are used in a NoSec
+        security mode (Section 9 of <xref target="RFC7252"></xref>) as the
+        source endpoint needs to be trusted.</t>
       </section>
     </section>
 
@@ -294,16 +301,16 @@
         2.04, and 2.05) (Section 5.5 of <xref target="RFC7252"></xref>).</t>
 
         <t>A CoAP endpoint (or proxy) MUST support either both or neither of
-        the Quick-Block1 and Quick-Block2 Options. </t>
+        the Quick-Block1 and Quick-Block2 Options.</t>
 
         <t>To indicate support for Quick-Block2 responses, the CoAP client
         MUST include the Quick-Block2 Option in a GET or similar request, the
         Quick-Block2 Option in a PUT or similar request, or the Quick-Block1
         Option in a PUT or similar so that the server knows that the client
-        supports this Quick-Block2 functionality should it needs to send back
-        a body that spans multiple payloads. Otherwise, the server would use
-        the Block2 Option (if supported) to send back a message body that is
-        too large to fit into a single IP packet <xref
+        supports this Quick-Block2 functionality should it need to send back a
+        body that spans multiple payloads. Otherwise, the server would use the
+        Block2 Option (if supported) to send back a message body that is too
+        large to fit into a single IP packet <xref
         target="RFC7959"></xref>.</t>
 
         <t>If Quick-Block1 Option is present in a request or Quick-Block2
@@ -387,8 +394,8 @@
         acknowledge each packet. NSTART will also need to be increased from
         the default (1) to get faster transmission rates.</t>
 
-        <t>Each individual payload of the body is treated as a new
-        request.</t>
+        <t>Each individual payload of the body is treated as a new request
+        (see <xref target="token"></xref>).</t>
 
         <t>A 2.01 (Created) or 2.04 (Changed) Response Code indicates
         successful receipt of the entire body. The 2.31 (Continue) Response
@@ -444,10 +451,12 @@
       </section>
 
       <section title="Using the Quick-Block2 Option">
-        <t>In a request, for block number 0, the M bit unset indicates the
-        entire body is requested. If the M bit is set for block number 0, this
-        indicates that this is a repeat request. Otherwise for a request, the
-        Quick-Block2 Option MUST always have the M bit unset.</t>
+        <t>In a request for any block number, the M bit unset indicates the
+        request is just for that block. If the M bit is set, this indicates
+        that this is a request for this block and for all of the remaining
+        blocks within the body. If the server receives multiple requests
+        (implied or otherwise) for the same block, it MUST only send back one
+        instance of that block. </t>
 
         <t>The payloads sent back from the server as a response MUST all have
         the same ETag (Section 5.10.6 of <xref target="RFC7252"></xref>) for
@@ -466,7 +475,12 @@
         <t>If the client detects that some of the payloads are missing, the
         missing payloads are requested by issuing a new GET, POST, PUT, FETCH,
         PATCH, or iPATCH request that contains one or more Quick-Block2
-        Options that define the missing blocks.</t>
+        Options that define the missing blocks with the M bit unset.</t>
+
+        <t>The requested missing block numbers MUST have an increasing block
+        number in each additional Quick-Block2 Option with no duplicates. The
+        server SHOULD respond with a 4.00 (Bad Request) if this is the
+        case.</t>
 
         <t>The ETag Option MUST NOT be used in the request as the server could
         respond with a 2.03 (Valid Response) with no payload. If the server
@@ -502,6 +516,11 @@
         up to EXCHANGE_LIFETIME (Section 4.8.2 of <xref
         target="RFC7252"></xref>) or as defined by the Max-Age Option
         whichever is the less.</t>
+
+        <t>If there is insufficient space to create a response PDU with a
+        block size of 16 bytes (SZX = 0) to reflect back all the request
+        options as appropriate, a 4.13 (Request Entity Too Large) is returned
+        without the Size2 Option.</t>
       </section>
 
       <section title="Working with Observe and Quick-Block2 Options">
@@ -589,12 +608,41 @@ missing-block-number = uint
       the case, then the server can send subsequent 4.08 (Request Entity
       Incomplete) responses containing the missing blocks on receipt of a new
       request providing a missing payload with the same Request-Tag.</t>
+
+      <t>The missing blocks MUST be reported in ascending order without any
+      duplicates. The client SHOULD silently drop 4.08 (Request Entity
+      Incomplete) responses not adhering with this behavior.</t>
+
+      <t><list style="hanging">
+          <t hangText="Implementation Note:">Updating the payload without
+          overflowing the overall packet size as each block number can be of
+          varying length needs consideration. It is possible to use
+          Indefinite-Length Arrays (Section 2.2.1 of <xref
+          target="RFC7049"></xref>), limit the array count to 23 (Undefined
+          value) so that the array data byte can be updated with the overall
+          length once the payload length is confirmed or limited to
+          MAX_PAYLOADS count. Limiting the count to MAX_PAYLOADS means that
+          Congestion Control is less likely to be invoked on the server.</t>
+        </list></t>
+
+      <t></t>
     </section>
 
-    <section title="The Use of Tokens">
+    <section anchor="token" title="The Use of Tokens">
       <t>Each new request MUST use a unique Token (Section 4 of <xref
       target="I-D.ietf-core-echo-request-tag"></xref>). Additional responses
       may use the same Token.</t>
+
+      <t><list style="hanging">
+          <t hangText="Implementation Note:">To minimize on the number of
+          tokens that have to be tracked by clients, it is recommended that
+          the bottom 32 bits is kept the same for the same body and the upper
+          32 bits contains the individual payload number. <vspace
+          blankLines="1" />Servers continue to treat the token as a unique
+          opaque entity. If an individual payload has to be resent (e.g.,
+          requested upon packet loss), then the retransmitted packet is
+          treated as a new request (i.e., the bottom 32 bits must change).</t>
+        </list></t>
     </section>
 
     <section anchor="cc" title="Congestion Control">
@@ -627,14 +675,27 @@ missing-block-number = uint
       in time terms less than the ACK_TIMEOUT delay.</t>
 
       <t>Also, for NON transmissions, it is permissible, but not required, to
-      send a Confirmable packet for the final payload of a body (that is, M
-      bit unset). If a Confirmable packet is used, then the transmitting peer
-      MUST wait for the appropriate response to be returned for successful
-      transmission, or respond to requests for the missing blocks (if
-      any).</t>
+      send a Confirmable packet for the final payload of a body transfer (that
+      is, M bit unset). If a Confirmable packet is used, then the transmitting
+      peer MUST wait for the appropriate response to be returned for
+      successful transmission, or respond to requests for the missing blocks
+      (if any).</t>
 
       <t>The sending of the set of missing blocks is subject to
       MAX_PAYLOADS.</t>
+
+      <t><list style="empty">
+          <t>Note: A delay of ACK_TIMEOUT after every transmission of
+          MAX_PAYLOADS blocks may be observed even if the peer agent is able
+          to handle more blocks without experiencing an overload. This delay
+          can be reduced by using CON for the MAX_PAYLOADS packet to trigger
+          sending the next set of data when the ACK is received. Nevertheless,
+          this behavior is likely to create other timeout issues in a lossy
+          environment (e.g., unidirectional loss as in DDoS pipe flooding).
+          The use of NON is thus superior but requires an additional signal in
+          the MAX_PAYLOADS packet to seek for a 2.31 (Continue) from the peer
+          if it is ready to receive the next set of blocks. </t>
+        </list></t>
     </section>
 
     <section title="Caching Considerations">
@@ -643,8 +704,9 @@ missing-block-number = uint
       will reassemble the body (using any appropriate recovery options for
       packet loss) before passing on the body to the appropriate CoAP
       endpoint. The onward transmission of the body does not require the use
-      of the Quick-Block1 or Quick-Block2 Options. This means that the proxy
-      must fully support the Quick-Block1 and Quick-Block2 Options.</t>
+      of the Quick-Block1 or Quick-Block2 Options as these options may not be
+      supported in that link. This means that the proxy must fully support the
+      Quick-Block1 and Quick-Block2 Options.</t>
 
       <t>How the body is cached in the initial CoAP client (Quick-Block1) or
       ultimate CoAP server (Quick-Block2) is implementation specific.</t>
@@ -887,6 +949,11 @@ o  Reference: [RFCXXXX]]]></artwork>
       <t>Security considerations discussed in Section 9 of <xref
       target="RFC7959"></xref> should be taken into account.</t>
 
+      <t>Security considerations discussed in Sections 11.3 and 11.4 of <xref
+      target="RFC7252"></xref> should be taken into account. In particular, it
+      is NOT RECOMMENDED that the NoSec security mode is used if the
+      Quick-Block1 and Quick-Block2 Options are to be used.</t>
+
       <t>Security considerations related to the use of Request-Tag are
       discussed in Section 5 of <xref
       target="I-D.ietf-core-echo-request-tag"></xref>.</t>
@@ -926,6 +993,8 @@ o  Reference: [RFCXXXX]]]></artwork>
       <?rfc include='reference.RFC.8613'?>
 
       <?rfc include='reference.RFC.8742'?>
+
+      <?rfc include='reference.RFC.7049'?>
 
       <?rfc include='reference.I-D.ietf-core-echo-request-tag'?>
     </references>
