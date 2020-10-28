@@ -398,10 +398,10 @@
         (see <xref target="token"></xref>).</t>
 
         <t>A 2.01 (Created) or 2.04 (Changed) Response Code indicates
-        successful receipt of the entire body. The 2.31 (Continue) Response
-        Code MUST NOT be used.</t>
+        successful receipt of the entire body. </t>
 
-        <t>The 2.31 (Continue) Response is not used.</t>
+        <t>The 2.31 (Continue) Response is not used in the current version of
+        the specification. </t>
 
         <t>A 4.00 (Bad Request) Response Code MUST be returned if the request
         does not include a Request-Tag Option but does include a Quick-Block1
