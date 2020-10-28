@@ -398,10 +398,10 @@
         (see <xref target="token"></xref>).</t>
 
         <t>A 2.01 (Created) or 2.04 (Changed) Response Code indicates
-        successful receipt of the entire body. </t>
+        successful receipt of the entire body.</t>
 
         <t>The 2.31 (Continue) Response is not used in the current version of
-        the specification. </t>
+        the specification.</t>
 
         <t>A 4.00 (Bad Request) Response Code MUST be returned if the request
         does not include a Request-Tag Option but does include a Quick-Block1
@@ -456,7 +456,7 @@
         that this is a request for this block and for all of the remaining
         blocks within the body. If the server receives multiple requests
         (implied or otherwise) for the same block, it MUST only send back one
-        instance of that block. </t>
+        instance of that block.</t>
 
         <t>The payloads sent back from the server as a response MUST all have
         the same ETag (Section 5.10.6 of <xref target="RFC7252"></xref>) for
@@ -694,7 +694,7 @@ missing-block-number = uint
           environment (e.g., unidirectional loss as in DDoS pipe flooding).
           The use of NON is thus superior but requires an additional signal in
           the MAX_PAYLOADS packet to seek for a 2.31 (Continue) from the peer
-          if it is ready to receive the next set of blocks. </t>
+          if it is ready to receive the next set of blocks.</t>
         </list></t>
     </section>
 
@@ -946,7 +946,7 @@ o  Reference: [RFCXXXX]]]></artwork>
     </section>
 
     <section anchor="security" title="Security Considerations">
-      <t>Security considerations discussed in Section 9 of <xref
+      <t>Security considerations discussed in Section 7 of <xref
       target="RFC7959"></xref> should be taken into account.</t>
 
       <t>Security considerations discussed in Sections 11.3 and 11.4 of <xref
