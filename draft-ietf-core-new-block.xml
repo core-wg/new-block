@@ -13,7 +13,7 @@
 <rfc category="std" docName="draft-ietf-core-new-block-latest"
      ipr="trust200902">
   <front>
-    <title abbrev="Quick Block-Wise Transfer Options">Constrained Application
+    <title abbrev="Block-Wise Transfer Options">Constrained Application
     Protocol (CoAP) Block-Wise Transfer Options for Faster
     Transmission</title>
 
@@ -61,38 +61,33 @@
 
     <workgroup>CORE</workgroup>
 
-    <keyword>security</keyword>
+    <keyword>Quick-Block</keyword>
 
-    <keyword>mitigation</keyword>
+    <keyword>Robust-Block</keyword>
 
-    <keyword>service delivery</keyword>
+    <keyword>R-Block</keyword>
 
-    <keyword>connectivity</keyword>
+    <keyword>Tough-Block</keyword>
 
-    <keyword>anti-DDoS</keyword>
+    <keyword>Resilient-Block</keyword>
 
-    <keyword>automation</keyword>
-
-    <keyword>cooperation</keyword>
+    <keyword>Fast-Block</keyword>
 
     <keyword>Resilience</keyword>
 
     <keyword>Filtering</keyword>
 
-    <keyword>Security Center</keyword>
+    <keyword>Faster transmission</keyword>
 
-    <keyword>Mitigator</keyword>
+    <keyword>Large amounts of data</keyword>
 
-    <keyword>Scrubbing</keyword>
+    <keyword>Less packet interchange</keyword>
 
-    <keyword>dynamic service protection</keyword>
-
-    <keyword>dynamic mitigation</keyword>
+    <keyword>Fast recovery</keyword>
 
     <abstract>
       <t>This document specifies alternate Constrained Application Protocol
-      (CoAP) Block-Wise transfer options: Quick-Block1 and Quick-Block2
-      Options.</t>
+      (CoAP) Block-Wise transfer options: Q-Block1 and Q-Block2 Options.</t>
 
       <t>These options are similar to the CoAP Block1 and Block2 Options, not
       a replacement for them, but do enable faster transmission rates for
@@ -135,10 +130,10 @@
       </section>
 
       <section title="Alternative CoAP Block-Wise Transfer Options">
-        <t>This document introduces the CoAP Quick-Block1 and Quick-Block2
-        Options. These options are similar in operation to the CoAP Block1 and
-        Block2 Options respectively, they are not a replacement for them, but
-        have the following benefits:</t>
+        <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options.
+        These options are similar in operation to the CoAP Block1 and Block2
+        Options respectively, they are not a replacement for them, but have
+        the following benefits:</t>
 
         <t><list style="symbols">
             <t>They can operate in environments where packet loss is highly
@@ -151,7 +146,7 @@
             in transmission.</t>
 
             <t>They support sending an entire body using Non-confirmable (NON)
-            without requiring a response.</t>
+            without requiring a response from the peer.</t>
           </list></t>
 
         <t>There are the following disadvantages over using CoAP Block 1 and
@@ -191,9 +186,9 @@
         then retransmit only the blocks that have been lost in
         transmission.</t>
 
-        <t>Quick-Block1 and Quick-Block2 Options can be used instead of Block1
-        and Block2 Options respectively when the different transmission
-        semantics are required. If the option is not supported by a peer, then
+        <t>Q-Block1 and Q-Block2 Options can be used instead of Block1 and
+        Block2 Options respectively when the different transmission semantics
+        are required. If the option is not supported by a peer, then
         transmissions can fall back to using Block1 and Block2
         respectively.</t>
 
@@ -210,7 +205,7 @@
       <section title="Updated CoAP Response Code (4.08)">
         <t>This document updates the 4.08 (Request Entity Incomplete) by
         defining an additional message format for reporting on payloads using
-        the Quick-Block1 Option that are not received by the server.</t>
+        the Q-Block1 Option that are not received by the server.</t>
 
         <t>See <xref target="code"></xref> for more details.</t>
       </section>
@@ -264,118 +259,114 @@
       representation that is being transferred in a block-wise fashion.</t>
     </section>
 
-    <section anchor="spec" title="The Quick-Block1 and Quick-Block2 Options">
-      <section title="Properties of Quick-Block1 and Quick-Block2 Options">
-        <t>The properties of Quick-Block1 and Quick-Block2 Options are shown
-        in Table 1. The formatting of this table follows the one used in Table
-        4 of <xref target="RFC7252"></xref> (Section 5.10). The C, U, N, and R
+    <section anchor="spec" title="The Q-Block1 and Q-Block2 Options">
+      <section title="Properties of Q-Block1 and Q-Block2 Options">
+        <t>The properties of Q-Block1 and Q-Block2 Options are shown in Table
+        1. The formatting of this table follows the one used in Table 4 of
+        <xref target="RFC7252"></xref> (Section 5.10). The C, U, N, and R
         columns indicate the properties Critical, Unsafe, NoCacheKey, and
         Repeatable defined in Section 5.4 of <xref target="RFC7252"></xref>.
-        Only C and U columns are marked for the Quick-Block1 Option. C, U, and
-        R columns are marked for the Quick-Block2 Option.</t>
+        Only C and U columns are marked for the Q-Block1 Option. C, U, and R
+        columns are marked for the Q-Block2 Option.</t>
 
         <t><figure align="center">
             <artwork align="center"><![CDATA[+--------+---+---+---+---+--------------+--------+--------+---------+
 | Number | C | U | N | R | Name         | Format | Length | Default |
 +========+===+===+===+===+==============+========+========+=========+
-|  TBA1  | x | x |   |   | Quick-Block1 | uint   |  0-3   | (none)  |
-|  TBA2  | x | x |   | x | Quick-Block2 | uint   |  0-3   | (none)  |
+|  TBA1  | x | x |   |   | Q-Block1     | uint   |  0-3   | (none)  |
+|  TBA2  | x | x |   | x | Q-Block2     | uint   |  0-3   | (none)  |
 +--------+---+---+---+---+--------------+--------+--------+---------+
 
-    Table 1: CoAP Quick-Block1 and Quick-Block2 Option Properties
+      Table 1: CoAP Q-Block1 and Q-Block2 Option Properties
 ]]></artwork>
           </figure></t>
 
-        <t>The Quick-Block1 and Quick-Block2 Options can be present in both
-        the request and response messages. The Quick-Block1 Option pertains to
-        the request payload and the Quick-Block2 Option pertains to the
-        response payload. The Content-Format Option applies to the body, not
-        to the payload (i.e., it must be the same for all payloads of the same
+        <t>The Q-Block1 and Q-Block2 Options can be present in both the
+        request and response messages. The Q-Block1 Option pertains to the
+        request payload and the Q-Block2 Option pertains to the response
+        payload. The Content-Format Option applies to the body, not to the
+        payload (i.e., it must be the same for all payloads of the same
         body).</t>
 
-        <t>Quick-Block1 Option is useful with the payload-bearing POST, PUT,
+        <t>Q-Block1 Option is useful with the payload-bearing POST, PUT,
         PATCH, and iPATCH requests and their responses (2.01 and 2.04).</t>
 
-        <t>Quick-Block2 Option is useful with GET, POST, PUT, FETCH, PATCH,
-        and iPATCH requests and their payload-bearing responses (2.01, 2.03,
-        2.04, and 2.05) (Section 5.5 of <xref target="RFC7252"></xref>).</t>
+        <t>Q-Block2 Option is useful with GET, POST, PUT, FETCH, PATCH, and
+        iPATCH requests and their payload-bearing responses (2.01, 2.03, 2.04,
+        and 2.05) (Section 5.5 of <xref target="RFC7252"></xref>).</t>
 
         <t>A CoAP endpoint (or proxy) MUST support either both or neither of
-        the Quick-Block1 and Quick-Block2 Options.</t>
+        the Q-Block1 and Q-Block2 Options.</t>
 
-        <t>To indicate support for Quick-Block2 responses, the CoAP client
-        MUST include the Quick-Block2 Option in a GET or similar request, the
-        Quick-Block2 Option in a PUT or similar request, or the Quick-Block1
-        Option in a PUT or similar so that the server knows that the client
-        supports this Quick-Block2 functionality should it need to send back a
-        body that spans multiple payloads. Otherwise, the server would use the
-        Block2 Option (if supported) to send back a message body that is too
-        large to fit into a single IP packet <xref
-        target="RFC7959"></xref>.</t>
+        <t>To indicate support for Q-Block2 responses, the CoAP client MUST
+        include the Q-Block2 Option in a GET or similar request, the Q-Block2
+        Option in a PUT or similar request, or the Q-Block1 Option in a PUT or
+        similar so that the server knows that the client supports this
+        Q-Block2 functionality should it need to send back a body that spans
+        multiple payloads. Otherwise, the server would use the Block2 Option
+        (if supported) to send back a message body that is too large to fit
+        into a single IP packet <xref target="RFC7959"></xref>.</t>
 
-        <t>If Quick-Block1 Option is present in a request or Quick-Block2
-        Option in a response (i.e., in that message to the payload of which it
-        pertains), it indicates a block-wise transfer and describes how this
-        specific block-wise payload forms part of the entire body being
-        transferred. If it is present in the opposite direction, it provides
-        additional control on how that payload will be formed or was
-        processed.</t>
+        <t>If Q-Block1 Option is present in a request or Q-Block2 Option in a
+        response (i.e., in that message to the payload of which it pertains),
+        it indicates a block-wise transfer and describes how this specific
+        block-wise payload forms part of the entire body being transferred. If
+        it is present in the opposite direction, it provides additional
+        control on how that payload will be formed or was processed.</t>
 
-        <t>Implementation of the Quick-Block1 and Quick-Block2 Options is
-        intended to be optional. However, when it is present in a CoAP
-        message, it MUST be processed (or the message rejected). Therefore,
-        Quick-Block1 and Quick-Block2 Options are identified as Critical
-        options.</t>
+        <t>Implementation of the Q-Block1 and Q-Block2 Options is intended to
+        be optional. However, when it is present in a CoAP message, it MUST be
+        processed (or the message rejected). Therefore, Q-Block1 and Q-Block2
+        Options are identified as Critical options.</t>
 
-        <t>The Quick-Block1 and Quick-Block2 Options are unsafe to forward.
-        That is, a CoAP proxy that does not understand the Quick-Block1 (or
-        Quick-Block2) Option MUST reject the request or response that uses
-        either option.</t>
+        <t>The Q-Block1 and Q-Block2 Options are unsafe to forward. That is, a
+        CoAP proxy that does not understand the Q-Block1 (or Q-Block2) Option
+        MUST reject the request or response that uses either option.</t>
 
-        <t>The Quick-Block2 Option is repeatable when requesting
-        re-transmission of missing Blocks, but not otherwise. Except that
-        case, any request carrying multiple Quick-Block1 (or Quick-Block2)
-        Options MUST be handled following the procedure specified in Section
-        5.4.5 of <xref target="RFC7252"></xref>.</t>
+        <t>The Q-Block2 Option is repeatable when requesting re-transmission
+        of missing Blocks, but not otherwise. Except that case, any request
+        carrying multiple Q-Block1 (or Q-Block2) Options MUST be handled
+        following the procedure specified in Section 5.4.5 of <xref
+        target="RFC7252"></xref>.</t>
 
-        <t>The Quick-Block1 and Quick-Block2 Options, like the Block1 and
-        Block2 Options, are both a class E and a class U in terms of OSCORE
+        <t>The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
+        Options, are both a class E and a class U in terms of OSCORE
         processing (see Section 4.1 of <xref target="RFC8613"></xref>): The
-        Quick-Block1 (or Quick-Block2) Option MAY be an Inner or Outer option.
-        The Inner and Outer values are therefore independent of each other.
-        The Inner option is encrypted and integrity protected between clients
-        and servers, and provides message body identification in case of
+        Q-Block1 (or Q-Block2) Option MAY be an Inner or Outer option. The
+        Inner and Outer values are therefore independent of each other. The
+        Inner option is encrypted and integrity protected between clients and
+        servers, and provides message body identification in case of
         end-to-end fragmentation of requests. The Outer option is visible to
         proxies and labels message bodies in case of hop-by-hop fragmentation
         of requests.</t>
       </section>
 
-      <section title="Structure of Quick-Block1 and Quick-Block2 Options">
-        <t>The structure of Quick-Block1 and Quick-Block2 Options follows the
+      <section title="Structure of Q-Block1 and Q-Block2 Options">
+        <t>The structure of Q-Block1 and Q-Block2 Options follows the
         structure defined in Section 2.2 of <xref
         target="RFC7959"></xref>.</t>
 
-        <t>There is no default value for the Quick-Block1 and Quick-Block2
-        Options. Absence of one of these options is equivalent to an option
-        value of 0 with respect to the value of block number (NUM) and more
-        bit (M) that could be given in the option, i.e., it indicates that the
-        current block is the first and only block of the transfer (block
-        number is set to 0, M is unset). However, in contrast to the explicit
-        value 0, which would indicate a size of the block (SZX) of 0, and thus
-        a size value of 16 bytes, there is no specific explicit size implied
-        by the absence of the option -- the size is left unspecified. (As for
-        any uint, the explicit value 0 is efficiently indicated by a
-        zero-length option; this, therefore, is different in semantics from
-        the absence of the option).</t>
+        <t>There is no default value for the Q-Block1 and Q-Block2 Options.
+        Absence of one of these options is equivalent to an option value of 0
+        with respect to the value of block number (NUM) and more bit (M) that
+        could be given in the option, i.e., it indicates that the current
+        block is the first and only block of the transfer (block number is set
+        to 0, M is unset). However, in contrast to the explicit value 0, which
+        would indicate a size of the block (SZX) of 0, and thus a size value
+        of 16 bytes, there is no specific explicit size implied by the absence
+        of the option -- the size is left unspecified. (As for any uint, the
+        explicit value 0 is efficiently indicated by a zero-length option;
+        this, therefore, is different in semantics from the absence of the
+        option).</t>
       </section>
 
-      <section title="Using the Quick-Block1 Option ">
-        <t>The Quick-Block1 Option is used when the client wants to send a
-        large amount of data to the server using the POST, PUT, PATCH, or
-        iPATCH methods where the data and headers do not fit into a single
+      <section title="Using the Q-Block1 Option ">
+        <t>The Q-Block1 Option is used when the client wants to send a large
+        amount of data to the server using the POST, PUT, PATCH, or iPATCH
+        methods where the data and headers do not fit into a single
         packet.</t>
 
-        <t>When Quick-Block1 Option is used, the client MUST include a single
+        <t>When Q-Block1 Option is used, the client MUST include a single
         Request-Tag Option <xref
         target="I-D.ietf-core-echo-request-tag"></xref>. The Request-Tag value
         MUST be the same for all of the blocks in the body of data that is
@@ -404,11 +395,11 @@
         the specification.</t>
 
         <t>A 4.00 (Bad Request) Response Code MUST be returned if the request
-        does not include a Request-Tag Option but does include a Quick-Block1
+        does not include a Request-Tag Option but does include a Q-Block1
         option.</t>
 
         <t>A 4.02 (Bad Option) Response Code MUST be returned if the server
-        does not support the Quick-Block1 Option.</t>
+        does not support the Q-Block1 Option.</t>
 
         <t>A 4.13 (Request Entity Too Large) Response Code can be returned
         under similar conditions to those discussed in Section 2.9.3 of <xref
@@ -422,12 +413,11 @@
         <t>A 4.08 (Request Entity Incomplete) Response Code returned with
         Content-Type "application/missing-blocks+cbor-seq" indicates that some
         of the payloads are missing and need to be resent. The client then
-        re-transmits the missing payloads using the Request-Tag and
-        Quick-Block1 to specify the block number, SZX, and M bit as
-        appropriate. The Request-Tag value to use is determined from the
-        payload of the 4.08 (Request Entity Incomplete) Response Code. If the
-        client does not recognize the Request-Tag, the client can ignore this
-        response.</t>
+        re-transmits the missing payloads using the Request-Tag and Q-Block1
+        to specify the block number, SZX, and M bit as appropriate. The
+        Request-Tag value to use is determined from the payload of the 4.08
+        (Request Entity Incomplete) Response Code. If the client does not
+        recognize the Request-Tag, the client can ignore this response.</t>
 
         <t>If the server has not received all the payloads of a body, but one
         or more payloads have been received, it SHOULD wait for up to
@@ -450,7 +440,7 @@
         target="RFC7252"></xref>).</t>
       </section>
 
-      <section title="Using the Quick-Block2 Option">
+      <section title="Using the Q-Block2 Option">
         <t>In a request for any block number, the M bit unset indicates the
         request is just for that block. If the M bit is set, this indicates
         that this is a request for this block and for all of the remaining
@@ -474,11 +464,11 @@
 
         <t>If the client detects that some of the payloads are missing, the
         missing payloads are requested by issuing a new GET, POST, PUT, FETCH,
-        PATCH, or iPATCH request that contains one or more Quick-Block2
-        Options that define the missing blocks with the M bit unset.</t>
+        PATCH, or iPATCH request that contains one or more Q-Block2 Options
+        that define the missing blocks with the M bit unset.</t>
 
         <t>The requested missing block numbers MUST have an increasing block
-        number in each additional Quick-Block2 Option with no duplicates. The
+        number in each additional Q-Block2 Option with no duplicates. The
         server SHOULD respond with a 4.00 (Bad Request) if this is the
         case.</t>
 
@@ -523,7 +513,7 @@
         without the Size2 Option.</t>
       </section>
 
-      <section title="Working with Observe and Quick-Block2 Options">
+      <section title="Working with Observe and Q-Block2 Options">
         <t>As the blocks of the body are sent without waiting for
         acknowledgement of the individual blocks, the Observe value <xref
         target="RFC7641"></xref> MUST be the same for all the blocks of the
@@ -545,18 +535,18 @@
         the data on the body so that any missing data can easily be
         determined.</t>
 
-        <t>The Size1 Option MUST be used with the Quick-Block1 Option when
-        used in a request. The Size2 Option MUST be used with the Quick-Block2
-        Option when used in a response.</t>
+        <t>The Size1 Option MUST be used with the Q-Block1 Option when used in
+        a request. The Size2 Option MUST be used with the Q-Block2 Option when
+        used in a response.</t>
 
         <t>If Size1 or Size2 Options are used, they MUST be used in all
         payloads of the body and MUST have the same value.</t>
       </section>
 
-      <section title="Use of Quick-Block1 and Quick-Block2 Options Together">
+      <section title="Use of Q-Block1 and Q-Block2 Options Together">
         <t>The behavior is similar to the one defined in Section 3.3 of <xref
-        target="RFC7959"></xref> with Quick-Block1 substituted for Block1 and
-        Quick-Block2 for Block2.</t>
+        target="RFC7959"></xref> with Q-Block1 substituted for Block1 and
+        Q-Block2 for Block2.</t>
       </section>
     </section>
 
@@ -654,8 +644,8 @@ missing-block-number = uint
       <t>Each NON 4.08 (Request Entity Incomplete) Response Codes is subjected
       to PROBING_RATE.</t>
 
-      <t>Each NON GET or similar request using Quick-Block2 Option is
-      subjected to PROBING_RATE.</t>
+      <t>Each NON GET or similar request using Q-Block2 Option is subjected to
+      PROBING_RATE.</t>
 
       <t>As the sending of many payloads of a single body may itself cause
       congestion, it is RECOMMENDED that after transmission of every set of
@@ -700,45 +690,45 @@ missing-block-number = uint
 
     <section title="Caching Considerations">
       <t>Caching block based information is not straight forward in a proxy.
-      For Quick-Block1 and Quick-Block2 Options, it is expected that the proxy
-      will reassemble the body (using any appropriate recovery options for
-      packet loss) before passing on the body to the appropriate CoAP
-      endpoint. The onward transmission of the body does not require the use
-      of the Quick-Block1 or Quick-Block2 Options as these options may not be
-      supported in that link. This means that the proxy must fully support the
-      Quick-Block1 and Quick-Block2 Options.</t>
+      For Q-Block1 and Q-Block2 Options, it is expected that the proxy will
+      reassemble the body (using any appropriate recovery options for packet
+      loss) before passing on the body to the appropriate CoAP endpoint. The
+      onward transmission of the body does not require the use of the Q-Block1
+      or Q-Block2 Options as these options may not be supported in that link.
+      This means that the proxy must fully support the Q-Block1 and Q-Block2
+      Options.</t>
 
-      <t>How the body is cached in the initial CoAP client (Quick-Block1) or
-      ultimate CoAP server (Quick-Block2) is implementation specific.</t>
+      <t>How the body is cached in the initial CoAP client (Q-Block1) or
+      ultimate CoAP server (Q-Block2) is implementation specific.</t>
 
-      <t>As the entire body is being cached in the proxy, the Quick-Block1 and
-      Quick-Block2 Options are not part of the cache key.</t>
+      <t>As the entire body is being cached in the proxy, the Q-Block1 and
+      Q-Block2 Options are not part of the cache key.</t>
 
-      <t>For Quick-Block2 responses, the ETag Option value is associated with
-      the data (and onward transmitted to the CoAP client), but is not part of
-      the cache key.</t>
+      <t>For Q-Block2 responses, the ETag Option value is associated with the
+      data (and onward transmitted to the CoAP client), but is not part of the
+      cache key.</t>
 
-      <t>For requests with Quick-Block1 Option, the Request-Tag Option is
+      <t>For requests with Q-Block1 Option, the Request-Tag Option is
       associated with the build up of the body from successive payloads, but
       is not part of the cache key. For the onward transmission of the body
       using CoAP, a new Request-Tag SHOULD be generated and used.</t>
 
       <t>It is possible that two or more CoAP clients are concurrently
       updating the same resource through a common proxy to the same CoAP
-      server using Quick-Block1 (or Block1) Option. If this is the case, the
-      first client to complete building the body causes that body to start
+      server using Q-Block1 (or Block1) Option. If this is the case, the first
+      client to complete building the body causes that body to start
       transmitting to the CoAP server with an appropriate Request-Tag value.
       When the next client completes building the body, any existing partial
       body transmission to the CoAP server is terminated and the new body
       representation transmission starts with a new Request-Tag value.</t>
 
-      <t>A proxy that supports Quick-Block2 Option MUST be prepared to receive
-      a GET or similar message indicating one or more missing blocks. The
-      proxy will serve from its cache the missing blocks that are available in
-      its cache in the same way a server would send all the appropriate
-      Quick-Block2s. If the cache key matching body is not available in the
-      cache, the proxy MUST request the entire body from the CoAP server using
-      the information in the cache key.</t>
+      <t>A proxy that supports Q-Block2 Option MUST be prepared to receive a
+      GET or similar message indicating one or more missing blocks. The proxy
+      will serve from its cache the missing blocks that are available in its
+      cache in the same way a server would send all the appropriate Q-Block2s.
+      If the cache key matching body is not available in the cache, the proxy
+      MUST request the entire body from the CoAP server using the information
+      in the cache key.</t>
 
       <t>How long a CoAP endpoint (or proxy) keeps the body in its cache is
       implementation specific (e.g., it may be based on Max-Age).</t>
@@ -756,8 +746,8 @@ missing-block-number = uint
 
     <section title="Examples of Selective Block Recovery">
       <t>This section provides some sample flows to illustrate the use of
-      Quick-Block1 and Quick-Block2 Options. <xref target="legend"></xref>
-      lists the conventions that are used in the following subsections.</t>
+      Q-Block1 and Q-Block2 Options. <xref target="legend"></xref> lists the
+      conventions that are used in the following subsections.</t>
 
       <t><figure align="center" anchor="legend"
           title="Notations Used in the Figures">
@@ -766,8 +756,8 @@ missing-block-number = uint
    M: Message ID
   RT: Request-Tag
   ET: ETag
- QB1: Quick-Block1 Option values NUM/More/SZX
- QB2: Quick-Block2 Option values NUM/More/SZX
+ QB1: Q-Block1 Option values NUM/More/SZX
+ QB2: Q-Block2 Option values NUM/More/SZX
    \: Trimming long lines
 [[]]: Comments
 -->X: Message loss
@@ -776,13 +766,13 @@ X<--: Message loss
 ]]></artwork>
         </figure></t>
 
-      <section title="Quick-Block1 Option: Non-Confirmable Example">
+      <section title="Q-Block1 Option: Non-Confirmable Example">
         <t><xref target="B3non"></xref> depicts an example of a NON PUT
-        request conveying Quick-Block1 Option. All the blocks are received by
-        the server.</t>
+        request conveying Q-Block1 Option. All the blocks are received by the
+        server.</t>
 
         <t><figure anchor="B3non"
-            title="Example of NON Request with Quick-Block1 Option (Without Loss)">
+            title="Example of NON Request with Q-Block1 Option (Without Loss)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -800,7 +790,7 @@ X<--: Message loss
         in <xref target="B3non1"></xref>.</t>
 
         <t><figure anchor="B3non1"
-            title="Example of NON Request with Quick-Block1 Option (With Loss)">
+            title="Example of NON Request with Q-Block1 Option (With Loss)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -819,7 +809,7 @@ X<--: Message loss
         response.</t>
 
         <t><figure anchor="B3non2"
-            title="Example of NON Request with Quick-Block1 Option (Blocks Recovery)">
+            title="Example of NON Request with Q-Block1 Option (Blocks Recovery)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -841,18 +831,18 @@ X<--: Message loss
         specific.</t>
       </section>
 
-      <section title="Quick-Block2 Option: Non-Confirmable Example">
-        <t><xref target="nonb4"></xref> illustrates the example of
-        Quick-Block2 Option. The client sends a NON GET carrying an Observe
-        and a Quick-Block2 Options. The Quick-Block2 Option indicates a size
-        hint (1024 bytes). This request is replied by the server using four
-        (4) blocks that are transmitted to the client without any loss. Each
-        of these blocks carries a Quick-Block2 Option. The same process is
-        repeated when an Observe is triggered, but no loss is experienced by
-        any of the notification blocks.</t>
+      <section title="Q-Block2 Option: Non-Confirmable Example">
+        <t><xref target="nonb4"></xref> illustrates the example of Q-Block2
+        Option. The client sends a NON GET carrying an Observe and a Q-Block2
+        Options. The Q-Block2 Option indicates a size hint (1024 bytes). This
+        request is replied by the server using four (4) blocks that are
+        transmitted to the client without any loss. Each of these blocks
+        carries a Q-Block2 Option. The same process is repeated when an
+        Observe is triggered, but no loss is experienced by any of the
+        notification blocks.</t>
 
         <t><figure anchor="nonb4"
-            title="Example of NON Notifications with Quick-Block2 Option (Without Loss)">
+            title="Example of NON Notifications with Q-Block2 Option (Without Loss)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -878,7 +868,7 @@ X<--: Message loss
         does so by indicating the blocks that were successfully received.</t>
 
         <t><figure anchor="nonb41"
-            title="Example of NON Notifications with Quick-Block2 Option (Blocks Recovery)">
+            title="Example of NON Notifications with Q-Block2 Option (Blocks Recovery)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -918,11 +908,11 @@ X<--: Message loss
             <artwork align="center"><![CDATA[+--------+------------------+-----------+
 | Number | Name             | Reference |
 +========+==================+===========+
-|  TBA1  | Quick-Block1     | [RFCXXXX] |
-|  TBA2  | Quick-Block2     | [RFCXXXX] |
+|  TBA1  | Q-Block1         | [RFCXXXX] |
+|  TBA2  | Q-Block2         | [RFCXXXX] |
 +--------+------------------+-----------+
 
-Table 2: CoAP Quick-Block1 and Quick-Block2 Option Numbers]]></artwork>
+Table 2: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
           </figure></t>
 
         <t>This document suggests 19 (TBA1) and 51 (TBA2) as a values to be
@@ -951,8 +941,8 @@ o  Reference: [RFCXXXX]]]></artwork>
 
       <t>Security considerations discussed in Sections 11.3 and 11.4 of <xref
       target="RFC7252"></xref> should be taken into account. In particular, it
-      is NOT RECOMMENDED that the NoSec security mode is used if the
-      Quick-Block1 and Quick-Block2 Options are to be used.</t>
+      is NOT RECOMMENDED that the NoSec security mode is used if the Q-Block1
+      and Q-Block2 Options are to be used.</t>
 
       <t>Security considerations related to the use of Request-Tag are
       discussed in Section 5 of <xref
@@ -1041,13 +1031,13 @@ o  Reference: [RFCXXXX]]]></artwork>
       <t>The notations provided in <xref target="legend"></xref> are used in
       the following subsections.</t>
 
-      <section title="Quick-Block1 Option">
-        <t>Let's now consider the use Quick-Block1 Option with a CON request
-        as shown in <xref target="con3"></xref>. All the blocks are
-        acknowledged (ACK).</t>
+      <section title="Q-Block1 Option">
+        <t>Let's now consider the use Q-Block1 Option with a CON request as
+        shown in <xref target="con3"></xref>. All the blocks are acknowledged
+        (ACK).</t>
 
         <t><figure anchor="con3"
-            title="Example of CON Request with Quick-Block1 Option (Without Loss)">
+            title="Example of CON Request with Q-Block1 Option (Without Loss)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -1069,7 +1059,7 @@ o  Reference: [RFCXXXX]]]></artwork>
         no ACK was received.</t>
 
         <t><figure anchor="con32"
-            title="Example of CON Request with Quick-Block1 Option (Blocks Recovery)">
+            title="Example of CON Request with Q-Block1 Option (Blocks Recovery)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
@@ -1102,12 +1092,12 @@ o  Reference: [RFCXXXX]]]></artwork>
         considered.</t>
       </section>
 
-      <section title="Quick-Block2 Option">
-        <t>An example of the use of Quick-Block2 Option with Confirmable
-        messages is shown in <xref target="b4con"></xref>.</t>
+      <section title="Q-Block2 Option">
+        <t>An example of the use of Q-Block2 Option with Confirmable messages
+        is shown in <xref target="b4con"></xref>.</t>
 
         <t><figure align="center" anchor="b4con"
-            title="Example of CON Notifications with Quick-Block2 Option">
+            title="Example of CON Notifications with Q-Block2 Option">
             <artwork align="center"><![CDATA[       Client      Server
          |          |
          +--------->| CON GET /path M:0x01 T:0xf0 O:0 QB2:0/0/1024
