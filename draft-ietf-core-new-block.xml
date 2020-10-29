@@ -469,8 +469,8 @@
 
         <t>The requested missing block numbers MUST have an increasing block
         number in each additional Q-Block2 Option with no duplicates. The
-        server SHOULD respond with a 4.00 (Bad Request) if this is the
-        case.</t>
+        server SHOULD respond with a 4.00 (Bad Request) to requests not
+        adhering to this behavior.</t>
 
         <t>The ETag Option MUST NOT be used in the request as the server could
         respond with a 2.03 (Valid Response) with no payload. If the server
