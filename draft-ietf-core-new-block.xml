@@ -13,7 +13,7 @@
 <rfc category="std" docName="draft-ietf-core-new-block-latest"
      ipr="trust200902">
   <front>
-    <title abbrev="Block-Wise Transfer Options">Constrained Application
+    <title abbrev="Quick Block-Wise Transfer Options">Constrained Application
     Protocol (CoAP) Block-Wise Transfer Options for Faster
     Transmission</title>
 
@@ -86,7 +86,7 @@
     <keyword>Fast recovery</keyword>
 
     <abstract>
-      <t>This document specifies alternate Constrained Application Protocol
+      <t>This document specifies alternative Constrained Application Protocol
       (CoAP) Block-Wise transfer options: Q-Block1 and Q-Block2 Options.</t>
 
       <t>These options are similar to the CoAP Block1 and Block2 Options, not
@@ -950,8 +950,8 @@ o  Reference: [RFCXXXX]]]></artwork>
     </section>
 
     <section anchor="ack" title="Acknowledgements">
-      <t>Thanks to Achim Kraus and Jim Schaad for the comments on the mailing
-      list.</t>
+      <t>Thanks to Achim Kraus, Jim Schaad, and Michael Richardson for the
+      comments on the mailing list.</t>
 
       <t>Special thanks to Christian Ams&uuml;ss and Carsten Bormann for their
       suggestions and several reviews, which improved this specification
