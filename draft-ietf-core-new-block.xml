@@ -99,35 +99,31 @@
 
   <middle>
     <section anchor="introduction" title="Introduction">
-      <section title="Existing CoAP Block-Wise Transfer Options">
-        <t>The Constrained Application Protocol (CoAP) <xref
-        target="RFC7252"></xref>, although inspired by HTTP, was designed to
-        use UDP instead of TCP. The message layer of CoAP over UDP includes
-        support for reliable delivery, simple congestion control, and flow
-        control. <xref target="RFC7959"></xref> introduced the CoAP Block1 and
-        Block2 Options to handle data records that cannot fit in a single IP
-        packet, so not having to rely on IP fragmentation and was further
-        updated by <xref target="RFC8323"></xref> for use over TCP, TLS, and
-        Websockets.</t>
+      <t>The Constrained Application Protocol (CoAP) <xref
+      target="RFC7252"></xref>, although inspired by HTTP, was designed to use
+      UDP instead of TCP. The message layer of CoAP over UDP includes support
+      for reliable delivery, simple congestion control, and flow control.
+      <xref target="RFC7959"></xref> introduced the CoAP Block1 and Block2
+      Options to handle data records that cannot fit in a single IP packet, so
+      not having to rely on IP fragmentation and was further updated by <xref
+      target="RFC8323"></xref> for use over TCP, TLS, and Websockets.</t>
 
-        <t>The CoAP Block1 and Block2 Options work well in environments where
-        there are no or minimal packet losses. These options operate
-        synchronously where each block has to be requested and can only ask
-        for (or send) the next block when the request for the previous block
-        has completed. Packet, and hence block transmission rate, is
-        controlled by Round Trip Times (RTTs).</t>
+      <t>The CoAP Block1 and Block2 Options work well in environments where
+      there are no or minimal packet losses. These options operate
+      synchronously where each block has to be requested and can only ask for
+      (or send) the next block when the request for the previous block has
+      completed. Packet, and hence block transmission rate, is controlled by
+      Round Trip Times (RTTs).</t>
 
-        <t>There is a requirement for these blocks of data to be transmitted
-        at higher rates under network conditions where there may be
-        asymmetrical transient packet loss. An example is when a network is
-        subject to a Distributed Denial of Service (DDoS) attack and there is
-        a need for DDoS mitigation agents relying upon CoAP to communicate
-        with each other (e.g., <xref
-        target="I-D.ietf-dots-telemetry"></xref>). As a reminder, <xref
-        target="RFC7959"></xref> recommends use of Confirmable (CON) responses
-        to handle potential packet loss, which does not work with a flooded
-        pipe DDoS situation.</t>
-      </section>
+      <t>There is a requirement for these blocks of data to be transmitted at
+      higher rates under network conditions where there may be asymmetrical
+      transient packet loss. An example is when a network is subject to a
+      Distributed Denial of Service (DDoS) attack and there is a need for DDoS
+      mitigation agents relying upon CoAP to communicate with each other
+      (e.g., <xref target="I-D.ietf-dots-telemetry"></xref>). As a reminder,
+      <xref target="RFC7959"></xref> recommends use of Confirmable (CON)
+      responses to handle potential packet loss, which does not work with a
+      flooded pipe DDoS situation.</t>
 
       <section title="Alternative CoAP Block-Wise Transfer Options">
         <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options.
@@ -233,7 +229,7 @@
         outside the intended use case should be carefully weighed against the
         loss of interoperability with generic CoAP applications. It is hoped
         that the experience gained with this mechanism can feed future
-        extensions of the block-wise mechanism that will both generally
+        extensions of the block-wise mechanism that will both be generally
         applicable and serve this particular use case.</t>
 
         <t>It is not recommended that these options are used in a NoSec
@@ -331,14 +327,23 @@
 
         <t>The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
         Options, are both a class E and a class U in terms of OSCORE
-        processing (see Section 4.1 of <xref target="RFC8613"></xref>): The
-        Q-Block1 (or Q-Block2) Option MAY be an Inner or Outer option. The
-        Inner and Outer values are therefore independent of each other. The
-        Inner option is encrypted and integrity protected between clients and
-        servers, and provides message body identification in case of
-        end-to-end fragmentation of requests. The Outer option is visible to
-        proxies and labels message bodies in case of hop-by-hop fragmentation
-        of requests.</t>
+        processing (Table 2): The Q-Block1 (or Q-Block2) Option MAY be an
+        Inner or Outer option (see Section 4.1 of <xref
+        target="RFC8613"></xref>). The Inner and Outer values are therefore
+        independent of each other. The Inner option is encrypted and integrity
+        protected between clients and servers, and provides message body
+        identification in case of end-to-end fragmentation of requests. The
+        Outer option is visible to proxies and labels message bodies in case
+        of hop-by-hop fragmentation of requests.<figure align="center">
+            <artwork><![CDATA[                   +------+-----------------+---+---+
+                   | No.  | Name            | E | U |
+                   +------+-----------------+---+---+
+                   | TBA1 | Q-Block1        | x | x |
+                   | TBA2 | Q-Block2        | x | x |
+                   +------+-----------------+---+---+
+          Table 2: Protection of Q-Block1 and Q-Block2 Options
+]]></artwork>
+          </figure></t>
       </section>
 
       <section title="Structure of Q-Block1 and Q-Block2 Options">
@@ -814,7 +819,7 @@ X<--: Message loss
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
-             ...
+         |   ...    |
          |<---------+ NON 4.08 M:0xf2 T:0xe3 [Missing 1,2 for RT=11]
          +--------->| NON PUT /path M:0x09 T:0xe4 RT=11 QB1:1/1/1024
          +--->X     | NON PUT /path M:0x0a T:0xe5 RT=11 QB1:2/1/1024
@@ -852,8 +857,8 @@ X<--: Message loss
          |<---------+ NON 2.05 M:0xf2 T:0xf0 O:1234 ET=21 QB2:1/1/1024
          |<---------+ NON 2.05 M:0xf3 T:0xf0 O:1234 ET=21 QB2:2/1/1024
          |<---------+ NON 2.05 M:0xf4 T:0xf0 O:1234 ET=21 QB2:3/0/1024
-              ...
-           [[Observe triggered]]
+         |   ...    |
+         | [[Observe triggered]]
          |<---------+ NON 2.05 M:0xf5 T:0xf0 O:1235 ET=22 QB2:0/1/1024
          |<---------+ NON 2.05 M:0xf6 T:0xf0 O:1235 ET=22 QB2:1/1/1024
          |<---------+ NON 2.05 M:0xf7 T:0xf0 O:1235 ET=22 QB2:2/1/1024
@@ -865,16 +870,17 @@ X<--: Message loss
 
         <t><xref target="nonb41"></xref> shows the example of an Observe that
         is triggered but for which some notification blocks are lost. The
-        client detects the missing blocks and request their retransmission. It
-        does so by indicating the blocks that were successfully received.</t>
+        client detects the missing blocks and requests their retransmission.
+        It does so by indicating the blocks that were successfully
+        received.</t>
 
         <t><figure anchor="nonb41"
             title="Example of NON Notifications with Q-Block2 Option (Blocks Recovery)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
-             ...
-            [[Observe triggered]]
+         |   ...    |
+         |  [[Observe triggered]]
          |<---------+ NON 2.05 M:0xf9 T:0xf0 O:1236 ET=23 QB2:0/1/1024
          |     X<---+ NON 2.05 M:0xfa T:0xf0 O:1236 ET=23 QB2:1/1/1024
          |     X<---+ NON 2.05 M:0xfb T:0xf0 O:1236 ET=23 QB2:2/1/1024
@@ -897,6 +903,34 @@ X<--: Message loss
         <t>Under high levels of traffic loss, the client can elect not to
         retry getting missing blocks of data. This decision is implementation
         specific.</t>
+
+        <t><xref target="nonb411"></xref> shows the example of an Observe that
+        is triggered but for which only the first notification block reaches
+        the client. In order to retrieve the missing blocks, the client sends
+        a single request with the M bit set.</t>
+
+        <t><figure anchor="nonb411"
+            title="Example of NON Notifications with Q-Block2 Option (Blocks Recovery with M bit Set)">
+            <artwork><![CDATA[        CoAP        CoAP
+       Client      Server
+         |          |
+         |   ...    |
+         |  [[Observe triggered]]
+         |<---------+ NON 2.05 M:0x123 T:0xf0 O:1237 ET=24 QB2:0/1/1024
+         |     X<---+ NON 2.05 M:0x124 T:0xf0 O:1237 ET=24 QB2:1/1/1024
+         |     X<---+ NON 2.05 M:0x125 T:0xf0 O:1237 ET=24 QB2:2/1/1024
+         |     X<---+ NON 2.05 M:0x126 T:0xf0 O:1237 ET=24 QB2:3/0/1024
+         |          |
+      [[Client realizes blocks are missing and asks for the missing
+        ones in one go by setting the M bit]]
+         +--------->| NON GET /path M:0x03 T:0xf3 QB2:1/1/1024
+         |<---------+ NON 2.05 M:0x127 T:0xf3 ET=24 QB2:1/1/1024
+         |<---------+ NON 2.05 M:0x128 T:0xf4 ET=24 QB2:2/1/1024
+         |<---------+ NON 2.05 M:0x129 T:0xf5 ET=24 QB2:3/0/1024
+         |          |
+             ...
+]]></artwork>
+          </figure></t>
       </section>
     </section>
 
@@ -913,7 +947,7 @@ X<--: Message loss
 |  TBA2  | Q-Block2         | [RFCXXXX] |
 +--------+------------------+-----------+
 
-Table 2: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
+Table 3: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
           </figure></t>
 
         <t>This document suggests 19 (TBA1) and 51 (TBA2) as a values to be
@@ -951,8 +985,8 @@ o  Reference: [RFCXXXX]]]></artwork>
     </section>
 
     <section anchor="ack" title="Acknowledgements">
-      <t>Thanks to Achim Kraus, Jim Schaad, and Michael Richardson for the
-      comments on the mailing list.</t>
+      <t>Thanks to Achim Kraus, Jim Schaad, Michael Richardson, and Marco
+      Tiloca for the comments.</t>
 
       <t>Special thanks to Christian Ams&uuml;ss and Carsten Bormann for their
       suggestions and several reviews, which improved this specification
