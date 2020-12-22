@@ -984,17 +984,19 @@ o  Reference: [RFCXXXX]]]></artwork>
       <t>Security considerations discussed in Sections 11.3 and 11.4 of <xref
       target="RFC7252"></xref> should be taken into account. </t>
 
-      <t>OSCORE provides end-to-end protection between endpoints and requires
-      that a security context is set up (Section 3.1 of <xref
-      target="RFC8613"></xref>); so it can be trusted that the source endpoint
-      is legitimate even if NoSec security mode is used for the wrapping of
-      the CoAP message. However, an intermediary process can modify the
-      unprotected outer Q-Block1 and/or Q-Block2 Options to cause a Q-Block
-      transfer to fail or keep requesting all the blocks by setting the M bit
-      and, thus, causing attack amplification. </t>
-
-      <t>It is NOT RECOMMENDED that the NoSec security mode is used if the
-      Q-Block1 and Q-Block2 Options are to be used. </t>
+      <t>OSCORE provides end-to-end protection of all information that is not
+      required for proxy operations and requires that a security context is
+      set up (Section 3.1 of <xref target="RFC8613"></xref>). It can be
+      trusted that the source endpoint is legitimate even if NoSec security
+      mode is used. However, an intermediary node can modify the unprotected
+      outer Q-Block1 and/or Q-Block2 Options to cause a Q-Block transfer to
+      fail or keep requesting all the blocks by setting the M bit and, thus,
+      causing attack amplification. As discussed in Section 12.1 of <xref
+      target="RFC8613"></xref>, applications need to consider that certain
+      message fields and messages types are not protected end-to-end and may
+      be spoofed or manipulated. From that standpoint, it is NOT RECOMMENDED
+      that the NoSec security mode is used if the Q-Block1 and Q-Block2
+      Options are to be used. </t>
 
       <t>Security considerations related to the use of Request-Tag are
       discussed in Section 5 of <xref
