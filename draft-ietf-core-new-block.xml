@@ -236,7 +236,7 @@
         security mode (Section 9 of <xref target="RFC7252"></xref>) as the
         source endpoint needs to be trusted. Using OSCORE <xref
         target="RFC8613"></xref> does provide a security context and, hence, a
-        trust of the source endpoint. Still, using a NoSec security mode may
+        trust of the source endpoint. However, using a NoSec security mode may
         still be inadequate for reasons discussed in <xref
         target="security"></xref>. </t>
       </section>
@@ -794,7 +794,7 @@ X<--: Message loss
          +--------->| NON PUT /path M:0x03 T:0xf2 RT=10 QB1:2/1/1024
          +--------->| NON PUT /path M:0x04 T:0xf3 RT=10 QB1:3/0/1024
          |<---------+ NON 2.04 M:0xf1 T:0xf3
-             ...
+         |   ...    |
 ]]></artwork>
           </figure></t>
 
@@ -812,7 +812,7 @@ X<--: Message loss
          +--->X     | NON PUT /path M:0x07 T:0xe2 RT=11 QB1:2/1/1024
          +--------->| NON PUT /path M:0x08 T:0xe3 RT=11 QB1:3/0/1024
          |          |
-             ...
+         |   ...    |
 ]]></artwork>
           </figure></t>
 
@@ -835,7 +835,7 @@ X<--: Message loss
          +--------->| NON PUT /path M:0x0b T:0xe6 RT=11 QB1:2/1/1024
          |<---------+ NON 2.04 M:0xf4 T:0xe6
          |          |
-             ...
+         |   ...    |
 ]]></artwork>
           </figure></t>
 
@@ -870,7 +870,7 @@ X<--: Message loss
          |<---------+ NON 2.05 M:0xf6 T:0xf0 O:1235 ET=22 QB2:1/1/1024
          |<---------+ NON 2.05 M:0xf7 T:0xf0 O:1235 ET=22 QB2:2/1/1024
          |<---------+ NON 2.05 M:0xf8 T:0xf0 O:1235 ET=22 QB2:3/0/1024
-             ...
+         |   ...    |
 
 ]]></artwork>
           </figure></t>
@@ -903,7 +903,7 @@ X<--: Message loss
       [[Get the final missing block]]
          +--------->| NON GET /path M:0x03 T:0xf2 QB2:1/0/1024
          |<---------+ NON 2.05 M:0xff T:0xf2 ET=23 QB2:1/1/1024
-             ...
+         |   ...    |
 ]]></artwork>
           </figure></t>
 
@@ -912,9 +912,9 @@ X<--: Message loss
         specific.</t>
 
         <t><xref target="nonb411"></xref> shows the example of an Observe that
-        is triggered but only the first 2 notification blocks reaches the
+        is triggered but only the first two notification blocks reaches the
         client. In order to retrieve the missing blocks, the client sends a
-        request with a single Q-Block2 option with the M bit set. </t>
+        request with a single Q-Block2 Option with the M bit set. </t>
 
         <t><figure anchor="nonb411"
             title="Example of NON Notifications with Q-Block2 Option (Blocks Recovery with M bit Set)">
@@ -930,11 +930,11 @@ X<--: Message loss
          |          |
       [[Client realizes blocks are missing and asks for the remaining missing
         ones in one go by setting the M bit]]
-         +--------->| NON GET /path M:0x03 T:0xf3 QB2:1/1/1024
-         |<---------+ NON 2.05 M:0x127 T:0xf4 ET=24 QB2:2/1/1024
-         |<---------+ NON 2.05 M:0x128 T:0xf5 ET=24 QB2:3/0/1024
+         +--------->| NON GET /path M:0x03 T:0xf3 QB2:2/1/1024   
+         |<---------+ NON 2.05 M:0x127 T:0xf3 ET=24 QB2:2/1/1024
+         |<---------+ NON 2.05 M:0x128 T:0xf3 ET=24 QB2:3/0/1024
          |          |
-             ...
+         |   ...    |
 
 ]]></artwork>
           </figure></t>
@@ -994,9 +994,8 @@ o  Reference: [RFCXXXX]]]></artwork>
       causing attack amplification. As discussed in Section 12.1 of <xref
       target="RFC8613"></xref>, applications need to consider that certain
       message fields and messages types are not protected end-to-end and may
-      be spoofed or manipulated. From that standpoint, it is NOT RECOMMENDED
-      that the NoSec security mode is used if the Q-Block1 and Q-Block2
-      Options are to be used. </t>
+      be spoofed or manipulated. It is NOT RECOMMENDED that the NoSec security
+      mode is used if the Q-Block1 and Q-Block2 Options are to be used. </t>
 
       <t>Security considerations related to the use of Request-Tag are
       discussed in Section 5 of <xref
@@ -1161,8 +1160,8 @@ o  Reference: [RFCXXXX]]]></artwork>
          |<---------+ ACK 2.05 M:0xe1 T:0xf0 O:1234 ET=21 QB2:1/1/1024
          |<---------+ ACK 2.05 M:0xe2 T:0xf0 O:1234 ET=21 QB2:2/1/1024
          |<---------+ ACK 2.05 M:0xe3 T:0xf0 O:1234 ET=21 QB2:3/0/1024
-             ...
-                 [[Observe triggered]]
+         |   ...    |
+         |       [[Observe triggered]]
          |<---------+ CON 2.05 M:0xe4 T:0xf0 O:1235 ET=22 QB2:0/1/1024
          |<---------+ CON 2.05 M:0xe5 T:0xf0 O:1235 ET=22 QB2:1/1/1024
          |<---------+ CON 2.05 M:0xe6 T:0xf0 O:1235 ET=22 QB2:2/1/1024
@@ -1171,8 +1170,8 @@ o  Reference: [RFCXXXX]]]></artwork>
          |--------->+ ACK 0.00 M:0xe5
          |--------->+ ACK 0.00 M:0xe6
          |--------->+ ACK 0.00 M:0xe7
-              ...
-                 [[Observe triggered]]
+         |   ...    |
+         |       [[Observe triggered]]
          |<---------+ CON 2.05 M:0xe8 T:0xf0 O:1236 ET=23 QB2:0/1/1024
          |     X<---+ CON 2.05 M:0xe9 T:0xf0 O:1236 ET=23 QB2:1/1/1024
          |     X<---+ CON 2.05 M:0xea T:0xf0 O:1236 ET=23 QB2:2/1/1024
@@ -1180,13 +1179,13 @@ o  Reference: [RFCXXXX]]]></artwork>
          |--------->+ ACK 0.00 M:0xe8
          |--------->+ ACK 0.00 M:0xeb
          |          |
-                 [[Server retransmits messages not acknowledged]]
+         |       [[Server retransmits messages not acknowledged]]
          |<---------+ CON 2.05 M:0xe9 T:0xf0 O:1236 ET=23 QB2:1/1/1024
          |     X<---+ CON 2.05 M:0xea T:0xf0 O:1236 ET=23 QB2:2/1/1024
          |--------->+ ACK 0.00 M:0xe9
          |          |
-                 [[Server retransmits messages not acknowledged
-                  (exponential backoff)]]
+         |       [[Server retransmits messages not acknowledged
+         |        (exponential backoff)]]
          |     X<---+ CON 2.05 M:0xea T:0xf0 O:1236 ET=23 QB2:2/1/1024
          |          |
            [[Either transmission failure (acknowledge retry timeout)
