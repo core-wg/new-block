@@ -106,8 +106,8 @@
         support for reliable delivery, simple congestion control, and flow
         control. <xref target="RFC7959"></xref> introduced the CoAP Block1 and
         Block2 Options to handle data records that cannot fit in a single IP
-        packet, so not having to rely on IP fragmentation and further updated
-        by <xref target="RFC8323"></xref> for use over TCP, TLS, and
+        packet, so not having to rely on IP fragmentation and was further
+        updated by <xref target="RFC8323"></xref> for use over TCP, TLS, and
         Websockets.</t>
 
         <t>The CoAP Block1 and Block2 Options work well in environments where
@@ -125,7 +125,7 @@
         with each other (e.g., <xref
         target="I-D.ietf-dots-telemetry"></xref>). As a reminder, <xref
         target="RFC7959"></xref> recommends use of Confirmable (CON) responses
-        to handle potential packet loss; which does not work with a flooded
+        to handle potential packet loss, which does not work with a flooded
         pipe DDoS situation.</t>
       </section>
 
@@ -180,9 +180,9 @@
         they are not used.</t>
 
         <t>A CoAP endpoint can acknowledge all or a subset of the blocks.
-        Concretely, the receiving CoAP endpoint informs the CoAP endpoint
-        sender either successful receipt or reports on all blocks in the body
-        that have been not yet been received. The CoAP endpoint sender will
+        Concretely, the receiving CoAP endpoint informs the CoAP sender
+        endpoint either successful receipt or reports on all blocks in the
+        body that have not yet been received. The CoAP sender endpoint will
         then retransmit only the blocks that have been lost in
         transmission.</t>
 
@@ -504,7 +504,7 @@
 
         <t>A client SHOULD only maintain a partial body (missing payloads) for
         up to EXCHANGE_LIFETIME (Section 4.8.2 of <xref
-        target="RFC7252"></xref>) or as defined by the Max-Age Option
+        target="RFC7252"></xref>) or as defined by the Max-Age Option,
         whichever is the less.</t>
 
         <t>If there is insufficient space to create a response PDU with a
@@ -540,7 +540,8 @@
         used in a response.</t>
 
         <t>If Size1 or Size2 Options are used, they MUST be used in all
-        payloads of the body and MUST have the same value.</t>
+        payloads of the body and MUST preserve the same value in each of those
+        payloads.</t>
       </section>
 
       <section title="Use of Q-Block1 and Q-Block2 Options Together">
@@ -608,7 +609,7 @@ missing-block-number = uint
           overflowing the overall packet size as each block number can be of
           varying length needs consideration. It is possible to use
           Indefinite-Length Arrays (Section 2.2.1 of <xref
-          target="RFC7049"></xref>), limit the array count to 23 (Undefined
+          target="RFC8949"></xref>), limit the array count to 23 (Undefined
           value) so that the array data byte can be updated with the overall
           length once the payload length is confirmed or limited to
           MAX_PAYLOADS count. Limiting the count to MAX_PAYLOADS means that
@@ -964,9 +965,9 @@ o  Reference: [RFCXXXX]]]></artwork>
 
   <back>
     <references title="Normative References">
-      <?rfc include="reference.RFC.2119"?>
+      <?rfc include='reference.RFC.2119'?>
 
-      <?rfc include="reference.RFC.7252"?>
+      <?rfc include='reference.RFC.7252'?>
 
       <?rfc include='reference.RFC.8174'?>
 
@@ -984,7 +985,7 @@ o  Reference: [RFCXXXX]]]></artwork>
 
       <?rfc include='reference.RFC.8742'?>
 
-      <?rfc include='reference.RFC.7049'?>
+      <?rfc include='reference.RFC.8949'?>
 
       <?rfc include='reference.I-D.ietf-core-echo-request-tag'?>
     </references>
