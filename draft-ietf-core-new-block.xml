@@ -200,10 +200,12 @@
       </section>
 
       <section title="CoAP Response Code (4.08) Usage">
+
         <t>This document adds a media type for the 4.08 (Request Entity
         Incomplete) response defining an additional message format for
         reporting on payloads using the Q-Block1 Option that are not received
         by the server.</t>
+
 
         <t>See <xref target="code"></xref> for more details.</t>
       </section>
@@ -240,7 +242,7 @@
         target="RFC8613"></xref> does provide a security context and, hence, a
         trust of the source endpoint. However, using a NoSec security mode may
         still be inadequate for reasons discussed in <xref
-        target="security"></xref>. </t>
+        target="security"></xref>.</t>
       </section>
     </section>
 
@@ -342,12 +344,12 @@
         identification in case of end-to-end fragmentation of requests. The
         Outer option is visible to proxies and labels message bodies in case
         of hop-by-hop fragmentation of requests.<figure align="center">
-            <artwork><![CDATA[                   +------+-----------------+---+---+
-                   | No.  | Name            | E | U |
-                   +------+-----------------+---+---+
-                   | TBA1 | Q-Block1        | x | x |
-                   | TBA2 | Q-Block2        | x | x |
-                   +------+-----------------+---+---+
+            <artwork><![CDATA[                   +--------+-----------------+---+---+
+                   | Number | Name            | E | U |
+                   +========+=================+===+===+
+                   |  TBA1  | Q-Block1        | x | x |
+                   |  TBA2  | Q-Block2        | x | x |
+                   +--------+-----------------+---+---+
           Table 2: Protection of Q-Block1 and Q-Block2 Options
 ]]></artwork>
           </figure></t>
@@ -399,8 +401,6 @@
         <t>For Confirmable transmission, the server continues to acknowledge
         each packet, but a response is not required (whether separate or
         piggybacked) until retransmission or successful receipt of the body.
-        NSTART will also need to be increased from the default (1) to get
-        faster transmission rates.</t>
 
         <t>Each individual payload of the body is treated as a new request
         (see <xref target="token"></xref>).</t>
@@ -664,7 +664,13 @@ missing-block-number = uint
       <t>PROBING_RATE parameter in CoAP indicates the average data rate that
       must not be exceeded by a CoAP endpoint in sending to a peer endpoint
       that does not respond. The body of blocks will be subjected to
-      PROBING_RATE (Section 4.7 of <xref target="RFC7252"></xref>).</t>
+      PROBING_RATE (Section 4.7 of <xref target="RFC7252"></xref>).<list
+          style="empty">
+          <t>Note: For the particular DOTS application, PROBING_RATE and other
+          transmission parameters are negotiated between peers. Even when not
+          negotiated, the DOTS application uses customized defaults as
+          discussed in Section 4.5.2 of <xref target="RFC8782"></xref>.</t>
+        </list></t>
 
       <t>Each NON 4.08 (Request Entity Incomplete) Response Codes is subjected
       to PROBING_RATE.</t>
@@ -711,6 +717,9 @@ missing-block-number = uint
           the MAX_PAYLOADS packet to seek for a 2.31 (Continue) from the peer
           if it is ready to receive the next set of blocks.</t>
         </list></t>
+
+      <t>For Confirmable transmission, NSTART SHOULD be increased from the
+      default (1) to get faster transmission rates.</t>
     </section>
 
     <section title="Caching Considerations">
@@ -926,7 +935,7 @@ X<--: Message loss
         <t><xref target="nonb411"></xref> shows the example of an Observe that
         is triggered but only the first two notification blocks reaches the
         client. In order to retrieve the missing blocks, the client sends a
-        request with a single Q-Block2 Option with the M bit set. </t>
+        request with a single Q-Block2 Option with the M bit set.</t>
 
         <t><figure anchor="nonb411"
             title="Example of NON Notifications with Q-Block2 Option (Blocks Recovery with M bit Set)">
@@ -945,7 +954,6 @@ X<--: Message loss
          +--------->| NON GET /path M:0x03 T:0xf3 QB2:2/1/1024   
          |<---------+ NON 2.05 M:0x127 T:0xf3 ET=24 QB2:2/1/1024
          |<---------+ NON 2.05 M:0x128 T:0xf3 ET=24 QB2:3/0/1024
-         |          |
          |   ...    |
 
 ]]></artwork>
@@ -994,7 +1002,7 @@ o  Reference: [RFCXXXX]]]></artwork>
       target="RFC7959"></xref> should be taken into account.</t>
 
       <t>Security considerations discussed in Sections 11.3 and 11.4 of <xref
-      target="RFC7252"></xref> should be taken into account. </t>
+      target="RFC7252"></xref> should be taken into account.</t>
 
       <t>OSCORE provides end-to-end protection of all information that is not
       required for proxy operations and requires that a security context is
@@ -1007,7 +1015,7 @@ o  Reference: [RFCXXXX]]]></artwork>
       target="RFC8613"></xref>, applications need to consider that certain
       message fields and messages types are not protected end-to-end and may
       be spoofed or manipulated. It is NOT RECOMMENDED that the NoSec security
-      mode is used if the Q-Block1 and Q-Block2 Options are to be used. </t>
+      mode is used if the Q-Block1 and Q-Block2 Options are to be used.</t>
 
       <t>Security considerations related to the use of Request-Tag are
       discussed in Section 5 of <xref
