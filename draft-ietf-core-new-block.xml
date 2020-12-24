@@ -711,9 +711,10 @@ missing-block-number = uint
           sending the next set of data when the ACK is received. Nevertheless,
           this behavior is likely to create other timeout issues in a lossy
           environment (e.g., unidirectional loss as in DDoS pipe flooding).
-          The use of NON is thus superior but requires an additional signal in
-          the MAX_PAYLOADS packet to seek for a 2.31 (Continue) from the peer
-          if it is ready to receive the next set of blocks.</t>
+          The use of NON is thus superior but requires an additional signal
+          (e.g., <xref target="RFC7967"></xref>) in the MAX_PAYLOADS packet to
+          seek for a 2.31 (Continue) from the peer if it is ready to receive
+          the next set of blocks.</t>
         </list></t>
 
       <t>For Confirmable transmission, NSTART SHOULD be increased from the
@@ -1068,6 +1069,8 @@ o  Reference: [RFCXXXX]]]></artwork>
       <?rfc include='reference.RFC.8782'?>
 
       <?rfc include='reference.RFC.8610'?>
+
+      <?rfc include='reference.RFC.7967'?>
 
       <reference anchor="Format"
                  target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats">
