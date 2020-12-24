@@ -424,7 +424,7 @@ Internet-Draft      Quick Block-Wise Transfer Options      December 2020
       Request-Tag as an unsigned integer of 8 bytes in length.  An
       implementation may want to consider limiting this to 4 bytes to
       reduce packet overhead size.  The initial Request-Tag value should
-      be randomly generated and then subsequenty incremented by the
+      be randomly generated and then subsequently incremented by the
       client whenever a new body of data is being transmitted between
       peers.
 
@@ -525,7 +525,7 @@ Internet-Draft      Quick Block-Wise Transfer Options      December 2020
       ETag as an unsigned integer of 8 bytes in length.  An
       implementation may want to consider limiting this to 4 bytes to
       reduce packet overhead size.  The initial ETag value should be
-      randomly generated and then subsequenty incremented by the server
+      randomly generated and then subsequently incremented by the server
       whenever a new body of data is being transmitted between peers.
 
    If the client detects that some of the payloads are missing, the
