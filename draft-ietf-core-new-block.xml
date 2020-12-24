@@ -165,10 +165,9 @@
 
         <t>Note that the same performance benefits can be applied to
         Confirmable messages if the value of NSTART is increased from 1
-        (Section 4.7 of <xref target="RFC7252"></xref>). However, the use
-        of Confirmable messages will not work if there asymmetrical packet
-        loss. Some sample examples
-        with Confirmable messages are provided in <xref
+        (Section 4.7 of <xref target="RFC7252"></xref>). However, the use of
+        Confirmable messages will not work if there is asymmetrical packet
+        loss. Some examples with Confirmable messages are provided in <xref
         target="CON"></xref>.</t>
 
         <t>There is little, if any, benefit of using these options with CoAP
@@ -200,12 +199,10 @@
       </section>
 
       <section title="CoAP Response Code (4.08) Usage">
-
         <t>This document adds a media type for the 4.08 (Request Entity
         Incomplete) response defining an additional message format for
         reporting on payloads using the Q-Block1 Option that are not received
         by the server.</t>
-
 
         <t>See <xref target="code"></xref> for more details.</t>
       </section>
@@ -293,8 +290,9 @@
         payload (i.e., it must be the same for all payloads of the same
         body).</t>
 
-        <t>Q-Block1 Option is useful with the payload-bearing POST, PUT, FETCH,
-        PATCH, and iPATCH requests and their responses (2.01 and 2.04).</t>
+        <t>Q-Block1 Option is useful with the payload-bearing POST, PUT,
+        FETCH, PATCH, and iPATCH requests and their responses (2.01 and
+        2.04).</t>
 
         <t>Q-Block2 Option is useful with GET, POST, PUT, FETCH, PATCH, and
         iPATCH requests and their payload-bearing responses (2.01, 2.03, 2.04,
@@ -387,20 +385,19 @@
         being transferred. It is also used to identify a particular block of a
         body that needs to be re-transmitted. The Request-Tag is opaque, the
         server still treats it as opaque but the client SHOULD ensure that it
-        is unique for every different body of transmitted data.</t>
+        is unique for every different body of transmitted data.<list
+            style="empty">
+            <t>Implementation Note: It is suggested that the client treats the
+            Request-Tag as an unsigned integer of 8 bytes in length. An
+            implementation may want to consider limiting this to 4 bytes to
+            reduce packet overhead size. The initial Request-Tag value should
+            be randomly generated and then subsequenty incremented by the
+            client whenever a new body of data is being transmitted between
+            peers.</t>
+          </list></t>
 
-        <t><list style="hanging">
-          <t hangText="Implementation Note:">It is suggested that the client
-          treats the Request-Tag as an unsigned integer of 8 bytes in length.
-          An implementation may want to consider limiting this to 4 bytes to
-          reduce packet overhead size. The initial Request-Tag value SHOULD
-          be randomly generated and then subsequenty incremented by the client
-          whenever a new body of data is being transmitted between peers.</t>
-        </list></t>
-
-        <t>For Confirmable transmission, the server continues to acknowledge
-        each packet, but a response is not required (whether separate or
-        piggybacked) until retransmission or successful receipt of the body.
+        <t>For Confirmable transmission, the server MUST continue to
+        acknowledge each packet.</t>
 
         <t>Each individual payload of the body is treated as a new request
         (see <xref target="token"></xref>).</t>
@@ -477,14 +474,15 @@
         server SHOULD ensure that it is unique for every different body of
         transmitted data.</t>
 
-        <t><list style="hanging">
-          <t hangText="Implementation Note:">It is suggested that the server
-          treats the ETag as an unsigned integer of 8 bytes in length.
-          An implementation may want to consider limiting this to 4 bytes to
-          reduce packet overhead size. The initial ETag value SHOULD
-          be randomly generated and then subsequenty incremented by the server
-          whenever a new body of data is being transmitted between peers.</t>
-        </list></t>
+        <t><list style="empty">
+            <t>Implementation Note: It is suggested that the server treats the
+            ETag as an unsigned integer of 8 bytes in length. An
+            implementation may want to consider limiting this to 4 bytes to
+            reduce packet overhead size. The initial ETag value should be
+            randomly generated and then subsequenty incremented by the server
+            whenever a new body of data is being transmitted between
+            peers.</t>
+          </list></t>
 
         <t>If the client detects that some of the payloads are missing, the
         missing payloads are requested by issuing a new GET, POST, PUT, FETCH,
