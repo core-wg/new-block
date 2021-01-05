@@ -803,7 +803,7 @@ missing-block-number = uint
 +=====================+===============|
 | MAX_PAYLOADS        |            10 |
 | NON_TIMEOUT         |           2 s |
-| NON_RECEIVE_TIMEOUT |          45 s |
+| NON_RECEIVE_TIMEOUT |           4 s |
 | NON_PROBING_WAIT    |         247 s |
 | NON_PARTIAL_TIMEOUT |         247 s |
 +---------------------+---------------+
@@ -835,9 +835,16 @@ Table 3: Derived Protocol Parameters]]></artwork>
         congestion, it is RECOMMENDED that after transmission of every set of
         MAX_PAYLOADS payloads of a single body, a delay is introduced of
         NON_TIMEOUT before sending the next set of payloads to manage
-        potential congestion issues. If the CoAP peer consistently reports
-        that there are missing payloads, then the value of NON_TIMEOUT SHOULD
-        be increased.</t>
+        potential congestion issues.</t>
+
+        <t>If the CoAP peer consistently reports that there are missing
+        payloads, then the value of MAX_PAYLOADS SHOULD be reduced by 1 at a
+        time (to a minimum of 1) and re-tested until there is no report of
+        missing payloads under normal operating conditions.  Note that the
+        CoAP peer will not know about the MAX_PAYLOADS change until it is
+        reconfigured.  As a consequence, the peer may indicate that there are
+        some missing payloads prior to the actual payload being transmitted as
+        all of its MAX_PAYLOADS payloads have not arrived.</t>
 
         <t>The sending of a set of missing payloads of a body is subject to
         MAX_PAYLOADS set of payloads.</t>
