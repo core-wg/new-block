@@ -127,10 +127,10 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    The CoAP Block1 and Block2 Options work well in environments where
    there are no or minimal packet losses.  These options operate
-   synchronously where each block has to be requested and can only ask
-   for (or send) the next block when the request for the previous block
-   has completed.  Packet, and hence block transmission rate, is
-   controlled by Round Trip Times (RTTs).
+   synchronously where each individual block has to be requested and can
+   only ask for (or send) the next block when the request for the
+   previous block has completed.  Packet, and hence block transmission
+   rate, is controlled by Round Trip Times (RTTs).
 
    There is a requirement for these blocks of data to be transmitted at
    higher rates under network conditions where there may be asymmetrical
@@ -138,15 +138,16 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    is when a network is subject to a Distributed Denial of Service
    (DDoS) attack and there is a need for DDoS mitigation agents relying
    upon CoAP to communicate with each other (e.g.,
-   [I-D.ietf-dots-telemetry]).  As a reminder, [RFC7959] recommends use
-   of Confirmable (CON) responses to handle potential packet loss, which
-   does not work with a flooded pipe DDoS situation.
+   [I-D.ietf-dots-telemetry]).  As a reminder, [RFC7959] recommends the
+   use of Confirmable (CON) responses to handle potential packet loss.
+   However, such recommendation does not work with a flooded pipe DDoS
+   situation.
 
 1.1.  Alternative CoAP Block-Wise Transfer Options
 
    This document introduces the CoAP Q-Block1 and Q-Block2 Options.
    These options are similar in operation to the CoAP Block1 and Block2
-   Options respectively, they are not a replacement for them, but have
+   Options, respectively.  They are not a replacement for them, but have
    the following benefits:
 
    o  They can operate in environments where packet loss is highly
@@ -160,7 +161,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    o  They support sending an entire body using Non-confirmable (NON)
       without requiring a response from the peer.
-
 
 
 
@@ -188,8 +188,8 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Using NON messages, the faster transmissions occur as all the blocks
    can be transmitted serially (as are IP fragmented packets) without
    having to wait for a response or next request from the remote CoAP
-   peer.  Recovery of missing Blocks is faster in that multiple missing
-   Blocks can be requested in a single CoAP packet.  Even if there is
+   peer.  Recovery of missing blocks is faster in that multiple missing
+   blocks can be requested in a single CoAP packet.  Even if there is
    asymmetrical packet loss, a body can still be sent and received by
    the peer whether the body comprises of a single or multiple payloads
    assuming no recovery is required.
@@ -211,13 +211,13 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    then retransmit only the blocks that have been lost in transmission.
 
    Q-Block1 and Q-Block2 Options can be used instead of Block1 and
-   Block2 Options respectively when the different transmission semantics
-   are required.  If the option is not supported by a peer, then
-   transmissions can fall back to using Block1 and Block2 respectively.
+   Block2 Options when the different transmission properties are
+   required.  If the new option is not supported by a peer, then
+   transmissions can fall back to using Block1 and Block2 Options,
+   respectively.
 
    The deviations from Block1 and Block2 Options are specified in
    Section 3.  Pointers to appropriate [RFC7959] sections are provided.
-
 
 
 
@@ -374,7 +374,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    MUST reject the request or response that uses either option.
 
    The Q-Block2 Option is repeatable when requesting retransmission of
-   missing Blocks, but not otherwise.  Except that case, any request
+   missing blocks, but not otherwise.  Except that case, any request
    carrying multiple Q-Block1 (or Q-Block2) Options MUST be handled
    following the procedure specified in Section 5.4.5 of [RFC7252].
 
@@ -545,9 +545,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    If the server has not received all the payloads of a body, but one or
    more NON payloads have been received, it SHOULD wait for up to
    NON_RECEIVE_TIMEOUT (Section 6.2) before sending a 4.08 (Request
-   Entity Incomplete) response.  Further discussion on the timings of
-   transmissions of 4.08 (Request Entity Incomplete) and 2.31 (Continue)
-   responses is in Section 6.2.
+   Entity Incomplete) response.  Further considerations related to the
+   transmission timings of 4.08 (Request Entity Incomplete) and 2.31
+   (Continue) Response Codes are discussed in Section 6.2.
 
    If a server receives payloads with different Request-Tags for the
    same resource, it should continue to process all the bodies as it has
@@ -620,8 +620,8 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    GET, POST, PUT, FETCH, PATCH, or iPATCH request that contains one or
    more Q-Block2 Options that define the missing blocks with the M bit
-   unset.  Further discussion on the timings of transmissions for
-   missing requests is discussed in (Section 6.2).
+   unset.  Further considerations related to the transmission timing for
+   missing requests are discussed in Section 6.2.
 
    The requested missing block numbers MUST have an increasing block
    number in each additional Q-Block2 Option with no duplicates.  The
@@ -869,7 +869,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    EXCHANGE_LIFETIME (Section 4.8.2 of [RFC7252]).
 
                   +---------------------+---------------+
-                  | Parameter Name      | Default value |
+                  | Parameter Name      | Default Value |
                   +=====================+===============|
                   | MAX_PAYLOADS        |            10 |
                   | NON_TIMEOUT         |           2 s |
@@ -901,10 +901,10 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
       not negotiated, the DOTS application uses customized defaults as
       discussed in Section 4.5.2 of [RFC8782].
 
-   Each NON 4.08 (Request Entity Incomplete) response is subjected to
+   Each NON 4.08 (Request Entity Incomplete) response is subject to
    PROBING_RATE.
 
-   Each NON GET or FETCH request using Q-Block2 Option is subjected to
+   Each NON GET or FETCH request using Q-Block2 Option is subject to
    PROBING_RATE.
 
    As the sending of many payloads of a single body may itself cause
