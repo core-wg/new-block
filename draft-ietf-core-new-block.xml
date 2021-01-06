@@ -123,8 +123,8 @@
       to communicate with each other (e.g., <xref
       target="I-D.ietf-dots-telemetry"></xref>). As a reminder, <xref
       target="RFC7959"></xref> recommends the use of Confirmable (CON)
-      responses to handle potential packet loss. However, such recommendation
-      does not work with a flooded pipe DDoS situation.</t>
+      responses to handle potential packet loss. However, such a
+      recommendation does not work with a flooded pipe DDoS situation.</t>
 
       <section title="Alternative CoAP Block-Wise Transfer Options">
         <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options.

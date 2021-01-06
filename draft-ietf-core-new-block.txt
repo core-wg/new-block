@@ -140,7 +140,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    upon CoAP to communicate with each other (e.g.,
    [I-D.ietf-dots-telemetry]).  As a reminder, [RFC7959] recommends the
    use of Confirmable (CON) responses to handle potential packet loss.
-   However, such recommendation does not work with a flooded pipe DDoS
+   However, such a recommendation does not work with a flooded pipe DDoS
    situation.
 
 1.1.  Alternative CoAP Block-Wise Transfer Options
