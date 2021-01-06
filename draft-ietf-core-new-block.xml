@@ -1313,8 +1313,6 @@ o  Reference: [RFCXXXX]]]></artwork>
 
       <?rfc include='reference.RFC.8610'?>
 
-      <?rfc include='reference.RFC.7967'?>
-
       <reference anchor="Format"
                  target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats">
         <front>

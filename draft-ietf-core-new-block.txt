@@ -1546,11 +1546,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
               DOI 10.17487/RFC6928, April 2013,
               <https://www.rfc-editor.org/info/rfc6928>.
 
-   [RFC7967]  Bhattacharyya, A., Bandyopadhyay, S., Pal, A., and T.
-              Bose, "Constrained Application Protocol (CoAP) Option for
-              No Server Response", RFC 7967, DOI 10.17487/RFC7967,
-              August 2016, <https://www.rfc-editor.org/info/rfc7967>.
-
    [RFC8610]  Birkholz, H., Vigano, C., and C. Bormann, "Concise Data
               Definition Language (CDDL): A Notational Convention to
               Express Concise Binary Object Representation (CBOR) and
@@ -1562,6 +1557,11 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
               Service Open Threat Signaling (DOTS) Signal Channel
               Specification", RFC 8782, DOI 10.17487/RFC8782, May 2020,
               <https://www.rfc-editor.org/info/rfc8782>.
+
+
+
+
+
 
 
 
