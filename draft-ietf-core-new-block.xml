@@ -837,14 +837,16 @@ Table 3: Derived Protocol Parameters]]></artwork>
         NON_TIMEOUT before sending the next set of payloads to manage
         potential congestion issues.</t>
 
-        <t>If the CoAP peer consistently reports that there are missing
-        payloads, then the value of MAX_PAYLOADS SHOULD be reduced by 1 at a
-        time (to a minimum of 1) and re-tested until there is no report of
-        missing payloads under normal operating conditions.  Note that the
-        CoAP peer will not know about the MAX_PAYLOADS change until it is
-        reconfigured.  As a consequence, the peer may indicate that there are
-        some missing payloads prior to the actual payload being transmitted as
-        all of its MAX_PAYLOADS payloads have not arrived.</t>
+        <t>If the CoAP peer reports at least one payload has not arrived for
+        each body for at least a 24 hour period and it is known that there are
+        no other network issues over that period, then the value of
+        MAX_PAYLOADS can be reduced by 1 at a time (to a minimum of 1) and
+        the situation re-evaluated for another 24 hour period until there is no
+        report of missing payloads under normal operating conditions.  Note
+        that the CoAP peer will not know about the MAX_PAYLOADS change until
+        it is reconfigured. As a consequence, the peer may indicate that there
+        are some missing payloads prior to the actual payload being transmitted
+        as all of its MAX_PAYLOADS payloads have not arrived.</t>
 
         <t>The sending of a set of missing payloads of a body is subject to
         MAX_PAYLOADS set of payloads.</t>
@@ -887,12 +889,13 @@ Table 3: Derived Protocol Parameters]]></artwork>
         for the missing payloads.</t>
 
         <t>The request that the client sends to acknowledge the receipt of all
-        the current set of MAX_PAYLOADS payloads SHOULD contain a Q-Block2
-        Option with NUM set to the first block of the next set of MAX_PAYLOADS
-        payloads and the M bit set to 1. The server SHOULD recognize this as a
-        continue request and just continue the transmission of the body
-        (including Observe Option, if appropriate for an unsolicited response)
-        rather than as a request for missing blocks.</t>
+        the current set of MAX_PAYLOADS payloads SHOULD contain a special case
+        Q-Block2 Option with NUM set to the first block of the next set of
+        MAX_PAYLOADS payloads and the M bit set to 1. The server SHOULD
+        recognize this special case as a continue request and just continue
+        the transmission of the body (including Observe Option, if appropriate
+        for an unsolicited response) rather than as a request for missing
+        blocks.</t>
 
         <t>The client does not need to acknowledge the receipt of the entire
         body.</t>
