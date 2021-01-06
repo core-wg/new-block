@@ -82,7 +82,7 @@ Table of Contents
    5.  The Use of Tokens . . . . . . . . . . . . . . . . . . . . . .  15
    6.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  15
      6.1.  Confirmable (CON) . . . . . . . . . . . . . . . . . . . .  15
-     6.2.  Non-confirmable (Non) . . . . . . . . . . . . . . . . . .  15
+     6.2.  Non-confirmable (NON) . . . . . . . . . . . . . . . . . .  15
    7.  Caching Considerations  . . . . . . . . . . . . . . . . . . .  18
    8.  HTTP-Mapping Considerations . . . . . . . . . . . . . . . . .  20
    9.  Examples of Selective Block Recovery  . . . . . . . . . . . .  20
@@ -811,8 +811,8 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 6.  Congestion Control
 
    The transmission of the payloads of a body either SHOULD all be
-   Confirmable or SHOULD all be Non-confirmable.  This is meant to
-   simplify the congestion control procedure.
+   Confirmable or all be Non-confirmable.  This is meant to simplify the
+   congestion control procedure.
 
 6.1.  Confirmable (CON)
 
@@ -829,7 +829,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    transmission failure as individual payloads will have failed after
    MAX_TRANSMIT_SPAN.
 
-6.2.  Non-confirmable (Non)
+6.2.  Non-confirmable (NON)
 
    This document introduces new parameters MAX_PAYLOADS, NON_TIMEOUT,
    NON_RECEIVE_TIMEOUT, NON_PROBING_WAIT, and NON_PARTIAL_TIMEOUT
@@ -869,7 +869,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    EXCHANGE_LIFETIME (Section 4.8.2 of [RFC7252]).
 
                   +---------------------+---------------+
-                  | Paramter Name       | Default value |
+                  | Parameter Name      | Default value |
                   +=====================+===============|
                   | MAX_PAYLOADS        |            10 |
                   | NON_TIMEOUT         |           2 s |

@@ -743,8 +743,8 @@ missing-block-number = uint
 
     <section anchor="cc" title="Congestion Control">
       <t>The transmission of the payloads of a body either SHOULD all be
-      Confirmable or SHOULD all be Non-confirmable. This is meant to simplify
-      the congestion control procedure.</t>
+      Confirmable or all be Non-confirmable. This is meant to simplify the
+      congestion control procedure.</t>
 
       <section anchor="cc-con" title="Confirmable (CON)">
         <t>Congestion control for CON requests and responses is specified in
@@ -761,7 +761,7 @@ missing-block-number = uint
         MAX_TRANSMIT_SPAN.</t>
       </section>
 
-      <section anchor="cc-non" title="Non-confirmable (Non)">
+      <section anchor="cc-non" title="Non-confirmable (NON)">
         <t>This document introduces new parameters MAX_PAYLOADS, NON_TIMEOUT,
         NON_RECEIVE_TIMEOUT, NON_PROBING_WAIT, and NON_PARTIAL_TIMEOUT
         primarily for use with NON.</t>
@@ -780,12 +780,12 @@ missing-block-number = uint
 
         <t>NON_TIMEOUT is the maximum period of delay between sending sets of
         MAX_PAYLOADS payloads for the same body. NON_TIMEOUT has the same
-        value as ACK_TIMEOUT (Section 4.8 of <xref target="RFC7252"></xref>).
-        </t>
+        value as ACK_TIMEOUT (Section 4.8 of <xref
+        target="RFC7252"></xref>).</t>
 
         <t>NON_RECEIVE_TIMEOUT is the maximum time to wait for a missing
         payload before requesting retransmission. NON_RECEIVE_TIMEOUT has a
-        value of twice NON_TIMEOUT. </t>
+        value of twice NON_TIMEOUT.</t>
 
         <t>NON_PROBING_WAIT is used to limit the potential wait needed
         calculated when using PROBING_WAIT. NON_PROBING_WAIT has the same
@@ -799,7 +799,7 @@ missing-block-number = uint
 
         <t><figure align="center">
             <artwork align="center"><![CDATA[+---------------------+---------------+
-| Paramter Name       | Default value |
+| Parameter Name      | Default value |
 +=====================+===============|
 | MAX_PAYLOADS        |            10 |
 | NON_TIMEOUT         |           2 s |
@@ -840,13 +840,13 @@ Table 3: Derived Protocol Parameters]]></artwork>
         <t>If the CoAP peer reports at least one payload has not arrived for
         each body for at least a 24 hour period and it is known that there are
         no other network issues over that period, then the value of
-        MAX_PAYLOADS can be reduced by 1 at a time (to a minimum of 1) and
-        the situation re-evaluated for another 24 hour period until there is no
-        report of missing payloads under normal operating conditions.  Note
+        MAX_PAYLOADS can be reduced by 1 at a time (to a minimum of 1) and the
+        situation re-evaluated for another 24 hour period until there is no
+        report of missing payloads under normal operating conditions. Note
         that the CoAP peer will not know about the MAX_PAYLOADS change until
         it is reconfigured. As a consequence, the peer may indicate that there
-        are some missing payloads prior to the actual payload being transmitted
-        as all of its MAX_PAYLOADS payloads have not arrived.</t>
+        are some missing payloads prior to the actual payload being
+        transmitted as all of its MAX_PAYLOADS payloads have not arrived.</t>
 
         <t>The sending of a set of missing payloads of a body is subject to
         MAX_PAYLOADS set of payloads.</t>
