@@ -528,14 +528,17 @@
             <t hangText="NUM is zero:">This is a request for the entire
             body.</t>
 
-            <t hangText="'NUM modulo MAX_PAYLOADS' is zero:">This is used to
-            confirm that the current set of MAX_PAYLOADS payloads have been
-            successfully received and that, upon receipt, the peer can
-            continue to sent the next set of payloads. This is the 'Continue'
+            <t hangText="'NUM modulo MAX_PAYLOADS' is zero, while NUM is not
+            zero:">This is used to confirm that the current set of
+            MAX_PAYLOADS payloads (the latest one having block number NUM-1)
+            has been successfully received and that, upon receipt of this
+            request, the server can continue to send the next set of payloads
+            (the first one having block number NUM). This is the 'Continue'
             Q-Block-2.</t>
 
-            <t hangText="Any other value of NUM:">This is a request for the
-            remaining payloads in the current MAX_PAYLOADS set.</t>
+            <t hangText="Any other value of NUM:">This is a request for that
+            block and for all of the remaining blocks in the current
+            MAX_PAYLOADS set.</t>
           </list></t>
 
         <t>If the request includes multiple Q-Block2 Options and these options
@@ -704,11 +707,12 @@ missing-block-number = uint
       <t></t>
 
       <t>The token to use for the response SHOULD be the token that was used
-      in the highest block number received payload. Note that the use of any
-      received token would work, but providing the one used in the highest
-      received block number will aid any troubleshooting. The client will use
-      the token to match the request to find what Request-Tag value is
-      currently being used.</t>
+      in the highest block number received so far with the same Request-Tag
+      value. Note that the use of any received token with the same Request-Tag
+      would work, but providing the one used in the highest received block
+      number will aid any troubleshooting. The client will use the token to
+      determine what is the previously sent request to obtain the Request-Tag
+      value to be used.</t>
 
       <t>If the size of the 4.08 (Request Entity Incomplete) response packet
       is larger than that defined by Section 4.6 <xref
@@ -1129,7 +1133,7 @@ X<--: Message loss (response)
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
-         +--------->| NON GET /path M:0x01 T:0xc0 O:0 QB2:0/0/1024
+         +--------->| NON GET /path M:0x01 T:0xc0 O:0 QB2:0/1/1024
          |<---------+ NON 2.05 M:0xf1 T:0xc0 O:1220 ET=19 QB2:0/1/1024
          |<---------+ NON 2.05 M:0xf2 T:0xc0 O:1220 ET=19 QB2:1/1/1024
          |<---------+ NON 2.05 M:0xf3 T:0xc0 O:1220 ET=19 QB2:2/1/1024
@@ -1174,7 +1178,7 @@ X<--: Message loss (response)
          |     [[MAX_PAYLOADS blocks acknowledged by client using 
          |       'Continue' Q-Block2]]
          +--------->| NON GET /path M:0x03 T:0xf2 QB2:10/1/1024
-         |<---------+ NON 2.05 M:0x9b T:0xf0 O:1235 ET=22 QB2:3/0/1024
+         |<---------+ NON 2.05 M:0x9b T:0xf0 O:1235 ET=22 QB2:10/0/1024
       [[Body has been received]]
          |   ...    |
 
@@ -1245,7 +1249,7 @@ X<--: Message loss (response)
          |   ...    |
       [[NON_TIMEOUT (server) delay expires]]
          |     [[Server sends next set of payloads]]
-         |     X<---+ NON 2.05 M:0xba T:0xf0 O:1237 ET=23 QB2:10/0/1024
+         |     X<---+ NON 2.05 M:0xba T:0xf0 O:1237 ET=24 QB2:10/0/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
          |     [[Client realizes blocks are missing and asks for the 
@@ -1493,7 +1497,7 @@ o  Reference: [RFCXXXX]]]></artwork>
 ]]></artwork>
           </figure></t>
 
-        <t>Now, suppose that a new body of data is to sent but with some
+        <t>Now, suppose that a new body of data is to be sent but with some
         blocks dropped in transmission as illustrated in <xref
         target="con32"></xref>. The client will retry sending blocks for which
         no ACK was received.</t>
