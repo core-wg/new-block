@@ -578,9 +578,10 @@
         payloads before issuing a GET, POST, PUT, FETCH, PATCH, or iPATCH
         request that contains one or more Q-Block2 Options that define the
         missing blocks with the M bit unset. It is permissible to set the M
-        bit to request this and missing blocks from this MAX_PAYLOADS set.
-        Further considerations related to the transmission timing for missing
-        requests are discussed in <xref target="cc-non"></xref>.</t>
+        bit to request the NUM and subsequent missing blocks from the current
+        MAX_PAYLOADS set.  Further considerations related to the transmission
+        timing for missing requests are discussed in
+        <xref target="cc-non"></xref>.</t>
 
         <t>The requested missing block numbers MUST have an increasing block
         number in each additional Q-Block2 Option with no duplicates. The

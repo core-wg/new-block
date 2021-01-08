@@ -638,10 +638,10 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    after the last received payload for NON payloads before issuing a
    GET, POST, PUT, FETCH, PATCH, or iPATCH request that contains one or
    more Q-Block2 Options that define the missing blocks with the M bit
-   unset.  It is permissible to set the M bit to request this and
-   missing blocks from this MAX_PAYLOADS set.  Further considerations
-   related to the transmission timing for missing requests are discussed
-   in Section 6.2.
+   unset.  It is permissible to set the M bit to request the NUM and
+   subsequent missing blocks from the current MAX_PAYLOADS set.  Further
+   considerations related to the transmission timing for missing
+   requests are discussed in Section 6.2.
 
    The requested missing block numbers MUST have an increasing block
    number in each additional Q-Block2 Option with no duplicates.  The
