@@ -523,31 +523,27 @@
 
       <section anchor="qblock2" title="Using the Q-Block2 Option">
         <t>In a request for any block number, the M bit unset indicates the
-        request is just for that block. If the M bit is set, this has different
-        meanings based on the NUM value.</t>
+        request is just for that block. If the M bit is set, this has
+        different meanings based on the NUM value:<list style="hanging">
+            <t hangText="NUM is zero:">This is a request for the entire
+            body.</t>
 
-        <t>M bit set and NUM is zero.<list style="empty">
-            <t>This is a request for the entire body.</t>
-          </list></t>
+            <t hangText="'NUM modulo MAX_PAYLOADS' is zero:">This is used to
+            confirm that the current set of MAX_PAYLOADS payloads have been
+            successfully received and that, upon receipt, the peer can
+            continue to sent the next set of payloads. This is the 'Continue'
+            Q-Block-2.</t>
 
-        <t>M bit set and 'NUM modulo MAX_PAYLOADS' is zero.<list style="empty">
-            <t>This is used to confirm that the current set of MAX_PAYLOADS
-            payloads have been successfully received and the peer on receipt
-            can continue to sent the next set of payloads.  This is the
-            'Continue' Q-Block-2.</t>
-          </list></t>
-
-        <t>M bit set and Any other value of NUM.<list style="empty">
-            <t>This is a request for the remaining payloads in the current
-            MAX_PAYLOADS set.</t>
+            <t hangText="Any other value of NUM:">This is a request for the
+            remaining payloads in the current MAX_PAYLOADS set.</t>
           </list></t>
 
         <t>If the request includes multiple Q-Block2 Options and these options
         overlap (e.g., combination of M being set (this and later blocks) and
         being unset (this individual block)) resulting in an individual block
         being requested multiple times, the server MUST only send back one
-        instance of that block. This behavior is meant to prevent amplification
-        attacks.</t>
+        instance of that block. This behavior is meant to prevent
+        amplification attacks.</t>
 
         <t>The payloads sent back from the server as a response MUST all have
         the same ETag (Section 5.10.6 of <xref target="RFC7252"></xref>) for
@@ -578,10 +574,9 @@
         payloads before issuing a GET, POST, PUT, FETCH, PATCH, or iPATCH
         request that contains one or more Q-Block2 Options that define the
         missing blocks with the M bit unset. It is permissible to set the M
-        bit to request the NUM and subsequent missing blocks from the current
-        MAX_PAYLOADS set.  Further considerations related to the transmission
-        timing for missing requests are discussed in
-        <xref target="cc-non"></xref>.</t>
+        bit to request this and missing blocks from this MAX_PAYLOADS set.
+        Further considerations related to the transmission timing for missing
+        requests are discussed in <xref target="cc-non"></xref>.</t>
 
         <t>The requested missing block numbers MUST have an increasing block
         number in each additional Q-Block2 Option with no duplicates. The
@@ -709,10 +704,11 @@ missing-block-number = uint
       <t></t>
 
       <t>The token to use for the response SHOULD be the token that was used
-      in the highest block number received payload. The client will use the
-      token to match the request to find what Request-Tag value is currently
-      being used.  Providing the highest received block number will aid any
-      troubleshooting.</t>
+      in the highest block number received payload. Note that the use of any
+      received token would works, but providing the one used in the highest
+      received block number will aid any troubleshooting. The client will use
+      the token to match the request to find what Request-Tag value is
+      currently being used.</t>
 
       <t>If the size of the 4.08 (Request Entity Incomplete) response packet
       is larger than that defined by Section 4.6 <xref
@@ -915,11 +911,12 @@ Table 3: Derived Protocol Parameters]]></artwork>
 
         <t>The request that the client sends to acknowledge the receipt of all
         the current set of MAX_PAYLOADS payloads is the 'Continue' Q-Block2
-        Option ('NUM modulo MAX_PAYLOADS' is zero, NUM is not zero and M bit
-        is set (<xref target="qblock2"></xref>)).  The server SHOULD recognize
+        Option ('NUM modulo MAX_PAYLOADS' is zero, NUM is not zero, and M bit
+        is set (<xref target="qblock2"></xref>)). The server SHOULD recognize
         this as a continue request and just continue the transmission of the
         body (including Observe Option, if appropriate for an unsolicited
-        response) rather than as a request for the remaining missing blocks.</t>
+        response) rather than as a request for the remaining missing
+        blocks.</t>
 
         <t>The client does not need to acknowledge the receipt of the entire
         body.</t>
@@ -1037,8 +1034,9 @@ X<--: Message loss (response)
          |   ...    |
 ]]></artwork>
           </figure></t>
+
         <t><xref target="B3non0"></xref> depicts an example of a NON PUT
-        request conveying Q-Block1 Option.  The number of payloads exceeds
+        request conveying Q-Block1 Option. The number of payloads exceeds
         MAX_PAYLOADS. All the blocks are received by the server.</t>
 
         <t><figure anchor="B3non0"
@@ -1051,7 +1049,7 @@ X<--: Message loss (response)
          +--------->| [[Payloads 3 - 9 not detailed]]
          +--------->| NON PUT /path M:0x0a T:0xfa RT=10 QB1:9/1/1024
       [[MAX_PAYLOADS has been reached]]
-      [[MAX_PAYLOADS receipt acknowledged by server]]
+         |     [[MAX_PAYLOADS blocks receipt acknowledged by server]]
          |<---------+ NON 2.31 M:0x81 T:0xfa
          +--------->| NON PUT /path M:0x0b T:0xfb RT=10 QB1:10/0/1024
          |<---------+ NON 2.04 M:0x82 T:0xfb
@@ -1078,7 +1076,7 @@ X<--: Message loss (response)
       [[NON_TIMEOUT (client) delay expires. Next set of payloads sent]]
          +--------->| NON PUT /path M:0x1b T:0xeb RT=11 QB1:10/0/1024
          |   ...    |
-      [[NON_RECEIVE_TIMEOUT (server) delay expires]]
+         |      [[NON_RECEIVE_TIMEOUT (server) delay expires]]
 ]]></artwork>
           </figure></t>
 
@@ -1086,8 +1084,9 @@ X<--: Message loss (response)
         missing ones in one go (<xref target="B3non2"></xref>). It does so by
         indicating which blocks have been received in the data portion of the
         response. The token used in the response should be the token that was
-        used in the highest block number received payload.  The client can then
-        derive the Request-Tag by matching the token with the sent request.</t>
+        used in the highest block number received payload. The client can then
+        derive the Request-Tag by matching the token with the sent
+        request.</t>
 
         <t><figure anchor="B3non2"
             title="Example of NON Request with Q-Block1 Option (Blocks Recovery)">
@@ -1097,8 +1096,8 @@ X<--: Message loss (response)
          +--------->| NON PUT /path M:0x1c T:0xec RT=11 QB1:1/1/1024
          +--->X     | NON PUT /path M:0x1d T:0xed RT=11 QB1:9/1/1024
          |   ...    |
-      [[NON_RECEIVE_TIMEOUT (server) delay expires. Server realizes a block is
-        still missing and asks for the missing one]]
+         |   [[NON_RECEIVE_TIMEOUT delay expires. The server realizes 
+         |     a block is still missing and asks for the missing one]]                 
          |<---------+ NON 4.08 M:0x1e T:0xec [Missing 9 [for RT=11]]
          +--------->| NON PUT /path M:0x1e T:0xee RT=11 QB1:9/1/1024
          |<---------+ NON 2.04 M:0x1f T:0xee
@@ -1108,8 +1107,8 @@ X<--: Message loss (response)
 
         <t>Under high levels of traffic loss, the client can elect not to
         retry sending missing blocks of data by "forgetting" all the tracked
-        tokens for this Request-Tag. Similarily, the server can elect to not
-        to continue asking for missing blocks. Both these decisions are
+        tokens for this Request-Tag. Similarly, the server can elect to not to
+        continue asking for missing blocks. Both these decisions are
         implementation specific.</t>
       </section>
 
@@ -1134,7 +1133,7 @@ X<--: Message loss (response)
          |<---------+ NON 2.05 M:0xf3 T:0xc0 O:1220 ET=19 QB2:2/1/1024
          |<---------+ NON 2.05 M:0xf4 T:0xc0 O:1220 ET=19 QB2:3/0/1024
          |   ...    |
-      [[Observe triggered]]
+         |       [[Observe triggered]]
          |<---------+ NON 2.05 M:0xf5 T:0xc0 O:1221 ET=20 QB2:0/1/1024
          |<---------+ NON 2.05 M:0xf6 T:0xc0 O:1221 ET=20 QB2:1/1/1024
          |<---------+ NON 2.05 M:0xf7 T:0xc0 O:1221 ET=20 QB2:2/1/1024
@@ -1146,7 +1145,7 @@ X<--: Message loss (response)
 
         <t><xref target="nonb40"></xref> illustrates the same as <xref
         target="nonb4"></xref> but this time has eleven (11) payloads which
-        exceeds MAX_PAYLOADS.  There is no loss experienced.</t>
+        exceeds MAX_PAYLOADS. There is no loss experienced.</t>
 
         <t><figure anchor="nonb40"
             title="Example of NON Notifications with Q-Block2 Option (Without Loss)">
@@ -1158,18 +1157,20 @@ X<--: Message loss (response)
          |<---------+ NON 2.05 M:0x82 T:0xf0 O:1234 ET=21 QB2:1/1/1024
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0x8a T:0xf0 O:1234 ET=21 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-      [[MAX_PAYLOADS acknowledged by client using special case Q-Block2]]
+         |       [[MAX_PAYLOADS has been reached]]
+      [[MAX_PAYLOADS blocks acknowledged by client using special case
+        Q-Block2]]
          +--------->| NON GET /path M:0x02 T:0xf1 QB2:10/1/1024
          |<---------+ NON 2.05 M:0x8b T:0xf0 O:1234 ET=21 QB2:10/0/1024
          |   ...    |
-      [[Observe triggered]]
+         |       [[Observe triggered]]
          |<---------+ NON 2.05 M:0x91 T:0xf0 O:1235 ET=22 QB2:0/1/1024
          |<---------+ NON 2.05 M:0x92 T:0xf0 O:1235 ET=22 QB2:1/1/1024
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0x9a T:0xf0 O:1235 ET=22 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-      [[MAX_PAYLOADS acknowledged by client using special case Q-Block2]]
+         |       [[MAX_PAYLOADS has been reached]]
+      [[MAX_PAYLOADS acknowledged by client using special case 
+        Q-Block2]]
          +--------->| NON GET /path M:0x03 T:0xf2 QB2:10/1/1024
          |<---------+ NON 2.05 M:0x9b T:0xf0 O:1235 ET=22 QB2:3/0/1024
       [[Body has been received]]
@@ -1189,25 +1190,26 @@ X<--: Message loss (response)
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |   ...    |
-      [[Observe triggered]]
+         |       [[Observe triggered]]
          |<---------+ NON 2.05 M:0xa1 T:0xf0 O:1236 ET=23 QB2:0/1/1024
          |     X<---+ NON 2.05 M:0xa2 T:0xf0 O:1236 ET=23 QB2:1/1/1024
          |<---------+ [[Payloads 3 - 8 not detailed]]
          |     X<---+ NON 2.05 M:0xaa T:0xf0 O:1236 ET=23 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
+         |       [[MAX_PAYLOADS has been reached]]
          |   ...    |
-      [[NON_TIMEOUT (server) delay expires. Next set of payloads sent]]
+         |       [[NON_TIMEOUT (server) delay expires. Next set of 
+         |         payloads sent]]
          |<---------+ NON 2.05 M:0xab T:0xf0 O:1236 ET=23 QB2:10/0/1024
          |   ...    |
-      [[NON_RECEIVE_TIMEOUT (client) delay expires. Client realizes blocks are
-        missing and asks for the missing ones in one go]]
+      [[NON_RECEIVE_TIMEOUT (client) delay expires. Client realizes 
+        blocks are missing and asks for the missing ones in one go]]
          +--------->| NON GET /path M:0x04 T:0xf3 QB2:1/0/1024\
          |          |                             QB2:9/0/1024
          |     X<---+ NON 2.05 M:0xac T:0xf3 ET=23 QB2:1/1/1024
          |<---------+ NON 2.05 M:0xad T:0xf3 ET=23 QB2:9/1/1024
          |   ...    |
-      [[NON_RECEIVE_TIMEOUT (client) delay expires. Client realizes block is
-        still missing and asks for missing block]]
+      [[NON_RECEIVE_TIMEOUT (client) delay expires. Client realizes
+         block is still missing and asks for missing block]]
          +--------->| NON GET /path M:0x05 T:0xf4 QB2:1/0/1024
          |<---------+ NON 2.05 M:0xae T:0xf4 ET=23 QB2:1/1/1024
       [[Body has been received]]
@@ -1229,25 +1231,28 @@ X<--: Message loss (response)
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |   ...    |
-      [[Observe triggered]]
+         |       [[Observe triggered]]
          |<---------+ NON 2.05 M:0xb1 T:0xf0 O:1237 ET=24 QB2:0/1/1024
          |<---------+ NON 2.05 M:0xb2 T:0xf0 O:1237 ET=24 QB2:1/1/1024
          |     X<---+ NON 2.05 M:0xb3 T:0xf0 O:1237 ET=24 QB2:2/1/1024
          |     X<---+ [[Payloads 4 - 9 not detailed]]
          |     X<---+ NON 2.05 M:0xb9 T:0xf0 O:1237 ET=24 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
+         |       [[MAX_PAYLOADS has been reached]]
          |   ...    |
-      [[NON_TIMEOUT (server) delay expires. Next set of payloads sent]]
+         |       [[NON_TIMEOUT (server) delay expires. Next set of 
+         |        payloads sent]]
          |     X<---+ NON 2.05 M:0xba T:0xf0 O:1237 ET=23 QB2:10/0/1024
          |   ...    |
-      [[NON_RECEIVE_TIMEOUT (client) delay expires. Client realizes blocks are
-        missing and asks for the missing ones in one go by setting the M bit]]
+      [[NON_RECEIVE_TIMEOUT (client) delay expires. Client realizes 
+        blocks are missing and asks for the missing ones in one go by
+        setting the M bit]]
          +--------->| NON GET /path M:0x06 T:0xf5 QB2:2/1/1024
          |<---------+ NON 2.05 M:0xbb T:0xf5 ET=24 QB2:2/1/1024
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0xc2 T:0xf5 ET=24 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-      [[MAX_PAYLOADS acknowledged by client using special case Q-Block2]]
+         |       [[MAX_PAYLOADS has been reached]]
+      [[MAX_PAYLOADS acknowledged by client using special case 
+        Q-Block2]]
          +--------->| NON GET /path M:0x87 T:0xf6 QB2:10/1/1024
          |<---------+ NON 2.05 M:0x9b T:0xf0 O:1237 ET=22 QB2:10/0/1024
       [[Body has been received]]
@@ -1299,7 +1304,8 @@ Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
 
    Published specification: [This_Document]
 
-   Applications that use this media type: Data serialization and deserialization.
+   Applications that use this media type: Data serialization and 
+      deserialization.
 
    Fragment identifier considerations: N/A
 
@@ -1500,13 +1506,14 @@ o  Reference: [RFCXXXX]]]></artwork>
          |<---------+ ACK 0.00 M:0x05
          |<---------+ ACK 0.00 M:0x08
          |   ...    |
-      [[ACK_TIMEOUT (client) delay expires. Associated packet retransmitted]]
+      [[ACK_TIMEOUT (client) delay expires. Associated packet 
+        retransmitted]]
          +--------->| CON PUT /path M:0x06 T:0xf5 RT=11 QB1:1/1/1024
          +--->X     | CON PUT /path M:0x07 T:0xf6 RT=11 QB1:2/1/1024
          |<---------+ ACK 0.00 M:0x06
          |   ...    |
-      [[ACK_TIMEOUT exponential backoff (client) delay expires. Associated
-        packet retransmitted]]
+      [[ACK_TIMEOUT exponential backoff (client) delay expires. 
+        Associated packet retransmitted]]
          +--->?     | CON PUT /path M:0x07 T:0xf6 RT=11 QB1:2/1/1024
          |   ...    |
       [[Either body transmission failure (acknowledge retry timeout)
@@ -1538,7 +1545,7 @@ o  Reference: [RFCXXXX]]]></artwork>
          |<---------+ ACK 2.05 M:0xe2 T:0xf0 O:1234 ET=21 QB2:2/1/1024
          |<---------+ ACK 2.05 M:0xe3 T:0xf0 O:1234 ET=21 QB2:3/0/1024
          |   ...    |
-      [[Observe triggered]]
+         |       [[Observe triggered]]
          |<---------+ CON 2.05 M:0xe4 T:0xf0 O:1235 ET=22 QB2:0/1/1024
          |<---------+ CON 2.05 M:0xe5 T:0xf0 O:1235 ET=22 QB2:1/1/1024
          |<---------+ CON 2.05 M:0xe6 T:0xf0 O:1235 ET=22 QB2:2/1/1024
@@ -1548,7 +1555,7 @@ o  Reference: [RFCXXXX]]]></artwork>
          |--------->+ ACK 0.00 M:0xe6
          |--------->+ ACK 0.00 M:0xe7
          |   ...    |
-      [[Observe triggered]]
+         |       [[Observe triggered]]
          |<---------+ CON 2.05 M:0xe8 T:0xf0 O:1236 ET=23 QB2:0/1/1024
          |     X<---+ CON 2.05 M:0xe9 T:0xf0 O:1236 ET=23 QB2:1/1/1024
          |     X<---+ CON 2.05 M:0xea T:0xf0 O:1236 ET=23 QB2:2/1/1024
@@ -1556,13 +1563,14 @@ o  Reference: [RFCXXXX]]]></artwork>
          |--------->+ ACK 0.00 M:0xe8
          |--------->+ ACK 0.00 M:0xeb
          |   ...    |
-      [[ACK_TIMEOUT (server) delay expires. Associated packet retransmitted]]
+         |       [[ACK_TIMEOUT (server) delay expires. Associated 
+         |         packet retransmitted]]
          |<---------+ CON 2.05 M:0xe9 T:0xf0 O:1236 ET=23 QB2:1/1/1024
          |     X<---+ CON 2.05 M:0xea T:0xf0 O:1236 ET=23 QB2:2/1/1024
          |--------->+ ACK 0.00 M:0xe9
          |   ...    |
-      [[ACK_TIMEOUT exponential backoff (server) delay expires. Associated
-         packet retransmitted]]
+         |      [[ACK_TIMEOUT exponential backoff (server) delay 
+         |        expires. Associated packet retransmitted]]
          |     X<---+ CON 2.05 M:0xea T:0xf0 O:1236 ET=23 QB2:2/1/1024
          |   ...    |
       [[Either body transmission failure (acknowledge retry timeout)
