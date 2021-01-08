@@ -1098,8 +1098,8 @@ X<--: Message loss (response)
          +--->X     | NON PUT /path M:0x1d T:0xed RT=11 QB1:9/1/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (server) delay expires]]
-         |     [[The server realizes a block is still missing and asks for the
-         |       missing one]]                 
+         |     [[The server realizes a block is still missing and asks
+         |        for the missing one]]                 
          |<---------+ NON 4.08 M:0x1e T:0xec [Missing 9 [for RT=11]]
          +--------->| NON PUT /path M:0x1e T:0xee RT=11 QB1:9/1/1024
          |<---------+ NON 2.04 M:0x1f T:0xee
@@ -1160,8 +1160,8 @@ X<--: Message loss (response)
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0x8a T:0xf0 O:1234 ET=21 QB2:9/1/1024
       [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using 'Continue'
-         |       Q-Block2]]
+         |     [[MAX_PAYLOADS blocks acknowledged by client using 
+         |       'Continue' Q-Block2]]
          +--------->| NON GET /path M:0x02 T:0xf1 QB2:10/1/1024
          |<---------+ NON 2.05 M:0x8b T:0xf0 O:1234 ET=21 QB2:10/0/1024
          |   ...    |
@@ -1171,8 +1171,8 @@ X<--: Message loss (response)
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0x9a T:0xf0 O:1235 ET=22 QB2:9/1/1024
       [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using 'Continue'
-         |       Q-Block2]]
+         |     [[MAX_PAYLOADS blocks acknowledged by client using 
+         |       'Continue' Q-Block2]]
          +--------->| NON GET /path M:0x03 T:0xf2 QB2:10/1/1024
          |<---------+ NON 2.05 M:0x9b T:0xf0 O:1235 ET=22 QB2:3/0/1024
       [[Body has been received]]
@@ -1204,16 +1204,16 @@ X<--: Message loss (response)
          |<---------+ NON 2.05 M:0xab T:0xf0 O:1236 ET=23 QB2:10/0/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes blocks are missing and asks for the missing
-         |       ones in one go]]
+         |     [[Client realizes blocks are missing and asks for the 
+         |       missing ones in one go]]
          +--------->| NON GET /path M:0x04 T:0xf3 QB2:1/0/1024\
          |          |                             QB2:9/0/1024
          |     X<---+ NON 2.05 M:0xac T:0xf3 ET=23 QB2:1/1/1024
          |<---------+ NON 2.05 M:0xad T:0xf3 ET=23 QB2:9/1/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes block is still missing and asks for missing
-         |       block]]
+         |     [[Client realizes block is still missing and asks for 
+         |       missing block]]
          +--------->| NON GET /path M:0x05 T:0xf4 QB2:1/0/1024
          |<---------+ NON 2.05 M:0xae T:0xf4 ET=23 QB2:1/1/1024
       [[Body has been received]]
@@ -1248,14 +1248,15 @@ X<--: Message loss (response)
          |     X<---+ NON 2.05 M:0xba T:0xf0 O:1237 ET=23 QB2:10/0/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes blocks are missing and asks for the missing
-         |       ones in one go by setting the M bit]]
+         |     [[Client realizes blocks are missing and asks for the 
+         |       missing ones in one go by setting the M bit]]
          +--------->| NON GET /path M:0x06 T:0xf5 QB2:2/1/1024
          |<---------+ NON 2.05 M:0xbb T:0xf5 ET=24 QB2:2/1/1024
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0xc2 T:0xf5 ET=24 QB2:9/1/1024
       [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS acknowledged by client using 'Continue' Q-Block2]]
+         |     [[MAX_PAYLOADS acknowledged by client using 'Continue'
+         |       Q-Block2]]
          +--------->| NON GET /path M:0x87 T:0xf6 QB2:10/1/1024
          |<---------+ NON 2.05 M:0x9b T:0xf0 O:1237 ET=22 QB2:10/0/1024
       [[Body has been received]]

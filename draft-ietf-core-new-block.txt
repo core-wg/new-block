@@ -1204,19 +1204,19 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    highest block number received payload.  The client can then derive
    the Request-Tag by matching the token with the sent request.
 
-        CoAP        CoAP
-       Client      Server
-         |<---------+ NON 4.08 M:0x91 T:0xe9 [Missing 1,9 [for RT=11]]
-         +--------->| NON PUT /path M:0x1c T:0xec RT=11 QB1:1/1/1024
-         +--->X     | NON PUT /path M:0x1d T:0xed RT=11 QB1:9/1/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (server) delay expires]]
-         |     [[The server realizes a block is still missing and asks for the
-         |       missing one]]
-         |<---------+ NON 4.08 M:0x1e T:0xec [Missing 9 [for RT=11]]
-         +--------->| NON PUT /path M:0x1e T:0xee RT=11 QB1:9/1/1024
-         |<---------+ NON 2.04 M:0x1f T:0xee
-         |   ...    |
+          CoAP        CoAP
+         Client      Server
+           |<---------+ NON 4.08 M:0x91 T:0xe9 [Missing 1,9 [for RT=11]]
+           +--------->| NON PUT /path M:0x1c T:0xec RT=11 QB1:1/1/1024
+           +--->X     | NON PUT /path M:0x1d T:0xed RT=11 QB1:9/1/1024
+           |   ...    |
+        [[NON_RECEIVE_TIMEOUT (server) delay expires]]
+           |     [[The server realizes a block is still missing and asks
+           |        for the missing one]]
+           |<---------+ NON 4.08 M:0x1e T:0xec [Missing 9 [for RT=11]]
+           +--------->| NON PUT /path M:0x1e T:0xee RT=11 QB1:9/1/1024
+           |<---------+ NON 2.04 M:0x1f T:0xee
+           |   ...    |
 
        Figure 6: Example of NON Request with Q-Block1 Option (Blocks
                                  Recovery)
@@ -1290,32 +1290,32 @@ Boucadair & Shallow       Expires July 12, 2021                [Page 23]
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
-        CoAP        CoAP
-       Client      Server
-         |          |
-         +--------->| NON GET /path M:0x01 T:0xf0 O:0 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x81 T:0xf0 O:1234 ET=21 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x82 T:0xf0 O:1234 ET=21 QB2:1/1/1024
-         |<---------+ [[Payloads 3 - 9 not detailed]]
-         |<---------+ NON 2.05 M:0x8a T:0xf0 O:1234 ET=21 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using 'Continue'
-         |       Q-Block2]]
-         +--------->| NON GET /path M:0x02 T:0xf1 QB2:10/1/1024
-         |<---------+ NON 2.05 M:0x8b T:0xf0 O:1234 ET=21 QB2:10/0/1024
-         |   ...    |
-         |     [[Observe triggered]]
-         |<---------+ NON 2.05 M:0x91 T:0xf0 O:1235 ET=22 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x92 T:0xf0 O:1235 ET=22 QB2:1/1/1024
-         |<---------+ [[Payloads 3 - 9 not detailed]]
-         |<---------+ NON 2.05 M:0x9a T:0xf0 O:1235 ET=22 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using 'Continue'
-         |       Q-Block2]]
-         +--------->| NON GET /path M:0x03 T:0xf2 QB2:10/1/1024
-         |<---------+ NON 2.05 M:0x9b T:0xf0 O:1235 ET=22 QB2:3/0/1024
-      [[Body has been received]]
-         |   ...    |
+         CoAP        CoAP
+        Client      Server
+          |          |
+          +--------->| NON GET /path M:0x01 T:0xf0 O:0 QB2:0/1/1024
+          |<---------+ NON 2.05 M:0x81 T:0xf0 O:1234 ET=21 QB2:0/1/1024
+          |<---------+ NON 2.05 M:0x82 T:0xf0 O:1234 ET=21 QB2:1/1/1024
+          |<---------+ [[Payloads 3 - 9 not detailed]]
+          |<---------+ NON 2.05 M:0x8a T:0xf0 O:1234 ET=21 QB2:9/1/1024
+       [[MAX_PAYLOADS has been reached]]
+          |     [[MAX_PAYLOADS blocks acknowledged by client using
+          |       'Continue' Q-Block2]]
+          +--------->| NON GET /path M:0x02 T:0xf1 QB2:10/1/1024
+          |<---------+ NON 2.05 M:0x8b T:0xf0 O:1234 ET=21 QB2:10/0/1024
+          |   ...    |
+          |     [[Observe triggered]]
+          |<---------+ NON 2.05 M:0x91 T:0xf0 O:1235 ET=22 QB2:0/1/1024
+          |<---------+ NON 2.05 M:0x92 T:0xf0 O:1235 ET=22 QB2:1/1/1024
+          |<---------+ [[Payloads 3 - 9 not detailed]]
+          |<---------+ NON 2.05 M:0x9a T:0xf0 O:1235 ET=22 QB2:9/1/1024
+       [[MAX_PAYLOADS has been reached]]
+          |     [[MAX_PAYLOADS blocks acknowledged by client using
+          |       'Continue' Q-Block2]]
+          +--------->| NON GET /path M:0x03 T:0xf2 QB2:10/1/1024
+          |<---------+ NON 2.05 M:0x9b T:0xf0 O:1235 ET=22 QB2:3/0/1024
+       [[Body has been received]]
+          |   ...    |
 
 
    Figure 8: Example of NON Notifications with Q-Block2 Option (Without
@@ -1346,35 +1346,35 @@ Boucadair & Shallow       Expires July 12, 2021                [Page 24]
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
-        CoAP        CoAP
-       Client      Server
-         |   ...    |
-         |     [[Observe triggered]]
-         |<---------+ NON 2.05 M:0xa1 T:0xf0 O:1236 ET=23 QB2:0/1/1024
-         |     X<---+ NON 2.05 M:0xa2 T:0xf0 O:1236 ET=23 QB2:1/1/1024
-         |<---------+ [[Payloads 3 - 8 not detailed]]
-         |     X<---+ NON 2.05 M:0xaa T:0xf0 O:1236 ET=23 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |   ...    |
-      [[NON_TIMEOUT (server) delay expires]]
-         |     [[Server sends next set of payloads]]
-         |<---------+ NON 2.05 M:0xab T:0xf0 O:1236 ET=23 QB2:10/0/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes blocks are missing and asks for the missing
-         |       ones in one go]]
-         +--------->| NON GET /path M:0x04 T:0xf3 QB2:1/0/1024\
-         |          |                             QB2:9/0/1024
-         |     X<---+ NON 2.05 M:0xac T:0xf3 ET=23 QB2:1/1/1024
-         |<---------+ NON 2.05 M:0xad T:0xf3 ET=23 QB2:9/1/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes block is still missing and asks for missing
-         |       block]]
-         +--------->| NON GET /path M:0x05 T:0xf4 QB2:1/0/1024
-         |<---------+ NON 2.05 M:0xae T:0xf4 ET=23 QB2:1/1/1024
-      [[Body has been received]]
-         |   ...    |
+         CoAP        CoAP
+        Client      Server
+          |   ...    |
+          |     [[Observe triggered]]
+          |<---------+ NON 2.05 M:0xa1 T:0xf0 O:1236 ET=23 QB2:0/1/1024
+          |     X<---+ NON 2.05 M:0xa2 T:0xf0 O:1236 ET=23 QB2:1/1/1024
+          |<---------+ [[Payloads 3 - 8 not detailed]]
+          |     X<---+ NON 2.05 M:0xaa T:0xf0 O:1236 ET=23 QB2:9/1/1024
+       [[MAX_PAYLOADS has been reached]]
+          |   ...    |
+       [[NON_TIMEOUT (server) delay expires]]
+          |     [[Server sends next set of payloads]]
+          |<---------+ NON 2.05 M:0xab T:0xf0 O:1236 ET=23 QB2:10/0/1024
+          |   ...    |
+       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
+          |     [[Client realizes blocks are missing and asks for the
+          |       missing ones in one go]]
+          +--------->| NON GET /path M:0x04 T:0xf3 QB2:1/0/1024\
+          |          |                             QB2:9/0/1024
+          |     X<---+ NON 2.05 M:0xac T:0xf3 ET=23 QB2:1/1/1024
+          |<---------+ NON 2.05 M:0xad T:0xf3 ET=23 QB2:9/1/1024
+          |   ...    |
+       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
+          |     [[Client realizes block is still missing and asks for
+          |       missing block]]
+          +--------->| NON GET /path M:0x05 T:0xf4 QB2:1/0/1024
+          |<---------+ NON 2.05 M:0xae T:0xf4 ET=23 QB2:1/1/1024
+       [[Body has been received]]
+          |   ...    |
 
     Figure 9: Example of NON Notifications with Q-Block2 Option (Blocks
                                  Recovery)
@@ -1402,34 +1402,35 @@ Boucadair & Shallow       Expires July 12, 2021                [Page 25]
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
-        CoAP        CoAP
-       Client      Server
-         |   ...    |
-         |     [[Observe triggered]]
-         |<---------+ NON 2.05 M:0xb1 T:0xf0 O:1237 ET=24 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0xb2 T:0xf0 O:1237 ET=24 QB2:1/1/1024
-         |     X<---+ NON 2.05 M:0xb3 T:0xf0 O:1237 ET=24 QB2:2/1/1024
-         |     X<---+ [[Payloads 4 - 9 not detailed]]
-         |     X<---+ NON 2.05 M:0xb9 T:0xf0 O:1237 ET=24 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |   ...    |
-      [[NON_TIMEOUT (server) delay expires]]
-         |     [[Server sends next set of payloads]]
-         |     X<---+ NON 2.05 M:0xba T:0xf0 O:1237 ET=23 QB2:10/0/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes blocks are missing and asks for the missing
-         |       ones in one go by setting the M bit]]
-         +--------->| NON GET /path M:0x06 T:0xf5 QB2:2/1/1024
-         |<---------+ NON 2.05 M:0xbb T:0xf5 ET=24 QB2:2/1/1024
-         |<---------+ [[Payloads 3 - 9 not detailed]]
-         |<---------+ NON 2.05 M:0xc2 T:0xf5 ET=24 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS acknowledged by client using 'Continue' Q-Block2]]
-         +--------->| NON GET /path M:0x87 T:0xf6 QB2:10/1/1024
-         |<---------+ NON 2.05 M:0x9b T:0xf0 O:1237 ET=22 QB2:10/0/1024
-      [[Body has been received]]
-         |   ...    |
+         CoAP        CoAP
+        Client      Server
+          |   ...    |
+          |     [[Observe triggered]]
+          |<---------+ NON 2.05 M:0xb1 T:0xf0 O:1237 ET=24 QB2:0/1/1024
+          |<---------+ NON 2.05 M:0xb2 T:0xf0 O:1237 ET=24 QB2:1/1/1024
+          |     X<---+ NON 2.05 M:0xb3 T:0xf0 O:1237 ET=24 QB2:2/1/1024
+          |     X<---+ [[Payloads 4 - 9 not detailed]]
+          |     X<---+ NON 2.05 M:0xb9 T:0xf0 O:1237 ET=24 QB2:9/1/1024
+       [[MAX_PAYLOADS has been reached]]
+          |   ...    |
+       [[NON_TIMEOUT (server) delay expires]]
+          |     [[Server sends next set of payloads]]
+          |     X<---+ NON 2.05 M:0xba T:0xf0 O:1237 ET=23 QB2:10/0/1024
+          |   ...    |
+       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
+          |     [[Client realizes blocks are missing and asks for the
+          |       missing ones in one go by setting the M bit]]
+          +--------->| NON GET /path M:0x06 T:0xf5 QB2:2/1/1024
+          |<---------+ NON 2.05 M:0xbb T:0xf5 ET=24 QB2:2/1/1024
+          |<---------+ [[Payloads 3 - 9 not detailed]]
+          |<---------+ NON 2.05 M:0xc2 T:0xf5 ET=24 QB2:9/1/1024
+       [[MAX_PAYLOADS has been reached]]
+          |     [[MAX_PAYLOADS acknowledged by client using 'Continue'
+          |       Q-Block2]]
+          +--------->| NON GET /path M:0x87 T:0xf6 QB2:10/1/1024
+          |<---------+ NON 2.05 M:0x9b T:0xf0 O:1237 ET=22 QB2:10/0/1024
+       [[Body has been received]]
+          |   ...    |
 
 
    Figure 10: Example of NON Notifications with Q-Block2 Option (Blocks
@@ -1442,6 +1443,21 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    IANA is requested to add the following entries to the "CoAP Option
    Numbers" sub-registry [Options]:
 
+
+
+
+
+
+
+
+
+
+
+Boucadair & Shallow       Expires July 12, 2021                [Page 26]
+
+Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+
+
             +--------+------------------+-----------+
             | Number | Name             | Reference |
             +========+==================+===========+
@@ -1451,13 +1467,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
             Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers
 
-
-
-Boucadair & Shallow       Expires July 12, 2021                [Page 26]
-
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
-
-
    This document suggests 19 (TBA1) and 51 (TBA2) as a values to be
    assigned for the new option numbers.
 
@@ -1466,15 +1475,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    This document requests IANA to register the "application/missing-
    blocks+cbor-seq" media type in the "Media Types" registry
    [IANA-MediaTypes]:
-
-
-
-
-
-
-
-
-
 
 
 
