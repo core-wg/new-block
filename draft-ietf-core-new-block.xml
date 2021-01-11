@@ -303,8 +303,8 @@
         body).</t>
 
         <t>Q-Block1 Option is useful with the payload-bearing POST, PUT,
-        FETCH, PATCH, and iPATCH requests and their responses (2.01 and
-        2.04).</t>
+        FETCH, PATCH, and iPATCH requests and their responses (2.01, 2.02,
+        2.04, and 2.05).</t>
 
         <t>Q-Block2 Option is useful with GET, POST, PUT, FETCH, PATCH, and
         iPATCH requests and their payload-bearing responses (2.01, 2.03, 2.04,
@@ -446,11 +446,31 @@
             the tokens used for this body.</t>
           </list></t>
 
+        <t>2.02 (Deleted)<list style="empty">
+            <t>This Response Code indicates successful receipt of the entire
+            body and the resource was deleted when using POST (See Section
+            5.8.2 <xref target="RFC7252"></xref>). The token used SHOULD be
+            from the last received payload. The client should then release all
+            of the tokens used for this body.</t>
+          </list></t>
+
         <t>2.04 (Changed)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
             body and the resource was updated. The token used SHOULD be from
             the last received payload. The client should then release all of
             the tokens used for this body.</t>
+          </list></t>
+
+        <t>2.05 (Content)<list style="empty">
+            <t>This Response Code indicates successful receipt of the entire
+            FETCH request body (See Section 2 of <xref target="RFC8132"></xref>)
+            and the appropriate representation of the resource has been
+            returned.  The token used in the response MUST be the one in the
+            FETCH request that has the Q-Block1 with the M bit unset. If the
+            FETCH request includes the Observe Option, then the server MUST
+            use the same token for returning any Observe triggered responses.
+            The client should then release all of the tokens used for this body
+            unless a resource is being observed.</t>
           </list></t>
 
         <t>2.31 (Continue)<list style="empty">
@@ -1303,6 +1323,88 @@ X<--: Message loss (response)
 
 ]]></artwork>
           </figure></t>
+      </section>
+
+      <section title="Q-Block1 and Q-Block2 Options: Non-Confirmable Examples">
+        <t><xref target="b12non"></xref> illustrates the example of a
+        FETCH using both Q-Block1 and Q-Block2 along with an Observe.
+        No loss is experienced.</t>
+
+        <t><figure anchor="b12non"
+            title="Example of NON FETCH with Q-Block1 and Q-Block2 Options (Without Loss)">
+            <artwork><![CDATA[        CoAP        CoAP
+       Client      Server
+         |          |
+         +--------->| NON FETCH /path M:0x81 T:0xc0 RT=30 QB1:0/1/1024
+         +--------->| NON FETCH /path M:0x82 T:0xc1 RT=30 QB1:1/1/1024
+         +--------->| NON FETCH /path M:0x84 T:0xc3 RT=30 QB1:2/0/1024
+         |<---------+ NON 2.05 M:0xf1 T:0xc3 O:1320 ET=90 QB2:0/1/1024
+         |<---------+ NON 2.05 M:0xf2 T:0xc3 O:1320 ET=90 QB2:1/1/1024
+         |<---------+ NON 2.05 M:0xf3 T:0xc3 O:1320 ET=90 QB2:2/1/1024
+         |<---------+ NON 2.05 M:0xf4 T:0xc3 O:1320 ET=90 QB2:3/0/1024
+         |   ...    |
+         |     [[Observe triggered]]
+         |<---------+ NON 2.05 M:0xf5 T:0xc3 O:1321 ET=91 QB2:0/1/1024
+         |<---------+ NON 2.05 M:0xf6 T:0xc3 O:1321 ET=91 QB2:1/1/1024
+         |<---------+ NON 2.05 M:0xf7 T:0xc3 O:1321 ET=91 QB2:2/1/1024
+         |<---------+ NON 2.05 M:0xf8 T:0xc3 O:1321 ET=91 QB2:3/0/1024
+         |   ...    |
+
+]]></artwork>
+          </figure></t>
+
+        <t><xref target="b12non0"></xref> illustrates the same as <xref
+        target="b12non"></xref> but this time has eleven (11) payloads in
+        both directions which exceeds MAX_PAYLOADS. There is no loss
+        experienced.</t>
+
+        <t><figure anchor="b12non0"
+            title="Example of NON FETCH with Q-Block1 and Q-Block2 Options (Without Loss)">
+            <artwork><![CDATA[        CoAP        CoAP
+       Client      Server
+         |          |
+         +--------->| NON FETCH /path M:0x01 T:0xf1 RT=10 QB1:0/1/1024
+         +--------->| NON FETCH /path M:0x02 T:0xf2 RT=10 QB1:1/1/1024
+         +--------->| [[Payloads 3 - 9 not detailed]]
+         +--------->| NON FETCH /path M:0x0a T:0xfa RT=10 QB1:9/1/1024
+      [[MAX_PAYLOADS has been reached]]
+         |     [[MAX_PAYLOADS blocks receipt acknowledged by server]]
+         |<---------+ NON 2.31 M:0x80 T:0xfa
+         +--------->| NON FETCH /path M:0x0b T:0xfb RT=10 QB1:10/0/1024
+         |<---------+ NON 2.05 M:0x81 T:0xfb O:1334 ET=21 QB2:0/1/1024
+         |<---------+ NON 2.05 M:0x82 T:0xfb O:1334 ET=21 QB2:1/1/1024
+         |<---------+ [[Payloads 3 - 9 not detailed]]
+         |<---------+ NON 2.05 M:0x8a T:0xfb O:1334 ET=21 QB2:9/1/1024
+      [[MAX_PAYLOADS has been reached]]
+         |     [[MAX_PAYLOADS blocks acknowledged by client using
+         |       'Continue' Q-Block2]]
+         +--------->| NON FETCH /path M:0x0c T:0xfc QB2:10/1/1024
+         |<---------+ NON 2.05 M:0x8b T:0xfb O:1334 ET=21 QB2:10/0/1024
+         |   ...    |
+         |     [[Observe triggered]]
+         |<---------+ NON 2.05 M:0x91 T:0xfb O:1335 ET=22 QB2:0/1/1024
+         |<---------+ NON 2.05 M:0x92 T:0xfb O:1335 ET=22 QB2:1/1/1024
+         |<---------+ [[Payloads 3 - 9 not detailed]]
+         |<---------+ NON 2.05 M:0x9a T:0xfb O:1335 ET=22 QB2:9/1/1024
+      [[MAX_PAYLOADS has been reached]]
+         |     [[MAX_PAYLOADS blocks acknowledged by client using
+         |       'Continue' Q-Block2]]
+         +--------->| NON FETCH /path M:0x0d T:0xfd QB2:10/1/1024
+         |<---------+ NON 2.05 M:0x9b T:0xfb O:1335 ET=22 QB2:10/0/1024
+      [[Body has been received]]
+         |   ...    |
+
+]]></artwork>
+          </figure></t>
+
+        <t>If there is a loss of a message with a Q-Block1 Option, this is
+        handled as shown in <xref target="B3non1"></xref> and <xref
+        target="B3non2"></xref> with FETCH substitued for PUT and 2.04 becomes
+        a 2.05 response.</t> 
+
+        <t>If there is a loss of a message with a Q-Block2 Option, this is
+        handled as shown in <xref target="nonb411"></xref> with FETCH
+        substitued for GET.</t> 
       </section>
     </section>
 
