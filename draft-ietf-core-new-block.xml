@@ -313,6 +313,13 @@
         <t>A CoAP endpoint (or proxy) MUST support either both or neither of
         the Q-Block1 and Q-Block2 Options.</t>
 
+        <t>If Q-Block1 Option is present in a request or Q-Block2 Option in a
+        response (i.e., in that message to the payload of which it pertains),
+        it indicates a block-wise transfer and describes how this specific
+        block-wise payload forms part of the entire body being transferred. If
+        it is present in the opposite direction, it provides additional
+        control on how that payload will be formed or was processed.</t>
+
         <t>To indicate support for Q-Block2 responses, the CoAP client MUST
         include the Q-Block2 Option in a GET or similar request, the Q-Block2
         Option in a PUT or similar request, or the Q-Block1 Option in a PUT or
@@ -322,17 +329,21 @@
         (if supported) to send back a message body that is too large to fit
         into a single IP packet <xref target="RFC7959"></xref>.</t>
 
-        <t>If Q-Block1 Option is present in a request or Q-Block2 Option in a
-        response (i.e., in that message to the payload of which it pertains),
-        it indicates a block-wise transfer and describes how this specific
-        block-wise payload forms part of the entire body being transferred. If
-        it is present in the opposite direction, it provides additional
-        control on how that payload will be formed or was processed.</t>
-
         <t>Implementation of the Q-Block1 and Q-Block2 Options is intended to
         be optional. However, when it is present in a CoAP message, it MUST be
         processed (or the message rejected). Therefore, Q-Block1 and Q-Block2
         Options are identified as Critical options.</t>
+
+        <t>With CoAP over UDP, the way a request message is rejected for
+        Critical options depends on the message type. A Confirmable message
+        with a unknown Critical option is rejected with a 4.02 (Bad Option)
+        response (Section 5.4.1 of <xref target="RFC7252"></xref>). A
+        Non-confirmable message with a unknown Critical option is either
+        rejected with a Reset message or just silently ignored (Section 5.4.1
+        and 4.3 of <xref target="RFC7252"></xref>).  To reliably get a
+        rejection message, it is therefore REQUIRED that clients use a
+        Confirmable message for determining support for Q-Block1 and Q-Block2
+        options.</t>
 
         <t>The Q-Block1 and Q-Block2 Options are unsafe to forward. That is, a
         CoAP proxy that does not understand the Q-Block1 (or Q-Block2) Option
@@ -430,19 +441,24 @@
 
         <t>2.01 (Created)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and the resource was created.</t>
+            body and the resource was created. The token used SHOULD be from
+            the last received payload. The client should then release all of
+            the tokens used for this body.</t>
           </list></t>
 
         <t>2.04 (Changed)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and the resource was updated.</t>
+            body and the resource was updated. The token used SHOULD be from
+            the last received payload. The client should then release all of
+            the tokens used for this body.</t>
           </list></t>
 
         <t>2.31 (Continue)<list style="empty">
             <t>This Response Code can be used to indicate that all of the
             blocks up to and including the Q-Block1 Option block NUM (all
             having the M bit set) in the response have been successfully
-            received.</t>
+            received. The token used SHOULD be from the last received payload.
+            </t>
 
             <t>A response using this Response Code SHOULD NOT be generated for
             every received Q-Block1 Option request. It SHOULD only be
@@ -481,6 +497,10 @@
             the 4.08 (Request Entity Incomplete) response and then finding the
             matching client request which contains the Request-Tag that is
             being used for this Q-Block1 body.</t>
+
+            <t>The token used in the response SHOULD be from the last received
+            payload. See <xref target="code"></xref> for further
+            information.</t>
           </list></t>
 
         <t>4.13 (Request Entity Too Large)<list style="empty">
@@ -707,9 +727,9 @@ missing-block-number = uint
       <t></t>
 
       <t>The token to use for the response SHOULD be the token that was used
-      in the highest block number received so far with the same Request-Tag
+      in the last block number received so far with the same Request-Tag
       value. Note that the use of any received token with the same Request-Tag
-      would work, but providing the one used in the highest received block
+      would work, but providing the one used in the last received block
       number will aid any troubleshooting. The client will use the token to
       determine what is the previously sent request to obtain the Request-Tag
       value to be used.</t>
@@ -885,18 +905,19 @@ Table 3: Derived Protocol Parameters]]></artwork>
         payloads.</t>
 
         <t>For the server receiving NON Q-Block1 requests, it SHOULD send back
-        a 2.31 (Continue) or 4.08 (Request Entity Incomplete) Response Code on
-        receipt of the last of the MAX_PAYLOADS payloads to prevent the client
-        unnecessarily delaying. If the last of the MAX_PAYLOADS payloads does
-        not arrive (or the final payload where the M bit is not set does not
-        arrive), then the server SHOULD delay for NON_RECEIVE_TIMEOUT before
-        sending the 4.08 (Request Entity Incomplete) Response Code.</t>
+        a 2.31 (Continue) Response Code on receipt of all of the MAX_PAYLOADS
+        payloads to prevent the client unnecessarily delaying. Otherwise the
+        server SHOULD delay for NON_RECEIVE_TIMEOUT, before sending the 4.08
+        (Request Entity Incomplete) Response Code. The NON_RECEIVE_TIMEOUT
+        delay can be reduced if either the last of the MAX_PAYLOADS payloads
+        or the final payload with the M bit unset arrives, but SHOULD NOT be
+        reduced to zero as packets may arrive in the wrong order.</t>
 
         <t>It is possible that the client may start transmitting the next set
         of MAX_PAYLOADS payloads before the server times out on waiting for
         the last of the previous MAX_PAYLOADS payloads. On receipt of the
-        first payload from the new set of MAX_PAYLOADS payloads, the server
-        SHOULD send a 4.08 (Request Entity Incomplete) Response Code
+        first received payload from the new set of MAX_PAYLOADS payloads, the
+        server SHOULD send a 4.08 (Request Entity Incomplete) Response Code
         indicating any missing payloads from any previous MAX_PAYLOADS
         payloads. Upon receipt of the 4.08 (Request Entity Incomplete)
         Response Code, the client SHOULD send the missing payloads before
@@ -905,13 +926,13 @@ Table 3: Derived Protocol Parameters]]></artwork>
         payloads.</t>
 
         <t>For the client receiving NON Q-Block2 responses, it SHOULD send a
-        request for the next set of payloads or a request for the missing
-        payloads upon receipt of the last of the MAX_PAYLOADS payloads to
-        prevent the server unnecessarily delaying the transmission of the
-        body. If the last of the MAX_PAYLOADS payloads does not arrive (or the
-        final payload where the M bit is not set does not arrive), then the
-        client SHOULD delay for NON_RECEIVE_TIMEOUT before sending the request
-        for the missing payloads.</t>
+        request for the next set of payloads on receipt of all of the
+        MAX_PAYLOADS payloads to prevent the server unnecessarily delaying.
+        Otherwise the client SHOULD delay for NON_RECEIVE_TIMEOUT, before
+        sending the request for the missing payloads. The NON_RECEIVE_TIMEOUT
+        delay can be reduced if either the last of the MAX_PAYLOADS payloads
+        or the final payload with the M bit unset arrives, but SHOULD NOT be
+        reduced to zero as packets may arrive in the wrong order.</t>
 
         <t>The request that the client sends to acknowledge the receipt of all
         the current set of MAX_PAYLOADS payloads is the 'Continue' Q-Block2
@@ -921,6 +942,17 @@ Table 3: Derived Protocol Parameters]]></artwork>
         body (including Observe Option, if appropriate for an unsolicited
         response) rather than as a request for the remaining missing
         blocks.</t>
+
+        <t>It is possible that the server may start transmitting the next set
+        of MAX_PAYLOADS payloads before the client times out on waiting for
+        the last of the previous MAX_PAYLOADS payloads. On receipt of the
+        first received payload from the new set of MAX_PAYLOADS payloads, the
+        client SHOULD send a request for the missing payloads indicating any
+        missing payloads from any previous MAX_PAYLOADS payloads. Upon receipt
+        of the request for missing payloads, the server SHOULD send the missing
+        payloads before continuing to send the remainder of the MAX_PAYLOADS
+        payloads and then go into another NON_TIMEOUT delay prior to sending
+        the next set of payloads.</t>
 
         <t>The client does not need to acknowledge the receipt of the entire
         body.</t>
@@ -1078,35 +1110,38 @@ X<--: Message loss (response)
       [[MAX_PAYLOADS has been reached]]
          |   ...    |
       [[NON_TIMEOUT (client) delay expires]]
-         |     [[Client sends next set of payloads]]
-         +--------->| NON PUT /path M:0x1b T:0xeb RT=11 QB1:10/0/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (server) delay expires]]
+         |     [[Client starts sending next set of payloads]]
+         +--->X     | NON PUT /path M:0x1b T:0xeb RT=11 QB1:10/1/1024
+         +--------->| NON PUT /path M:0x1c T:0xec RT=11 QB1:11/1/1024
 ]]></artwork>
           </figure></t>
 
-        <t>The server realizes that some blocks are missing and asks for the
-        missing ones in one go (<xref target="B3non2"></xref>). It does so by
-        indicating which blocks have been received in the data portion of the
-        response. The token used in the response should be the token that was
-        used in the highest block number received payload. The client can then
-        derive the Request-Tag by matching the token with the sent
-        request.</t>
+        <t>On seeing a payload from the next set of payloads, the server
+        realizes that some blocks are missing from the previous MAX_PAYLOADS
+        payloads and asks for the missing blocks in one go (<xref
+        target="B3non2"></xref>). It does so by indicating which blocks have
+        been received in the data portion of the response. The token used in
+        the response should be the token that was used in the last block number
+        received payload. The client can then derive the Request-Tag by
+        matching the token with the sent request.</t>
 
         <t><figure anchor="B3non2"
             title="Example of NON Request with Q-Block1 Option (Blocks Recovery)">
             <artwork><![CDATA[        CoAP        CoAP
        Client      Server
-         |<---------+ NON 4.08 M:0x91 T:0xe9 [Missing 1,9 [for RT=11]]
-         +--------->| NON PUT /path M:0x1c T:0xec RT=11 QB1:1/1/1024
-         +--->X     | NON PUT /path M:0x1d T:0xed RT=11 QB1:9/1/1024
+         |<---------+ NON 4.08 M:0x91 T:0xec [Missing 1,9 [for RT=11]]
+         |     [[Client responds with missing payloads]]
+         +--------->| NON PUT /path M:0x1d T:0xed RT=11 QB1:1/1/1024
+         +--------->| NON PUT /path M:0x1e T:0xee RT=11 QB1:9/1/1024
+         |     [[Client continues sending next set of payloads]]
+         +--------->| NON PUT /path M:0x1f T:0xef RT=11 QB1:12/0/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (server) delay expires]]
          |     [[The server realizes a block is still missing and asks
-         |        for the missing one]]                 
-         |<---------+ NON 4.08 M:0x1e T:0xec [Missing 9 [for RT=11]]
-         +--------->| NON PUT /path M:0x1e T:0xee RT=11 QB1:9/1/1024
-         |<---------+ NON 2.04 M:0x1f T:0xee
+         |        for the missing one]]                
+         |<---------+ NON 4.08 M:0x92 T:0xef [Missing 10 [for RT=11]]
+         +--------->| NON PUT /path M:0x20 T:0xf0 RT=11 QB1:10/1/1024
+         |<---------+ NON 2.04 M:0x93 T:0xf0
          |   ...    |
 ]]></artwork>
           </figure></t>
@@ -1164,7 +1199,7 @@ X<--: Message loss (response)
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0x8a T:0xf0 O:1234 ET=21 QB2:9/1/1024
       [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using 
+         |     [[MAX_PAYLOADS blocks acknowledged by client using
          |       'Continue' Q-Block2]]
          +--------->| NON GET /path M:0x02 T:0xf1 QB2:10/1/1024
          |<---------+ NON 2.05 M:0x8b T:0xf0 O:1234 ET=21 QB2:10/0/1024
@@ -1175,7 +1210,7 @@ X<--: Message loss (response)
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0x9a T:0xf0 O:1235 ET=22 QB2:9/1/1024
       [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using 
+         |     [[MAX_PAYLOADS blocks acknowledged by client using
          |       'Continue' Q-Block2]]
          +--------->| NON GET /path M:0x03 T:0xf2 QB2:10/1/1024
          |<---------+ NON 2.05 M:0x9b T:0xf0 O:1235 ET=22 QB2:10/0/1024
@@ -1208,7 +1243,7 @@ X<--: Message loss (response)
          |<---------+ NON 2.05 M:0xab T:0xf0 O:1236 ET=23 QB2:10/0/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes blocks are missing and asks for the 
+         |     [[Client realizes blocks are missing and asks for the
          |       missing ones in one go]]
          +--------->| NON GET /path M:0x04 T:0xf3 QB2:1/0/1024\
          |          |                             QB2:9/0/1024
@@ -1216,7 +1251,7 @@ X<--: Message loss (response)
          |<---------+ NON 2.05 M:0xad T:0xf3 ET=23 QB2:9/1/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes block is still missing and asks for 
+         |     [[Client realizes block is still missing and asks for
          |       missing block]]
          +--------->| NON GET /path M:0x05 T:0xf4 QB2:1/0/1024
          |<---------+ NON 2.05 M:0xae T:0xf4 ET=23 QB2:1/1/1024
@@ -1252,7 +1287,7 @@ X<--: Message loss (response)
          |     X<---+ NON 2.05 M:0xba T:0xf0 O:1237 ET=24 QB2:10/0/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes blocks are missing and asks for the 
+         |     [[Client realizes blocks are missing and asks for the
          |       missing ones in one go by setting the M bit]]
          +--------->| NON GET /path M:0x06 T:0xf5 QB2:2/1/1024
          |<---------+ NON 2.05 M:0xbb T:0xf5 ET=24 QB2:2/1/1024
@@ -1262,7 +1297,7 @@ X<--: Message loss (response)
          |     [[MAX_PAYLOADS acknowledged by client using 'Continue'
          |       Q-Block2]]
          +--------->| NON GET /path M:0x87 T:0xf6 QB2:10/1/1024
-         |<---------+ NON 2.05 M:0x9b T:0xf0 O:1237 ET=22 QB2:10/0/1024
+         |<---------+ NON 2.05 M:0xc3 T:0xf0 O:1237 ET=24 QB2:10/0/1024
       [[Body has been received]]
          |   ...    |
 
@@ -1312,7 +1347,7 @@ Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
 
    Published specification: [This_Document]
 
-   Applications that use this media type: Data serialization and 
+   Applications that use this media type: Data serialization and
       deserialization.
 
    Fragment identifier considerations: N/A
@@ -1381,12 +1416,12 @@ o  Reference: [RFCXXXX]]]></artwork>
     </section>
 
     <section anchor="ack" title="Acknowledgements">
-      <t>Thanks to Achim Kraus, Jim Schaad, Michael Richardson, and Marco
-      Tiloca for the comments.</t>
+      <t>Thanks to Achim Kraus, Jim Schaad, and Michael Richardson for their
+      comments.</t>
 
-      <t>Special thanks to Christian Ams&uuml;ss and Carsten Bormann for their
-      suggestions and several reviews, which improved this specification
-      significantly.</t>
+      <t>Special thanks to Christian Ams&uuml;ss, Carsten Bormann and Marco
+      Tiloca for their suggestions and several reviews, which improved this
+      specification significantly.</t>
 
       <t>Some text from <xref target="RFC7959"></xref> is reused for readers
       convenience.</t>
@@ -1515,7 +1550,7 @@ o  Reference: [RFCXXXX]]]></artwork>
          |<---------+ ACK 0.00 M:0x08
          |   ...    |
       [[ACK_TIMEOUT (client) delay expires]]
-         |     [[Client retransmits associated packet]] 
+         |     [[Client retransmits associated packet]]
          +--------->| CON PUT /path M:0x06 T:0xf5 RT=11 QB1:1/1/1024
          +--->X     | CON PUT /path M:0x07 T:0xf6 RT=11 QB1:2/1/1024
          |<---------+ ACK 0.00 M:0x06
@@ -1571,7 +1606,7 @@ o  Reference: [RFCXXXX]]]></artwork>
          |--------->+ ACK 0.00 M:0xe8
          |--------->+ ACK 0.00 M:0xeb
          |   ...    |
-      [[ACK_TIMEOUT (server) delay expires]]
+      [[ACK_TIMEOUT (server) delay expires (twice in this example)]]
          |     [[Server retransmits associated packet]]
          |<---------+ CON 2.05 M:0xe9 T:0xf0 O:1236 ET=23 QB2:1/1/1024
          |     X<---+ CON 2.05 M:0xea T:0xf0 O:1236 ET=23 QB2:2/1/1024
