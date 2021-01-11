@@ -370,14 +370,14 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Q-Block2 Options are identified as Critical options.
 
    With CoAP over UDP, the way a request message is rejected for
-   Critical options depends on the message type.  A Confirmable message
-   with a unknown Critical option is rejected with a 4.02 (Bad Option)
-   response (Section 5.4.1 of [RFC7252]).  A Non-confirmable message
-   with a unknown Critical option is either rejected with a Reset
-   message or just silently ignored (Section 5.4.1 and 4.3 of
+   critical options depends on the message type.  A Confirmable message
+   with an unrecognized critical option is rejected with a 4.02 (Bad
+   Option) response (Section 5.4.1 of [RFC7252]).  A Non-confirmable
+   message with an unrecognized critical option is either rejected with
+   a Reset message or just silently ignored (Sections 5.4.1 and 4.3 of
    [RFC7252]).  To reliably get a rejection message, it is therefore
    REQUIRED that clients use a Confirmable message for determining
-   support for Q-Block1 and Q-Block2 options.
+   support for Q-Block1 and Q-Block2 Options.
 
    The Q-Block1 and Q-Block2 Options are unsafe to forward.  That is, a
    CoAP proxy that does not understand the Q-Block1 (or Q-Block2) Option
@@ -995,7 +995,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    payloads to prevent the client unnecessarily delaying.  Otherwise the
    server SHOULD delay for NON_RECEIVE_TIMEOUT, before sending the 4.08
    (Request Entity Incomplete) Response Code.  The NON_RECEIVE_TIMEOUT
-   delay can be reduced if either the last of the MAX_PAYLOADS payloads
+   delay may be reduced if either the last of the MAX_PAYLOADS payloads
    or the final payload with the M bit unset arrives, but SHOULD NOT be
    reduced to zero as packets may arrive in the wrong order.
 
@@ -1024,7 +1024,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    MAX_PAYLOADS payloads to prevent the server unnecessarily delaying.
    Otherwise the client SHOULD delay for NON_RECEIVE_TIMEOUT, before
    sending the request for the missing payloads.  The
-   NON_RECEIVE_TIMEOUT delay can be reduced if either the last of the
+   NON_RECEIVE_TIMEOUT delay may be reduced if either the last of the
    MAX_PAYLOADS payloads or the final payload with the M bit unset
    arrives, but SHOULD NOT be reduced to zero as packets may arrive in
    the wrong order.
@@ -1039,14 +1039,13 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    It is possible that the server may start transmitting the next set of
    MAX_PAYLOADS payloads before the client times out on waiting for the
-   last of the previous MAX_PAYLOADS payloads.  On receipt of the first
-   received payload from the new set of MAX_PAYLOADS payloads, the
-   client SHOULD send a request for the missing payloads indicating any
-   missing payloads from any previous MAX_PAYLOADS payloads.  Upon
-   receipt of the request for missing payloads, the server SHOULD send
-   the missing payloads before continuing to send the remainder of the
-   MAX_PAYLOADS payloads and then go into another NON_TIMEOUT delay
-   prior to sending the next set of payloads.
+   last of the previous MAX_PAYLOADS payloads.  Upon receipt of the
+   first payload from the new set of MAX_PAYLOADS payloads, the client
+   SHOULD send a request indicating any missing payloads from any
+   previous set of MAX_PAYLOADS payloads.  Upon receipt of such request,
+   the server SHOULD send the missing payloads before continuing to send
+   the remainder of the MAX_PAYLOADS payloads and then go into another
+   NON_TIMEOUT delay prior to sending the next set of payloads.
 
    The client does not need to acknowledge the receipt of the entire
    body.
@@ -1056,6 +1055,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
       transmission of MAX_PAYLOADS blocks will be observed.  The
       endpoint receiving the body is still likely to receive the entire
       body.
+
 
 
 
@@ -1660,8 +1660,8 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Thanks to Achim Kraus, Jim Schaad, and Michael Richardson for their
    comments.
 
-   Special thanks to Christian Amsuess, Carsten Bormann and Marco Tiloca
-   for their suggestions and several reviews, which improved this
+   Special thanks to Christian Amsuess, Carsten Bormann, and Marco
+   Tiloca for their suggestions and several reviews, which improved this
    specification significantly.
 
    Some text from [RFC7959] is reused for readers convenience.
