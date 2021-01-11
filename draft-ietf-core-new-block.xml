@@ -851,7 +851,7 @@ missing-block-number = uint
 | NON_PARTIAL_TIMEOUT |         247 s |
 +---------------------+---------------+
 
-Table 3: Derived Protocol Parameters]]></artwork>
+Table 3: Congestion Control Parameters]]></artwork>
           </figure></t>
 
         <t>PROBING_RATE parameter in CoAP indicates the average data rate that
@@ -864,8 +864,10 @@ Table 3: Derived Protocol Parameters]]></artwork>
             <t>Note: For the particular DOTS application, PROBING_RATE and
             other transmission parameters are negotiated between peers. Even
             when not negotiated, the DOTS application uses customized defaults
-            as discussed in Section 4.5.2 of <xref
-            target="RFC8782"></xref>.</t>
+            as discussed in Section 4.5.2 of <xref target="RFC8782"></xref>.
+            Note that MAX_PAYLOADS and NON_TIMEOUT can be negotiated between
+            DOTS peers as per <xref
+            target="I-D.bosh-dots-quick-blocks"></xref>.</t>
           </list></t>
 
         <t>Each NON 4.08 (Request Entity Incomplete) response is subject to
@@ -1035,7 +1037,7 @@ Table 3: Derived Protocol Parameters]]></artwork>
 
       <t><figure align="center" anchor="legend"
           title="Notations Used in the Figures">
-          <artwork><![CDATA[   T: Token value
+          <artwork align="center"><![CDATA[   T: Token value
    O: Observe Option value
    M: Message ID
   RT: Request-Tag
@@ -1047,7 +1049,6 @@ Table 3: Derived Protocol Parameters]]></artwork>
 -->X: Message loss (request)
 X<--: Message loss (response)
  ...: Passage of time
-
 ]]></artwork>
         </figure></t>
 
@@ -1456,6 +1457,8 @@ o  Reference: [RFCXXXX]]]></artwork>
 
     <references title="Informative References">
       <?rfc include="reference.I-D.ietf-dots-telemetry"?>
+
+      <?rfc include='reference.I-D.bosh-dots-quick-blocks'?>
 
       <?rfc include='reference.RFC.6928'?>
 
