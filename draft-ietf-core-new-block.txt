@@ -977,7 +977,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
       Note: For the particular DOTS application, PROBING_RATE and other
       transmission parameters are negotiated between peers.  Even when
       not negotiated, the DOTS application uses customized defaults as
-      discussed in Section 4.5.2 of [RFC8782].
+      discussed in Section 4.5.2 of [RFC8782].  Note that MAX_PAYLOADS
+      and NON_TIMEOUT can be negotiated between DOTS peers as per
+      [I-D.bosh-dots-quick-blocks].
 
    Each NON 4.08 (Request Entity Incomplete) response is subject to
    PROBING_RATE.
@@ -1000,8 +1002,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    newly derived value for MAX_PAYLOADS should be used for both ends of
    this particular CoAP peer link.  Note that the CoAP peer will not
    know about the MAX_PAYLOADS change until it is reconfigured.  As a
-   consequence of not being reconfigured, the peer may indicate that
-
 
 
 
@@ -1010,6 +1010,7 @@ Boucadair & Shallow       Expires July 15, 2021                [Page 18]
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
+   consequence of not being reconfigured, the peer may indicate that
    there are some missing payloads prior to the actual payload being
    transmitted as all of its MAX_PAYLOADS payloads have not arrived.
 
@@ -1057,7 +1058,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    The request that the client sends to acknowledge the receipt of all
    the current set of MAX_PAYLOADS payloads is the 'Continue' Q-Block2
-   Option ('NUM modulo MAX_PAYLOADS' is zero, NUM is not zero, and M bit
 
 
 
@@ -1066,6 +1066,7 @@ Boucadair & Shallow       Expires July 15, 2021                [Page 19]
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
+   Option ('NUM modulo MAX_PAYLOADS' is zero, NUM is not zero, and M bit
    is set (Section 3.4)).  The server SHOULD recognize this as a
    continue request and just continue the transmission of the body
    (including Observe Option, if appropriate for an unsolicited
@@ -1111,9 +1112,8 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Q-Block2 Options are removed as part of the block assembly and thus
    do not reach the cache.
 
-   For Q-Block2 responses, the ETag Option value is associated with the
-   data (and onward transmitted to the CoAP client), but is not part of
-   the cache key.
+
+
 
 
 
@@ -1121,6 +1121,10 @@ Boucadair & Shallow       Expires July 15, 2021                [Page 20]
 
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
+
+   For Q-Block2 responses, the ETag Option value is associated with the
+   data (and onward transmitted to the CoAP client), but is not part of
+   the cache key.
 
    For requests with Q-Block1 Option, the Request-Tag Option is
    associated with the build up of the body from successive payloads,
@@ -1169,28 +1173,23 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-
-
-
-
 Boucadair & Shallow       Expires July 15, 2021                [Page 21]
 
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
-      T: Token value
-      O: Observe Option value
-      M: Message ID
-     RT: Request-Tag
-     ET: ETag
-    QB1: Q-Block1 Option values NUM/More/SZX
-    QB2: Q-Block2 Option values NUM/More/SZX
-      \: Trimming long lines
-   [[]]: Comments
-   -->X: Message loss (request)
-   X<--: Message loss (response)
-    ...: Passage of time
-
+                    T: Token value
+                    O: Observe Option value
+                    M: Message ID
+                   RT: Request-Tag
+                   ET: ETag
+                  QB1: Q-Block1 Option values NUM/More/SZX
+                  QB2: Q-Block2 Option values NUM/More/SZX
+                    \: Trimming long lines
+                 [[]]: Comments
+                 -->X: Message loss (request)
+                 X<--: Message loss (response)
+                  ...: Passage of time
 
                   Figure 2: Notations Used in the Figures
 
@@ -1214,6 +1213,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Figure 4 depicts an example of a NON PUT request conveying Q-Block1
    Option.  The number of payloads exceeds MAX_PAYLOADS.  All the blocks
    are received by the server.
+
 
 
 
@@ -1920,6 +1920,13 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    [Format]   , <https://www.iana.org/assignments/core-parameters/core-
               parameters.xhtml#content-formats>.
 
+   [I-D.bosh-dots-quick-blocks]
+              Boucadair, M. and J. Shallow, "Distributed Denial-of-
+              Service Open Threat Signaling (DOTS) Signal Channel
+              Configuration Attributes for Faster Block Transmission",
+              draft-bosh-dots-quick-blocks-00 (work in progress),
+              January 2021.
+
    [I-D.ietf-dots-telemetry]
               Boucadair, M., Reddy.K, T., Doron, E., chenmeiling, c.,
               and J. Shallow, "Distributed Denial-of-Service Open Threat
@@ -1944,13 +1951,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
               JSON Data Structures", RFC 8610, DOI 10.17487/RFC8610,
               June 2019, <https://www.rfc-editor.org/info/rfc8610>.
 
-   [RFC8782]  Reddy.K, T., Ed., Boucadair, M., Ed., Patil, P.,
-              Mortensen, A., and N. Teague, "Distributed Denial-of-
-              Service Open Threat Signaling (DOTS) Signal Channel
-              Specification", RFC 8782, DOI 10.17487/RFC8782, May 2020,
-              <https://www.rfc-editor.org/info/rfc8782>.
-
-
 
 
 
@@ -1961,6 +1961,12 @@ Boucadair & Shallow       Expires July 15, 2021                [Page 35]
 
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
+
+   [RFC8782]  Reddy.K, T., Ed., Boucadair, M., Ed., Patil, P.,
+              Mortensen, A., and N. Teague, "Distributed Denial-of-
+              Service Open Threat Signaling (DOTS) Signal Channel
+              Specification", RFC 8782, DOI 10.17487/RFC8782, May 2020,
+              <https://www.rfc-editor.org/info/rfc8782>.
 
 Appendix A.  Examples with Confirmable Messages
 
@@ -1992,12 +1998,6 @@ A.1.  Q-Block1 Option Confirmable Examples
    Now, suppose that a new body of data is to be sent but with some
    blocks dropped in transmission as illustrated in Figure 14.  The
    client will retry sending blocks for which no ACK was received.
-
-
-
-
-
-
 
 
 
