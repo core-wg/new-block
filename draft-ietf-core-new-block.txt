@@ -400,7 +400,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
    Options, are both a class E and a class U in terms of OSCORE
    processing (Table 2).  The Q-Block1 (or Q-Block2) Option MAY be an
-   Inner or Outer option (see Section 4.1 of [RFC8613]).  The Inner and
+   Inner or Outer option (Section 4.1 of [RFC8613]).  The Inner and
    Outer values are therefore independent of each other.  The Inner
    option is encrypted and integrity protected between clients and
    servers, and provides message body identification in case of end-to-
@@ -474,8 +474,8 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    payloads are sent as Non-confirmable and have not arrived, a
    retransmit missing payloads response is needed.
 
-   Each individual payload of the body is treated as a new request (see
-   Section 5).
+   Each individual payload of the body is treated as a new request
+   (Section 5).
 
    The client MUST send the payloads with the block numbers increasing,
    starting from zero, until the body is complete (subject to any
@@ -495,7 +495,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    2.02 (Deleted)
 
       This Response Code indicates successful receipt of the entire body
-      and the resource was deleted when using POST (See Section 5.8.2
+      and the resource was deleted when using POST (Section 5.8.2
       [RFC7252]).  The token used SHOULD be from the last received
 
 
@@ -519,14 +519,14 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    2.05 (Content)
 
       This Response Code indicates successful receipt of the entire
-      FETCH request body (See Section 2 of [RFC8132]) and the
-      appropriate representation of the resource has been returned.  The
-      token used in the response MUST be the one in the FETCH request
-      that has the Q-Block1 with the M bit unset.  If the FETCH request
-      includes the Observe Option, then the server MUST use the same
-      token for returning any Observe triggered responses.  The client
-      should then release all of the tokens used for this body unless a
-      resource is being observed.
+      FETCH request body (Section 2 of [RFC8132]) and the appropriate
+      representation of the resource has been returned.  The token used
+      in the response MUST be the one in the FETCH request that has the
+      Q-Block1 with the M bit unset.  If the FETCH request includes the
+      Observe Option, then the server MUST use the same token for
+      returning any Observe triggered responses.  The client should then
+      release all of the tokens used for this body unless a resource is
+      being observed.
 
    2.31 (Continue)
 
@@ -806,7 +806,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    The Content-Format Option (Section 5.10.3 of [RFC7252]) MUST be used
    in the 4.08 (Request Entity Incomplete) response.  It MUST be set to
-   "application/missing-blocks+cbor-seq" (see Section 10.3).
+   "application/missing-blocks+cbor-seq" (Section 10.3).
 
    The Concise Data Definition Language [RFC8610] for the data
    describing these missing blocks is as follows:

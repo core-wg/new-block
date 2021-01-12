@@ -358,13 +358,13 @@
         <t>The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
         Options, are both a class E and a class U in terms of OSCORE
         processing (Table 2). The Q-Block1 (or Q-Block2) Option MAY be an
-        Inner or Outer option (see Section 4.1 of <xref
-        target="RFC8613"></xref>). The Inner and Outer values are therefore
-        independent of each other. The Inner option is encrypted and integrity
-        protected between clients and servers, and provides message body
-        identification in case of end-to-end fragmentation of requests. The
-        Outer option is visible to proxies and labels message bodies in case
-        of hop-by-hop fragmentation of requests.</t>
+        Inner or Outer option (Section 4.1 of <xref target="RFC8613"></xref>).
+        The Inner and Outer values are therefore independent of each other.
+        The Inner option is encrypted and integrity protected between clients
+        and servers, and provides message body identification in case of
+        end-to-end fragmentation of requests. The Outer option is visible to
+        proxies and labels message bodies in case of hop-by-hop fragmentation
+        of requests.</t>
 
         <t><figure align="center">
             <artwork align="center"><![CDATA[                   +--------+-----------------+---+---+
@@ -429,7 +429,7 @@
         retransmit missing payloads response is needed.</t>
 
         <t>Each individual payload of the body is treated as a new request
-        (see <xref target="token"></xref>).</t>
+        (<xref target="token"></xref>).</t>
 
         <t>The client MUST send the payloads with the block numbers
         increasing, starting from zero, until the body is complete (subject to
@@ -448,10 +448,10 @@
 
         <t>2.02 (Deleted)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and the resource was deleted when using POST (See Section
-            5.8.2 <xref target="RFC7252"></xref>). The token used SHOULD be
-            from the last received payload. The client should then release all
-            of the tokens used for this body.</t>
+            body and the resource was deleted when using POST (Section 5.8.2
+            <xref target="RFC7252"></xref>). The token used SHOULD be from the
+            last received payload. The client should then release all of the
+            tokens used for this body.</t>
           </list></t>
 
         <t>2.04 (Changed)<list style="empty">
@@ -463,14 +463,14 @@
 
         <t>2.05 (Content)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            FETCH request body (See Section 2 of <xref target="RFC8132"></xref>)
+            FETCH request body (Section 2 of <xref target="RFC8132"></xref>)
             and the appropriate representation of the resource has been
-            returned.  The token used in the response MUST be the one in the
+            returned. The token used in the response MUST be the one in the
             FETCH request that has the Q-Block1 with the M bit unset. If the
             FETCH request includes the Observe Option, then the server MUST
             use the same token for returning any Observe triggered responses.
-            The client should then release all of the tokens used for this body
-            unless a resource is being observed.</t>
+            The client should then release all of the tokens used for this
+            body unless a resource is being observed.</t>
           </list></t>
 
         <t>2.31 (Continue)<list style="empty">
@@ -728,7 +728,7 @@
       <t>The Content-Format Option (Section 5.10.3 of <xref
       target="RFC7252"></xref>) MUST be used in the 4.08 (Request Entity
       Incomplete) response. It MUST be set to
-      "application/missing-blocks+cbor-seq" (see <xref
+      "application/missing-blocks+cbor-seq" (<xref
       target="new-format"></xref>).</t>
 
       <t>The Concise Data Definition Language <xref target="RFC8610"></xref>
@@ -1326,9 +1326,9 @@ X<--: Message loss (response)
       </section>
 
       <section title="Q-Block1 and Q-Block2 Options: Non-Confirmable Examples">
-        <t><xref target="b12non"></xref> illustrates the example of a
-        FETCH using both Q-Block1 and Q-Block2 along with an Observe.
-        No loss is experienced.</t>
+        <t><xref target="b12non"></xref> illustrates the example of a FETCH
+        using both Q-Block1 and Q-Block2 along with an Observe. No loss is
+        experienced.</t>
 
         <t><figure anchor="b12non"
             title="Example of NON FETCH with Q-Block1 and Q-Block2 Options (Without Loss)">
@@ -1354,8 +1354,8 @@ X<--: Message loss (response)
           </figure></t>
 
         <t><xref target="b12non0"></xref> illustrates the same as <xref
-        target="b12non"></xref> but this time has eleven (11) payloads in
-        both directions which exceeds MAX_PAYLOADS. There is no loss
+        target="b12non"></xref> but this time has eleven (11) payloads in both
+        directions which exceeds MAX_PAYLOADS. There is no loss
         experienced.</t>
 
         <t><figure anchor="b12non0"
@@ -1400,11 +1400,11 @@ X<--: Message loss (response)
         <t>If there is a loss of a message with a Q-Block1 Option, this is
         handled as shown in <xref target="B3non1"></xref> and <xref
         target="B3non2"></xref> with FETCH substitued for PUT and 2.04 becomes
-        a 2.05 response.</t> 
+        a 2.05 response.</t>
 
         <t>If there is a loss of a message with a Q-Block2 Option, this is
         handled as shown in <xref target="nonb411"></xref> with FETCH
-        substitued for GET.</t> 
+        substitued for GET.</t>
       </section>
     </section>
 
