@@ -89,12 +89,12 @@ Table of Contents
    9.  Examples using Q-Block1 and Q-Block2 Options  . . . . . . . .  22
      9.1.  Q-Block1 Option: Non-Confirmable Examples . . . . . . . .  23
        9.1.1.  A Simple Example  . . . . . . . . . . . . . . . . . .  23
-       9.1.2.  Handling MAX_PAYLOAD Limits . . . . . . . . . . . . .  23
-       9.1.3.  Handling MAX_PAYLOAD with Recovery  . . . . . . . . .  24
+       9.1.2.  Handling MAX_PAYLOADS Limits  . . . . . . . . . . . .  23
+       9.1.3.  Handling MAX_PAYLOADS with Recovery . . . . . . . . .  24
      9.2.  Q-Block2 Option: Non-Confirmable Examples . . . . . . . .  25
        9.2.1.  A Simple Example  . . . . . . . . . . . . . . . . . .  25
-       9.2.2.  Handling MAX_PAYLOAD Limits . . . . . . . . . . . . .  26
-       9.2.3.  Handling MAX_PAYLOAD with Recovery  . . . . . . . . .  27
+       9.2.2.  Handling MAX_PAYLOADS Limits  . . . . . . . . . . . .  26
+       9.2.3.  Handling MAX_PAYLOADS with Recovery . . . . . . . . .  27
        9.2.4.  Handling Recovery using M-bit Set . . . . . . . . . .  28
      9.3.  Q-Block1 and Q-Block2 Options: Non-Confirmable Examples .  29
        9.3.1.  A Simple Example  . . . . . . . . . . . . . . . . . .  29
@@ -979,7 +979,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    twice NON_TIMEOUT.
 
    NON_MAX_RETRANSMIT is the maximum number of times a request for the
-   retransmission of missings payloads can occur without a response from
+   retransmission of missing payloads can occur without a response from
    the remote peer.  After this occurs, the peer SHOULD consider the
    body stale and remove all references to it.  By default,
    NON_MAX_RETRANSMI has the same value as MAX_RETRANSMIT.
@@ -1034,9 +1034,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
       Note: For the particular DOTS application, PROBING_RATE and other
       transmission parameters are negotiated between peers.  Even when
       not negotiated, the DOTS application uses customized defaults as
-      discussed in Section 4.5.2 of [RFC8782].  Note that MAX_PAYLOADS
-      and NON_TIMEOUT can be negotiated between DOTS peers as per
-      [I-D.bosh-dots-quick-blocks].
+      discussed in Section 4.5.2 of [RFC8782].  Note that MAX_PAYLOADS,
+      NON_MAX_RETRANSMIT, and NON_TIMEOUT can be negotiated between DOTS
+      peers as per [I-D.bosh-dots-quick-blocks].
 
    Each NON 4.08 (Request Entity Incomplete) response is subject to
    PROBING_RATE.
@@ -1268,7 +1268,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    Figure 3: Example of NON Request with Q-Block1 Option (Without Loss)
 
-9.1.2.  Handling MAX_PAYLOAD Limits
+9.1.2.  Handling MAX_PAYLOADS Limits
 
    Figure 4 depicts an example of a NON PUT request conveying Q-Block1
    Option.  The number of payloads exceeds MAX_PAYLOADS.  All the blocks
@@ -1307,7 +1307,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
     Figure 4: Example of MAX_PAYLOADS NON Request with Q-Block1 Option
                               (Without Loss)
 
-9.1.3.  Handling MAX_PAYLOAD with Recovery
+9.1.3.  Handling MAX_PAYLOADS with Recovery
 
    Consider now a scenario where a new body of data is to be sent by the
    client, but some blocks are dropped in transmission as illustrated in
@@ -1327,6 +1327,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
             |     [[Client starts sending next set of payloads]]
             +--->X     | NON PUT /path M:0x1b T:0xeb RT=11 QB1:10/1/1024
             +--------->| NON PUT /path M:0x1c T:0xec RT=11 QB1:11/1/1024
+            |          |
 
     Figure 5: Example of MAX_PAYLOADS NON Request with Q-Block1 Option
                                 (With Loss)
@@ -1340,7 +1341,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-
 Boucadair & Shallow       Expires July 17, 2021                [Page 24]
 
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
@@ -1351,6 +1351,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
           CoAP        CoAP
          Client      Server
+           |          |
            |<---------+ NON 4.08 M:0x91 T:0xec [Missing 1,9 [for RT=11]]
            |     [[Client responds with missing payloads]]
            +--------->| NON PUT /path M:0x1d T:0xed RT=11 QB1:1/1/1024
@@ -1396,7 +1397,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-
 Boucadair & Shallow       Expires July 17, 2021                [Page 25]
 
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
@@ -1422,7 +1422,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Figure 7: Example of NON Notifications with Q-Block2 Option (Without
                                    Loss)
 
-9.2.2.  Handling MAX_PAYLOAD Limits
+9.2.2.  Handling MAX_PAYLOADS Limits
 
    Figure 8 illustrates the same as Figure 7 but this time has eleven
    (11) payloads which exceeds MAX_PAYLOADS.  There is no loss
@@ -1489,7 +1489,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Figure 8: Example of NON Notifications with Q-Block2 Option (Without
                                    Loss)
 
-9.2.3.  Handling MAX_PAYLOAD with Recovery
+9.2.3.  Handling MAX_PAYLOADS with Recovery
 
    Figure 9 shows the example of an Observe that is triggered but for
    which some notification blocks are lost.  The client detects the
@@ -1645,7 +1645,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
          |   ...    |
 
 
-     Figure 11: Exampl of NON FETCH with Q-Block1 and Q-Block2 Options
+    Figure 11: Example of NON FETCH with Q-Block1 and Q-Block2 Options
                               (Without Loss)
 
 9.3.2.  Handling MAX_PAYLOAD Limits
@@ -1760,6 +1760,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
         CoAP        CoAP
        Client      Server
+         |          |
          |<---------+ NON 4.08 M:0xa0 T:0xc3 [Missing 1,2 [for RT=31]]
          |     [[Client responds with missing payloads]]
          +--------->| NON FETCH /path M:0x54 T:0xc4 O:0 RT=31 QB1:1/1/1024
@@ -1782,7 +1783,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    (Figure 15).  However, because the original request is spread over
    multiple payloads using Q-Block1, the entire FETCH body has to be
    used to make the request for the missing payloads.
-
 
 
 
@@ -2159,7 +2159,7 @@ A.1.  Q-Block1 Option Confirmable Examples
             |<---------+ ACK 0.00 M:0x02
             |<---------+ ACK 0.00 M:0x03
             |<---------+ ACK 2.04 M:0x04
-
+            |          |
 
    Figure 16: Example of CON Request with Q-Block1 Option (Without Loss)
 
