@@ -864,8 +864,8 @@ missing-block-number = uint
           </list></t>
 
         <t>NON_TIMEOUT is the maximum period of delay between sending sets of
-        MAX_PAYLOADS payloads for the same body. NON_TIMEOUT has the same
-        value as ACK_TIMEOUT (Section 4.8 of <xref
+        MAX_PAYLOADS payloads for the same body. By default, NON_TIMEOUT has
+        the same value as ACK_TIMEOUT (Section 4.8 of <xref
         target="RFC7252"></xref>).</t>
 
         <t>NON_RECEIVE_TIMEOUT is the maximum time to wait for a missing
@@ -875,8 +875,9 @@ missing-block-number = uint
         <t>NON_MAX_RETRANSMIT is the maximum number of times a request for the
         retransmission of missing payloads can occur without a response from
         the remote peer. After this occurs, the peer SHOULD consider the body
-        stale and remove all references to it. By default, NON_MAX_RETRANSMI
-        has the same value as MAX_RETRANSMIT.</t>
+        stale and remove all references to it. By default, NON_MAX_RETRANSMIT
+        has the same value as MAX_RETRANSMIT (Section 4.8 of <xref
+        target="RFC7252"></xref>).</t>
 
         <t>NON_PROBING_WAIT is used to limit the potential wait needed
         calculated when using PROBING_WAIT. NON_PROBING_WAIT has the same
@@ -917,10 +918,8 @@ Table 3: Congestion Control Parameters]]></artwork>
             Note that MAX_PAYLOADS, NON_MAX_RETRANSMIT, and NON_TIMEOUT can be
             negotiated between DOTS peers as per <xref
             target="I-D.bosh-dots-quick-blocks"></xref>.</t>
-          </list></t>
-
-        <t>Each NON 4.08 (Request Entity Incomplete) response is subject to
-        PROBING_RATE.</t>
+          </list>Each NON 4.08 (Request Entity Incomplete) response is subject
+        to PROBING_RATE.</t>
 
         <t>Each NON GET or FETCH request using Q-Block2 Option is subject to
         PROBING_RATE.</t>
@@ -1384,23 +1383,23 @@ X<--: Message loss (response)
 
           <t><figure anchor="b12non"
               title="Example of NON FETCH with Q-Block1 and Q-Block2 Options (Without Loss)">
-              <artwork><![CDATA[        CoAP        CoAP
-       Client      Server
-         |          |
-         +--------->| NON FETCH /path M:0x10 T:0x90 O:0 RT=30 QB1:0/1/1024
-         +--------->| NON FETCH /path M:0x11 T:0x91 O:0 RT=30 QB1:1/1/1024
-         +--------->| NON FETCH /path M:0x12 T:0x93 O:0 RT=30 QB1:2/0/1024
-         |<---------+ NON 2.05 M:0x60 T:0x93 O:1320 ET=90 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x61 T:0x93 O:1320 ET=90 QB2:1/1/1024
-         |<---------+ NON 2.05 M:0x62 T:0x93 O:1320 ET=90 QB2:2/1/1024
-         |<---------+ NON 2.05 M:0x63 T:0x93 O:1320 ET=90 QB2:3/0/1024
-         |   ...    |
-         |     [[Observe triggered]]
-         |<---------+ NON 2.05 M:0x64 T:0x93 O:1321 ET=91 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x65 T:0x93 O:1321 ET=91 QB2:1/1/1024
-         |<---------+ NON 2.05 M:0x66 T:0x93 O:1321 ET=91 QB2:2/1/1024
-         |<---------+ NON 2.05 M:0x67 T:0x93 O:1321 ET=91 QB2:3/0/1024
-         |   ...    |
+              <artwork><![CDATA[      CoAP        CoAP
+     Client      Server
+       |          |
+       +--------->| NON FETCH /path M:0x10 T:0x90 O:0 RT=30 QB1:0/1/1024
+       +--------->| NON FETCH /path M:0x11 T:0x91 O:0 RT=30 QB1:1/1/1024
+       +--------->| NON FETCH /path M:0x12 T:0x93 O:0 RT=30 QB1:2/0/1024
+       |<---------+ NON 2.05 M:0x60 T:0x93 O:1320 ET=90 QB2:0/1/1024
+       |<---------+ NON 2.05 M:0x61 T:0x93 O:1320 ET=90 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0x62 T:0x93 O:1320 ET=90 QB2:2/1/1024
+       |<---------+ NON 2.05 M:0x63 T:0x93 O:1320 ET=90 QB2:3/0/1024
+       |   ...    |
+       |     [[Observe triggered]]
+       |<---------+ NON 2.05 M:0x64 T:0x93 O:1321 ET=91 QB2:0/1/1024
+       |<---------+ NON 2.05 M:0x65 T:0x93 O:1321 ET=91 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0x66 T:0x93 O:1321 ET=91 QB2:2/1/1024
+       |<---------+ NON 2.05 M:0x67 T:0x93 O:1321 ET=91 QB2:3/0/1024
+       |   ...    |
 
 ]]></artwork>
             </figure></t>
@@ -1414,40 +1413,39 @@ X<--: Message loss (response)
 
           <t><figure anchor="b12non0"
               title="Example of NON FETCH with Q-Block1 and Q-Block2 Options (Without Loss)">
-              <artwork><![CDATA[        CoAP        CoAP
-       Client      Server
-         |          |
-         +--------->| NON FETCH /path M:0x30 T:0xa0 O:0 RT=10 QB1:0/1/1024
-         +--------->| NON FETCH /path M:0x31 T:0xa1 O:0 RT=10 QB1:1/1/1024
-         +--------->| [[Payloads 3 - 9 not detailed]]
-         +--------->| NON FETCH /path M:0x39 T:0xa9 O:0 RT=10 QB1:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks receipt acknowledged by server]]
-         |<---------+ NON 2.31 M:0x80 T:0xa9
-         +--------->| NON FETCH /path M:0x3a T:0xaa O:0 RT=10 QB1:10/0/1024
-         |<---------+ NON 2.05 M:0x81 T:0xaa O:1334 ET=21 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x82 T:0xaa O:1334 ET=21 QB2:1/1/1024
-         |<---------+ [[Payloads 3 - 9 not detailed]]
-         |<---------+ NON 2.05 M:0x8a T:0xaa O:1334 ET=21 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using
-         |       'Continue' Q-Block2]]
-         +--------->| NON FETCH /path M:0x3b T:0xab QB2:10/1/1024
-         |<---------+ NON 2.05 M:0x8b T:0xaa O:1334 ET=21 QB2:10/0/1024
-         |   ...    |
-         |     [[Observe triggered]]
-         |<---------+ NON 2.05 M:0x8c T:0xaa O:1335 ET=22 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x8d T:0xaa O:1335 ET=22 QB2:1/1/1024
-         |<---------+ [[Payloads 3 - 9 not detailed]]
-         |<---------+ NON 2.05 M:0x95 T:0xaa O:1335 ET=22 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using
-         |       'Continue' Q-Block2]]
-         +--------->| NON FETCH /path M:0x3c T:0xac QB2:10/1/1024
-         |<---------+ NON 2.05 M:0x96 T:0xaa O:1335 ET=22 QB2:10/0/1024
-      [[Body has been received]]
-         |   ...    |
-
+              <artwork><![CDATA[     CoAP        CoAP
+    Client      Server
+      |          | 
+      +--------->| NON FETCH /path M:0x30 T:0xa0 O:0 RT=10 QB1:0/1/1024
+      +--------->| NON FETCH /path M:0x31 T:0xa1 O:0 RT=10 QB1:1/1/1024
+      +--------->| [[Payloads 3 - 9 not detailed]]
+      +--------->| NON FETCH /path M:0x39 T:0xa9 O:0 RT=10 QB1:9/1/1024
+   [[MAX_PAYLOADS has been reached]]
+      |     [[MAX_PAYLOADS blocks receipt acknowledged by server]]
+      |<---------+ NON 2.31 M:0x80 T:0xa9
+      +--------->| NON FETCH /path M:0x3a T:0xaa O:0 RT=10 QB1:10/0/1024
+      |<---------+ NON 2.05 M:0x81 T:0xaa O:1334 ET=21 QB2:0/1/1024
+      |<---------+ NON 2.05 M:0x82 T:0xaa O:1334 ET=21 QB2:1/1/1024
+      |<---------+ [[Payloads 3 - 9 not detailed]]
+      |<---------+ NON 2.05 M:0x8a T:0xaa O:1334 ET=21 QB2:9/1/1024
+   [[MAX_PAYLOADS has been reached]]
+      |     [[MAX_PAYLOADS blocks acknowledged by client using
+      |       'Continue' Q-Block2]]
+      +--------->| NON FETCH /path M:0x3b T:0xab QB2:10/1/1024
+      |<---------+ NON 2.05 M:0x8b T:0xaa O:1334 ET=21 QB2:10/0/1024
+      |   ...    |
+      |     [[Observe triggered]]
+      |<---------+ NON 2.05 M:0x8c T:0xaa O:1335 ET=22 QB2:0/1/1024
+      |<---------+ NON 2.05 M:0x8d T:0xaa O:1335 ET=22 QB2:1/1/1024
+      |<---------+ [[Payloads 3 - 9 not detailed]]
+      |<---------+ NON 2.05 M:0x95 T:0xaa O:1335 ET=22 QB2:9/1/1024
+   [[MAX_PAYLOADS has been reached]]
+      |     [[MAX_PAYLOADS blocks acknowledged by client using
+      |       'Continue' Q-Block2]]
+      +--------->| NON FETCH /path M:0x3c T:0xac QB2:10/1/1024
+      |<---------+ NON 2.05 M:0x96 T:0xaa O:1335 ET=22 QB2:10/0/1024
+   [[Body has been received]]
+      |   ...    |
 ]]></artwork>
             </figure></t>
         </section>
@@ -1458,15 +1456,15 @@ X<--: Message loss (response)
 
           <t><figure anchor="b12non1"
               title="Example of NON FETCH with Q-Block1 and Q-Block2 Options (With Loss)">
-              <artwork><![CDATA[        CoAP        CoAP
-       Client      Server
-         |          |
-         +--------->| NON FETCH /path M:0x50 T:0xc0 O:0 RT=31 QB1:0/1/1024
-         +--->X     | NON FETCH /path M:0x51 T:0xc1 O:0 RT=31 QB1:1/1/1024
-         +--->X     | NON FETCH /path M:0x52 T:0xc2 O:0 RT=31 QB1:2/1/1024
-         +--------->| NON FETCH /path M:0x53 T:0xc3 O:0 RT=31 QB1:3/0/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (server) delay expires]]
+              <artwork><![CDATA[      CoAP        CoAP
+     Client      Server
+       |          |
+       +--------->| NON FETCH /path M:0x50 T:0xc0 O:0 RT=31 QB1:0/1/1024
+       +--->X     | NON FETCH /path M:0x51 T:0xc1 O:0 RT=31 QB1:1/1/1024
+       +--->X     | NON FETCH /path M:0x52 T:0xc2 O:0 RT=31 QB1:2/1/1024
+       +--------->| NON FETCH /path M:0x53 T:0xc3 O:0 RT=31 QB1:3/0/1024
+       |   ...    |
+    [[NON_RECEIVE_TIMEOUT (server) delay expires]]
 ]]></artwork>
             </figure></t>
 
@@ -1480,22 +1478,22 @@ X<--: Message loss (response)
 
           <t><figure anchor="b12non2"
               title="Example of NON Request with Q-Block1 Option (Server Recovery)">
-              <artwork><![CDATA[        CoAP        CoAP
-       Client      Server
-         |          |
-         |<---------+ NON 4.08 M:0xa0 T:0xc3 [Missing 1,2 [for RT=31]]
-         |     [[Client responds with missing payloads]]
-         +--------->| NON FETCH /path M:0x54 T:0xc4 O:0 RT=31 QB1:1/1/1024
-         +--------->| NON FETCH /path M:0x55 T:0xc5 O:0 RT=31 QB1:2/1/1024
-         |     [[Server received FETCH body,
-         |       starts transmitting response body]]
-         |<---------+ NON 2.05 M:0xa1 T:0xc3 O:1236 ET=23 QB2:0/1/1024
-         |     X<---+ NON 2.05 M:0xa2 T:0xc3 O:1236 ET=23 QB2:1/1/1024
-         |<---------+ NON 2.05 M:0xa3 T:0xc3 O:1236 ET=23 QB2:2/1/1024
-         |     X<---+ NON 2.05 M:0xa4 T:0xc3 O:1236 ET=23 QB2:3/0/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |          |
+              <artwork><![CDATA[      CoAP        CoAP
+     Client      Server
+       |          |
+       |<---------+ NON 4.08 M:0xa0 T:0xc3 [Missing 1,2 [for RT=31]]
+       |     [[Client responds with missing payloads]]
+       +--------->| NON FETCH /path M:0x54 T:0xc4 O:0 RT=31 QB1:1/1/1024
+       +--------->| NON FETCH /path M:0x55 T:0xc5 O:0 RT=31 QB1:2/1/1024
+       |     [[Server received FETCH body,
+       |       starts transmitting response body]]
+       |<---------+ NON 2.05 M:0xa1 T:0xc3 O:1236 ET=23 QB2:0/1/1024
+       |     X<---+ NON 2.05 M:0xa2 T:0xc3 O:1236 ET=23 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0xa3 T:0xc3 O:1236 ET=23 QB2:2/1/1024
+       |     X<---+ NON 2.05 M:0xa4 T:0xc3 O:1236 ET=23 QB2:3/0/1024
+       |   ...    |
+    [[NON_RECEIVE_TIMEOUT (client) delay expires]]
+       |          |
 ]]></artwork>
             </figure></t>
 
@@ -1508,42 +1506,42 @@ X<--: Message loss (response)
 
           <t><figure anchor="b12non3"
               title="Example of NON Request with Q-Block1 Option (Client Recovery)">
-              <artwork><![CDATA[        CoAP        CoAP
-       Client      Server
-         |          |
-         +--------->| NON FETCH /path M:0x56 T:0xc6 RT=31 QB1:0/1/1024\
-         |          |                                     QB2:1/0/1024\
-         |          |                                     QB2:3/0/1024
-         +--------->| NON FETCH /path M:0x57 T:0xc7 RT=31 QB1:1/1/1024\
-         |          |                                     QB2:1/0/1024\
-         |          |                                     QB2:3/0/1024
-         +--------->| NON FETCH /path M:0x58 T:0xc8 RT=31 QB1:2/1/1024\
-         |          |                                     QB2:1/0/1024\
-         |          |                                     QB2:3/0/1024
-         +--------->| NON FETCH /path M:0x59 T:0xc9 RT=31 QB1:3/0/1024\
-         |          |                                     QB2:1/0/1024\
-         |          |                                     QB2:3/0/1024
-         |     [[Server received FETCH request,
-         |       starts transmitting missing blocks]]
-         |     X<---+ NON 2.05 M:0xa5 T:0xc9 ET=23 QB2:1/1/1024
-         |<---------+ NON 2.05 M:0xa6 T:0xc9 ET=23 QB2:3/0/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes block is still missing and asks for
-         |       missing block]]
-         +--------->| NON FETCH /path M:0x5a T:0xca RT=31 QB1:0/1/1024\
-         |          |                                     QB2:1/0/1024
-         +--------->| NON FETCH /path M:0x5b T:0xcb RT=31 QB1:1/1/1024\
-         |          |                                     QB2:1/0/1024
-         +--------->| NON FETCH /path M:0x5c T:0xcc RT=31 QB1:2/1/1024\
-         |          |                                     QB2:1/0/1024
-         +--------->| NON FETCH /path M:0x5d T:0xcd RT=31 QB1:3/0/1024\
-         |          |                                     QB2:1/0/1024
-         |     [[Server received FETCH request,
-         |       starts transmitting missing block]]
-         |<---------+ NON 2.05 M:0xa7 T:0xcd ET=23 QB2:1/1/1024
-      [[Body has been received]]
-         |   ...    |
+              <artwork><![CDATA[      CoAP        CoAP
+     Client      Server
+       |          |
+       +--------->| NON FETCH /path M:0x56 T:0xc6 RT=31 QB1:0/1/1024\
+       |          |                                     QB2:1/0/1024\
+       |          |                                     QB2:3/0/1024
+       +--------->| NON FETCH /path M:0x57 T:0xc7 RT=31 QB1:1/1/1024\
+       |          |                                     QB2:1/0/1024\
+       |          |                                     QB2:3/0/1024
+       +--------->| NON FETCH /path M:0x58 T:0xc8 RT=31 QB1:2/1/1024\
+       |          |                                     QB2:1/0/1024\
+       |          |                                     QB2:3/0/1024
+       +--------->| NON FETCH /path M:0x59 T:0xc9 RT=31 QB1:3/0/1024\
+       |          |                                     QB2:1/0/1024\
+       |          |                                     QB2:3/0/1024
+       |     [[Server received FETCH request,
+       |       starts transmitting missing blocks]]
+       |     X<---+ NON 2.05 M:0xa5 T:0xc9 ET=23 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0xa6 T:0xc9 ET=23 QB2:3/0/1024
+       |   ...    |
+    [[NON_RECEIVE_TIMEOUT (client) delay expires]]
+       |     [[Client realizes block is still missing and asks for
+       |       missing block]]
+       +--------->| NON FETCH /path M:0x5a T:0xca RT=31 QB1:0/1/1024\
+       |          |                                     QB2:1/0/1024
+       +--------->| NON FETCH /path M:0x5b T:0xcb RT=31 QB1:1/1/1024\
+       |          |                                     QB2:1/0/1024
+       +--------->| NON FETCH /path M:0x5c T:0xcc RT=31 QB1:2/1/1024\
+       |          |                                     QB2:1/0/1024
+       +--------->| NON FETCH /path M:0x5d T:0xcd RT=31 QB1:3/0/1024\
+       |          |                                     QB2:1/0/1024
+       |     [[Server received FETCH request,
+       |       starts transmitting missing block]]
+       |<---------+ NON 2.05 M:0xa7 T:0xcd ET=23 QB2:1/1/1024
+    [[Body has been received]]
+       |   ...    |
 ]]></artwork>
             </figure></t>
         </section>
@@ -1756,7 +1754,7 @@ o  Reference: [RFCXXXX]]]></artwork>
       <t>The notations provided in <xref target="legend"></xref> are used in
       the following subsections.</t>
 
-      <section title="Q-Block1 Option Confirmable Examples">
+      <section title="Q-Block1 Option">
         <t>Let's now consider the use Q-Block1 Option with a CON request as
         shown in <xref target="con3"></xref>. All the blocks are acknowledged
         (ACK).</t>
@@ -1820,7 +1818,7 @@ o  Reference: [RFCXXXX]]]></artwork>
         losses, then the use of NON should be considered.</t>
       </section>
 
-      <section title="Q-Block2 Option Confirmable Examples">
+      <section title="Q-Block2 Option">
         <t>An example of the use of Q-Block2 Option with Confirmable messages
         is shown in <xref target="b4con"></xref>.</t>
 

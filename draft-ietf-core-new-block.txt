@@ -118,8 +118,8 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
      13.1.  Normative References . . . . . . . . . . . . . . . . . .  36
      13.2.  Informative References . . . . . . . . . . . . . . . . .  38
    Appendix A.  Examples with Confirmable Messages . . . . . . . . .  39
-     A.1.  Q-Block1 Option Confirmable Examples  . . . . . . . . . .  39
-     A.2.  Q-Block2 Option Confirmable Examples  . . . . . . . . . .  40
+     A.1.  Q-Block1 Option . . . . . . . . . . . . . . . . . . . . .  39
+     A.2.  Q-Block2 Option . . . . . . . . . . . . . . . . . . . . .  40
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  42
 
 1.  Introduction
@@ -971,8 +971,8 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
       those discussed in Section 5 of [RFC6928].
 
    NON_TIMEOUT is the maximum period of delay between sending sets of
-   MAX_PAYLOADS payloads for the same body.  NON_TIMEOUT has the same
-   value as ACK_TIMEOUT (Section 4.8 of [RFC7252]).
+   MAX_PAYLOADS payloads for the same body.  By default, NON_TIMEOUT has
+   the same value as ACK_TIMEOUT (Section 4.8 of [RFC7252]).
 
    NON_RECEIVE_TIMEOUT is the maximum time to wait for a missing payload
    before requesting retransmission.  NON_RECEIVE_TIMEOUT has a value of
@@ -982,7 +982,8 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    retransmission of missing payloads can occur without a response from
    the remote peer.  After this occurs, the peer SHOULD consider the
    body stale and remove all references to it.  By default,
-   NON_MAX_RETRANSMI has the same value as MAX_RETRANSMIT.
+   NON_MAX_RETRANSMIT has the same value as MAX_RETRANSMIT (Section 4.8
+   of [RFC7252]).
 
    NON_PROBING_WAIT is used to limit the potential wait needed
    calculated when using PROBING_WAIT.  NON_PROBING_WAIT has the same
@@ -991,7 +992,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    NON_PARTIAL_TIMEOUT is used for expiring partially received bodies.
    NON_PARTIAL_TIMEOUT has the same value as computed for
    EXCHANGE_LIFETIME (Section 4.8.2 of [RFC7252]).
-
 
 
 
@@ -1626,23 +1626,23 @@ Boucadair & Shallow       Expires July 17, 2021                [Page 29]
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
-        CoAP        CoAP
-       Client      Server
-         |          |
-         +--------->| NON FETCH /path M:0x10 T:0x90 O:0 RT=30 QB1:0/1/1024
-         +--------->| NON FETCH /path M:0x11 T:0x91 O:0 RT=30 QB1:1/1/1024
-         +--------->| NON FETCH /path M:0x12 T:0x93 O:0 RT=30 QB1:2/0/1024
-         |<---------+ NON 2.05 M:0x60 T:0x93 O:1320 ET=90 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x61 T:0x93 O:1320 ET=90 QB2:1/1/1024
-         |<---------+ NON 2.05 M:0x62 T:0x93 O:1320 ET=90 QB2:2/1/1024
-         |<---------+ NON 2.05 M:0x63 T:0x93 O:1320 ET=90 QB2:3/0/1024
-         |   ...    |
-         |     [[Observe triggered]]
-         |<---------+ NON 2.05 M:0x64 T:0x93 O:1321 ET=91 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x65 T:0x93 O:1321 ET=91 QB2:1/1/1024
-         |<---------+ NON 2.05 M:0x66 T:0x93 O:1321 ET=91 QB2:2/1/1024
-         |<---------+ NON 2.05 M:0x67 T:0x93 O:1321 ET=91 QB2:3/0/1024
-         |   ...    |
+      CoAP        CoAP
+     Client      Server
+       |          |
+       +--------->| NON FETCH /path M:0x10 T:0x90 O:0 RT=30 QB1:0/1/1024
+       +--------->| NON FETCH /path M:0x11 T:0x91 O:0 RT=30 QB1:1/1/1024
+       +--------->| NON FETCH /path M:0x12 T:0x93 O:0 RT=30 QB1:2/0/1024
+       |<---------+ NON 2.05 M:0x60 T:0x93 O:1320 ET=90 QB2:0/1/1024
+       |<---------+ NON 2.05 M:0x61 T:0x93 O:1320 ET=90 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0x62 T:0x93 O:1320 ET=90 QB2:2/1/1024
+       |<---------+ NON 2.05 M:0x63 T:0x93 O:1320 ET=90 QB2:3/0/1024
+       |   ...    |
+       |     [[Observe triggered]]
+       |<---------+ NON 2.05 M:0x64 T:0x93 O:1321 ET=91 QB2:0/1/1024
+       |<---------+ NON 2.05 M:0x65 T:0x93 O:1321 ET=91 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0x66 T:0x93 O:1321 ET=91 QB2:2/1/1024
+       |<---------+ NON 2.05 M:0x67 T:0x93 O:1321 ET=91 QB2:3/0/1024
+       |   ...    |
 
 
     Figure 11: Example of NON FETCH with Q-Block1 and Q-Block2 Options
@@ -1682,40 +1682,39 @@ Boucadair & Shallow       Expires July 17, 2021                [Page 30]
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
-        CoAP        CoAP
-       Client      Server
-         |          |
-         +--------->| NON FETCH /path M:0x30 T:0xa0 O:0 RT=10 QB1:0/1/1024
-         +--------->| NON FETCH /path M:0x31 T:0xa1 O:0 RT=10 QB1:1/1/1024
-         +--------->| [[Payloads 3 - 9 not detailed]]
-         +--------->| NON FETCH /path M:0x39 T:0xa9 O:0 RT=10 QB1:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks receipt acknowledged by server]]
-         |<---------+ NON 2.31 M:0x80 T:0xa9
-         +--------->| NON FETCH /path M:0x3a T:0xaa O:0 RT=10 QB1:10/0/1024
-         |<---------+ NON 2.05 M:0x81 T:0xaa O:1334 ET=21 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x82 T:0xaa O:1334 ET=21 QB2:1/1/1024
-         |<---------+ [[Payloads 3 - 9 not detailed]]
-         |<---------+ NON 2.05 M:0x8a T:0xaa O:1334 ET=21 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using
-         |       'Continue' Q-Block2]]
-         +--------->| NON FETCH /path M:0x3b T:0xab QB2:10/1/1024
-         |<---------+ NON 2.05 M:0x8b T:0xaa O:1334 ET=21 QB2:10/0/1024
-         |   ...    |
-         |     [[Observe triggered]]
-         |<---------+ NON 2.05 M:0x8c T:0xaa O:1335 ET=22 QB2:0/1/1024
-         |<---------+ NON 2.05 M:0x8d T:0xaa O:1335 ET=22 QB2:1/1/1024
-         |<---------+ [[Payloads 3 - 9 not detailed]]
-         |<---------+ NON 2.05 M:0x95 T:0xaa O:1335 ET=22 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using
-         |       'Continue' Q-Block2]]
-         +--------->| NON FETCH /path M:0x3c T:0xac QB2:10/1/1024
-         |<---------+ NON 2.05 M:0x96 T:0xaa O:1335 ET=22 QB2:10/0/1024
-      [[Body has been received]]
-         |   ...    |
-
+     CoAP        CoAP
+    Client      Server
+      |          |
+      +--------->| NON FETCH /path M:0x30 T:0xa0 O:0 RT=10 QB1:0/1/1024
+      +--------->| NON FETCH /path M:0x31 T:0xa1 O:0 RT=10 QB1:1/1/1024
+      +--------->| [[Payloads 3 - 9 not detailed]]
+      +--------->| NON FETCH /path M:0x39 T:0xa9 O:0 RT=10 QB1:9/1/1024
+   [[MAX_PAYLOADS has been reached]]
+      |     [[MAX_PAYLOADS blocks receipt acknowledged by server]]
+      |<---------+ NON 2.31 M:0x80 T:0xa9
+      +--------->| NON FETCH /path M:0x3a T:0xaa O:0 RT=10 QB1:10/0/1024
+      |<---------+ NON 2.05 M:0x81 T:0xaa O:1334 ET=21 QB2:0/1/1024
+      |<---------+ NON 2.05 M:0x82 T:0xaa O:1334 ET=21 QB2:1/1/1024
+      |<---------+ [[Payloads 3 - 9 not detailed]]
+      |<---------+ NON 2.05 M:0x8a T:0xaa O:1334 ET=21 QB2:9/1/1024
+   [[MAX_PAYLOADS has been reached]]
+      |     [[MAX_PAYLOADS blocks acknowledged by client using
+      |       'Continue' Q-Block2]]
+      +--------->| NON FETCH /path M:0x3b T:0xab QB2:10/1/1024
+      |<---------+ NON 2.05 M:0x8b T:0xaa O:1334 ET=21 QB2:10/0/1024
+      |   ...    |
+      |     [[Observe triggered]]
+      |<---------+ NON 2.05 M:0x8c T:0xaa O:1335 ET=22 QB2:0/1/1024
+      |<---------+ NON 2.05 M:0x8d T:0xaa O:1335 ET=22 QB2:1/1/1024
+      |<---------+ [[Payloads 3 - 9 not detailed]]
+      |<---------+ NON 2.05 M:0x95 T:0xaa O:1335 ET=22 QB2:9/1/1024
+   [[MAX_PAYLOADS has been reached]]
+      |     [[MAX_PAYLOADS blocks acknowledged by client using
+      |       'Continue' Q-Block2]]
+      +--------->| NON FETCH /path M:0x3c T:0xac QB2:10/1/1024
+      |<---------+ NON 2.05 M:0x96 T:0xaa O:1335 ET=22 QB2:10/0/1024
+   [[Body has been received]]
+      |   ...    |
 
     Figure 12: Example of NON FETCH with Q-Block1 and Q-Block2 Options
                               (Without Loss)
@@ -1733,20 +1732,21 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
+
 Boucadair & Shallow       Expires July 17, 2021                [Page 31]
 
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
-        CoAP        CoAP
-       Client      Server
-         |          |
-         +--------->| NON FETCH /path M:0x50 T:0xc0 O:0 RT=31 QB1:0/1/1024
-         +--->X     | NON FETCH /path M:0x51 T:0xc1 O:0 RT=31 QB1:1/1/1024
-         +--->X     | NON FETCH /path M:0x52 T:0xc2 O:0 RT=31 QB1:2/1/1024
-         +--------->| NON FETCH /path M:0x53 T:0xc3 O:0 RT=31 QB1:3/0/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (server) delay expires]]
+      CoAP        CoAP
+     Client      Server
+       |          |
+       +--------->| NON FETCH /path M:0x50 T:0xc0 O:0 RT=31 QB1:0/1/1024
+       +--->X     | NON FETCH /path M:0x51 T:0xc1 O:0 RT=31 QB1:1/1/1024
+       +--->X     | NON FETCH /path M:0x52 T:0xc2 O:0 RT=31 QB1:2/1/1024
+       +--------->| NON FETCH /path M:0x53 T:0xc3 O:0 RT=31 QB1:3/0/1024
+       |   ...    |
+    [[NON_RECEIVE_TIMEOUT (server) delay expires]]
 
     Figure 13: Example of NON FETCH with Q-Block1 and Q-Block2 Options
                                 (With Loss)
@@ -1758,22 +1758,22 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    last block number received payload.  The client can then derive the
    Request-Tag by matching the token with the sent request.
 
-        CoAP        CoAP
-       Client      Server
-         |          |
-         |<---------+ NON 4.08 M:0xa0 T:0xc3 [Missing 1,2 [for RT=31]]
-         |     [[Client responds with missing payloads]]
-         +--------->| NON FETCH /path M:0x54 T:0xc4 O:0 RT=31 QB1:1/1/1024
-         +--------->| NON FETCH /path M:0x55 T:0xc5 O:0 RT=31 QB1:2/1/1024
-         |     [[Server received FETCH body,
-         |       starts transmitting response body]]
-         |<---------+ NON 2.05 M:0xa1 T:0xc3 O:1236 ET=23 QB2:0/1/1024
-         |     X<---+ NON 2.05 M:0xa2 T:0xc3 O:1236 ET=23 QB2:1/1/1024
-         |<---------+ NON 2.05 M:0xa3 T:0xc3 O:1236 ET=23 QB2:2/1/1024
-         |     X<---+ NON 2.05 M:0xa4 T:0xc3 O:1236 ET=23 QB2:3/0/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |          |
+      CoAP        CoAP
+     Client      Server
+       |          |
+       |<---------+ NON 4.08 M:0xa0 T:0xc3 [Missing 1,2 [for RT=31]]
+       |     [[Client responds with missing payloads]]
+       +--------->| NON FETCH /path M:0x54 T:0xc4 O:0 RT=31 QB1:1/1/1024
+       +--------->| NON FETCH /path M:0x55 T:0xc5 O:0 RT=31 QB1:2/1/1024
+       |     [[Server received FETCH body,
+       |       starts transmitting response body]]
+       |<---------+ NON 2.05 M:0xa1 T:0xc3 O:1236 ET=23 QB2:0/1/1024
+       |     X<---+ NON 2.05 M:0xa2 T:0xc3 O:1236 ET=23 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0xa3 T:0xc3 O:1236 ET=23 QB2:2/1/1024
+       |     X<---+ NON 2.05 M:0xa4 T:0xc3 O:1236 ET=23 QB2:3/0/1024
+       |   ...    |
+    [[NON_RECEIVE_TIMEOUT (client) delay expires]]
+       |          |
 
       Figure 14: Example of NON Request with Q-Block1 Option (Server
                                  Recovery)
@@ -2143,7 +2143,7 @@ Appendix A.  Examples with Confirmable Messages
    The notations provided in Figure 2 are used in the following
    subsections.
 
-A.1.  Q-Block1 Option Confirmable Examples
+A.1.  Q-Block1 Option
 
    Let's now consider the use Q-Block1 Option with a CON request as
    shown in Figure 16.  All the blocks are acknowledged (ACK).
@@ -2221,7 +2221,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    If there is likely to be the possibility of network transient losses,
    then the use of NON should be considered.
 
-A.2.  Q-Block2 Option Confirmable Examples
+A.2.  Q-Block2 Option
 
    An example of the use of Q-Block2 Option with Confirmable messages is
    shown in Figure 18.
