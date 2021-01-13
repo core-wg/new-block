@@ -1081,7 +1081,7 @@ Table 3: Congestion Control Parameters]]></artwork>
       to be followed.</t>
     </section>
 
-    <section title="Examples using Q-Block1 and Q-Block2 Options">
+    <section title="Examples">
       <t>This section provides some sample flows to illustrate the use of
       Q-Block1 and Q-Block2 Options. <xref target="legend"></xref> lists the
       conventions that are used in the following subsections.</t>
@@ -1403,7 +1403,7 @@ X<--: Message loss (response)
             </figure></t>
         </section>
 
-        <section title="Handling MAX_PAYLOAD Limits">
+        <section title="Handling MAX_PAYLOADS Limits">
           <t><xref target="b12non0"></xref> illustrates the same as <xref
           target="b12non"></xref> but this time has eleven (11) payloads in
           both directions which exceeds MAX_PAYLOADS. There is no loss

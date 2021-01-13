@@ -86,7 +86,7 @@ Table of Contents
      6.2.  Non-confirmable (NON) . . . . . . . . . . . . . . . . . .  18
    7.  Caching Considerations  . . . . . . . . . . . . . . . . . . .  21
    8.  HTTP-Mapping Considerations . . . . . . . . . . . . . . . . .  22
-   9.  Examples using Q-Block1 and Q-Block2 Options  . . . . . . . .  22
+   9.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .  22
      9.1.  Q-Block1 Option: Non-Confirmable Examples . . . . . . . .  23
        9.1.1.  A Simple Example  . . . . . . . . . . . . . . . . . .  23
        9.1.2.  Handling MAX_PAYLOADS Limits  . . . . . . . . . . . .  23
@@ -98,7 +98,7 @@ Table of Contents
        9.2.4.  Handling Recovery using M-bit Set . . . . . . . . . .  28
      9.3.  Q-Block1 and Q-Block2 Options: Non-Confirmable Examples .  29
        9.3.1.  A Simple Example  . . . . . . . . . . . . . . . . . .  29
-       9.3.2.  Handling MAX_PAYLOAD Limits . . . . . . . . . . . . .  30
+       9.3.2.  Handling MAX_PAYLOADS Limits  . . . . . . . . . . . .  30
        9.3.3.  Handling Recovery . . . . . . . . . . . . . . . . . .  31
    10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  33
      10.1.  New CoAP Options . . . . . . . . . . . . . . . . . . . .  33
@@ -1219,7 +1219,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    The rules defined in Section 5 of [RFC7959] are to be followed.
 
-9.  Examples using Q-Block1 and Q-Block2 Options
+9.  Examples
 
    This section provides some sample flows to illustrate the use of
    Q-Block1 and Q-Block2 Options.  Figure 2 lists the conventions that
@@ -1648,7 +1648,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
     Figure 11: Example of NON FETCH with Q-Block1 and Q-Block2 Options
                               (Without Loss)
 
-9.3.2.  Handling MAX_PAYLOAD Limits
+9.3.2.  Handling MAX_PAYLOADS Limits
 
    Figure 12 illustrates the same as Figure 11 but this time has eleven
    (11) payloads in both directions which exceeds MAX_PAYLOADS.  There
