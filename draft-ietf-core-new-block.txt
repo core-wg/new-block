@@ -86,17 +86,17 @@ Table of Contents
      6.2.  Non-confirmable (NON) . . . . . . . . . . . . . . . . . .  18
    7.  Caching Considerations  . . . . . . . . . . . . . . . . . . .  21
    8.  HTTP-Mapping Considerations . . . . . . . . . . . . . . . . .  22
-   9.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . .  22
-     9.1.  Q-Block1 Option: Non-Confirmable Examples . . . . . . . .  23
+   9.  Examples with Non-confirmable Messages  . . . . . . . . . . .  22
+     9.1.  Q-Block1 Option . . . . . . . . . . . . . . . . . . . . .  23
        9.1.1.  A Simple Example  . . . . . . . . . . . . . . . . . .  23
        9.1.2.  Handling MAX_PAYLOADS Limits  . . . . . . . . . . . .  23
        9.1.3.  Handling MAX_PAYLOADS with Recovery . . . . . . . . .  24
-     9.2.  Q-Block2 Option: Non-Confirmable Examples . . . . . . . .  25
+     9.2.  Q-Block2 Option . . . . . . . . . . . . . . . . . . . . .  25
        9.2.1.  A Simple Example  . . . . . . . . . . . . . . . . . .  25
        9.2.2.  Handling MAX_PAYLOADS Limits  . . . . . . . . . . . .  26
        9.2.3.  Handling MAX_PAYLOADS with Recovery . . . . . . . . .  27
        9.2.4.  Handling Recovery using M-bit Set . . . . . . . . . .  28
-     9.3.  Q-Block1 and Q-Block2 Options: Non-Confirmable Examples .  29
+     9.3.  Q-Block1 and Q-Block2 Options . . . . . . . . . . . . . .  29
        9.3.1.  A Simple Example  . . . . . . . . . . . . . . . . . .  29
        9.3.2.  Handling MAX_PAYLOADS Limits  . . . . . . . . . . . .  30
        9.3.3.  Handling Recovery . . . . . . . . . . . . . . . . . .  31
@@ -1219,11 +1219,11 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    The rules defined in Section 5 of [RFC7959] are to be followed.
 
-9.  Examples
+9.  Examples with Non-confirmable Messages
 
    This section provides some sample flows to illustrate the use of
-   Q-Block1 and Q-Block2 Options.  Figure 2 lists the conventions that
-   are used in the following subsections.
+   Q-Block1 and Q-Block2 Options with NON.  Examples with CON are
+   provided in Appendix A.
 
 
 
@@ -1233,6 +1233,9 @@ Boucadair & Shallow       Expires July 17, 2021                [Page 22]
 
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
+
+   Figure 2 lists the conventions that are used in the following
+   subsections.
 
                     T: Token value
                     O: Observe Option value
@@ -1249,7 +1252,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
                   Figure 2: Notations Used in the Figures
 
-9.1.  Q-Block1 Option: Non-Confirmable Examples
+9.1.  Q-Block1 Option
 
 9.1.1.  A Simple Example
 
@@ -1273,9 +1276,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Figure 4 depicts an example of a NON PUT request conveying Q-Block1
    Option.  The number of payloads exceeds MAX_PAYLOADS.  All the blocks
    are received by the server.
-
-
-
 
 
 
@@ -1376,7 +1376,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    continue asking for missing blocks.  Both these decisions are
    implementation specific.
 
-9.2.  Q-Block2 Option: Non-Confirmable Examples
+9.2.  Q-Block2 Option
 
 9.2.1.  A Simple Example
 
@@ -1604,7 +1604,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Figure 10: Example of NON Notifications with Q-Block2 Option (Blocks
                          Recovery with M bit Set)
 
-9.3.  Q-Block1 and Q-Block2 Options: Non-Confirmable Examples
+9.3.  Q-Block1 and Q-Block2 Options
 
 9.3.1.  A Simple Example
 

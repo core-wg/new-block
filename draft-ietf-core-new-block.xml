@@ -1081,10 +1081,13 @@ Table 3: Congestion Control Parameters]]></artwork>
       to be followed.</t>
     </section>
 
-    <section title="Examples">
+    <section title="Examples with Non-confirmable Messages">
       <t>This section provides some sample flows to illustrate the use of
-      Q-Block1 and Q-Block2 Options. <xref target="legend"></xref> lists the
-      conventions that are used in the following subsections.</t>
+      Q-Block1 and Q-Block2 Options with NON. Examples with CON are provided
+      in <xref target="CON"></xref>.</t>
+
+      <t><xref target="legend"></xref> lists the conventions that are used in
+      the following subsections.</t>
 
       <t><figure align="center" anchor="legend"
           title="Notations Used in the Figures">
@@ -1103,7 +1106,7 @@ X<--: Message loss (response)
 ]]></artwork>
         </figure></t>
 
-      <section title="Q-Block1 Option: Non-Confirmable Examples">
+      <section title="Q-Block1 Option ">
         <section title="A Simple Example">
           <t><xref target="B3non"></xref> depicts an example of a NON PUT
           request conveying Q-Block1 Option. All the blocks are received by
@@ -1212,7 +1215,7 @@ X<--: Message loss (response)
         </section>
       </section>
 
-      <section title="Q-Block2 Option: Non-Confirmable Examples">
+      <section title="Q-Block2 Option">
         <section title="A Simple Example">
           <t><xref target="nonb4"></xref> illustrates the example of Q-Block2
           Option. The client sends a NON GET carrying Observe and Q-Block2
@@ -1373,7 +1376,7 @@ X<--: Message loss (response)
         </section>
       </section>
 
-      <section title="Q-Block1 and Q-Block2 Options: Non-Confirmable Examples">
+      <section title="Q-Block1 and Q-Block2 Options">
         <section title="A Simple Example">
           <t><xref target="b12non"></xref> illustrates the example of a FETCH
           using both Q-Block1 and Q-Block2 Options along with an Observe
