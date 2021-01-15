@@ -436,7 +436,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
    Options, are both a class E and a class U in terms of OSCORE
-   processing (Table 2).  The Q-Block1 (or Q-Block2) Option MAY be an
+   processing (Table 3).  The Q-Block1 (or Q-Block2) Option MAY be an
    Inner or Outer option (Section 4.1 of [RFC8613]).  The Inner and
    Outer values are therefore independent of each other.  The Inner
    option is encrypted and integrity protected between clients and
@@ -459,7 +459,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
                        |  TBA1  | Q-Block1        | x | x |
                        |  TBA2  | Q-Block2        | x | x |
                        +--------+-----------------+---+---+
-           Table 2: OSCORE Protection of Q-Block1 and Q-Block2 Options
+           Table 3: OSCORE Protection of Q-Block1 and Q-Block2 Options
 
    Note that if Q-Block1 (or Q-Block2) Option is included in a packet,
    Block1 (or Q-Block2) Option MUST NOT be included.
@@ -979,7 +979,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    This document introduces new parameters MAX_PAYLOADS, NON_TIMEOUT,
    NON_RECEIVE_TIMEOUT, NON_MAX_RETRANSMIT, NON_PROBING_WAIT, and
-   NON_PARTIAL_TIMEOUT primarily for use with NON.
+   NON_PARTIAL_TIMEOUT primarily for use with NON (Table 4).
 
    MAX_PAYLOADS should be configurable with a default value of 10.  Both
    CoAP endpoints SHOULD have the same value (otherwise there will be
@@ -1033,7 +1033,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
                   | NON_PARTIAL_TIMEOUT |         247 s |
                   +---------------------+---------------+
 
-                  Table 3: Congestion Control Parameters
+                  Table 4: Congestion Control Parameters
 
    PROBING_RATE parameter in CoAP indicates the average data rate that
    must not be exceeded by a CoAP endpoint in sending to a peer endpoint
@@ -1857,7 +1857,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
             |  TBA2  | Q-Block2         | [RFCXXXX] |
             +--------+------------------+-----------+
 
-            Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers
+            Table 5: CoAP Q-Block1 and Q-Block2 Option Numbers
 
    This document suggests 19 (TBA1) and 51 (TBA2) as a values to be
    assigned for the new option numbers.
@@ -1978,7 +1978,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    | 7.01       |  TBD4  | Quick Block-Wise-Transfer | [RFCXXXX] |
    +------------+--------+---------------------------+-----------+
 
-                      Table 5: CoAP Signaling Option Codes
+                      Table 6: CoAP Signaling Option Codes
 
 11.  Security Considerations
 

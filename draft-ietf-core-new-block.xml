@@ -381,7 +381,7 @@
 
         <t>The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
         Options, are both a class E and a class U in terms of OSCORE
-        processing (Table 2). The Q-Block1 (or Q-Block2) Option MAY be an
+        processing (Table 3). The Q-Block1 (or Q-Block2) Option MAY be an
         Inner or Outer option (Section 4.1 of <xref target="RFC8613"></xref>).
         The Inner and Outer values are therefore independent of each other.
         The Inner option is encrypted and integrity protected between clients
@@ -397,7 +397,7 @@
                    |  TBA1  | Q-Block1        | x | x |
                    |  TBA2  | Q-Block2        | x | x |
                    +--------+-----------------+---+---+
-       Table 2: OSCORE Protection of Q-Block1 and Q-Block2 Options
+       Table 3: OSCORE Protection of Q-Block1 and Q-Block2 Options
 ]]></artwork>
           </figure></t>
 
@@ -871,7 +871,7 @@ missing-block-number = uint
       <section anchor="cc-non" title="Non-confirmable (NON)">
         <t>This document introduces new parameters MAX_PAYLOADS, NON_TIMEOUT,
         NON_RECEIVE_TIMEOUT, NON_MAX_RETRANSMIT, NON_PROBING_WAIT, and
-        NON_PARTIAL_TIMEOUT primarily for use with NON.</t>
+        NON_PARTIAL_TIMEOUT primarily for use with NON (Table 4).</t>
 
         <t>MAX_PAYLOADS should be configurable with a default value of 10.
         Both CoAP endpoints SHOULD have the same value (otherwise there will
@@ -909,9 +909,7 @@ missing-block-number = uint
         <t>NON_PARTIAL_TIMEOUT is used for expiring partially received bodies.
         NON_PARTIAL_TIMEOUT has the same value as computed for
         EXCHANGE_LIFETIME (Section 4.8.2 of <xref
-        target="RFC7252"></xref>).</t>
-
-        <t><figure align="center">
+        target="RFC7252"></xref>).<figure align="center">
             <artwork align="center"><![CDATA[+---------------------+---------------+
 | Parameter Name      | Default Value |
 +=====================+===============|
@@ -923,7 +921,7 @@ missing-block-number = uint
 | NON_PARTIAL_TIMEOUT |         247 s |
 +---------------------+---------------+
 
-Table 3: Congestion Control Parameters]]></artwork>
+Table 4: Congestion Control Parameters]]></artwork>
           </figure></t>
 
         <t>PROBING_RATE parameter in CoAP indicates the average data rate that
@@ -1583,7 +1581,7 @@ X<--: Message loss (response)
 |  TBA2  | Q-Block2         | [RFCXXXX] |
 +--------+------------------+-----------+
 
-Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
+Table 5: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
           </figure></t>
 
         <t>This document suggests 19 (TBA1) and 51 (TBA2) as a values to be
@@ -1665,7 +1663,7 @@ o  Reference: [RFCXXXX]]]></artwork>
 | 7.01       |  TBD4  | Quick Block-Wise-Transfer | [RFCXXXX] |
 +------------+--------+---------------------------+-----------+
 
-                   Table 5: CoAP Signaling Option Codes]]></artwork>
+                   Table 6: CoAP Signaling Option Codes]]></artwork>
           </figure></t>
 
         <t></t>
