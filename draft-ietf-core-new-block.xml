@@ -316,7 +316,26 @@
         experienced loss.</t>
 
         <t>A CoAP endpoint (or proxy) MUST support either both or neither of
-        the Q-Block1 and Q-Block2 Options.</t>
+        the Q-Block1 and Q-Block2 Options. Note that in CoAP over TCP,
+        Capabilities and Settings Messages (CSMs) can be used to indicate
+        support of Q-Block Options by means of the Quick Block-Wise-Transfer
+        Capability Option (Table 2). The behavior of CoAP peers is similar to
+        the one specified in Section 5.3.2 of <xref target="RFC8323"></xref>,
+        except that it indicates support of Q-Block Options.</t>
+
+        <t><figure>
+            <artwork><![CDATA[   +----+---+---+---------+------------------+--------+--------+--------+
+   | #  | C | R | Applies | Name             | Format | Length | Base   |
+   |    |   |   | to      |                  |        |        | Value  |
+   +====+===+===+=========+==================+========+========+========+
+   |TBD4|   |   | CSM     | Quick Block-Wise-|  empty |      0 | (none) |
+   |    |   |   |         | Transfer         |        |        |        |
+   +----+---+---+---------+------------------+--------+--------+--------+
+
+                         C=Critical, R=Repeatable
+
+            Table 2: The Quick Block-Wise-Transfer Capability Option]]></artwork>
+          </figure></t>
 
         <t>If Q-Block1 Option is present in a request or Q-Block2 Option in a
         response (i.e., in that message to the payload of which it pertains),
@@ -1633,6 +1652,24 @@ o  Reference: [RFCXXXX]]]></artwork>
 
         <t></t>
       </section>
+
+      <section title="CoAP Signaling Option Number">
+        <t>This document requests IANA to register the following option in the
+        "CoAP Signaling Option Numbers" registry <xref
+        target="CSM"></xref>.</t>
+
+        <t><figure>
+            <artwork><![CDATA[+------------+--------+---------------------------+-----------+
+| Applies to | Number | Name                      | Reference |
++============+========+===========================+===========+
+| 7.01       |  TBD4  | Quick Block-Wise-Transfer | [RFCXXXX] |
++------------+--------+---------------------------+-----------+
+
+                   Table 5: CoAP Signaling Option Codes]]></artwork>
+          </figure></t>
+
+        <t></t>
+      </section>
     </section>
 
     <section anchor="security" title="Security Considerations">
@@ -1715,6 +1752,19 @@ o  Reference: [RFCXXXX]]]></artwork>
                  target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats">
         <front>
           <title></title>
+
+          <author>
+            <organization></organization>
+          </author>
+
+          <date />
+        </front>
+      </reference>
+
+      <reference anchor="CSM"
+                 target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#signaling-option-numbers">
+        <front>
+          <title>CoAP Signaling Option Numbers</title>
 
           <author>
             <organization></organization>
