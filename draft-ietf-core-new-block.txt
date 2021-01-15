@@ -400,17 +400,17 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    peers is similar to the one specified in Section 5.3.2 of [RFC8323],
    except that it indicates support of Q-Block Options.
 
-+----+---+---+---------+-----------------------+--------+--------+--------+
-| #  | C | R | Applies | Name                  | Format | Length | Base   |
-|    |   |   | to      |                       |        |        | Value  |
-+====+===+===+=========+=======================+========+========+========+
-|TBD4|   |   | CSM     | Q-Block-Wise-Transfer |  empty |      0 | (none) |
-|    |   |   |         |                       |        |        |        |
-+----+---+---+---------+-----------------------+--------+--------+--------+
+    +----+---+---+---------+---------------+--------+--------+--------+
+    | #  | C | R | Applies | Name          | Format | Length | Base   |
+    |    |   |   | to      |               |        |        | Value  |
+    +====+===+===+=========+===============+========+========+========+
+    |TBD4|   |   | CSM     | Q-Block-Wise- |  empty |      0 | (none) |
+    |    |   |   |         |   Transfer    |        |        |        |
+    +----+---+---+---------+---------------+--------+--------+--------+
 
-                         C=Critical, R=Repeatable
+                          C=Critical, R=Repeatable
 
-            Table 2: The Q-Block-Wise-Transfer Capability Option
+          Table 2: The Q-Block-Wise-Transfer Capability Option
 
    Implementation of the Q-Block1 and Q-Block2 Options is intended to be
    optional.  However, when it is present in a CoAP message, it MUST be
@@ -1972,13 +1972,13 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    This document requests IANA to register the following option in the
    "CoAP Signaling Option Numbers" registry [CSM].
 
-   +------------+--------+-----------------------+-----------+
-   | Applies to | Number | Name                  | Reference |
-   +============+========+=======================+===========+
-   | 7.01       |  TBD4  | Q-Block-Wise-Transfer | [RFCXXXX] |
-   +------------+--------+-----------------------+-----------+
+        +------------+--------+-----------------------+-----------+
+        | Applies to | Number | Name                  | Reference |
+        +============+========+=======================+===========+
+        | 7.01       |  TBD4  | Q-Block-Wise-Transfer | [RFCXXXX] |
+        +------------+--------+-----------------------+-----------+
 
-                Table 6: CoAP Signaling Option Codes
+                     Table 6: CoAP Signaling Option Codes
 
 11.  Security Considerations
 

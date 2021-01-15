@@ -341,18 +341,18 @@
         target="RFC8323"></xref>, except that it indicates support of Q-Block
         Options.</t>
 
-        <t><figure>
-            <artwork><![CDATA[+----+---+---+---------+-----------------------+--------+--------+--------+
-| #  | C | R | Applies | Name                  | Format | Length | Base   |
-|    |   |   | to      |                       |        |        | Value  |
-+====+===+===+=========+=======================+========+========+========+
-|TBD4|   |   | CSM     | Q-Block-Wise-Transfer |  empty |      0 | (none) |
-|    |   |   |         |                       |        |        |        |
-+----+---+---+---------+-----------------------+--------+--------+--------+
+        <t><figure align="center">
+            <artwork align="center"><![CDATA[+----+---+---+---------+---------------+--------+--------+--------+
+| #  | C | R | Applies | Name          | Format | Length | Base   |
+|    |   |   | to      |               |        |        | Value  |
++====+===+===+=========+===============+========+========+========+
+|TBD4|   |   | CSM     | Q-Block-Wise- |  empty |      0 | (none) |
+|    |   |   |         |   Transfer    |        |        |        |
++----+---+---+---------+---------------+--------+--------+--------+
 
-                         C=Critical, R=Repeatable
+                      C=Critical, R=Repeatable
 
-            Table 2: The Q-Block-Wise-Transfer Capability Option]]></artwork>
+      Table 2: The Q-Block-Wise-Transfer Capability Option]]></artwork>
           </figure></t>
 
         <t>Implementation of the Q-Block1 and Q-Block2 Options is intended to
@@ -1659,7 +1659,7 @@ o  Reference: [RFCXXXX]]]></artwork>
         target="CSM"></xref>.</t>
 
         <t><figure align="center">
-            <artwork><![CDATA[+------------+--------+-----------------------+-----------+
+            <artwork align="center"><![CDATA[+------------+--------+-----------------------+-----------+
 | Applies to | Number | Name                  | Reference |
 +============+========+=======================+===========+
 | 7.01       |  TBD4  | Q-Block-Wise-Transfer | [RFCXXXX] |
