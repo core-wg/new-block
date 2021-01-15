@@ -462,7 +462,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
            Table 3: OSCORE Protection of Q-Block1 and Q-Block2 Options
 
    Note that if Q-Block1 (or Q-Block2) Option is included in a packet,
-   Block1 (or Q-Block2) Option MUST NOT be included.
+   Block1 (or Block2) Option MUST NOT be included.
 
 3.2.  Structure of Q-Block1 and Q-Block2 Options
 
