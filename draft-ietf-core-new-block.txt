@@ -79,6 +79,7 @@ Table of Contents
      3.6.  Using Observe and Q-Block2 Options  . . . . . . . . . . .  15
      3.7.  Using Size1 and Size2 Options . . . . . . . . . . . . . .  15
      3.8.  Using Q-Block1 and Q-Block2 Options Together  . . . . . .  16
+     3.9.  Using Q-Block2 Option With Multicast  . . . . . . . . . .  16
    4.  The Use of 4.08 (Request Entity Incomplete) Response Code . .  16
    5.  The Use of Tokens . . . . . . . . . . . . . . . . . . . . . .  17
    6.  Congestion Control  . . . . . . . . . . . . . . . . . . . . .  18
@@ -105,7 +106,6 @@ Table of Contents
      10.2.  New Media Type . . . . . . . . . . . . . . . . . . . . .  34
      10.3.  New Content Format . . . . . . . . . . . . . . . . . . .  35
      10.4.  New CoAP Signaling Option Number . . . . . . . . . . . .  36
-   11. Security Considerations . . . . . . . . . . . . . . . . . . .  36
 
 
 
@@ -114,6 +114,7 @@ Boucadair & Shallow       Expires July 19, 2021                 [Page 2]
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
+   11. Security Considerations . . . . . . . . . . . . . . . . . . .  36
    12. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  36
    13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  37
      13.1.  Normative References . . . . . . . . . . . . . . . . . .  37
@@ -164,7 +165,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-
 Boucadair & Shallow       Expires July 19, 2021                 [Page 3]
 
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
@@ -194,6 +194,8 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
       (Section 4.7 of [RFC7252]).  Such tuning is out of scope of this
       document.
 
+   o  There is no multicast support.
+
    Using NON messages, the faster transmissions occur as all the blocks
    can be transmitted serially (as are IP fragmented packets) without
    having to wait for a response or next request from the remote CoAP
@@ -216,8 +218,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    A CoAP endpoint can acknowledge all or a subset of the blocks.
    Concretely, the receiving CoAP endpoint informs the CoAP sender
    endpoint either successful receipt or reports on all blocks in the
-   body that have not yet been received.  The CoAP sender endpoint will
-   then retransmit only the blocks that have been lost in transmission.
 
 
 
@@ -225,6 +225,9 @@ Boucadair & Shallow       Expires July 19, 2021                 [Page 4]
 
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
+
+   body that have not yet been received.  The CoAP sender endpoint will
+   then retransmit only the blocks that have been lost in transmission.
 
    Q-Block1 and Q-Block2 Options can be used instead of Block1 and
    Block2 Options when the different transmission properties are
@@ -271,9 +274,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    congestion control as specified in Section 4.7 of [RFC7252].  See
    Section 6 for more details.
 
-   This mechanism is not intended for general CoAP usage, and any use
-   outside the intended use case should be carefully weighed against the
-   loss of interoperability with generic CoAP applications.  It is hoped
 
 
 
@@ -282,6 +282,9 @@ Boucadair & Shallow       Expires July 19, 2021                 [Page 5]
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
+   This mechanism is not intended for general CoAP usage, and any use
+   outside the intended use case should be carefully weighed against the
+   loss of interoperability with generic CoAP applications.  It is hoped
    that the experience gained with this mechanism can feed future
    extensions of the block-wise mechanism that will both be generally
    applicable and serve this particular use case.
@@ -322,9 +325,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    marked for the Q-Block1 Option.  Critical, UnSafe, and Repeatable
    columns are marked for the Q-Block2 Option.  As these options are
    UnSafe, NoCacheKey has no meaning and so is marked with a dash.
-
-
-
 
 
 
@@ -848,6 +848,12 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    [RFC7959] with Q-Block1 substituted for Block1 and Q-Block2 for
    Block2.
 
+3.9.  Using Q-Block2 Option With Multicast
+
+   Servers MUST ignore multicast requests that contain the Q-Block2
+   Option.  As a reminder, Block2 Option can be used as stated in
+   Section 2.8 of [RFC7959].
+
 4.  The Use of 4.08 (Request Entity Incomplete) Response Code
 
    4.08 (Request Entity Incomplete) Response Code has a new Content-Type
@@ -884,12 +890,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    The token to use for the response SHOULD be the token that was used
    in the last block number received so far with the same Request-Tag
    value.  Note that the use of any received token with the same
-   Request-Tag would work, but providing the one used in the last
-   received block number will aid any troubleshooting.  The client will
-   use the token to determine what is the previously sent request to
-   obtain the Request-Tag value to be used.
-
-
 
 
 
@@ -897,6 +897,11 @@ Boucadair & Shallow       Expires July 19, 2021                [Page 16]
 
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
+
+   Request-Tag would work, but providing the one used in the last
+   received block number will aid any troubleshooting.  The client will
+   use the token to determine what is the previously sent request to
+   obtain the Request-Tag value to be used.
 
    If the size of the 4.08 (Request Entity Incomplete) response packet
    is larger than that defined by Section 4.6 [RFC7252], then the number
@@ -941,11 +946,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
       an individual payload has to be resent (e.g., requested upon
       packet loss), then the retransmitted packet is treated as a new
       request (i.e., the bottom 32 bits must change).
-
-
-
-
-
 
 
 

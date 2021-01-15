@@ -159,6 +159,8 @@
             congestion control where other parameters need to be tuned
             (Section 4.7 of <xref target="RFC7252"></xref>). Such tuning is
             out of scope of this document.</t>
+
+            <t>There is no multicast support.</t>
           </list></t>
 
         <t>Using NON messages, the faster transmissions occur as all the
@@ -750,6 +752,12 @@
         <t>The behavior is similar to the one defined in Section 3.3 of <xref
         target="RFC7959"></xref> with Q-Block1 substituted for Block1 and
         Q-Block2 for Block2.</t>
+      </section>
+
+      <section title="Using Q-Block2 Option With Multicast">
+        <t>Servers MUST ignore multicast requests that contain the Q-Block2
+        Option. As a reminder, Block2 Option can be used as stated in Section
+        2.8 of <xref target="RFC7959"></xref>.</t>
       </section>
     </section>
 
