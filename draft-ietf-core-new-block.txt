@@ -367,32 +367,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    experienced loss.
 
    A CoAP endpoint (or proxy) MUST support either both or neither of the
-   Q-Block1 and Q-Block2 Options.  Note that in CoAP over TCP,
-   Capabilities and Settings Messages (CSMs) can be used to indicate
-   support of Q-Block Options by means of the Quick Block-Wise-Transfer
-   Capability Option (Table 2).  The behavior of CoAP peers is similar
-   to the one specified in Section 5.3.2 of [RFC8323], except that it
-   indicates support of Q-Block Options.
-
-   +----+---+---+---------+------------------+--------+--------+--------+
-   | #  | C | R | Applies | Name             | Format | Length | Base   |
-   |    |   |   | to      |                  |        |        | Value  |
-   +====+===+===+=========+==================+========+========+========+
-   |TBD4|   |   | CSM     | Quick Block-Wise-|  empty |      0 | (none) |
-   |    |   |   |         | Transfer         |        |        |        |
-   +----+---+---+---------+------------------+--------+--------+--------+
-
-                         C=Critical, R=Repeatable
-
-            Table 2: The Quick Block-Wise-Transfer Capability Option
-
-
-
-
-Boucadair & Shallow       Expires July 19, 2021                 [Page 7]
-
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
-
+   Q-Block1 and Q-Block2 Options.
 
    If Q-Block1 Option is present in a request or Q-Block2 Option in a
    response (i.e., in that message to the payload of which it pertains),
@@ -409,6 +384,33 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    multiple payloads.  Otherwise, the server would use the Block2 Option
    (if supported) to send back a message body that is too large to fit
    into a single IP packet [RFC7959].
+
+
+
+
+
+Boucadair & Shallow       Expires July 19, 2021                 [Page 7]
+
+Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+
+
+   In CoAP over TCP, Capabilities and Settings Messages (CSMs) can be
+   used to indicate support of Q-Block Options by means of the Q-Block-
+   Wise-Transfer Capability Option (Table 2).  The behavior of CoAP
+   peers is similar to the one specified in Section 5.3.2 of [RFC8323],
+   except that it indicates support of Q-Block Options.
+
++----+---+---+---------+-----------------------+--------+--------+--------+
+| #  | C | R | Applies | Name                  | Format | Length | Base   |
+|    |   |   | to      |                       |        |        | Value  |
++====+===+===+=========+=======================+========+========+========+
+|TBD4|   |   | CSM     | Q-Block-Wise-Transfer |  empty |      0 | (none) |
+|    |   |   |         |                       |        |        |        |
++----+---+---+---------+-----------------------+--------+--------+--------+
+
+                         C=Critical, R=Repeatable
+
+            Table 2: The Q-Block-Wise-Transfer Capability Option
 
    Implementation of the Q-Block1 and Q-Block2 Options is intended to be
    optional.  However, when it is present in a CoAP message, it MUST be
@@ -440,8 +442,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Inner or Outer option (Section 4.1 of [RFC8613]).  The Inner and
    Outer values are therefore independent of each other.  The Inner
    option is encrypted and integrity protected between clients and
-   servers, and provides message body identification in case of end-to-
-   end fragmentation of requests.  The Outer option is visible to
 
 
 
@@ -450,6 +450,8 @@ Boucadair & Shallow       Expires July 19, 2021                 [Page 8]
 Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
+   servers, and provides message body identification in case of end-to-
+   end fragmentation of requests.  The Outer option is visible to
    proxies and labels message bodies in case of hop-by-hop fragmentation
    of requests.
 
@@ -496,8 +498,6 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    of a body that needs to be retransmitted.  The Request-Tag is opaque,
    the server still treats it as opaque but the client SHOULD ensure
    that it is unique for every different body of transmitted data.
-
-
 
 
 
@@ -1972,13 +1972,13 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    This document requests IANA to register the following option in the
    "CoAP Signaling Option Numbers" registry [CSM].
 
-   +------------+--------+---------------------------+-----------+
-   | Applies to | Number | Name                      | Reference |
-   +============+========+===========================+===========+
-   | 7.01       |  TBD4  | Quick Block-Wise-Transfer | [RFCXXXX] |
-   +------------+--------+---------------------------+-----------+
+   +------------+--------+-----------------------+-----------+
+   | Applies to | Number | Name                  | Reference |
+   +============+========+=======================+===========+
+   | 7.01       |  TBD4  | Q-Block-Wise-Transfer | [RFCXXXX] |
+   +------------+--------+-----------------------+-----------+
 
-                      Table 6: CoAP Signaling Option Codes
+                Table 6: CoAP Signaling Option Codes
 
 11.  Security Considerations
 
