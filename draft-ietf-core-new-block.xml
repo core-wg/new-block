@@ -381,6 +381,9 @@
        Table 2: OSCORE Protection of Q-Block1 and Q-Block2 Options
 ]]></artwork>
           </figure></t>
+
+        <t>Note that if Q-Block1 (or Q-Block2) Option is included in a packet,
+        Block1 (or Q-Block2) Option MUST NOT be included.</t>
       </section>
 
       <section title="Structure of Q-Block1 and Q-Block2 Options">
