@@ -598,7 +598,7 @@
             body.</t>
 
             <t
-            hangText="'NUM modulo MAX_PAYLOADS' is zero, while NUM is not             zero:">This
+            hangText="'NUM modulo MAX_PAYLOADS' is zero, while NUM is not zero:">This
             is used to confirm that the current set of MAX_PAYLOADS payloads
             (the latest one having block number NUM-1) has been successfully
             received and that, upon receipt of this request, the server can
@@ -1653,7 +1653,7 @@ o  Reference: [RFCXXXX]]]></artwork>
         <t></t>
       </section>
 
-      <section title="CoAP Signaling Option Number">
+      <section title="New CoAP Signaling Option Number">
         <t>This document requests IANA to register the following option in the
         "CoAP Signaling Option Numbers" registry <xref
         target="CSM"></xref>.</t>
