@@ -799,16 +799,15 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 3.5.  Using Observe Option
 
-   For a request that uses Q-Block1, the Observe Option and value
-   [RFC7641] MUST be the same for all the payloads of the same body.
-   This includes any missing payloads that are retransmitted.
+   For a request that uses Q-Block1, the Observe value [RFC7641] MUST be
+   the same for all the payloads of the same body.  This includes any
+   missing payloads that are retransmitted.
 
-   For a response that uses Q-Block2, the Observe Option and value MUST
-   be the same for all the payloads of the same body.  This includes
-   payloads transmitted following receipt of the 'Continue' Q-Block2
-   Option (Section 3.4) by the server.  If a missing payload is
-   requested, then both the request and response MUST NOT include the
-   Observe Option.
+   For a response that uses Q-Block2, the Observe value MUST be the same
+   for all the payloads of the same body.  This includes payloads
+   transmitted following receipt of the 'Continue' Q-Block2 Option
+   (Section 3.4) by the server.  If a missing payload is requested, then
+   both the request and response MUST NOT include the Observe Option.
 
 3.6.  Using Size1 and Size2 Options
 
@@ -833,6 +832,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    The behavior is similar to the one defined in Section 3.3 of
    [RFC7959] with Q-Block1 substituted for Block1 and Q-Block2 for
    Block2.
+
 
 
 
@@ -1435,7 +1435,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
          |<---------+ NON 4.08 M:0x04 T:0xd2 [Missing 1 [for RT=12]]
          |   ...    |
       [[16 * NON_RECEIVE_TIMEOUT (server) delay expires]]
-         |     [[NON_MAX_RETRANSMIT exceeded.  Server stops requesting for
+         |     [[NON_MAX_RETRASMIT exceeded.  Server stops requesting for
          |       missing blocks and releases partial body]]
          |   ...    |
 
@@ -1444,9 +1444,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 9.2.  Q-Block2 Option
 
-   These examples include the Observe Option to demonstrate how that is
-   used.  The Observe Option is not required for Q-Block2 and the
-   observe detail can be ignored.
+   These examples include the Observe Option to demonstrate how that
+   option is used.  Note that the Observe Option is not required for
+   Q-Block2; the observe detail can thus be ignored.
 
 
 
@@ -2154,10 +2154,10 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
               Sequences", RFC 8742, DOI 10.17487/RFC8742, February 2020,
               <https://www.rfc-editor.org/info/rfc8742>.
 
-   [RFC8974]  Hartke, K. and M. Richardson, "Extended Tokens and
-              Stateless Clients in the Constrained Application Protocol
-              (CoAP)", RFC 8974, DOI 10.17487/RFC8974, January 2021,
-              <https://www.rfc-editor.org/info/rfc8974>.
+   [RFC8949]  Bormann, C. and P. Hoffman, "Concise Binary Object
+              Representation (CBOR)", STD 94, RFC 8949,
+              DOI 10.17487/RFC8949, December 2020,
+              <https://www.rfc-editor.org/info/rfc8949>.
 
 13.2.  Informative References
 
@@ -2172,7 +2172,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
               Boucadair, M. and J. Shallow, "Distributed Denial-of-
               Service Open Threat Signaling (DOTS) Signal Channel
               Configuration Attributes for Faster Block Transmission",
-              draft-bosh-dots-quick-blocks-00 (work in progress),
+              draft-bosh-dots-quick-blocks-01 (work in progress),
               January 2021.
 
 
@@ -2216,10 +2216,10 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
               Specification", RFC 8782, DOI 10.17487/RFC8782, May 2020,
               <https://www.rfc-editor.org/info/rfc8782>.
 
-   [RFC8949]  Bormann, C. and P. Hoffman, "Concise Binary Object
-              Representation (CBOR)", STD 94, RFC 8949,
-              DOI 10.17487/RFC8949, December 2020,
-              <https://www.rfc-editor.org/info/rfc8949>.
+   [RFC8974]  Hartke, K. and M. Richardson, "Extended Tokens and
+              Stateless Clients in the Constrained Application Protocol
+              (CoAP)", RFC 8974, DOI 10.17487/RFC8974, January 2021,
+              <https://www.rfc-editor.org/info/rfc8974>.
 
 Appendix A.  Examples with Confirmable Messages
 
