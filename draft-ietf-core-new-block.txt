@@ -1435,7 +1435,7 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
          |<---------+ NON 4.08 M:0x04 T:0xd2 [Missing 1 [for RT=12]]
          |   ...    |
       [[16 * NON_RECEIVE_TIMEOUT (server) delay expires]]
-         |     [[NON_MAX_RETRASMIT exceeded.  Server stops requesting for
+         |     [[NON_MAX_RETRANSMIT exceeded.  Server stops requesting for
          |       missing blocks and releases partial body]]
          |   ...    |
 
