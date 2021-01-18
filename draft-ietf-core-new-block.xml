@@ -206,8 +206,8 @@
         methods, FETCH, PATCH, and iPATCH introduced in <xref
         target="RFC8132"></xref>.</t>
 
-        <t>Q-Block1 and Q-Block2 Options are designed to work with
-        Non-confirmable requests and responses, in particular.</t>
+        <t>Q-Block1 and Q-Block2 Options are designed to work in
+        particular with Non-confirmable requests and responses.</t>
       </section>
 
       <section title="CoAP Response Code (4.08) Usage">
@@ -311,12 +311,6 @@
         iPATCH requests and their payload-bearing responses (2.01, 2.02, 2.03,
         2.04, and 2.05) (Section 5.5 of <xref target="RFC7252"></xref>).</t>
 
-        <t>However, with methods needing both Q-Block1 for the request and
-        Q-Block2 for the response, and there is need for recovery following
-        payload loss, the numbers of packets needed to initiate and complete
-        the recovery can get very large as a function of the severity of the
-        experienced loss.</t>
-
         <t>A CoAP endpoint (or proxy) MUST support either both or neither of
         the Q-Block1 and Q-Block2 Options. </t>
 
@@ -336,19 +330,19 @@
         (if supported) to send back a message body that is too large to fit
         into a single IP packet <xref target="RFC7959"></xref>.</t>
 
-        <t>In CoAP over TCP, Capabilities and Settings Messages (CSMs) can be
-        used to indicate support of Q-Block Options by means of the
-        Q-Block-Wise-Transfer Capability Option (Table 2). The behavior of
-        CoAP peers is similar to the one specified in Section 5.3.2 of <xref
-        target="RFC8323"></xref>, except that it indicates support of Q-Block
-        Options.</t>
+        <t>Alternatively, with CoAP over TCP, Capabilities and Settings
+        Messages (CSMs) can be used to indicate support of Q-Block Options by
+        means of the Q-Block-Wise-Transfer Capability Option (Table 2). The
+        behavior of CoAP peers is similar to the one specified in Section 5.3.2
+        of <xref target="RFC8323"></xref>, except that it indicates support of
+        Q-Block Options.</t>
 
         <t><figure align="center">
             <artwork align="center"><![CDATA[+----+---+---+---------+---------------+--------+--------+--------+
 | #  | C | R | Applies | Name          | Format | Length | Base   |
 |    |   |   | to      |               |        |        | Value  |
 +====+===+===+=========+===============+========+========+========+
-|TBD4|   |   | CSM     | Q-Block-Wise- |  empty |      0 | (none) |
+|TBA4|   |   | CSM     | Q-Block-Wise- |  empty |      0 | (none) |
 |    |   |   |         |   Transfer    |        |        |        |
 +----+---+---+---------+---------------+--------+--------+--------+
 
@@ -455,9 +449,13 @@
 
         <t>For Confirmable transmission, the server continues to acknowledge
         each packet, but a response is not required (whether separate or
-        piggybacked) until successful receipt of the body or, if some of the
-        payloads are sent as Non-confirmable and have not arrived, a
-        retransmit missing payloads response is needed.</t>
+        piggybacked) until successful receipt of the body by the server. For
+        Non-confirmable transmission, no response is required until the
+        successful receipt of the body by the server or some of the payloads
+        have not arrived after a timeout and a retransmit missing payloads
+        response is needed. For reliable transports (e.g., <xref
+        target="RFC8323"></xref>), a response is not required until successful
+        receipt of the body by the server.</t>
 
         <t>Each individual payload of the body is treated as a new request
         (<xref target="token"></xref>).</t>
@@ -495,7 +493,7 @@
         <t>2.05 (Content)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
             FETCH request body (Section 2 of <xref target="RFC8132"></xref>)
-            and the appropriate representation of the resource has been
+            and the appropriate representation of the resource is being
             returned. The token used in the response MUST be the one in the
             FETCH request that has the Q-Block1 with the M bit unset. If the
             FETCH request includes the Observe Option, then the server MUST
@@ -527,8 +525,9 @@
           </list></t>
 
         <t>4.02 (Bad Option)<list style="empty">
-            <t>Either this Response Code or a reset message MUST be returned
-            if the server does not support the Q-Block1 Option.</t>
+            <t>Either this Response Code (Confirmable) or a reset message
+            (Non-confirmable) MUST be returned if the server does not support
+            the Q-Block1 Option.</t>
           </list></t>
 
         <t>4.08 (Request Entity Incomplete)<list style="empty">
@@ -541,13 +540,12 @@
             "application/missing-blocks+cbor-seq" indicates that some of the
             payloads are missing and need to be resent. The client then
             retransmits the missing payloads using the same Request-Tag, Size1
-            and Q-Block1 to specify the block number, SZX, and M bit as
+            and Q-Block1 to specify the block NUM, SZX, and M bit as
             appropriate.</t>
 
-            <t>The Request-Tag value to use is determined from the token in
-            the 4.08 (Request Entity Incomplete) response and then finding the
-            matching client request which contains the Request-Tag that is
-            being used for this Q-Block1 body.</t>
+            <t>The Request-Tag value to use is determined by taking the token
+            in the 4.08 (Request Entity Incomplete) response, locating the
+            matching client request, and then using its Request-Tag.</t>
 
             <t>The token used in the response SHOULD be from the last received
             payload. See <xref target="code"></xref> for further
@@ -562,7 +560,7 @@
             <t>This Response Code can be returned if there is insufficient
             space to create a response PDU with a block size of 16 bytes (SZX
             = 0) to send back all the response options as appropriate. In this
-            case, the Size1 Option is not included.</t>
+            case, the Size1 Option is not included in the response.</t>
           </list></t>
 
         <t>If the server has not received all the payloads of a body, but one
@@ -605,7 +603,9 @@
             (the latest one having block number NUM-1) has been successfully
             received and that, upon receipt of this request, the server can
             continue to send the next set of payloads (the first one having
-            block number NUM). This is the 'Continue' Q-Block-2.</t>
+            block number NUM). This is the 'Continue' Q-Block-2 and
+            conceptually has the same usage (i.e., continue sending the next
+            set of data) as the use of 2.31 (Continue) for Q-Block1.</t>
 
             <t hangText="Any other value of NUM:">This is a request for that
             block and for all of the remaining blocks in the current
@@ -668,13 +668,17 @@
 
         <t>A client SHOULD only maintain a partial body (missing payloads) for
         up to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>) or as
-        defined by the Max-Age Option (or its default), whichever is the
-        less.</t>
+        defined by the Max-Age Option (or its default of 60 seconds (Section
+        5.6.1 of <xref target="RFC7252"></xref>)), whichever is the less.</t>
 
         <t>The ETag Option should not be used in the request for missing
         blocks as the server could respond with a 2.03 (Valid Response) with
         no payload. It can be used in the request if the client wants to check
-        the freshness of the currently cached body response.</t>
+        the freshness of the locally cached body response.</t>
+
+        <t>It is RECOMMENDED that the server maintains a cached copy of the
+        body when using the Q-Block2 Option to facilitate retransmission of any
+        missing payloads.</t>
 
         <t>If the server detects part way through a body transfer that the
         resource data has changed and the server is not maintaining a cached
@@ -699,34 +703,18 @@
         the Size1 Option.</t>
       </section>
 
-      <section title="Using Observe and Q-Block1 Options">
-        <t>As the blocks of the body are sent without waiting for
-        acknowledgement of the individual blocks, the observe value <xref
-        target="RFC7641"></xref> MUST be the same for all the blocks of the
-        same body.</t>
+      <section title="Using Observe Option">
+        <t>For a request that uses Q-Block1, the Observe Option and value <xref
+        target="RFC7641"></xref> MUST be the same for all the payloads of the
+        same body. This includes any missing payloads that are
+        retransmitted.</t>
 
-        <t>If the server reports any missing payload, the client re-sends the
-        missing payload(s). Each re-sent payload is treated as a new request
-        and the Observe Option MUST be included in the request.</t>
-
-        <t>If the response (or associated response) uses Q-Block2 Option, and
-        one of the response payloads is missing, the request for the missing
-        payload(s) is treated as a new request. The request MUST comprise of
-        all of the request payloads and the Observe Option MUST NOT be
-        included in either the request or response.</t>
-      </section>
-
-      <section title="Using Observe and Q-Block2 Options">
-        <t>As the blocks of the body are sent without waiting for
-        acknowledgement of the individual blocks, the Observe value <xref
-        target="RFC7641"></xref> MUST be the same for all the blocks of the
-        same body.</t>
-
-        <t>If the client requests missing blocks, this is treated as a new
-        Request and the Observe Option MUST NOT be included in either the
-        request or response. If the ETag value in the response changes, then
-        the previously received partial body should be considered as not fresh
-        and the whole body re-requested.</t>
+        <t>For a response that uses Q-Block2, the Observe Option and value
+        MUST be the same for all the payloads of the same body. This includes
+        payloads transmitted following receipt of the 'Continue' Q-Block2
+        Option (<xref target="qblock2"></xref>) by the server. If a missing
+        payload is requested, then both the request and response MUST NOT
+        include the Observe Option.</t>
       </section>
 
       <section anchor="size" title="Using Size1 and Size2 Options">
@@ -805,7 +793,7 @@ missing-block-number = uint
       value. Note that the use of any received token with the same Request-Tag
       would work, but providing the one used in the last received block number
       will aid any troubleshooting. The client will use the token to determine
-      what is the previously sent request to obtain the Request-Tag value to
+      what was the previously sent request to obtain the Request-Tag value to
       be used.</t>
 
       <t>If the size of the 4.08 (Request Entity Incomplete) response packet
@@ -850,7 +838,9 @@ missing-block-number = uint
           <t hangText="Implementation Note:">To minimize on the number of
           tokens that have to be tracked by clients, it is recommended that
           the bottom 32 bits is kept the same for the same body and the upper
-          32 bits contains the individual payload number. <vspace
+          32 bits contains the individual payload number. This allows the
+          client to be alleviated from keeping all the per-request-state, e.g.,
+          in Section 3 of <xref target="RFC8974"></xref>. <vspace
           blankLines="1" />Servers continue to treat the token as a unique
           opaque entity. If an individual payload has to be resent (e.g.,
           requested upon packet loss), then the retransmitted packet is
@@ -858,10 +848,13 @@ missing-block-number = uint
         </list></t>
     </section>
 
-    <section anchor="cc" title="Congestion Control">
-      <t>The transmission of the payloads of a body either SHOULD all be
-      Confirmable or all be Non-confirmable. This is meant to simplify the
-      congestion control procedure.</t>
+    <section anchor="cc" title="Congestion Control for Unreliable Transports">
+      <t>The transmission of the payloads of a body over an unreliable
+      transport SHOULD either all be Confirmable or all be Non-confirmable.
+      This is meant to simplify the congestion control procedure.</t>
+
+      <t>As a reminder, there is no need for CoAP-specific congestion control
+      for reliable transports <xref target="RFC8323"></xref>.</t>
 
       <section anchor="cc-con" title="Confirmable (CON)">
         <t>Congestion control for CON requests and responses is specified in
@@ -881,7 +874,8 @@ missing-block-number = uint
       <section anchor="cc-non" title="Non-confirmable (NON)">
         <t>This document introduces new parameters MAX_PAYLOADS, NON_TIMEOUT,
         NON_RECEIVE_TIMEOUT, NON_MAX_RETRANSMIT, NON_PROBING_WAIT, and
-        NON_PARTIAL_TIMEOUT primarily for use with NON (Table 4).</t>
+        NON_PARTIAL_TIMEOUT primarily for use with NON
+        (Table 4).</t>
 
         <t>MAX_PAYLOADS should be configurable with a default value of 10.
         Both CoAP endpoints SHOULD have the same value (otherwise there will
@@ -900,16 +894,25 @@ missing-block-number = uint
         the same value as ACK_TIMEOUT (Section 4.8 of <xref
         target="RFC7252"></xref>).</t>
 
-        <t>NON_RECEIVE_TIMEOUT is the maximum time to wait for a missing
-        payload before requesting retransmission. NON_RECEIVE_TIMEOUT has a
-        value of twice NON_TIMEOUT.</t>
+        <t>NON_RECEIVE_TIMEOUT is the initial maximum time to wait for a missing
+        payload before requesting retransmission for the first time. Every time
+        the missing payload is re-requested, the time to wait value doubles.
+        The time to wait is calculated as:<list style="empty">
+            <t>Time-to-Wait = NON_RECEIVE_TIMEOUT * (2 ** (Re-Request-Count -
+            1))</t>
+          </list></t>
+        <t>NON_RECEIVE_TIMEOUT has a default value of twice NON_TIMEOUT.
+        NON_RECEIVE_TIMEOUT MUST always be greater than NON_TIMEOUT by at least
+        one second so that the sender of the payloads has the opportunity to
+        start sending the next set of payloads before the receiver times out.
+        </t>
 
         <t>NON_MAX_RETRANSMIT is the maximum number of times a request for the
         retransmission of missing payloads can occur without a response from
-        the remote peer. After this occurs, the peer SHOULD consider the body
-        stale and remove all references to it. By default, NON_MAX_RETRANSMIT
-        has the same value as MAX_RETRANSMIT (Section 4.8 of <xref
-        target="RFC7252"></xref>).</t>
+        the remote peer. After this occurs, the local endpoint SHOULD consider
+        the body stale and remove all references to it. By default,
+        NON_MAX_RETRANSMIT has the same value as MAX_RETRANSMIT (Section 4.8 of
+        <xref target="RFC7252"></xref>).</t>
 
         <t>NON_PROBING_WAIT is used to limit the potential wait needed
         calculated when using PROBING_WAIT. NON_PROBING_WAIT has the same
@@ -919,7 +922,9 @@ missing-block-number = uint
         <t>NON_PARTIAL_TIMEOUT is used for expiring partially received bodies.
         NON_PARTIAL_TIMEOUT has the same value as computed for
         EXCHANGE_LIFETIME (Section 4.8.2 of <xref
-        target="RFC7252"></xref>).<figure align="center">
+        target="RFC7252"></xref>).</t>
+
+        <t><figure align="center">
             <artwork align="center"><![CDATA[+---------------------+---------------+
 | Parameter Name      | Default Value |
 +=====================+===============|
@@ -987,14 +992,14 @@ Table 4: Congestion Control Parameters]]></artwork>
         <t>For the server receiving NON Q-Block1 requests, it SHOULD send back
         a 2.31 (Continue) Response Code on receipt of all of the MAX_PAYLOADS
         payloads to prevent the client unnecessarily delaying. Otherwise the
-        server SHOULD delay for NON_RECEIVE_TIMEOUT, before sending the 4.08
-        (Request Entity Incomplete) Response Code. The NON_RECEIVE_TIMEOUT
-        delay may be reduced for the first time that this 4.08 (Request Entity
-        Incomplete) is sent if either the last of the MAX_PAYLOADS payloads or
-        the final payload with the M bit unset arrives, but SHOULD NOT be
-        reduced to zero as packets may arrive in the wrong order.</t>
+        server SHOULD delay for NON_RECEIVE_TIMEOUT (exponentially scaled based
+        on the repeat request count for a payload), before sending the 4.08
+        (Request Entity Incomplete) Response Code for the missing payload(s).
+        If the repeat request count for a missing payload exceeds
+        NON_MAX_RETRANSMIT, the server SHOULD discard the partial body and
+        stop requesting the missing payloads.</t>
 
-        <t>It is possible that the client may start transmitting the next set
+        <t>It is likely that the client will start transmitting the next set
         of MAX_PAYLOADS payloads before the server times out on waiting for
         the last of the previous MAX_PAYLOADS payloads. On receipt of the
         first received payload from the new set of MAX_PAYLOADS payloads, the
@@ -1007,25 +1012,21 @@ Table 4: Congestion Control Parameters]]></artwork>
         payloads.</t>
 
         <t>For the client receiving NON Q-Block2 responses, it SHOULD send a
-        request for the next set of payloads on receipt of all of the
-        MAX_PAYLOADS payloads to prevent the server unnecessarily delaying.
-        Otherwise the client SHOULD delay for NON_RECEIVE_TIMEOUT, before
-        sending the request for the missing payloads. The NON_RECEIVE_TIMEOUT
-        delay may be reduced for the first time that this request is sent if
-        either the last of the MAX_PAYLOADS payloads or the final payload with
-        the M bit unset arrives, but SHOULD NOT be reduced to zero as packets
-        may arrive in the wrong order.</t>
+        'Continue' Q-Block2 request (<xref target="qblock2"></xref>) for the
+        next set of payloads on receipt of all of the MAX_PAYLOADS payloads to
+        prevent the server unnecessarily delaying. Otherwise the client SHOULD
+        delay for NON_RECEIVE_TIMEOUT (exponentially scaled based on the repeat
+        request count for a payload), before sending the request for the
+        missing payload(s). If the repeat request count for a missing payload
+        exceeds NON_MAX_RETRANSMIT, the client SHOULD discard the partial body
+        and stop requesting the missing payloads.</t>
 
-        <t>The request that the client sends to acknowledge the receipt of all
-        the current set of MAX_PAYLOADS payloads is the 'Continue' Q-Block2
-        Option ('NUM modulo MAX_PAYLOADS' is zero, NUM is not zero, and M bit
-        is set (<xref target="qblock2"></xref>)). The server SHOULD recognize
-        this as a continue request and just continue the transmission of the
-        body (including Observe Option, if appropriate for an unsolicited
-        response) rather than as a request for the remaining missing
-        blocks.</t>
+        <t>The server SHOULD recognize the 'Continue' Q-Block2 request as a
+        continue request and just continue the transmission of the body
+        (including Observe Option, if appropriate for an unsolicited response)
+        rather than as a request for the remaining missing blocks.</t>
 
-        <t>It is possible that the server may start transmitting the next set
+        <t>It is likely that the server will start transmitting the next set
         of MAX_PAYLOADS payloads before the client times out on waiting for
         the last of the previous MAX_PAYLOADS payloads. Upon receipt of the
         first payload from the new set of MAX_PAYLOADS payloads, the client
@@ -1208,11 +1209,12 @@ X<--: Message loss (response)
           <t>On seeing a payload from the next set of payloads, the server
           realizes that some blocks are missing from the previous MAX_PAYLOADS
           payloads and asks for the missing blocks in one go (<xref
-          target="B3non2"></xref>). It does so by indicating which blocks have
-          not been received in the data portion of the response. The token
-          used in the response should be the token that was used in the last
-          block number received payload. The client can then derive the
-          Request-Tag by matching the token with the sent request.</t>
+          target="B3non2"></xref>). It does so by indicating which blocks from
+          the previous MAX_PAYLOADS payloads have not been received in the data
+          portion of the response. The token used in the response should be the
+          token that was used in the last block number received payload. The
+          client can then derive the Request-Tag by matching the token with the
+          sent request.</t>
 
           <t><figure anchor="B3non2"
               title="Example of NON Request with Q-Block1 Option (Blocks Recovery)">
@@ -1228,7 +1230,7 @@ X<--: Message loss (response)
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (server) delay expires]]
          |     [[The server realizes a block is still missing and asks
-         |        for the missing one]]                
+         |        for the missing one]]            
          |<---------+ NON 4.08 M:0x92 T:0xef [Missing 10 [for RT=11]]
          +--------->| NON PUT /path M:0x20 T:0xf0 RT=11 QB1:10/1/1024
          |<---------+ NON 2.04 M:0x93 T:0xf0
@@ -1236,15 +1238,56 @@ X<--: Message loss (response)
 ]]></artwork>
             </figure></t>
 
-          <t>Under high levels of traffic loss, the client can elect not to
-          retry sending missing blocks of data by "forgetting" all the tracked
-          tokens for this Request-Tag. Similarly, the server can elect to not
-          to continue asking for missing blocks. Both these decisions are
-          implementation specific.</t>
+        </section>
+
+        <section title="Handling Recovery with Failure">
+          <t><xref target="B3non3"></xref> depicts an example of a NON PUT
+          request conveying Q-Block1 Option where recovery takes place, but
+          eventually fails.</t>
+
+          <t><figure anchor="B3non3"
+              title="Example of NON Request with Q-Block1 Option (With Eventual Failure)">
+              <artwork><![CDATA[        CoAP        CoAP
+       Client      Server
+         |          |
+         +--------->| NON PUT /path M:0x91 T:0xd0 RT=12 QB1:0/1/1024
+         +--->X     | NON PUT /path M:0x92 T:0xd1 RT=12 QB1:1/1/1024
+         +--------->| NON PUT /path M:0x93 T:0xd2 RT=12 QB1:2/0/1024
+         |   ...    |
+      [[NON_RECEIVE_TIMEOUT (server) delay expires]]
+         |     [[The server realizes a block is missing and asks
+         |        for the missing one.  Retry #1]]            
+         |<---------+ NON 4.08 M:0x01 T:0xd2 [Missing 1 [for RT=12]]
+         |   ...    |
+      [[2 * NON_RECEIVE_TIMEOUT (server) delay expires]]
+         |     [[The server realizes a block is still missing and asks
+         |        for the missing one.  Retry #2]]            
+         |<---------+ NON 4.08 M:0x02 T:0xd2 [Missing 1 [for RT=12]]
+         |   ...    |
+      [[4 * NON_RECEIVE_TIMEOUT (server) delay expires]]
+         |     [[The server realizes a block is still missing and asks
+         |        for the missing one.  Retry #3]]            
+         |<---------+ NON 4.08 M:0x03 T:0xd2 [Missing 1 [for RT=12]]
+         |   ...    |
+      [[8 * NON_RECEIVE_TIMEOUT (server) delay expires]]
+         |     [[The server realizes a block is still missing and asks
+         |        for the missing one.  Retry #4]]            
+         |<---------+ NON 4.08 M:0x04 T:0xd2 [Missing 1 [for RT=12]]
+         |   ...    |
+      [[16 * NON_RECEIVE_TIMEOUT (server) delay expires]]
+         |     [[NON_MAX_RETRASMIT exceeded.  Server stops requesting for
+         |       missing blocks and releases partial body]]
+         |   ...    |
+]]></artwork>
+            </figure></t>
         </section>
       </section>
 
       <section title="Q-Block2 Option">
+        <t>These examples include the Observe Option to demonstrate how that
+        is used. The Observe Option is not required for Q-Block2 and the
+        observe detail can be ignored.</t>
+
         <section title="A Simple Example">
           <t><xref target="nonb4"></xref> illustrates the example of Q-Block2
           Option. The client sends a NON GET carrying Observe and Q-Block2
@@ -1319,8 +1362,8 @@ X<--: Message loss (response)
           <t><xref target="nonb41"></xref> shows the example of an Observe
           that is triggered but for which some notification blocks are lost.
           The client detects the missing blocks and requests their
-          retransmission. It does so by indicating the blocks that were
-          successfully received.</t>
+          retransmission. It does so by indicating the blocks that are
+          missing as one or more Q-Block2 Options.</t>
 
           <t><figure anchor="nonb41"
               title="Example of NON Notifications with Q-Block2 Option (Blocks Recovery)">
@@ -1355,10 +1398,6 @@ X<--: Message loss (response)
          |   ...    |
 ]]></artwork>
             </figure></t>
-
-          <t>Under high levels of traffic loss, the client can elect not to
-          retry getting missing blocks of data. This decision is
-          implementation specific.</t>
         </section>
 
         <section title="Handling Recovery using M-bit Set">
@@ -1445,7 +1484,7 @@ X<--: Message loss (response)
               title="Example of NON FETCH with Q-Block1 and Q-Block2 Options (Without Loss)">
               <artwork><![CDATA[     CoAP        CoAP
     Client      Server
-      |          | 
+      |          |
       +--------->| NON FETCH /path M:0x30 T:0xa0 O:0 RT=10 QB1:0/1/1024
       +--------->| NON FETCH /path M:0x31 T:0xa1 O:0 RT=10 QB1:1/1/1024
       +--------->| [[Payloads 3 - 9 not detailed]]
@@ -1529,47 +1568,42 @@ X<--: Message loss (response)
 
           <t>The client realizes that not all the payloads of the response
           have been returned. The client then asks for the missing blocks in
-          one go (<xref target="b12non3"></xref>). However, because the
-          original request is spread over multiple payloads using Q-Block1,
-          the entire FETCH body has to be used to make the request for the
-          missing payloads.</t>
+          one go (<xref target="b12non3"></xref>). Note that, following Section
+          2.7 of <xref target="RFC7959"></xref>, the FETCH request does not
+          include the Q-Block1 or any payload.</t>
 
           <t><figure anchor="b12non3"
               title="Example of NON Request with Q-Block1 Option (Client Recovery)">
               <artwork><![CDATA[      CoAP        CoAP
      Client      Server
        |          |
-       +--------->| NON FETCH /path M:0x56 T:0xc6 RT=31 QB1:0/1/1024\
-       |          |                                     QB2:1/0/1024\
+       +--------->| NON FETCH /path M:0x56 T:0xc6 RT=31 QB2:1/0/1024\
        |          |                                     QB2:3/0/1024
-       +--------->| NON FETCH /path M:0x57 T:0xc7 RT=31 QB1:1/1/1024\
-       |          |                                     QB2:1/0/1024\
-       |          |                                     QB2:3/0/1024
-       +--------->| NON FETCH /path M:0x58 T:0xc8 RT=31 QB1:2/1/1024\
-       |          |                                     QB2:1/0/1024\
-       |          |                                     QB2:3/0/1024
-       +--------->| NON FETCH /path M:0x59 T:0xc9 RT=31 QB1:3/0/1024\
-       |          |                                     QB2:1/0/1024\
-       |          |                                     QB2:3/0/1024
-       |     [[Server received FETCH request,
+       |     [[Server receives FETCH request for missing payloads,
        |       starts transmitting missing blocks]]
-       |     X<---+ NON 2.05 M:0xa5 T:0xc9 ET=23 QB2:1/1/1024
-       |<---------+ NON 2.05 M:0xa6 T:0xc9 ET=23 QB2:3/0/1024
+       |     X<---+ NON 2.05 M:0xa5 T:0xc6 ET=23 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0xa6 T:0xc6 ET=23 QB2:3/0/1024
        |   ...    |
     [[NON_RECEIVE_TIMEOUT (client) delay expires]]
        |     [[Client realizes block is still missing and asks for
        |       missing block]]
-       +--------->| NON FETCH /path M:0x5a T:0xca RT=31 QB1:0/1/1024\
-       |          |                                     QB2:1/0/1024
-       +--------->| NON FETCH /path M:0x5b T:0xcb RT=31 QB1:1/1/1024\
-       |          |                                     QB2:1/0/1024
-       +--------->| NON FETCH /path M:0x5c T:0xcc RT=31 QB1:2/1/1024\
-       |          |                                     QB2:1/0/1024
-       +--------->| NON FETCH /path M:0x5d T:0xcd RT=31 QB1:3/0/1024\
-       |          |                                     QB2:1/0/1024
-       |     [[Server received FETCH request,
+       +--------->| NON FETCH /path M:0x57 T:0xc7 RT=31 QB2:1/0/1024
+       |     [[Server receives FETCH request for missing payload,
        |       starts transmitting missing block]]
-       |<---------+ NON 2.05 M:0xa7 T:0xcd ET=23 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0xa7 T:0xc7 ET=23 QB2:1/1/1024
+    [[Body has been received]]
+       |   ...    |
+       |     [[Observe triggered]]
+       |<---------+ NON 2.05 M:0xa8 T:0xc3 O:1337 ET=24 QB2:0/1/1024
+       |     X<---+ NON 2.05 M:0xa9 T:0xc3 O:1337 ET=24 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0xaa T:0xc3 O:1337 ET=24 QB2:2/0/1024
+    [[NON_RECEIVE_TIMEOUT (client) delay expires]]
+       |     [[Client realizes block is still missing and asks for
+       |       missing block]]
+       +--------->| NON FETCH /path M:0x58 T:0xc8 RT=31 QB2:1/0/1024
+       |     [[Server receives FETCH request for missing payload,
+       |       starts transmitting missing block]]
+       |<---------+ NON 2.05 M:0xa7 T:0xc8 ET=23 QB2:1/1/1024
     [[Body has been received]]
        |   ...    |
 ]]></artwork>
@@ -1594,7 +1628,7 @@ X<--: Message loss (response)
 Table 5: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
           </figure></t>
 
-        <t>This document suggests 19 (TBA1) and 51 (TBA2) as a values to be
+        <t>This document suggests 19 (TBA1) and 51 (TBA2) as values to be
         assigned for the new option numbers.</t>
       </section>
 
@@ -1654,11 +1688,12 @@ Table 5: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
         <figure>
           <artwork><![CDATA[o  Media Type: application/missing-blocks+cbor-seq
 o  Encoding: -
-o  Id: TBD3
+o  Id: TBA3
 o  Reference: [RFCXXXX]]]></artwork>
         </figure>
 
-        <t></t>
+        <t>This document suggests 272 (TBA3) as a value to be assigned for the
+        new content format number.</t>
       </section>
 
       <section title="New CoAP Signaling Option Number">
@@ -1670,13 +1705,14 @@ o  Reference: [RFCXXXX]]]></artwork>
             <artwork align="center"><![CDATA[+------------+--------+-----------------------+-----------+
 | Applies to | Number | Name                  | Reference |
 +============+========+=======================+===========+
-| 7.01       |  TBD4  | Q-Block-Wise-Transfer | [RFCXXXX] |
+| 7.01       |  TBA4  | Q-Block-Wise-Transfer | [RFCXXXX] |
 +------------+--------+-----------------------+-----------+
 
              Table 6: CoAP Signaling Option Codes]]></artwork>
           </figure></t>
 
-        <t></t>
+        <t>This document suggests 8 (TBA4) as a value to be assigned for the
+        new option number.</t>
       </section>
     </section>
 
@@ -1740,7 +1776,7 @@ o  Reference: [RFCXXXX]]]></artwork>
 
       <?rfc include='reference.RFC.8742'?>
 
-      <?rfc include='reference.RFC.8949'?>
+      <?rfc include='reference.RFC.8974'?>
 
       <?rfc include='reference.I-D.ietf-core-echo-request-tag'?>
     </references>
@@ -1756,10 +1792,12 @@ o  Reference: [RFCXXXX]]]></artwork>
 
       <?rfc include='reference.RFC.8610'?>
 
+      <?rfc include='reference.RFC.8949'?>
+
       <reference anchor="Format"
                  target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats">
         <front>
-          <title></title>
+          <title>CoAP Content-Formats</title>
 
           <author>
             <organization></organization>
@@ -1785,7 +1823,7 @@ o  Reference: [RFCXXXX]]]></artwork>
       <reference anchor="Options"
                  target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#option-numbers">
         <front>
-          <title></title>
+          <title>CoAP Option Numbers</title>
 
           <author>
             <organization></organization>
