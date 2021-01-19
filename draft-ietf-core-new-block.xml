@@ -1276,8 +1276,8 @@ X<--: Message loss (response)
          |<---------+ NON 4.08 M:0x04 T:0xd2 [Missing 1 [for RT=12]]
          |   ...    |
       [[16 * NON_RECEIVE_TIMEOUT (server) delay expires]]
-         |     [[NON_MAX_RETRANSMIT exceeded.  Server stops requesting for
-         |       missing blocks and releases partial body]]
+         |     [[NON_MAX_RETRANSMIT exceeded. Server stops requesting
+         |       for missing blocks and releases partial body]]
          |   ...    |
 ]]></artwork>
             </figure></t>

@@ -1407,37 +1407,37 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Figure 7 depicts an example of a NON PUT request conveying Q-Block1
    Option where recovery takes place, but eventually fails.
 
-        CoAP        CoAP
-       Client      Server
-         |          |
-         +--------->| NON PUT /path M:0x91 T:0xd0 RT=12 QB1:0/1/1024
-         +--->X     | NON PUT /path M:0x92 T:0xd1 RT=12 QB1:1/1/1024
-         +--------->| NON PUT /path M:0x93 T:0xd2 RT=12 QB1:2/0/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (server) delay expires]]
-         |     [[The server realizes a block is missing and asks
-         |        for the missing one.  Retry #1]]
-         |<---------+ NON 4.08 M:0x01 T:0xd2 [Missing 1 [for RT=12]]
-         |   ...    |
-      [[2 * NON_RECEIVE_TIMEOUT (server) delay expires]]
-         |     [[The server realizes a block is still missing and asks
-         |        for the missing one.  Retry #2]]
-         |<---------+ NON 4.08 M:0x02 T:0xd2 [Missing 1 [for RT=12]]
-         |   ...    |
-      [[4 * NON_RECEIVE_TIMEOUT (server) delay expires]]
-         |     [[The server realizes a block is still missing and asks
-         |        for the missing one.  Retry #3]]
-         |<---------+ NON 4.08 M:0x03 T:0xd2 [Missing 1 [for RT=12]]
-         |   ...    |
-      [[8 * NON_RECEIVE_TIMEOUT (server) delay expires]]
-         |     [[The server realizes a block is still missing and asks
-         |        for the missing one.  Retry #4]]
-         |<---------+ NON 4.08 M:0x04 T:0xd2 [Missing 1 [for RT=12]]
-         |   ...    |
-      [[16 * NON_RECEIVE_TIMEOUT (server) delay expires]]
-         |     [[NON_MAX_RETRANSMIT exceeded.  Server stops requesting for
-         |       missing blocks and releases partial body]]
-         |   ...    |
+          CoAP        CoAP
+         Client      Server
+           |          |
+           +--------->| NON PUT /path M:0x91 T:0xd0 RT=12 QB1:0/1/1024
+           +--->X     | NON PUT /path M:0x92 T:0xd1 RT=12 QB1:1/1/1024
+           +--------->| NON PUT /path M:0x93 T:0xd2 RT=12 QB1:2/0/1024
+           |   ...    |
+        [[NON_RECEIVE_TIMEOUT (server) delay expires]]
+           |     [[The server realizes a block is missing and asks
+           |        for the missing one.  Retry #1]]
+           |<---------+ NON 4.08 M:0x01 T:0xd2 [Missing 1 [for RT=12]]
+           |   ...    |
+        [[2 * NON_RECEIVE_TIMEOUT (server) delay expires]]
+           |     [[The server realizes a block is still missing and asks
+           |        for the missing one.  Retry #2]]
+           |<---------+ NON 4.08 M:0x02 T:0xd2 [Missing 1 [for RT=12]]
+           |   ...    |
+        [[4 * NON_RECEIVE_TIMEOUT (server) delay expires]]
+           |     [[The server realizes a block is still missing and asks
+           |        for the missing one.  Retry #3]]
+           |<---------+ NON 4.08 M:0x03 T:0xd2 [Missing 1 [for RT=12]]
+           |   ...    |
+        [[8 * NON_RECEIVE_TIMEOUT (server) delay expires]]
+           |     [[The server realizes a block is still missing and asks
+           |        for the missing one.  Retry #4]]
+           |<---------+ NON 4.08 M:0x04 T:0xd2 [Missing 1 [for RT=12]]
+           |   ...    |
+        [[16 * NON_RECEIVE_TIMEOUT (server) delay expires]]
+           |     [[NON_MAX_RETRANSMIT exceeded. Server stops requesting
+           |       for missing blocks and releases partial body]]
+           |   ...    |
 
    Figure 7: Example of NON Request with Q-Block1 Option (With Eventual
                                  Failure)
