@@ -330,12 +330,12 @@
         (if supported) to send back a message body that is too large to fit
         into a single IP packet <xref target="RFC7959"></xref>.</t>
 
-        <t>Alternatively, with CoAP over TCP, Capabilities and Settings
-        Messages (CSMs) can be used to indicate support of Q-Block Options by
-        means of the Q-Block-Wise-Transfer Capability Option (Table 2). The
-        behavior of CoAP peers is similar to the one specified in Section
-        5.3.2 of <xref target="RFC8323"></xref>, except that it indicates
-        support of Q-Block Options.</t>
+        <t>Alternatively, with CoAP over reliable transports, Capabilities and
+        Settings Messages (CSMs) can be used to indicate support of Q-Block
+        Options by means of the Q-Block-Wise-Transfer Capability Option (Table
+        2). The behavior of CoAP peers is similar to the one specified in
+        Section 5.3.2 of <xref target="RFC8323"></xref>, except that it
+        indicates support of Q-Block Options.</t>
 
         <t><figure align="center">
             <artwork align="center"><![CDATA[+----+---+---+---------+---------------+--------+--------+--------+
@@ -377,6 +377,9 @@
         following the procedure specified in Section 5.4.5 of <xref
         target="RFC7252"></xref>.</t>
 
+        <t>Note that if Q-Block1 (or Q-Block2) Option is included in a packet,
+        Block1 (or Block2) Option MUST NOT be included.</t>
+
         <t>The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
         Options, are both a class E and a class U in terms of OSCORE
         processing (Table 3). The Q-Block1 (or Q-Block2) Option MAY be an
@@ -399,8 +402,7 @@
 ]]></artwork>
           </figure></t>
 
-        <t>Note that if Q-Block1 (or Q-Block2) Option is included in a packet,
-        Block1 (or Block2) Option MUST NOT be included.</t>
+        <t></t>
       </section>
 
       <section title="Structure of Q-Block1 and Q-Block2 Options">
@@ -525,9 +527,9 @@
           </list></t>
 
         <t>4.02 (Bad Option)<list style="empty">
-            <t>Either this Response Code (Confirmable) or a reset message
-            (Non-confirmable) MUST be returned if the server does not support
-            the Q-Block1 Option.</t>
+            <t>Either this Response Code (in case of Confirmable request) or a
+            reset message (in case of Non-confirmable request) MUST be
+            returned if the server does not support the Q-Block1 Option.</t>
           </list></t>
 
         <t>4.08 (Request Entity Incomplete)<list style="empty">
