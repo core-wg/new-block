@@ -5,7 +5,7 @@
 CORE                                                        M. Boucadair
 Internet-Draft                                                    Orange
 Intended status: Standards Track                              J. Shallow
-Expires: July 23, 2021                                  January 19, 2021
+Expires: August 7, 2021                                 February 3, 2021
 
 
 Constrained Application Protocol (CoAP) Block-Wise Transfer Options for
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 23, 2021.
+   This Internet-Draft will expire on August 7, 2021.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                 [Page 1]
+Boucadair & Shallow      Expires August 7, 2021                 [Page 1]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    to this document.  Code Components extracted from this document must
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                 [Page 2]
+Boucadair & Shallow      Expires August 7, 2021                 [Page 2]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    11. Security Considerations . . . . . . . . . . . . . . . . . . .  37
@@ -165,9 +165,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                 [Page 3]
+Boucadair & Shallow      Expires August 7, 2021                 [Page 3]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    o  They enable faster transmissions of sets of blocks of data with
@@ -221,9 +221,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                 [Page 4]
+Boucadair & Shallow      Expires August 7, 2021                 [Page 4]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    body that have not yet been received.  The CoAP sender endpoint will
@@ -277,9 +277,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                 [Page 5]
+Boucadair & Shallow      Expires August 7, 2021                 [Page 5]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    This mechanism is not intended for general CoAP usage, and any use
@@ -333,9 +333,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                 [Page 6]
+Boucadair & Shallow      Expires August 7, 2021                 [Page 6]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    +--------+---+---+---+---+--------------+--------+--------+---------+
@@ -389,9 +389,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                 [Page 7]
+Boucadair & Shallow      Expires August 7, 2021                 [Page 7]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
     +----+---+---+---------+---------------+--------+--------+--------+
@@ -445,9 +445,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                 [Page 8]
+Boucadair & Shallow      Expires August 7, 2021                 [Page 8]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    proxies and labels message bodies in case of hop-by-hop fragmentation
@@ -501,9 +501,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                 [Page 9]
+Boucadair & Shallow      Expires August 7, 2021                 [Page 9]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
       be randomly generated and then subsequently incremented by the
@@ -557,9 +557,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 10]
+Boucadair & Shallow      Expires August 7, 2021                [Page 10]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    2.05 (Content)
@@ -613,9 +613,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 11]
+Boucadair & Shallow      Expires August 7, 2021                [Page 11]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
       missing payloads using the same Request-Tag, Size1 and Q-Block1 to
@@ -669,9 +669,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 12]
+Boucadair & Shallow      Expires August 7, 2021                [Page 12]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
 3.4.  Using the Q-Block2 Option
@@ -725,9 +725,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 13]
+Boucadair & Shallow      Expires August 7, 2021                [Page 13]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    The client SHOULD wait for up to NON_RECEIVE_TIMEOUT (Section 6.2)
@@ -781,9 +781,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 14]
+Boucadair & Shallow      Expires August 7, 2021                [Page 14]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    If the server transmits a new body of data (e.g., a triggered
@@ -837,9 +837,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 15]
+Boucadair & Shallow      Expires August 7, 2021                [Page 15]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
 3.8.  Using Q-Block2 Option With Multicast
@@ -893,9 +893,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 16]
+Boucadair & Shallow      Expires August 7, 2021                [Page 16]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    If the size of the 4.08 (Request Entity Incomplete) response packet
@@ -935,23 +935,23 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    Implementation Note:  To minimize on the number of tokens that have
       to be tracked by clients, it is recommended that the bottom 32
       bits is kept the same for the same body and the upper 32 bits
-      contains the individual payload number.  This allows the client to
-      be alleviated from keeping all the per-request-state, e.g., in
-      Section 3 of [RFC8974].
+      contains the current body's request number (incrementing every
+      request).  This allows the client to be alleviated from keeping
+      all the per-request-state, e.g., in Section 3 of [RFC8974].
 
       Servers continue to treat the token as a unique opaque entity.  If
       an individual payload has to be resent (e.g., requested upon
-      packet loss), then the retransmitted packet is treated as a new
-      request (i.e., the bottom 32 bits must change).
+      packet loss), then the retransmitted packet keeps the same bottom
+      32 bits and the upper 32 bits is incremented.
 
 
 
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 17]
+Boucadair & Shallow      Expires August 7, 2021                [Page 17]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
 6.  Congestion Control for Unreliable Transports
@@ -1005,9 +1005,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 18]
+Boucadair & Shallow      Expires August 7, 2021                [Page 18]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
       Time-to-Wait = NON_RECEIVE_TIMEOUT * (2 ** (Re-Request-Count - 1))
@@ -1061,9 +1061,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 19]
+Boucadair & Shallow      Expires August 7, 2021                [Page 19]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
       NON_MAX_RETRANSMIT, and NON_TIMEOUT can be negotiated between DOTS
@@ -1111,16 +1111,20 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
    server SHOULD delay for NON_RECEIVE_TIMEOUT (exponentially scaled
    based on the repeat request count for a payload), before sending the
    4.08 (Request Entity Incomplete) Response Code for the missing
-   payload(s).  If the repeat request count for a missing payload
-   exceeds NON_MAX_RETRANSMIT, the server SHOULD discard the partial
-   body and stop requesting the missing payloads.
+   payload(s).  If this is a repeat for the 2.31 (Continue) response,
+   the server SHOULD send a 4.08 (Request Entity Incomplete) response
+   detailing the missing payloads after the block number that would have
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 20]
+Boucadair & Shallow      Expires August 7, 2021                [Page 20]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
+
+   been indicated in the 2.31 (Continue).  If the repeat request count
+   for a missing payload exceeds NON_MAX_RETRANSMIT, the server SHOULD
+   discard the partial body and stop requesting the missing payloads.
 
    It is likely that the client will start transmitting the next set of
    MAX_PAYLOADS payloads before the server times out on waiting for the
@@ -1165,18 +1169,17 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
       Note: If there is asymmetric traffic loss causing responses to
       never get received, a delay of NON_TIMEOUT after every
       transmission of MAX_PAYLOADS blocks will be observed.  The
+
+
+
+
+Boucadair & Shallow      Expires August 7, 2021                [Page 21]
+
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
+
+
       endpoint receiving the body is still likely to receive the entire
       body.
-
-
-
-
-
-
-Boucadair & Shallow       Expires July 23, 2021                [Page 21]
-
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
-
 
 7.  Caching Considerations
 
@@ -1223,17 +1226,17 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
    A proxy that supports Q-Block2 Option MUST be prepared to receive a
    GET or similar request indicating one or more missing blocks.  The
+
+
+
+Boucadair & Shallow      Expires August 7, 2021                [Page 22]
+
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
+
+
    proxy will serve from its cache the missing blocks that are available
    in its cache in the same way a server would send all the appropriate
    Q-Block2s.  If the cache key matching body is not available in the
-
-
-
-Boucadair & Shallow       Expires July 23, 2021                [Page 22]
-
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
-
-
    cache, the proxy MUST request the entire body from the CoAP server
    using the information in the cache key.
 
@@ -1282,12 +1285,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-
-
-
-Boucadair & Shallow       Expires July 23, 2021                [Page 23]
+Boucadair & Shallow      Expires August 7, 2021                [Page 23]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
            CoAP        CoAP
@@ -1341,9 +1341,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 24]
+Boucadair & Shallow      Expires August 7, 2021                [Page 24]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
            CoAP        CoAP
@@ -1397,9 +1397,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 25]
+Boucadair & Shallow      Expires August 7, 2021                [Page 25]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
 9.1.4.  Handling Recovery with Failure
@@ -1453,9 +1453,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 26]
+Boucadair & Shallow      Expires August 7, 2021                [Page 26]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
 9.2.1.  A Simple Example
@@ -1509,9 +1509,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 27]
+Boucadair & Shallow      Expires August 7, 2021                [Page 27]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
          CoAP        CoAP
@@ -1565,9 +1565,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 28]
+Boucadair & Shallow      Expires August 7, 2021                [Page 28]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
          CoAP        CoAP
@@ -1621,9 +1621,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 29]
+Boucadair & Shallow      Expires August 7, 2021                [Page 29]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
          CoAP        CoAP
@@ -1677,9 +1677,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 30]
+Boucadair & Shallow      Expires August 7, 2021                [Page 30]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
       CoAP        CoAP
@@ -1733,9 +1733,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 31]
+Boucadair & Shallow      Expires August 7, 2021                [Page 31]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
      CoAP        CoAP
@@ -1789,9 +1789,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 32]
+Boucadair & Shallow      Expires August 7, 2021                [Page 32]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
       CoAP        CoAP
@@ -1845,9 +1845,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 33]
+Boucadair & Shallow      Expires August 7, 2021                [Page 33]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
          CoAP        CoAP
@@ -1901,9 +1901,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 34]
+Boucadair & Shallow      Expires August 7, 2021                [Page 34]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
             +--------+------------------+-----------+
@@ -1957,9 +1957,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 35]
+Boucadair & Shallow      Expires August 7, 2021                [Page 35]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
      Type name: application
@@ -2013,9 +2013,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 36]
+Boucadair & Shallow      Expires August 7, 2021                [Page 36]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    o  Media Type: application/missing-blocks+cbor-seq
@@ -2069,9 +2069,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 37]
+Boucadair & Shallow      Expires August 7, 2021                [Page 37]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
 12.  Acknowledgements
@@ -2125,9 +2125,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 38]
+Boucadair & Shallow      Expires August 7, 2021                [Page 38]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    [RFC8132]  van der Stok, P., Bormann, C., and A. Sehgal, "PATCH and
@@ -2181,9 +2181,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 39]
+Boucadair & Shallow      Expires August 7, 2021                [Page 39]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    [I-D.ietf-dots-telemetry]
@@ -2237,9 +2237,9 @@ A.1.  Q-Block1 Option
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 40]
+Boucadair & Shallow      Expires August 7, 2021                [Page 40]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
            CoAP        CoAP
@@ -2293,9 +2293,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 41]
+Boucadair & Shallow      Expires August 7, 2021                [Page 41]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    new transmission of the payloads that have not been acknowledged
@@ -2349,9 +2349,9 @@ A.2.  Q-Block2 Option
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 42]
+Boucadair & Shallow      Expires August 7, 2021                [Page 42]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
          Client      Server
@@ -2405,9 +2405,9 @@ Internet-Draft      Quick Block-Wise Transfer Options       January 2021
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 43]
+Boucadair & Shallow      Expires August 7, 2021                [Page 43]
 
-Internet-Draft      Quick Block-Wise Transfer Options       January 2021
+Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
 
    If there is likely to be the possibility of network transient losses,
@@ -2461,4 +2461,4 @@ Authors' Addresses
 
 
 
-Boucadair & Shallow       Expires July 23, 2021                [Page 44]
+Boucadair & Shallow      Expires August 7, 2021                [Page 44]
