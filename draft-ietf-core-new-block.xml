@@ -840,13 +840,14 @@ missing-block-number = uint
           <t hangText="Implementation Note:">To minimize on the number of
           tokens that have to be tracked by clients, it is recommended that
           the bottom 32 bits is kept the same for the same body and the upper
-          32 bits contains the individual payload number. This allows the
-          client to be alleviated from keeping all the per-request-state,
-          e.g., in Section 3 of <xref target="RFC8974"></xref>. <vspace
-          blankLines="1" />Servers continue to treat the token as a unique
-          opaque entity. If an individual payload has to be resent (e.g.,
-          requested upon packet loss), then the retransmitted packet is
-          treated as a new request (i.e., the bottom 32 bits must change).</t>
+          32 bits contains the current body's request number (incrementing
+          every request). This allows the client to be alleviated from keeping
+          all the per-request-state, e.g., in Section 3 of <xref
+          target="RFC8974"></xref>. <vspace blankLines="1" />Servers continue
+          to treat the token as a unique opaque entity. If an individual
+          payload has to be resent (e.g., requested upon packet loss), then
+          the retransmitted packet keeps the same bottom 32 bits and the upper
+          32 bits is incremented. </t>
         </list></t>
     </section>
 
@@ -997,9 +998,12 @@ Table 4: Congestion Control Parameters]]></artwork>
         server SHOULD delay for NON_RECEIVE_TIMEOUT (exponentially scaled
         based on the repeat request count for a payload), before sending the
         4.08 (Request Entity Incomplete) Response Code for the missing
-        payload(s). If the repeat request count for a missing payload exceeds
-        NON_MAX_RETRANSMIT, the server SHOULD discard the partial body and
-        stop requesting the missing payloads.</t>
+        payload(s). If this is a repeat for the 2.31 (Continue) response, the
+        server SHOULD send a 4.08 (Request Entity Incomplete) response
+        detailing the missing payloads after the block number that would have
+        been indicated in the 2.31 (Continue). If the repeat request count for
+        a missing payload exceeds NON_MAX_RETRANSMIT, the server SHOULD
+        discard the partial body and stop requesting the missing payloads.</t>
 
         <t>It is likely that the client will start transmitting the next set
         of MAX_PAYLOADS payloads before the server times out on waiting for
