@@ -529,7 +529,7 @@
         <t>4.02 (Bad Option)<list style="empty">
             <t>Either this Response Code (in case of Confirmable request) or a
             reset message (in case of Non-confirmable request) MUST be
-            returned if the server does not support the Q-Block1 Option.</t>
+            returned if the server does not support the Q-Block Options.</t>
           </list></t>
 
         <t>4.08 (Request Entity Incomplete)<list style="empty">
@@ -847,7 +847,7 @@ missing-block-number = uint
           to treat the token as a unique opaque entity. If an individual
           payload has to be resent (e.g., requested upon packet loss), then
           the retransmitted packet keeps the same bottom 32 bits and the upper
-          32 bits is incremented. </t>
+          32 bits is incremented.</t>
         </list></t>
     </section>
 

@@ -599,7 +599,7 @@ Internet-Draft      Quick Block-Wise Transfer Options      February 2021
 
       Either this Response Code (in case of Confirmable request) or a
       reset message (in case of Non-confirmable request) MUST be
-      returned if the server does not support the Q-Block1 Option.
+      returned if the server does not support the Q-Block Options.
 
    4.08 (Request Entity Incomplete)
 
