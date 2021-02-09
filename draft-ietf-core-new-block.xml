@@ -172,6 +172,13 @@
         the peer whether the body comprises of a single or multiple payloads
         assuming no recovery is required.</t>
 
+        <t>A CoAP endpoint can acknowledge all or a subset of the blocks.
+        Concretely, the receiving CoAP endpoint informs the CoAP sender
+        endpoint either successful receipt or reports on all blocks in the
+        body that have not yet been received. The CoAP sender endpoint will
+        then retransmit only the blocks that have been lost in
+        transmission.</t>
+
         <t>Note that similar performance benefits can be applied to
         Confirmable messages if the value of NSTART is increased from 1
         (Section 4.7 of <xref target="RFC7252"></xref>). However, the use of
@@ -182,14 +189,8 @@
         <t>There is little, if any, benefit of using these options with CoAP
         running over a reliable connection <xref target="RFC8323"></xref>. In
         this case, there is no differentiation between Confirmable and NON as
-        they are not used.</t>
-
-        <t>A CoAP endpoint can acknowledge all or a subset of the blocks.
-        Concretely, the receiving CoAP endpoint informs the CoAP sender
-        endpoint either successful receipt or reports on all blocks in the
-        body that have not yet been received. The CoAP sender endpoint will
-        then retransmit only the blocks that have been lost in
-        transmission.</t>
+        they are not used. Some examples using a reliable transport are
+        provided in <xref target="REL"></xref>.</t>
 
         <t>Q-Block1 and Q-Block2 Options can be used instead of Block1 and
         Block2 Options when the different transmission properties are
@@ -660,10 +661,11 @@
         adhering to this behavior.</t>
 
         <t>For Confirmable responses, the client continues to acknowledge each
-        packet. The server will detect failure to send a packet, but the
-        client can issue, after a MAX_TRANSMIT_SPAN delay, a separate GET,
-        POST, PUT, FETCH, PATCH, or iPATCH for any missing blocks as
-        needed.</t>
+        packet. The server acknowledges the initial request using an ACK with
+        the payload, and then sends the subsequent payloads as CON responses.
+        The server will detect failure to send a packet, but the client can
+        issue, after a MAX_TRANSMIT_SPAN delay, a separate GET, POST, PUT,
+        FETCH, PATCH, or iPATCH for any missing blocks as needed.</t>
 
         <t>If the client receives a duplicate block with the same ETag, it
         SHOULD silently ignore the packet.</t>
@@ -1930,11 +1932,14 @@ o  Reference: [RFCXXXX]]]></artwork>
             title="Example of CON Notifications with Q-Block2 Option">
             <artwork align="center"><![CDATA[       Client      Server
          |          |
-         +--------->| CON GET /path M:0x01 T:0xf0 O:0 QB2:0/0/1024
+         +--------->| CON GET /path M:0x01 T:0xf0 O:0 QB2:0/1/1024
          |<---------+ ACK 2.05 M:0x01 T:0xf0 O:1234 ET=21 QB2:0/1/1024
-         |<---------+ ACK 2.05 M:0xe1 T:0xf0 O:1234 ET=21 QB2:1/1/1024
-         |<---------+ ACK 2.05 M:0xe2 T:0xf0 O:1234 ET=21 QB2:2/1/1024
-         |<---------+ ACK 2.05 M:0xe3 T:0xf0 O:1234 ET=21 QB2:3/0/1024
+         |<---------+ CON 2.05 M:0xe1 T:0xf0 O:1234 ET=21 QB2:1/1/1024
+         |<---------+ CON 2.05 M:0xe2 T:0xf0 O:1234 ET=21 QB2:2/1/1024
+         |<---------+ CON 2.05 M:0xe3 T:0xf0 O:1234 ET=21 QB2:3/0/1024
+         |--------->+ ACK 0.00 M:0xe1
+         |--------->+ ACK 0.00 M:0xe2
+         |--------->+ ACK 0.00 M:0xe3
          |   ...    |
          |     [[Observe triggered]]
          |<---------+ CON 2.05 M:0xe4 T:0xf0 O:1235 ET=22 QB2:0/1/1024
@@ -1977,6 +1982,62 @@ o  Reference: [RFCXXXX]]]></artwork>
 
         <t>If there is likely to be the possibility of network transient
         losses, then the use of NON should be considered.</t>
+      </section>
+    </section>
+    <section anchor="REL" title="Examples with Reliable Transports">
+      <t>The notations provided in <xref target="legend"></xref> are used in
+      the following subsections.</t>
+
+      <section title="Q-Block1 Option">
+        <t>Let's now consider the use of Q-Block1 Option with a reliable
+        transport as shown in <xref target="rel3"></xref>. There is no
+        acknowledgment of packets at the CoAP layer, just the final result.</t>
+
+        <t><figure anchor="rel3"
+            title="Example of Reliable Request with Q-Block1 Option">
+            <artwork><![CDATA[        CoAP        CoAP
+       Client      Server
+         |          |
+         +--------->| PUT /path T:0xf0 RT=10 QB1:0/1/1024
+         +--------->| PUT /path T:0xf1 RT=10 QB1:1/1/1024
+         +--------->| PUT /path T:0xf2 RT=10 QB1:2/1/1024
+         +--------->| PUT /path T:0xf3 RT=10 QB1:3/0/1024
+         |<---------+ 2.04
+         |          |
+]]></artwork>
+          </figure></t>
+
+        <t>If there is likely to be the possibility of network transient
+        losses, then the use of unreliable transport with NON should be
+        considered.</t>
+      </section>
+
+      <section title="Q-Block2 Option">
+        <t>An example of the use of Q-Block2 Option with a reliable transport
+        is shown in <xref target="b4rel"></xref>.</t>
+
+        <t><figure align="center" anchor="b4rel"
+            title="Example of Notifications with Q-Block2 Option">
+            <artwork align="center"><![CDATA[       Client      Server
+         |          |
+         +--------->| GET /path T:0xf0 O:0 QB2:0/1/1024
+         |<---------+ 2.05 T:0xf0 O:1234 ET=21 QB2:0/1/1024
+         |<---------+ 2.05 T:0xf0 O:1234 ET=21 QB2:1/1/1024
+         |<---------+ 2.05 T:0xf0 O:1234 ET=21 QB2:2/1/1024
+         |<---------+ 2.05 T:0xf0 O:1234 ET=21 QB2:3/0/1024
+         |   ...    |
+         |     [[Observe triggered]]
+         |<---------+ 2.05 T:0xf0 O:1235 ET=22 QB2:0/1/1024
+         |<---------+ 2.05 T:0xf0 O:1235 ET=22 QB2:1/1/1024
+         |<---------+ 2.05 T:0xf0 O:1235 ET=22 QB2:2/1/1024
+         |<---------+ 2.05 T:0xf0 O:1235 ET=22 QB2:3/0/1024
+         |   ...    |
+]]></artwork>
+          </figure></t>
+
+        <t>If there is likely to be the possibility of network transient
+        losses, then the use of unreliable transport with NON should be
+        considered.</t>
       </section>
     </section>
   </back>
