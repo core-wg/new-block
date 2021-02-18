@@ -160,6 +160,12 @@
             (Section 4.7 of <xref target="RFC7252"></xref>). Such tuning is
             out of scope of this document.</t>
 
+            <t>The Q-Block Options do not support stateless operation/random
+            access.</t>
+
+            <t>Proxying of Q-Block is limited to caching full representations.
+            </t>
+
             <t>There is no multicast support.</t>
           </list></t>
 
@@ -195,8 +201,7 @@
         <t>Q-Block1 and Q-Block2 Options can be used instead of Block1 and
         Block2 Options when the different transmission properties are
         required. If the new option is not supported by a peer, then
-        transmissions can fall back to using Block1 and Block2 Options,
-        respectively.</t>
+        transmissions can fall back to using Block1 and Block2 Options.</t>
 
         <t>The deviations from Block1 and Block2 Options are specified in
         <xref target="spec"></xref>. Pointers to appropriate <xref
@@ -209,6 +214,10 @@
 
         <t>Q-Block1 and Q-Block2 Options are designed to work in particular
         with Non-confirmable requests and responses.</t>
+
+        <t>The No-Response Option was considered but was abandoned as it does
+        not apply to Q-Block2 responses. A unified solution is defined in the
+        document.</t>
       </section>
 
       <section title="CoAP Response Code (4.08) Usage">
@@ -378,9 +387,6 @@
         following the procedure specified in Section 5.4.5 of <xref
         target="RFC7252"></xref>.</t>
 
-        <t>Note that if Q-Block1 (or Q-Block2) Option is included in a packet,
-        Block1 (or Block2) Option MUST NOT be included.</t>
-
         <t>The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
         Options, are both a class E and a class U in terms of OSCORE
         processing (Table 3). The Q-Block1 (or Q-Block2) Option MAY be an
@@ -404,6 +410,13 @@
           </figure></t>
 
         <t></t>
+
+        <t>Note that if Q-Block1 or Q-Block2 Options are included in a packet
+        as Inner options, Block1 or Block2 Options MUST NOT be included as
+        Inner options.  Similarly there MUST NOT be a mix of Q-Block and
+        Block for the Outer options. Q-Block and Block Options can be mixed
+        across Inner and Outer options as these are handled independently of
+        each other.</t>
       </section>
 
       <section title="Structure of Q-Block1 and Q-Block2 Options">
@@ -497,10 +510,10 @@
             <t>This Response Code indicates successful receipt of the entire
             FETCH request body (Section 2 of <xref target="RFC8132"></xref>)
             and the appropriate representation of the resource is being
-            returned. The token used in the response MUST be the one in the
-            FETCH request that has the Q-Block1 with the M bit unset. If the
-            FETCH request includes the Observe Option, then the server MUST
-            use the same token for returning any Observe triggered responses.
+            returned. The token used in the response SHOULD be from the last
+            received payload. If the FETCH request includes the Observe Option,
+            then the server MUST use the same token for returning any Observe
+            triggered responses so that the client can match them up.
             The client should then release all of the tokens used for this
             body unless a resource is being observed.</t>
           </list></t>
@@ -686,9 +699,9 @@
 
         <t>If the server detects part way through a body transfer that the
         resource data has changed and the server is not maintaining a cached
-        copy of the old data, then the body response SHOULD be restarted with
-        a different ETag Option value. Any subsequent missing block requests
-        MUST be responded to using the latest ETag Option value.</t>
+        copy of the old data, then the transmission is terminated. Any
+        subsequent missing block requests MUST be responded to using the
+        latest ETag and Size2 Option values with the updated data.</t>
 
         <t>If the server responds during a body update with a different ETag
         Option value (as the resource representation has changed), then the
@@ -732,12 +745,10 @@
         determined.</t>
 
         <t>The Size1 Option MUST be used with the Q-Block1 Option when used in
-        a request. The Size2 Option MUST be used with the Q-Block2 Option when
-        used in a response.</t>
-
-        <t>If Size1 or Size2 Options are used, they MUST be used in all
-        payloads of the body and MUST preserve the same value in each of those
-        payloads.</t>
+        a request and MUST be present in all payloads of the request preserving
+        the same value. The Size2 Option MUST be used with the Q-Block2 Option
+        when used in a response and MUST be present in all payloads of the
+        response preserving the same value.</t>
       </section>
 
       <section title="Using Q-Block1 and Q-Block2 Options Together">
@@ -834,22 +845,19 @@ missing-block-number = uint
     </section>
 
     <section anchor="token" title="The Use of Tokens">
-      <t>Each new request MUST use a unique Token (Section 4 of <xref
+      <t>Each new request generally uses a new Token (and sometimes must, see
+      Section 4 of <xref
       target="I-D.ietf-core-echo-request-tag"></xref>). Additional responses
-      may use the same Token.</t>
+      to a request all use the token of the request they respond to.</t>
 
       <t><list style="hanging">
           <t hangText="Implementation Note:">To minimize on the number of
-          tokens that have to be tracked by clients, it is recommended that
+          tokens that have to be tracked by clients, it is suggested that
           the bottom 32 bits is kept the same for the same body and the upper
           32 bits contains the current body's request number (incrementing
-          every request). This allows the client to be alleviated from keeping
-          all the per-request-state, e.g., in Section 3 of <xref
-          target="RFC8974"></xref>. <vspace blankLines="1" />Servers continue
-          to treat the token as a unique opaque entity. If an individual
-          payload has to be resent (e.g., requested upon packet loss), then
-          the retransmitted packet keeps the same bottom 32 bits and the upper
-          32 bits is incremented.</t>
+          every request, including every re-transmit). This allows the client
+          to be alleviated from keeping all the per-request-state, e.g., in
+          Section 3 of <xref target="RFC8974"></xref>.</t>
         </list></t>
     </section>
 
@@ -1229,7 +1237,7 @@ X<--: Message loss (response)
               <artwork><![CDATA[        CoAP        CoAP
        Client      Server
          |          |
-         |<---------+ NON 4.08 M:0x91 T:0xec [Missing 1,9 [for RT=11]]
+         |<---------+ NON 4.08 M:0x91 T:0xec [Missing 1,9]
          |     [[Client responds with missing payloads]]
          +--------->| NON PUT /path M:0x1d T:0xed RT=11 QB1:1/1/1024
          +--------->| NON PUT /path M:0x1e T:0xee RT=11 QB1:9/1/1024
@@ -1239,7 +1247,7 @@ X<--: Message loss (response)
       [[NON_RECEIVE_TIMEOUT (server) delay expires]]
          |     [[The server realizes a block is still missing and asks
          |        for the missing one]]            
-         |<---------+ NON 4.08 M:0x92 T:0xef [Missing 10 [for RT=11]]
+         |<---------+ NON 4.08 M:0x92 T:0xef [Missing 10]
          +--------->| NON PUT /path M:0x20 T:0xf0 RT=11 QB1:10/1/1024
          |<---------+ NON 2.04 M:0x93 T:0xf0
          |   ...    |
@@ -1264,22 +1272,22 @@ X<--: Message loss (response)
       [[NON_RECEIVE_TIMEOUT (server) delay expires]]
          |     [[The server realizes a block is missing and asks
          |        for the missing one.  Retry #1]]            
-         |<---------+ NON 4.08 M:0x01 T:0xd2 [Missing 1 [for RT=12]]
+         |<---------+ NON 4.08 M:0x01 T:0xd2 [Missing 1]
          |   ...    |
       [[2 * NON_RECEIVE_TIMEOUT (server) delay expires]]
          |     [[The server realizes a block is still missing and asks
          |        for the missing one.  Retry #2]]            
-         |<---------+ NON 4.08 M:0x02 T:0xd2 [Missing 1 [for RT=12]]
+         |<---------+ NON 4.08 M:0x02 T:0xd2 [Missing 1]
          |   ...    |
       [[4 * NON_RECEIVE_TIMEOUT (server) delay expires]]
          |     [[The server realizes a block is still missing and asks
          |        for the missing one.  Retry #3]]            
-         |<---------+ NON 4.08 M:0x03 T:0xd2 [Missing 1 [for RT=12]]
+         |<---------+ NON 4.08 M:0x03 T:0xd2 [Missing 1]
          |   ...    |
       [[8 * NON_RECEIVE_TIMEOUT (server) delay expires]]
          |     [[The server realizes a block is still missing and asks
          |        for the missing one.  Retry #4]]            
-         |<---------+ NON 4.08 M:0x04 T:0xd2 [Missing 1 [for RT=12]]
+         |<---------+ NON 4.08 M:0x04 T:0xd2 [Missing 1]
          |   ...    |
       [[16 * NON_RECEIVE_TIMEOUT (server) delay expires]]
          |     [[NON_MAX_RETRANSMIT exceeded. Server stops requesting
@@ -1557,7 +1565,7 @@ X<--: Message loss (response)
               <artwork><![CDATA[      CoAP        CoAP
      Client      Server
        |          |
-       |<---------+ NON 4.08 M:0xa0 T:0xc3 [Missing 1,2 [for RT=31]]
+       |<---------+ NON 4.08 M:0xa0 T:0xc3 [Missing 1,2]
        |     [[Client responds with missing payloads]]
        +--------->| NON FETCH /path M:0x54 T:0xc4 O:0 RT=31 QB1:1/1/1024
        +--------->| NON FETCH /path M:0x55 T:0xc5 O:0 RT=31 QB1:2/1/1024
@@ -1855,7 +1863,7 @@ o  Reference: [RFCXXXX]]]></artwork>
     </references>
 
     <section anchor="CON" title="Examples with Confirmable Messages">
-      <t>These examples assume NSTART has been increased to at least 4.</t>
+      <t>These examples assume NSTART has been increased to 3.</t>
 
       <t>The notations provided in <xref target="legend"></xref> are used in
       the following subsections.</t>
@@ -1873,8 +1881,9 @@ o  Reference: [RFCXXXX]]]></artwork>
          +--------->| CON PUT /path M:0x01 T:0xf0 RT=10 QB1:0/1/1024
          +--------->| CON PUT /path M:0x02 T:0xf1 RT=10 QB1:1/1/1024
          +--------->| CON PUT /path M:0x03 T:0xf2 RT=10 QB1:2/1/1024
-         +--------->| CON PUT /path M:0x04 T:0xf3 RT=10 QB1:3/0/1024
+      [[NSTART(3) limit reached]]
          |<---------+ ACK 0.00 M:0x01
+         +--------->| CON PUT /path M:0x04 T:0xf3 RT=10 QB1:3/0/1024
          |<---------+ ACK 0.00 M:0x02
          |<---------+ ACK 0.00 M:0x03
          |<---------+ ACK 2.04 M:0x04
@@ -1895,18 +1904,21 @@ o  Reference: [RFCXXXX]]]></artwork>
          +--------->| CON PUT /path M:0x05 T:0xf4 RT=11 QB1:0/1/1024
          +--->X     | CON PUT /path M:0x06 T:0xf5 RT=11 QB1:1/1/1024
          +--->X     | CON PUT /path M:0x07 T:0xf6 RT=11 QB1:2/1/1024
-         +--------->| CON PUT /path M:0x08 T:0xf7 RT=11 QB1:3/1/1024
+      [[NSTART(3) limit reached]]
          |<---------+ ACK 0.00 M:0x05
+         +--------->| CON PUT /path M:0x08 T:0xf7 RT=11 QB1:3/1/1024
          |<---------+ ACK 0.00 M:0x08
          |   ...    |
-      [[ACK_TIMEOUT (client) delay expires]]
-         |     [[Client retransmits associated packet]]
+      [[ACK_TIMEOUT (client) for M:0x06 delay expires]]
+         |     [[Client retransmits packet]]
          +--------->| CON PUT /path M:0x06 T:0xf5 RT=11 QB1:1/1/1024
+      [[ACK_TIMEOUT (client) for M:0x07 delay expires]]
+         |     [[Client retransmits packet]]
          +--->X     | CON PUT /path M:0x07 T:0xf6 RT=11 QB1:2/1/1024
          |<---------+ ACK 0.00 M:0x06
          |   ...    |
       [[ACK_TIMEOUT exponential backoff (client) delay expires]]
-         |     [[Client retransmits associated packet]]
+         |     [[Client retransmits packet]]
          +--->?     | CON PUT /path M:0x07 T:0xf6 RT=11 QB1:2/1/1024
          |   ...    |
       [[Either body transmission failure (acknowledge retry timeout)
@@ -1945,8 +1957,9 @@ o  Reference: [RFCXXXX]]]></artwork>
          |<---------+ CON 2.05 M:0xe4 T:0xf0 O:1235 ET=22 QB2:0/1/1024
          |<---------+ CON 2.05 M:0xe5 T:0xf0 O:1235 ET=22 QB2:1/1/1024
          |<---------+ CON 2.05 M:0xe6 T:0xf0 O:1235 ET=22 QB2:2/1/1024
-         |<---------+ CON 2.05 M:0xe7 T:0xf0 O:1235 ET=22 QB2:3/0/1024
+      [[NSTART(3) limit reached]]
          |--------->+ ACK 0.00 M:0xe4
+         |<---------+ CON 2.05 M:0xe7 T:0xf0 O:1235 ET=22 QB2:3/0/1024
          |--------->+ ACK 0.00 M:0xe5
          |--------->+ ACK 0.00 M:0xe6
          |--------->+ ACK 0.00 M:0xe7
@@ -1955,18 +1968,21 @@ o  Reference: [RFCXXXX]]]></artwork>
          |<---------+ CON 2.05 M:0xe8 T:0xf0 O:1236 ET=23 QB2:0/1/1024
          |     X<---+ CON 2.05 M:0xe9 T:0xf0 O:1236 ET=23 QB2:1/1/1024
          |     X<---+ CON 2.05 M:0xea T:0xf0 O:1236 ET=23 QB2:2/1/1024
-         |<---------+ CON 2.05 M:0xeb T:0xf0 O:1236 ET=23 QB2:3/0/1024
+      [[NSTART(3) limit reached]]
          |--------->+ ACK 0.00 M:0xe8
+         |<---------+ CON 2.05 M:0xeb T:0xf0 O:1236 ET=23 QB2:3/0/1024
          |--------->+ ACK 0.00 M:0xeb
          |   ...    |
-      [[ACK_TIMEOUT (server) delay expires (twice in this example)]]
-         |     [[Server retransmits associated packet]]
+      [[ACK_TIMEOUT (server) for M:0xe9 delay expires]]
+         |     [[Server retransmits packet]]
          |<---------+ CON 2.05 M:0xe9 T:0xf0 O:1236 ET=23 QB2:1/1/1024
+      [[ACK_TIMEOUT (server) for M:0xea delay expires]]
+         |     [[Server retransmits packet]]
          |     X<---+ CON 2.05 M:0xea T:0xf0 O:1236 ET=23 QB2:2/1/1024
          |--------->+ ACK 0.00 M:0xe9
          |   ...    |
       [[ACK_TIMEOUT exponential backoff (server) delay expires]]
-         |     [[Server retransmits associated packet]]
+         |     [[Server retransmits packet]]
          |     X<---+ CON 2.05 M:0xea T:0xf0 O:1236 ET=23 QB2:2/1/1024
          |   ...    |
       [[Either body transmission failure (acknowledge retry timeout)
