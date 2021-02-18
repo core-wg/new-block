@@ -197,7 +197,7 @@ Internet-Draft      Quick Block-Wise Transfer Options      February 2021
       (Section 4.7 of [RFC7252]).  Such tuning is out of scope of this
       document.
 
-   o  The Q-Block options do not support stateless operation / random
+   o  The Q-Block Options do not support stateless operation/random
       access.
 
    o  Proxying of Q-Block is limited to caching full representations.
