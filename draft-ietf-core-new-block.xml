@@ -160,7 +160,7 @@
             (Section 4.7 of <xref target="RFC7252"></xref>). Such tuning is
             out of scope of this document.</t>
 
-            <t>The Q-Block options do not support stateless operation / random
+            <t>The Q-Block Options do not support stateless operation/random
             access.</t>
 
             <t>Proxying of Q-Block is limited to caching full representations.
