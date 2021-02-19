@@ -777,10 +777,11 @@
 
       <t>The data payload of the 4.08 (Request Entity Incomplete) response is
       encoded as a CBOR Sequence <xref target="RFC8742"></xref>. It comprises
-      of one or more CBOR encoded missing block numbers. The missing block
-      numbers MUST be unique in each 4.08 (Request Entity Incomplete) response
-      when created by the server; the client SHOULD drop any duplicates in the
-      same 4.08 (Request Entity Incomplete) response.</t>
+      of one or more CBOR encoded <xref target="RFC8949 "></xref> missing block
+      numbers. The missing block numbers MUST be unique in each 4.08 (Request
+      Entity Incomplete) response when created by the server; the client SHOULD
+      drop any duplicates in the same 4.08 (Request Entity Incomplete)
+      response.</t>
 
       <t>The Content-Format Option (Section 5.10.3 of <xref
       target="RFC7252"></xref>) MUST be used in the 4.08 (Request Entity
@@ -789,11 +790,12 @@
       target="new-format"></xref>).</t>
 
       <t>The Concise Data Definition Language <xref target="RFC8610"></xref>
-      for the data describing these missing blocks is as follows:</t>
+      (and see Section 4.1  <xref target="RFC8742"></xref>) for the data
+      describing these missing blocks is as follows:</t>
 
       <figure align="center" anchor="cddl"
               title="Structure of the Missing Blocks Payload">
-        <artwork align="center"><![CDATA[; This defines an array, the elements of which are to be used
+        <artwork align="center"><![CDATA[; A notional array, the elements of which are to be used
 ; in a CBOR Sequence:
 payload = [+ missing-block-number]
 ; A unique block number not received:
@@ -806,7 +808,7 @@ missing-block-number = uint
       <t>The token to use for the response SHOULD be the token that was used
       in the last block number received so far with the same Request-Tag
       value. Note that the use of any received token with the same Request-Tag
-      would work, but providing the one used in the last received block number
+      would work, but providing the one used in the last received payload
       will aid any troubleshooting. The client will use the token to determine
       what was the previously sent request to obtain the Request-Tag value to
       be used.</t>
@@ -824,16 +826,10 @@ missing-block-number = uint
       Incomplete) responses not adhering with this behavior.</t>
 
       <t><list style="hanging">
-          <t hangText="Implementation Note:">Updating the payload without
-          overflowing the overall packet size as each block number can be of
-          varying length needs consideration. It is possible to use
-          Indefinite-Length Arrays (Section 3.2.2 of <xref
-          target="RFC8949"></xref>), or alternatively limit the array count to
-          23 so that the initial byte with the array major type and data
-          length in the additional information can be updated with the overall
-          count once the payload count is confirmed. Further restricting the
-          count to MAX_PAYLOADS means that congestion control is less likely
-          to be invoked on the server.</t>
+          <t hangText="Implementation Note:">Consider limiting the number of
+          missing payloads to MAX_PAYLOADS to minimize congestion control
+          being needed.  The CBOR sequence does not include any array
+          wrapper.</t>
         </list></t>
 
       <t>The 4.08 (Request Entity Incomplete) with Content-Type
