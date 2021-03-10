@@ -160,6 +160,9 @@
             (Section 4.7 of <xref target="RFC7252"></xref>). Such tuning is
             out of scope of this document.</t>
 
+            <t>Mixing of NON and CON during requests/responses using Q-Block
+            is not supported.</t>
+
             <t>The Q-Block Options do not support stateless operation/random
             access.</t>
 
@@ -340,27 +343,6 @@
         (if supported) to send back a message body that is too large to fit
         into a single IP packet <xref target="RFC7959"></xref>.</t>
 
-        <t>Alternatively, with CoAP over reliable transports, Capabilities and
-        Settings Messages (CSMs) can be used to indicate support of Q-Block
-        Options by means of the Q-Block-Wise-Transfer Capability Option (Table
-        2). The behavior of CoAP peers is similar to the one specified in
-        Section 5.3.2 of <xref target="RFC8323"></xref>, except that it
-        indicates support of Q-Block Options.</t>
-
-        <t><figure align="center">
-            <artwork align="center"><![CDATA[+----+---+---+---------+---------------+--------+--------+--------+
-| #  | C | R | Applies | Name          | Format | Length | Base   |
-|    |   |   | to      |               |        |        | Value  |
-+====+===+===+=========+===============+========+========+========+
-|TBA4|   |   | CSM     | Q-Block-Wise- |  empty |      0 | (none) |
-|    |   |   |         |   Transfer    |        |        |        |
-+----+---+---+---------+---------------+--------+--------+--------+
-
-                      C=Critical, R=Repeatable
-
-      Table 2: The Q-Block-Wise-Transfer Capability Option]]></artwork>
-          </figure></t>
-
         <t>Implementation of the Q-Block1 and Q-Block2 Options is intended to
         be optional. However, when it is present in a CoAP message, it MUST be
         processed (or the message rejected). Therefore, Q-Block1 and Q-Block2
@@ -389,7 +371,7 @@
 
         <t>The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
         Options, are both a class E and a class U in terms of OSCORE
-        processing (Table 3). The Q-Block1 (or Q-Block2) Option MAY be an
+        processing (Table 2). The Q-Block1 (or Q-Block2) Option MAY be an
         Inner or Outer option (Section 4.1 of <xref target="RFC8613"></xref>).
         The Inner and Outer values are therefore independent of each other.
         The Inner option is encrypted and integrity protected between clients
@@ -405,7 +387,7 @@
                    |  TBA1  | Q-Block1        | x | x |
                    |  TBA2  | Q-Block2        | x | x |
                    +--------+-----------------+---+---+
-       Table 3: OSCORE Protection of Q-Block1 and Q-Block2 Options
+       Table 2: OSCORE Protection of Q-Block1 and Q-Block2 Options
 ]]></artwork>
           </figure></t>
 
@@ -883,7 +865,7 @@ missing-block-number = uint
       <section anchor="cc-non" title="Non-confirmable (NON)">
         <t>This document introduces new parameters MAX_PAYLOADS, NON_TIMEOUT,
         NON_RECEIVE_TIMEOUT, NON_MAX_RETRANSMIT, NON_PROBING_WAIT, and
-        NON_PARTIAL_TIMEOUT primarily for use with NON (Table 4).</t>
+        NON_PARTIAL_TIMEOUT primarily for use with NON (Table 3).</t>
 
         <t>MAX_PAYLOADS should be configurable with a default value of 10.
         Both CoAP endpoints SHOULD have the same value (otherwise there will
@@ -945,7 +927,7 @@ missing-block-number = uint
 | NON_PARTIAL_TIMEOUT |         247 s |
 +---------------------+---------------+
 
-Table 4: Congestion Control Parameters]]></artwork>
+Table 3: Congestion Control Parameters]]></artwork>
           </figure></t>
 
         <t>PROBING_RATE parameter in CoAP indicates the average data rate that
@@ -983,9 +965,10 @@ Table 4: Congestion Control Parameters]]></artwork>
         newly derived value for MAX_PAYLOADS should be used for both ends of
         this particular CoAP peer link. Note that the CoAP peer will not know
         about the MAX_PAYLOADS change until it is reconfigured. As a
-        consequence of not being reconfigured, the peer may indicate that
-        there are some missing payloads prior to the actual payload being
-        transmitted as all of its MAX_PAYLOADS payloads have not arrived.</t>
+        consequence of the two peers having different MAX_PAYLOADS values, a
+        peer may continue indicate that there are some missing payloads as
+        all of its MAX_PAYLOADS set may not have arrived. How the two peer
+        values for MAX_PAYLOADS are synchronized is out of the scope.</t>
 
         <t>The sending of a set of missing payloads of a body is subject to
         MAX_PAYLOADS set of payloads.</t>
@@ -1636,7 +1619,7 @@ X<--: Message loss (response)
 |  TBA2  | Q-Block2         | [RFCXXXX] |
 +--------+------------------+-----------+
 
-Table 5: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
+Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
           </figure></t>
 
         <t>This document suggests 19 (TBA1) and 51 (TBA2) as values to be
@@ -1705,25 +1688,6 @@ o  Reference: [RFCXXXX]]]></artwork>
 
         <t>This document suggests 272 (TBA3) as a value to be assigned for the
         new content format number.</t>
-      </section>
-
-      <section title="New CoAP Signaling Option Number">
-        <t>This document requests IANA to register the following option in the
-        "CoAP Signaling Option Numbers" registry <xref
-        target="CSM"></xref>.</t>
-
-        <t><figure align="center">
-            <artwork align="center"><![CDATA[+------------+--------+-----------------------+-----------+
-| Applies to | Number | Name                  | Reference |
-+============+========+=======================+===========+
-| 7.01       |  TBA4  | Q-Block-Wise-Transfer | [RFCXXXX] |
-+------------+--------+-----------------------+-----------+
-
-             Table 6: CoAP Signaling Option Codes]]></artwork>
-          </figure></t>
-
-        <t>This document suggests 8 (TBA4) as a value to be assigned for the
-        new option number.</t>
       </section>
     </section>
 
@@ -1809,19 +1773,6 @@ o  Reference: [RFCXXXX]]]></artwork>
                  target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats">
         <front>
           <title>CoAP Content-Formats</title>
-
-          <author>
-            <organization></organization>
-          </author>
-
-          <date />
-        </front>
-      </reference>
-
-      <reference anchor="CSM"
-                 target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#signaling-option-numbers">
-        <front>
-          <title>CoAP Signaling Option Numbers</title>
 
           <author>
             <organization></organization>
