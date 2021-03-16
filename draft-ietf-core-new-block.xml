@@ -110,10 +110,10 @@
 
       <t>The CoAP Block1 and Block2 Options work well in environments where
       there are no or minimal packet losses. These options operate
-      synchronously where each individual block has to be requested and can
-      only ask for (or send) the next block when the request for the previous
-      block has completed. Packet transmission rate, and hence block
-      transmission rate, is controlled by Round Trip Times (RTTs).</t>
+      synchronously, i.e., each individual block has to be requested. A CoAP
+      endpoint can only ask for (or send) the next block when the transfer of
+      the previous block has completed. Packet transmission rate, and hence
+      block transmission rate, is controlled by Round Trip Times (RTTs).</t>
 
       <t>There is a requirement for these blocks of data to be transmitted at
       higher rates under network conditions where there may be asymmetrical
@@ -258,7 +258,7 @@
         extensions of the block-wise mechanism that will both be generally
         applicable and serve this particular use case.</t>
 
-        <t>It is NOT RECOMMENDED that these options are used in a NoSec
+        <t>It is not recommended that these options are used in a NoSec
         security mode (Section 9 of <xref target="RFC7252"></xref>) as the
         source endpoint needs to be trusted. Using OSCORE <xref
         target="RFC8613"></xref> does provide a security context and, hence, a
