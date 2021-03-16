@@ -114,16 +114,16 @@ Boucadair & Shallow    Expires September 17, 2021               [Page 2]
 Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
 
-   12. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  37
-   13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  37
-     13.1.  Normative References . . . . . . . . . . . . . . . . . .  37
-     13.2.  Informative References . . . . . . . . . . . . . . . . .  39
-   Appendix A.  Examples with Confirmable Messages . . . . . . . . .  40
-     A.1.  Q-Block1 Option . . . . . . . . . . . . . . . . . . . . .  40
+   12. References  . . . . . . . . . . . . . . . . . . . . . . . . .  37
+     12.1.  Normative References . . . . . . . . . . . . . . . . . .  37
+     12.2.  Informative References . . . . . . . . . . . . . . . . .  38
+   Appendix A.  Examples with Confirmable Messages . . . . . . . . .  39
+     A.1.  Q-Block1 Option . . . . . . . . . . . . . . . . . . . . .  39
      A.2.  Q-Block2 Option . . . . . . . . . . . . . . . . . . . . .  41
    Appendix B.  Examples with Reliable Transports  . . . . . . . . .  43
      B.1.  Q-Block1 Option . . . . . . . . . . . . . . . . . . . . .  43
      B.2.  Q-Block2 Option . . . . . . . . . . . . . . . . . . . . .  43
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  44
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  44
 
 1.  Introduction
@@ -2034,20 +2034,9 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
    This document suggests 272 (TBA3) as a value to be assigned for the
    new content format number.
 
-12.  Acknowledgements
+12.  References
 
-   Thanks to Achim Kraus, Jim Schaad, and Michael Richardson for their
-   comments.
-
-   Special thanks to Christian Amsuess, Carsten Bormann, and Marco
-   Tiloca for their suggestions and several reviews, which improved this
-   specification significantly.
-
-   Some text from [RFC7959] is reused for readers convenience.
-
-13.  References
-
-13.1.  Normative References
+12.1.  Normative References
 
    [I-D.ietf-core-echo-request-tag]
               Amsuess, C., Mattsson, J., and G. Selander, "CoAP: Echo,
@@ -2064,16 +2053,6 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
               DOI 10.17487/RFC7252, June 2014,
               <https://www.rfc-editor.org/info/rfc7252>.
 
-
-
-
-
-
-Boucadair & Shallow    Expires September 17, 2021              [Page 37]
-
-Internet-Draft      Quick Block-Wise Transfer Options         March 2021
-
-
    [RFC7641]  Hartke, K., "Observing Resources in the Constrained
               Application Protocol (CoAP)", RFC 7641,
               DOI 10.17487/RFC7641, September 2015,
@@ -2083,6 +2062,17 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
               the Constrained Application Protocol (CoAP)", RFC 7959,
               DOI 10.17487/RFC7959, August 2016,
               <https://www.rfc-editor.org/info/rfc7959>.
+
+
+
+
+
+
+
+Boucadair & Shallow    Expires September 17, 2021              [Page 37]
+
+Internet-Draft      Quick Block-Wise Transfer Options         March 2021
+
 
    [RFC8075]  Castellani, A., Loreto, S., Rahman, A., Fossati, T., and
               E. Dijk, "Guidelines for Mapping Implementations: HTTP to
@@ -2119,18 +2109,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
               DOI 10.17487/RFC8949, December 2020,
               <https://www.rfc-editor.org/info/rfc8949>.
 
-
-
-
-
-
-
-Boucadair & Shallow    Expires September 17, 2021              [Page 38]
-
-Internet-Draft      Quick Block-Wise Transfer Options         March 2021
-
-
-13.2.  Informative References
+12.2.  Informative References
 
    [Format]   "CoAP Content-Formats", <https://www.iana.org/assignments/
               core-parameters/core-parameters.xhtml#content-formats>.
@@ -2141,6 +2120,15 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
               Configuration Attributes for Faster Block Transmission",
               draft-bosh-dots-quick-blocks-01 (work in progress),
               January 2021.
+
+
+
+
+
+Boucadair & Shallow    Expires September 17, 2021              [Page 38]
+
+Internet-Draft      Quick Block-Wise Transfer Options         March 2021
+
 
    [I-D.ietf-dots-telemetry]
               Boucadair, M., Reddy.K, T., Doron, E., chenmeiling, c.,
@@ -2177,15 +2165,6 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
               (CoAP)", RFC 8974, DOI 10.17487/RFC8974, January 2021,
               <https://www.rfc-editor.org/info/rfc8974>.
 
-
-
-
-
-Boucadair & Shallow    Expires September 17, 2021              [Page 39]
-
-Internet-Draft      Quick Block-Wise Transfer Options         March 2021
-
-
 Appendix A.  Examples with Confirmable Messages
 
    These examples assume NSTART has been increased to 3.
@@ -2197,6 +2176,15 @@ A.1.  Q-Block1 Option
 
    Let's now consider the use of Q-Block1 Option with a CON request as
    shown in Figure 17.  All the blocks are acknowledged (ACK).
+
+
+
+
+
+Boucadair & Shallow    Expires September 17, 2021              [Page 39]
+
+Internet-Draft      Quick Block-Wise Transfer Options         March 2021
+
 
            CoAP        CoAP
           Client      Server
@@ -2217,30 +2205,6 @@ A.1.  Q-Block1 Option
    Now, suppose that a new body of data is to be sent but with some
    blocks dropped in transmission as illustrated in Figure 18.  The
    client will retry sending blocks for which no ACK was received.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Boucadair & Shallow    Expires September 17, 2021              [Page 40]
-
-Internet-Draft      Quick Block-Wise Transfer Options         March 2021
-
 
            CoAP        CoAP
           Client      Server
@@ -2271,6 +2235,13 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
       Figure 18: Example of CON Request with Q-Block1 Option (Blocks
                                  Recovery)
 
+
+
+Boucadair & Shallow    Expires September 17, 2021              [Page 40]
+
+Internet-Draft      Quick Block-Wise Transfer Options         March 2021
+
+
    It is up to the implementation as to whether the application process
    stops trying to send this particular body of data on reaching
    MAX_RETRANSMIT for any payload, or separately tries to initiate the
@@ -2284,6 +2255,35 @@ A.2.  Q-Block2 Option
 
    An example of the use of Q-Block2 Option with Confirmable messages is
    shown in Figure 19.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2430,6 +2430,17 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
    If there is likely to be the possibility of network transient losses,
    then the use of unreliable transport with NON should be considered.
 
+Acknowledgements
+
+   Thanks to Achim Kraus, Jim Schaad, and Michael Richardson for their
+   comments.
+
+   Special thanks to Christian Amsuess, Carsten Bormann, and Marco
+   Tiloca for their suggestions and several reviews, which improved this
+   specification significantly.
+
+   Some text from [RFC7959] is reused for readers convenience.
+
 Authors' Addresses
 
    Mohamed Boucadair
@@ -2444,17 +2455,6 @@ Authors' Addresses
    United Kingdom
 
    Email: supjps-ietf@jpshallow.com
-
-
-
-
-
-
-
-
-
-
-
 
 
 

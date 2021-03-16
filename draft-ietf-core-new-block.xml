@@ -1109,7 +1109,7 @@ Table 3: Congestion Control Parameters]]></artwork>
       <t>This section provides some sample flows to illustrate the use of
       Q-Block1 and Q-Block2 Options with NON. Examples with CON are provided
       in <xref target="CON"></xref>. These examples assume MAX_PAYLOADS is set
-      to 10 and NON_MAX_RETRANSMIT is set to 4. </t>
+      to 10 and NON_MAX_RETRANSMIT is set to 4.</t>
 
       <t><xref target="legend"></xref> lists the conventions that are used in
       the following subsections.</t>
@@ -1723,18 +1723,6 @@ o  Reference: [This_Document]]]></artwork>
         new content format number.</t>
       </section>
     </section>
-
-    <section anchor="ack" title="Acknowledgements">
-      <t>Thanks to Achim Kraus, Jim Schaad, and Michael Richardson for their
-      comments.</t>
-
-      <t>Special thanks to Christian Ams&uuml;ss, Carsten Bormann, and Marco
-      Tiloca for their suggestions and several reviews, which improved this
-      specification significantly.</t>
-
-      <t>Some text from <xref target="RFC7959"></xref> is reused for readers
-      convenience.</t>
-    </section>
   </middle>
 
   <back>
@@ -2012,6 +2000,18 @@ o  Reference: [This_Document]]]></artwork>
         losses, then the use of unreliable transport with NON should be
         considered.</t>
       </section>
+    </section>
+
+    <section title="Acknowledgements" toc="default" numbered="false">
+      <t>Thanks to Achim Kraus, Jim Schaad, and Michael Richardson for their
+      comments.</t>
+
+      <t>Special thanks to Christian Ams&uuml;ss, Carsten Bormann, and Marco
+      Tiloca for their suggestions and several reviews, which improved this
+      specification significantly.</t>
+
+      <t>Some text from <xref target="RFC7959"></xref> is reused for readers
+      convenience.</t>
     </section>
   </back>
 </rfc>
