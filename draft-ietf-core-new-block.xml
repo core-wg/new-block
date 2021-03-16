@@ -59,7 +59,7 @@
 
     <date />
 
-    <workgroup>CORE</workgroup>
+    <workgroup>CORE Working Group</workgroup>
 
     <keyword>Quick-Block</keyword>
 
@@ -89,11 +89,11 @@
       <t>This document specifies alternative Constrained Application Protocol
       (CoAP) Block-Wise transfer options: Q-Block1 and Q-Block2 Options.</t>
 
-      <t>These options are similar to the CoAP Block1 and Block2 Options, not
-      a replacement for them, but do enable faster transmission rates for
-      large amounts of data with less packet interchanges as well as
-      supporting faster recovery should any of the blocks get lost in
-      transmission.</t>
+      <t>These options are similar to the CoAP Block1 and Block2 Options
+      defined in RFC 7959, not a replacement for them, but do enable faster
+      transmission rates for large amounts of data with less packet
+      interchanges. Also, they support faster recovery should any of the
+      blocks get lost in transmission.</t>
     </abstract>
   </front>
 
@@ -112,8 +112,8 @@
       there are no or minimal packet losses. These options operate
       synchronously where each individual block has to be requested and can
       only ask for (or send) the next block when the request for the previous
-      block has completed. Packet, and hence block transmission rate, is
-      controlled by Round Trip Times (RTTs).</t>
+      block has completed. Packet transmission rate, and hence block
+      transmission rate, is controlled by Round Trip Times (RTTs).</t>
 
       <t>There is a requirement for these blocks of data to be transmitted at
       higher rates under network conditions where there may be asymmetrical
@@ -143,7 +143,7 @@
             in transmission.</t>
 
             <t>They support sending an entire body using Non-confirmable (NON)
-            without requiring a response from the peer.</t>
+            messages without requiring a response from the peer.</t>
           </list></t>
 
         <t>There are the following disadvantages over using CoAP Block1 and
@@ -152,7 +152,7 @@
             the correct (block ascending) order.</t>
 
             <t>Additional congestion control measures need to be put in place
-            for NON (<xref target="cc-non"></xref>).</t>
+            for NON messages (<xref target="cc-non"></xref>).</t>
 
             <t>To reduce the transmission times for CON transmission of large
             bodies, NSTART needs to be increased from 1, but this affects
@@ -166,27 +166,29 @@
             <t>The Q-Block Options do not support stateless operation/random
             access.</t>
 
-            <t>Proxying of Q-Block is limited to caching full representations.
-            </t>
+            <t>Proxying of Q-Block is limited to caching full
+            representations.</t>
 
             <t>There is no multicast support.</t>
           </list></t>
+
+        <t>Q-Block1 and Q-Block2 Options are designed to work in particular
+        with Non-confirmable requests and responses.</t>
 
         <t>Using NON messages, the faster transmissions occur as all the
         blocks can be transmitted serially (as are IP fragmented packets)
         without having to wait for a response or next request from the remote
         CoAP peer. Recovery of missing blocks is faster in that multiple
-        missing blocks can be requested in a single CoAP packet. Even if there
-        is asymmetrical packet loss, a body can still be sent and received by
-        the peer whether the body comprises of a single or multiple payloads
-        assuming no recovery is required.</t>
+        missing blocks can be requested in a single CoAP message. Even if
+        there is asymmetrical packet loss, a body can still be sent and
+        received by the peer whether the body comprises of a single or
+        multiple payloads assuming no recovery is required.</t>
 
         <t>A CoAP endpoint can acknowledge all or a subset of the blocks.
-        Concretely, the receiving CoAP endpoint informs the CoAP sender
-        endpoint either successful receipt or reports on all blocks in the
-        body that have not yet been received. The CoAP sender endpoint will
-        then retransmit only the blocks that have been lost in
-        transmission.</t>
+        Concretely, the receiving CoAP endpoint either informs the CoAP sender
+        endpoint of successful reception or reports on all blocks in the body
+        that have not yet been received. The CoAP sender endpoint will then
+        retransmit only the blocks that have been lost in transmission.</t>
 
         <t>Note that similar performance benefits can be applied to
         Confirmable messages if the value of NSTART is increased from 1
@@ -203,7 +205,7 @@
 
         <t>Q-Block1 and Q-Block2 Options can be used instead of Block1 and
         Block2 Options when the different transmission properties are
-        required. If the new option is not supported by a peer, then
+        required. If the new options are not supported by a peer, then
         transmissions can fall back to using Block1 and Block2 Options.</t>
 
         <t>The deviations from Block1 and Block2 Options are specified in
@@ -214,9 +216,6 @@
         Section 5.8 of <xref target="RFC7252"></xref> and the new CoAP
         methods, FETCH, PATCH, and iPATCH introduced in <xref
         target="RFC8132"></xref>.</t>
-
-        <t>Q-Block1 and Q-Block2 Options are designed to work in particular
-        with Non-confirmable requests and responses.</t>
 
         <t>The No-Response Option was considered but was abandoned as it does
         not apply to Q-Block2 responses. A unified solution is defined in the
@@ -240,7 +239,7 @@
         provides additional properties that are tailored towards the intended
         use case of Non-Confirmable transmission. Concretely, this mechanism
         primarily targets applications such as DDoS Open Threat Signaling
-        (DOTS) that can't use Confirmable (CON) responses to handle potential
+        (DOTS) that cannot use Confirmable (CON) responses to handle potential
         packet loss and that support application-specific mechanisms to assess
         whether the remote peer is able to handle the messages sent by a CoAP
         endpoint (e.g., DOTS heartbeats in Section 4.7 of <xref
@@ -259,7 +258,7 @@
         extensions of the block-wise mechanism that will both be generally
         applicable and serve this particular use case.</t>
 
-        <t>It is not recommended that these options are used in a NoSec
+        <t>It is NOT RECOMMENDED that these options are used in a NoSec
         security mode (Section 9 of <xref target="RFC7252"></xref>) as the
         source endpoint needs to be trusted. Using OSCORE <xref
         target="RFC8613"></xref> does provide a security context and, hence, a
@@ -277,7 +276,8 @@
       only when, they appear in all capitals, as shown here.</t>
 
       <t>Readers should be familiar with the terms and concepts defined in
-      <xref target="RFC7252"></xref>.</t>
+      <xref target="RFC7252"></xref>, <xref target="RFC7959"></xref>, and
+      <xref target="RFC8132"></xref>.</t>
 
       <t>The terms "payload" and "body" are defined in <xref
       target="RFC7959"></xref>. The term "payload" is thus used for the
@@ -288,9 +288,9 @@
 
     <section anchor="spec" title="The Q-Block1 and Q-Block2 Options">
       <section title="Properties of Q-Block1 and Q-Block2 Options">
-        <t>The properties of Q-Block1 and Q-Block2 Options are shown in Table
-        1. The formatting of this table follows the one used in Table 4 of
-        <xref target="RFC7252"></xref> (Section 5.10). The C, U, N, and R
+        <t>The properties of the Q-Block1 and Q-Block2 Options are shown in
+        Table 1. The formatting of this table follows the one used in Table 4
+        of <xref target="RFC7252"></xref> (Section 5.10). The C, U, N, and R
         columns indicate the properties Critical, UnSafe, NoCacheKey, and
         Repeatable defined in Section 5.4 of <xref target="RFC7252"></xref>.
         Only Critical and UnSafe columns are marked for the Q-Block1 Option.
@@ -337,7 +337,7 @@
         <t>To indicate support for Q-Block2 responses, the CoAP client MUST
         include the Q-Block2 Option in a GET or similar request, the Q-Block2
         Option in a PUT or similar request, or the Q-Block1 Option in a PUT or
-        similar so that the server knows that the client supports this
+        similar request so that the server knows that the client supports this
         Q-Block2 functionality should it need to send back a body that spans
         multiple payloads. Otherwise, the server would use the Block2 Option
         (if supported) to send back a message body that is too large to fit
@@ -370,15 +370,15 @@
         target="RFC7252"></xref>.</t>
 
         <t>The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
-        Options, are both a class E and a class U in terms of OSCORE
-        processing (Table 2). The Q-Block1 (or Q-Block2) Option MAY be an
-        Inner or Outer option (Section 4.1 of <xref target="RFC8613"></xref>).
-        The Inner and Outer values are therefore independent of each other.
-        The Inner option is encrypted and integrity protected between clients
-        and servers, and provides message body identification in case of
-        end-to-end fragmentation of requests. The Outer option is visible to
-        proxies and labels message bodies in case of hop-by-hop fragmentation
-        of requests.</t>
+        Options, both of class E and class U for OSCORE processing (Table 2).
+        The Q-Block1 (or Q-Block2) Option MAY be an Inner or Outer option
+        (Section 4.1 of <xref target="RFC8613"></xref>). The Inner and Outer
+        values are therefore independent of each other. The Inner option is
+        encrypted and integrity protected between clients and servers, and
+        provides message body identification in case of end-to-end
+        fragmentation of requests. The Outer option is visible to proxies and
+        labels message bodies in case of hop-by-hop fragmentation of
+        requests.</t>
 
         <t><figure align="center">
             <artwork align="center"><![CDATA[                   +--------+-----------------+---+---+
@@ -395,10 +395,10 @@
 
         <t>Note that if Q-Block1 or Q-Block2 Options are included in a packet
         as Inner options, Block1 or Block2 Options MUST NOT be included as
-        Inner options.  Similarly there MUST NOT be a mix of Q-Block and
-        Block for the Outer options. Q-Block and Block Options can be mixed
-        across Inner and Outer options as these are handled independently of
-        each other.</t>
+        Inner options. Similarly there MUST NOT be a mix of Q-Block and Block
+        for the Outer options. Q-Block and Block Options can be mixed across
+        Inner and Outer options as these are handled independently of each
+        other.</t>
       </section>
 
       <section title="Structure of Q-Block1 and Q-Block2 Options">
@@ -468,34 +468,34 @@
 
         <t>2.01 (Created)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and the resource was created. The token used SHOULD be from
-            the last received payload. The client should then release all of
-            the tokens used for this body.</t>
+            body and that the resource was created. The token used SHOULD be
+            from the last received payload. The client should then release all
+            of the tokens used for this body.</t>
           </list></t>
 
         <t>2.02 (Deleted)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and the resource was deleted when using POST (Section 5.8.2
-            <xref target="RFC7252"></xref>). The token used SHOULD be from the
-            last received payload. The client should then release all of the
-            tokens used for this body.</t>
+            body and that the resource was deleted when using POST (Section
+            5.8.2 <xref target="RFC7252"></xref>). The token used SHOULD be
+            from the last received payload. The client should then release all
+            of the tokens used for this body.</t>
           </list></t>
 
         <t>2.04 (Changed)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and the resource was updated. The token used SHOULD be from
-            the last received payload. The client should then release all of
-            the tokens used for this body.</t>
+            body and that the resource was updated. The token used SHOULD be
+            from the last received payload. The client should then release all
+            of the tokens used for this body.</t>
           </list></t>
 
         <t>2.05 (Content)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
             FETCH request body (Section 2 of <xref target="RFC8132"></xref>)
-            and the appropriate representation of the resource is being
+            and that the appropriate representation of the resource is being
             returned. The token used in the response SHOULD be from the last
-            received payload. If the FETCH request includes the Observe Option,
-            then the server MUST use the same token for returning any Observe
-            triggered responses so that the client can match them up.
+            received payload. If the FETCH request includes the Observe
+            Option, then the server MUST use the same token for returning any
+            Observe triggered responses so that the client can match them up.
             The client should then release all of the tokens used for this
             body unless a resource is being observed.</t>
           </list></t>
@@ -503,9 +503,8 @@
         <t>2.31 (Continue)<list style="empty">
             <t>This Response Code can be used to indicate that all of the
             blocks up to and including the Q-Block1 Option block NUM (all
-            having the M bit set) in the response have been successfully
-            received. The token used SHOULD be from the last received
-            payload.</t>
+            having the M bit set) have been successfully received. The token
+            used SHOULD be from the last received payload.</t>
 
             <t>A response using this Response Code SHOULD NOT be generated for
             every received Q-Block1 Option request. It SHOULD only be
@@ -671,7 +670,7 @@
         5.6.1 of <xref target="RFC7252"></xref>)), whichever is the less.</t>
 
         <t>The ETag Option should not be used in the request for missing
-        blocks as the server could respond with a 2.03 (Valid Response) with
+        blocks as the server could respond with a 2.03 (Valid) response with
         no payload. It can be used in the request if the client wants to check
         the freshness of the locally cached body response.</t>
 
@@ -691,10 +690,10 @@
         being fresh.</t>
 
         <t>If the server transmits a new body of data (e.g., a triggered
-        Observe) with a new ETag to the same client as an additional response,
-        the client should remove any partially received body held for a
-        previous ETag for that resource as it is unlikely the missing blocks
-        can be retrieved.</t>
+        Observe notification) with a new ETag to the same client as an
+        additional response, the client should remove any partially received
+        body held for a previous ETag for that resource as it is unlikely the
+        missing blocks can be retrieved.</t>
 
         <t>If there is insufficient space to create a response PDU with a
         block size of 16 bytes (SZX = 0) to send back all the response options
@@ -727,10 +726,10 @@
         determined.</t>
 
         <t>The Size1 Option MUST be used with the Q-Block1 Option when used in
-        a request and MUST be present in all payloads of the request preserving
-        the same value. The Size2 Option MUST be used with the Q-Block2 Option
-        when used in a response and MUST be present in all payloads of the
-        response preserving the same value.</t>
+        a request and MUST be present in all payloads of the request
+        preserving the same value. The Size2 Option MUST be used with the
+        Q-Block2 Option when used in a response and MUST be present in all
+        payloads of the response preserving the same value.</t>
       </section>
 
       <section title="Using Q-Block1 and Q-Block2 Options Together">
@@ -759,10 +758,10 @@
 
       <t>The data payload of the 4.08 (Request Entity Incomplete) response is
       encoded as a CBOR Sequence <xref target="RFC8742"></xref>. It comprises
-      of one or more CBOR encoded <xref target="RFC8949 "></xref> missing block
+      of one or more CBOR encoded <xref target="RFC8949"></xref> missing block
       numbers. The missing block numbers MUST be unique in each 4.08 (Request
-      Entity Incomplete) response when created by the server; the client SHOULD
-      drop any duplicates in the same 4.08 (Request Entity Incomplete)
+      Entity Incomplete) response when created by the server; the client
+      SHOULD drop any duplicates in the same 4.08 (Request Entity Incomplete)
       response.</t>
 
       <t>The Content-Format Option (Section 5.10.3 of <xref
@@ -772,7 +771,7 @@
       target="new-format"></xref>).</t>
 
       <t>The Concise Data Definition Language <xref target="RFC8610"></xref>
-      (and see Section 4.1  <xref target="RFC8742"></xref>) for the data
+      (and see Section 4.1 <xref target="RFC8742"></xref>) for the data
       describing these missing blocks is as follows:</t>
 
       <figure align="center" anchor="cddl"
@@ -790,10 +789,10 @@ missing-block-number = uint
       <t>The token to use for the response SHOULD be the token that was used
       in the last block number received so far with the same Request-Tag
       value. Note that the use of any received token with the same Request-Tag
-      would work, but providing the one used in the last received payload
-      will aid any troubleshooting. The client will use the token to determine
-      what was the previously sent request to obtain the Request-Tag value to
-      be used.</t>
+      would work, but providing the one used in the last received payload will
+      aid any troubleshooting. The client will use the token to determine what
+      was the previously sent request to obtain the Request-Tag value to be
+      used.</t>
 
       <t>If the size of the 4.08 (Request Entity Incomplete) response packet
       is larger than that defined by Section 4.6 <xref
@@ -810,7 +809,7 @@ missing-block-number = uint
       <t><list style="hanging">
           <t hangText="Implementation Note:">Consider limiting the number of
           missing payloads to MAX_PAYLOADS to minimize congestion control
-          being needed.  The CBOR sequence does not include any array
+          being needed. The CBOR sequence does not include any array
           wrapper.</t>
         </list></t>
 
@@ -824,18 +823,18 @@ missing-block-number = uint
 
     <section anchor="token" title="The Use of Tokens">
       <t>Each new request generally uses a new Token (and sometimes must, see
-      Section 4 of <xref
-      target="I-D.ietf-core-echo-request-tag"></xref>). Additional responses
-      to a request all use the token of the request they respond to.</t>
+      Section 4 of <xref target="I-D.ietf-core-echo-request-tag"></xref>).
+      Additional responses to a request all use the token of the request they
+      respond to.</t>
 
       <t><list style="hanging">
           <t hangText="Implementation Note:">To minimize on the number of
-          tokens that have to be tracked by clients, it is suggested that
-          the bottom 32 bits is kept the same for the same body and the upper
-          32 bits contains the current body's request number (incrementing
-          every request, including every re-transmit). This allows the client
-          to be alleviated from keeping all the per-request-state, e.g., in
-          Section 3 of <xref target="RFC8974"></xref>.</t>
+          tokens that have to be tracked by clients, it is suggested that the
+          bottom 32 bits is kept the same for the same body and the upper 32
+          bits contains the current body's request number (incrementing every
+          request, including every re-transmit). This allows the client to be
+          alleviated from keeping all the per-request-state, e.g., in Section
+          3 of <xref target="RFC8974"></xref>.</t>
         </list></t>
     </section>
 
@@ -966,9 +965,9 @@ Table 3: Congestion Control Parameters]]></artwork>
         this particular CoAP peer link. Note that the CoAP peer will not know
         about the MAX_PAYLOADS change until it is reconfigured. As a
         consequence of the two peers having different MAX_PAYLOADS values, a
-        peer may continue indicate that there are some missing payloads as
-        all of its MAX_PAYLOADS set may not have arrived. How the two peer
-        values for MAX_PAYLOADS are synchronized is out of the scope.</t>
+        peer may continue indicate that there are some missing payloads as all
+        of its MAX_PAYLOADS set may not have arrived. How the two peer values
+        for MAX_PAYLOADS are synchronized is out of the scope.</t>
 
         <t>The sending of a set of missing payloads of a body is subject to
         MAX_PAYLOADS set of payloads.</t>
@@ -1087,10 +1086,10 @@ Table 3: Congestion Control Parameters]]></artwork>
       <t>A proxy that supports Q-Block2 Option MUST be prepared to receive a
       GET or similar request indicating one or more missing blocks. The proxy
       will serve from its cache the missing blocks that are available in its
-      cache in the same way a server would send all the appropriate Q-Block2s.
-      If the cache key matching body is not available in the cache, the proxy
-      MUST request the entire body from the CoAP server using the information
-      in the cache key.</t>
+      cache in the same way a server would send all the appropriate Q-Block2
+      responses. If the cache key matching body is not available in the cache,
+      the proxy MUST request the entire body from the CoAP server using the
+      information in the cache key.</t>
 
       <t>How long a CoAP endpoint (or proxy) keeps the body in its cache is
       implementation specific (e.g., it may be based on Max-Age).</t>
@@ -1109,7 +1108,8 @@ Table 3: Congestion Control Parameters]]></artwork>
     <section title="Examples with Non-confirmable Messages">
       <t>This section provides some sample flows to illustrate the use of
       Q-Block1 and Q-Block2 Options with NON. Examples with CON are provided
-      in <xref target="CON"></xref>.</t>
+      in <xref target="CON"></xref>. These examples assume MAX_PAYLOADS is set
+      to 10 and NON_MAX_RETRANSMIT is set to 4. </t>
 
       <t><xref target="legend"></xref> lists the conventions that are used in
       the following subsections.</t>
@@ -1207,9 +1207,9 @@ X<--: Message loss (response)
           target="B3non2"></xref>). It does so by indicating which blocks from
           the previous MAX_PAYLOADS payloads have not been received in the
           data portion of the response. The token used in the response should
-          be the token that was used in the last block number received
-          payload. The client can then derive the Request-Tag by matching the
-          token with the sent request.</t>
+          be the token that was used in the last received payload. The client
+          can then derive the Request-Tag by matching the token with the sent
+          request.</t>
 
           <t><figure anchor="B3non2"
               title="Example of NON Request with Q-Block1 Option (Blocks Recovery)">
@@ -1514,7 +1514,7 @@ X<--: Message loss (response)
         </section>
 
         <section title="Handling Recovery">
-          <t>Consider now a scenario where there are some blocks are lost in
+          <t>Consider now a scenario where some blocks are lost in
           transmission as illustrated in <xref target="b12non1"></xref>.</t>
 
           <t><figure anchor="b12non1"
@@ -1534,10 +1534,10 @@ X<--: Message loss (response)
           <t>The server realizes that some blocks are missing and asks for the
           missing blocks in one go (<xref target="b12non2"></xref>). It does
           so by indicating which blocks have not been received in the data
-          portion of the response. The token used in the response is be the
-          token that was used in the last block number received payload. The
-          client can then derive the Request-Tag by matching the token with
-          the sent request.</t>
+          portion of the response. The token used in the response is the token
+          that was used in the last received payload. The client can then
+          derive the Request-Tag by matching the token with the sent
+          request.</t>
 
           <t><figure anchor="b12non2"
               title="Example of NON Request with Q-Block1 Option (Server Recovery)">
@@ -1597,97 +1597,12 @@ X<--: Message loss (response)
        +--------->| NON FETCH /path M:0x58 T:0xc8 RT=31 QB2:1/0/1024
        |     [[Server receives FETCH request for missing payload,
        |       starts transmitting missing block]]
-       |<---------+ NON 2.05 M:0xa7 T:0xc8 ET=23 QB2:1/1/1024
+       |<---------+ NON 2.05 M:0xa7 T:0xc8 ET=24 QB2:1/1/1024
     [[Body has been received]]
        |   ...    |
 ]]></artwork>
             </figure></t>
         </section>
-      </section>
-    </section>
-
-    <section anchor="IANA" title="IANA Considerations">
-      <section title="New CoAP Options">
-        <t>IANA is requested to add the following entries to the "CoAP Option
-        Numbers" sub-registry <xref target="Options"></xref>:</t>
-
-        <t><figure align="center">
-            <artwork align="center"><![CDATA[+--------+------------------+-----------+
-| Number | Name             | Reference |
-+========+==================+===========+
-|  TBA1  | Q-Block1         | [RFCXXXX] |
-|  TBA2  | Q-Block2         | [RFCXXXX] |
-+--------+------------------+-----------+
-
-Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
-          </figure></t>
-
-        <t>This document suggests 19 (TBA1) and 51 (TBA2) as values to be
-        assigned for the new option numbers.</t>
-      </section>
-
-      <section title="New Media Type">
-        <t>This document requests IANA to register the
-        "application/missing-blocks+cbor-seq" media type in the "Media Types"
-        registry <xref target="IANA-MediaTypes"></xref>:<figure>
-            <artwork><![CDATA[   Type name: application
-
-   Subtype name: missing-blocks+cbor-seq
-
-   Required parameters: N/A
-
-   Optional parameters: N/A
-
-   Encoding considerations: binary
-
-   Security considerations: See the Security Considerations Section of
-   [This_Document].
-
-   Interoperability considerations: N/A
-
-   Published specification: [This_Document]
-
-   Applications that use this media type: Data serialization and
-      deserialization.
-
-   Fragment identifier considerations: N/A
-
-   Additional information:
-
-      Deprecated alias names for this type: N/A
-      Magic number(s): N/A
-      File extension(s): N/A
-      Macintosh file type code(s): N/A
-
-   Person & email address to contact for further information: IETF,
-   iesg@ietf.org
-
-   Intended usage: COMMON
-
-   Restrictions on usage: none
-
-   Author: See Authors' Addresses section.
-
-   Change controller: IESG
-
-   Provisional registration?  No]]></artwork>
-          </figure></t>
-      </section>
-
-      <section anchor="new-format" title="New Content Format">
-        <t>This document requests IANA to register the CoAP Content-Format ID
-        for the "application/missing-blocks+cbor-seq" media type in the "CoAP
-        Content-Formats" registry <xref target="Format"></xref>:</t>
-
-        <figure>
-          <artwork><![CDATA[o  Media Type: application/missing-blocks+cbor-seq
-o  Encoding: -
-o  Id: TBA3
-o  Reference: [RFCXXXX]]]></artwork>
-        </figure>
-
-        <t>This document suggests 272 (TBA3) as a value to be assigned for the
-        new content format number.</t>
       </section>
     </section>
 
@@ -1714,6 +1629,99 @@ o  Reference: [RFCXXXX]]]></artwork>
       <t>Security considerations related to the use of Request-Tag are
       discussed in Section 5 of <xref
       target="I-D.ietf-core-echo-request-tag"></xref>.</t>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <section title="CoAP Option Numbers Registry">
+        <t>IANA is requested to add the following entries to the "CoAP Option
+        Numbers" sub-registry <xref target="Options"></xref> defined in <xref
+        target="RFC7252"></xref> within the "Constrained RESTful Environments
+        (CoRE) Parameters" registry:</t>
+
+        <t><figure align="center">
+            <artwork align="center"><![CDATA[+--------+--------------+-----------------+
+| Number | Name         | Reference       |
++========+==============+=================+
+|  TBA1  | Q-Block1     | [This_Document] |
+|  TBA2  | Q-Block2     | [This_Document] |
++--------+--------------+-----------------+
+
+Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
+          </figure></t>
+
+        <t>This document suggests 19 (TBA1) and 51 (TBA2) as values to be
+        assigned for the new option numbers.</t>
+      </section>
+
+      <section title="Media Type Registration">
+        <t>This document requests IANA to register the
+        "application/missing-blocks+cbor-seq" media type in the "Media Types"
+        registry <xref target="IANA-MediaTypes"></xref>:<figure>
+            <artwork><![CDATA[   Type name: application
+
+   Subtype name: missing-blocks+cbor-seq
+
+   Required parameters: N/A
+
+   Optional parameters: N/A
+
+   Encoding considerations: Must be encoded as a CBOR 
+     sequence [RFC8742], as defined in Section 4 of [This_Document].
+
+   Security considerations: See the Security Considerations Section 11
+      of [This_Document].
+
+   Interoperability considerations: N/A
+
+   Published specification: [This_Document]
+
+   Applications that use this media type: Data serialization and
+      deserialization. In particular, the type is used by applications
+      relying upon block-wise transfers, allowing a server to specify
+      non-received blocks and request for their retransmission, as 
+      defined in Section 4 of [This_Document].
+
+   Fragment identifier considerations: N/A
+
+   Additional information:
+
+      Deprecated alias names for this type: N/A
+      Magic number(s): N/A
+      File extension(s): N/A
+      Macintosh file type code(s): N/A
+
+   Person & email address to contact for further information: IETF,
+   iesg@ietf.org
+
+   Intended usage: COMMON
+
+   Restrictions on usage: none
+
+   Author: See Authors' Addresses section.
+
+   Change controller: IESG
+
+   Provisional registration?  No]]></artwork>
+          </figure></t>
+      </section>
+
+      <section anchor="new-format" title="CoAP Content-Formats Registry">
+        <t>This document requests IANA to register the following CoAP
+        Content-Format for the "application/missing-blocks+cbor-seq" media
+        type in the "CoAP Content-Formats" registry <xref
+        target="Format"></xref>, defined in [RFC7252], within the "Constrained
+        RESTful Environments (CoRE) Parameters" registry:</t>
+
+        <figure>
+          <artwork><![CDATA[o  Media Type: application/missing-blocks+cbor-seq
+o  Encoding: -
+o  Id: TBA3
+o  Reference: [This_Document]]]></artwork>
+        </figure>
+
+        <t>This document suggests 272 (TBA3) as a value to be assigned for the
+        new content format number.</t>
+      </section>
     </section>
 
     <section anchor="ack" title="Acknowledgements">
@@ -1816,7 +1824,7 @@ o  Reference: [RFCXXXX]]]></artwork>
       the following subsections.</t>
 
       <section title="Q-Block1 Option">
-        <t>Let's now consider the use Q-Block1 Option with a CON request as
+        <t>Let's now consider the use of Q-Block1 Option with a CON request as
         shown in <xref target="con3"></xref>. All the blocks are acknowledged
         (ACK).</t>
 
@@ -1866,7 +1874,7 @@ o  Reference: [RFCXXXX]]]></artwork>
          |   ...    |
       [[ACK_TIMEOUT exponential backoff (client) delay expires]]
          |     [[Client retransmits packet]]
-         +--->?     | CON PUT /path M:0x07 T:0xf6 RT=11 QB1:2/1/1024
+         +--->X     | CON PUT /path M:0x07 T:0xf6 RT=11 QB1:2/1/1024
          |   ...    |
       [[Either body transmission failure (acknowledge retry timeout)
          or successfully transmitted.]]
@@ -1947,6 +1955,7 @@ o  Reference: [RFCXXXX]]]></artwork>
         losses, then the use of NON should be considered.</t>
       </section>
     </section>
+
     <section anchor="REL" title="Examples with Reliable Transports">
       <t>The notations provided in <xref target="legend"></xref> are used in
       the following subsections.</t>
@@ -1954,7 +1963,8 @@ o  Reference: [RFCXXXX]]]></artwork>
       <section title="Q-Block1 Option">
         <t>Let's now consider the use of Q-Block1 Option with a reliable
         transport as shown in <xref target="rel3"></xref>. There is no
-        acknowledgment of packets at the CoAP layer, just the final result.</t>
+        acknowledgment of packets at the CoAP layer, just the final
+        result.</t>
 
         <t><figure anchor="rel3"
             title="Example of Reliable Request with Q-Block1 Option">
