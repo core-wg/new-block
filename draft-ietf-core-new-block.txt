@@ -1016,8 +1016,8 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
    NON_MAX_RETRANSMIT is the maximum number of times a request for the
    retransmission of missing payloads can occur without a response from
    the remote peer.  After this occurs, the local endpoint SHOULD
-   consider the body stale, remove any body, release Tokens and Request-
-   Tag on the client, and release the ETag on the server.  By default,
+   consider the body stale, remove any body, and release Tokens and
+   Request-Tag on the client (or the ETag on the server).  By default,
    NON_MAX_RETRANSMIT has the same value as MAX_RETRANSMIT (Section 4.8
    of [RFC7252]).
 
