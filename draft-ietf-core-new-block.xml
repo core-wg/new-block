@@ -1676,7 +1676,7 @@ Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
    Optional parameters: N/A
 
    Encoding considerations: Must be encoded as a CBOR 
-     sequence <xref target="RFC8742"></xref>, as defined in Section 4 of
+     sequence [RFC8742], as defined in Section 4 of
      [This_Document].
 
    Security considerations: See the Security Considerations Section 11
