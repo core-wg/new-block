@@ -20,8 +20,8 @@ Abstract
    These options are similar to the CoAP Block1 and Block2 Options
    defined in RFC 7959, not a replacement for them, but do enable faster
    transmission rates for large amounts of data with less packet
-   interchanges.  Also, they support faster recovery should any of the
-   blocks get lost in transmission.
+   interchanges.  Also, Q-Block1 and Q-Block2 Options support faster
+   recovery should any of the blocks get lost in transmission.
 
 Status of This Memo
 
@@ -151,10 +151,10 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
    is when a network is subject to a Distributed Denial of Service
    (DDoS) attack and there is a need for DDoS mitigation agents relying
    upon CoAP to communicate with each other (e.g.,
-   [I-D.ietf-dots-telemetry]).  As a reminder, [RFC7959] recommends the
-   use of Confirmable (CON) responses to handle potential packet loss.
-   However, such a recommendation does not work with a flooded pipe DDoS
-   situation.
+   [RFC8782][I-D.ietf-dots-telemetry]).  As a reminder, [RFC7959]
+   recommends the use of Confirmable (CON) responses to handle potential
+   packet loss.  However, such a recommendation does not work with a
+   flooded pipe DDoS situation.
 
 1.1.  Alternative CoAP Block-Wise Transfer Options
 
@@ -208,7 +208,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
    o  There is no multicast support.
 
    Q-Block1 and Q-Block2 Options are designed to work in particular with
-   Non-confirmable requests and responses.
+   NON requests and responses.
 
    Using NON messages, the faster transmissions occur as all the blocks
    can be transmitted serially (as are IP fragmented packets) without
@@ -241,8 +241,8 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
    There is little, if any, benefit of using these options with CoAP
    running over a reliable connection [RFC8323].  In this case, there is
-   no differentiation between Confirmable and NON as they are not used.
-   Some examples using a reliable transport are provided in Appendix B.
+   no differentiation between CON and NON as they are not used.  Some
+   examples using a reliable transport are provided in Appendix B.
 
    Q-Block1 and Q-Block2 Options can be used instead of Block1 and
    Block2 Options when the different transmission properties are
@@ -286,11 +286,10 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
    additional properties that are tailored towards the intended use case
    of Non-Confirmable transmission.  Concretely, this mechanism
    primarily targets applications such as DDoS Open Threat Signaling
-   (DOTS) that cannot use Confirmable (CON) responses to handle
-   potential packet loss and that support application-specific
-   mechanisms to assess whether the remote peer is able to handle the
-   messages sent by a CoAP endpoint (e.g., DOTS heartbeats in
-   Section 4.7 of [RFC8782]).
+   (DOTS) that cannot use CON responses to handle potential packet loss
+   and that support application-specific mechanisms to assess whether
+   the remote peer is able to handle the messages sent by a CoAP
+   endpoint (e.g., DOTS heartbeats in Section 4.7 of [RFC8782]).
 
    The mechanism includes guards to prevent a CoAP agent from
    overloading the network by adopting an aggressive sending rate.
@@ -328,6 +327,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
    (i.e., a single block being transferred), while the term "body" is
    used for the entire resource representation that is being transferred
    in a block-wise fashion.
+
 
 
 
@@ -1017,7 +1017,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
    retransmission of missing payloads can occur without a response from
    the remote peer.  After this occurs, the local endpoint SHOULD
    consider the body stale, remove any body, release Tokens and Request-
-   Tag on the client and release the ETag on the server.  By default,
+   Tag on the client, and release the ETag on the server.  By default,
    NON_MAX_RETRANSMIT has the same value as MAX_RETRANSMIT (Section 4.8
    of [RFC7252]).
 
@@ -1252,8 +1252,10 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
    This section provides some sample flows to illustrate the use of
    Q-Block1 and Q-Block2 Options with NON.  Examples with CON are
-   provided in Appendix A.  These examples assume MAX_PAYLOADS is set to
-   10 and NON_MAX_RETRANSMIT is set to 4.
+   provided in Appendix A.
+
+   The examples in the following subsections assume MAX_PAYLOADS is set
+   to 10 and NON_MAX_RETRANSMIT is set to 4.
 
    Figure 2 lists the conventions that are used in the following
    subsections.
@@ -1279,8 +1281,6 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
    Figure 3 depicts an example of a NON PUT request conveying Q-Block1
    Option.  All the blocks are received by the server.
-
-
 
 
 
@@ -1920,18 +1920,21 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
 11.  IANA Considerations
 
+   RFC Editor Note:  Please replace [RFCXXXX] with the RFC number to be
+      assigned to this document.
+
 11.1.  CoAP Option Numbers Registry
 
    IANA is requested to add the following entries to the "CoAP Option
    Numbers" sub-registry [Options] defined in [RFC7252] within the
    "Constrained RESTful Environments (CoRE) Parameters" registry:
 
-            +--------+--------------+-----------------+
-            | Number | Name         | Reference       |
-            +========+==============+=================+
-            |  TBA1  | Q-Block1     | [This_Document] |
-            |  TBA2  | Q-Block2     | [This_Document] |
-            +--------+--------------+-----------------+
+            +--------+------------------+-----------+
+            | Number | Name             | Reference |
+            +========+==================+===========+
+            |  TBA1  | Q-Block1         | [RFCXXXX] |
+            |  TBA2  | Q-Block2         | [RFCXXXX] |
+            +--------+------------------+-----------+
 
             Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers
 
@@ -1954,61 +1957,58 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
 
 
-
-
-
 Boucadair & Shallow    Expires September 17, 2021              [Page 35]
 
 Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
 
-   Type name: application
+     Type name: application
 
-   Subtype name: missing-blocks+cbor-seq
+     Subtype name: missing-blocks+cbor-seq
 
-   Required parameters: N/A
+     Required parameters: N/A
 
-   Optional parameters: N/A
+     Optional parameters: N/A
 
-   Encoding considerations: Must be encoded as a CBOR
-     sequence [RFC8742], as defined in Section 4 of
-     [This_Document].
+     Encoding considerations: Must be encoded as a CBOR
+       sequence [RFC8742], as defined in Section 4 of [RFCXXXX].
 
-   Security considerations: See the Security Considerations Section 11
-      of [This_Document].
+     Security considerations: See Section 10 of [RFCXXXX].
 
-   Interoperability considerations: N/A
+     Interoperability considerations: N/A
 
-   Published specification: [This_Document]
+     Published specification: [RFCXXXX]
 
-   Applications that use this media type: Data serialization and
-      deserialization. In particular, the type is used by applications
-      relying upon block-wise transfers, allowing a server to specify
-      non-received blocks and request for their retransmission, as
-      defined in Section 4 of [This_Document].
+     Applications that use this media type: Data serialization and
+        deserialization. In particular, the type is used by applications
+        relying upon block-wise transfers, allowing a server to specify
+        non-received blocks and request for their retransmission, as
+        defined in Section 4 of [RFCXXXX].
 
-   Fragment identifier considerations: N/A
+     Fragment identifier considerations: N/A
 
-   Additional information: N/A
+     Additional information: N/A
 
-   Person & email address to contact for further information: IETF,
-   iesg@ietf.org
+     Person & email address to contact for further information: IETF,
+        iesg@ietf.org
 
-   Intended usage: COMMON
+     Intended usage: COMMON
 
-   Restrictions on usage: none
+     Restrictions on usage: none
 
-   Author: See Authors' Addresses section.
+     Author: See Authors' Addresses section.
 
-   Change controller: IESG
+     Change controller: IESG
 
-   Provisional registration?  No
+     Provisional registration?  No
 
 11.3.  CoAP Content-Formats Registry
 
    This document requests IANA to register the following CoAP Content-
    Format for the "application/missing-blocks+cbor-seq" media type in
    the "CoAP Content-Formats" registry [Format], defined in [RFC7252],
+   within the "Constrained RESTful Environments (CoRE) Parameters"
+   registry:
 
 
 
@@ -2018,13 +2018,10 @@ Boucadair & Shallow    Expires September 17, 2021              [Page 36]
 Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
 
-   within the "Constrained RESTful Environments (CoRE) Parameters"
-   registry:
-
    o  Media Type: application/missing-blocks+cbor-seq
    o  Encoding: -
    o  Id: TBA3
-   o  Reference: [This_Document]
+   o  Reference: [RFCXXXX]
 
    This document suggests 272 (TBA3) as a value to be assigned for the
    new content format number.
@@ -2063,8 +2060,11 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
               DOI 10.17487/RFC7959, August 2016,
               <https://www.rfc-editor.org/info/rfc7959>.
 
-
-
+   [RFC8075]  Castellani, A., Loreto, S., Rahman, A., Fossati, T., and
+              E. Dijk, "Guidelines for Mapping Implementations: HTTP to
+              the Constrained Application Protocol (CoAP)", RFC 8075,
+              DOI 10.17487/RFC8075, February 2017,
+              <https://www.rfc-editor.org/info/rfc8075>.
 
 
 
@@ -2073,12 +2073,6 @@ Boucadair & Shallow    Expires September 17, 2021              [Page 37]
 
 Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
-
-   [RFC8075]  Castellani, A., Loreto, S., Rahman, A., Fossati, T., and
-              E. Dijk, "Guidelines for Mapping Implementations: HTTP to
-              the Constrained Application Protocol (CoAP)", RFC 8075,
-              DOI 10.17487/RFC8075, February 2017,
-              <https://www.rfc-editor.org/info/rfc8075>.
 
    [RFC8132]  van der Stok, P., Bormann, C., and A. Sehgal, "PATCH and
               FETCH Methods for the Constrained Application Protocol
@@ -2121,6 +2115,12 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
               draft-bosh-dots-quick-blocks-01 (work in progress),
               January 2021.
 
+   [I-D.ietf-dots-telemetry]
+              Boucadair, M., Reddy.K, T., Doron, E., chenmeiling, c.,
+              and J. Shallow, "Distributed Denial-of-Service Open Threat
+              Signaling (DOTS) Telemetry", draft-ietf-dots-telemetry-15
+              (work in progress), December 2020.
+
 
 
 
@@ -2129,12 +2129,6 @@ Boucadair & Shallow    Expires September 17, 2021              [Page 38]
 
 Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
-
-   [I-D.ietf-dots-telemetry]
-              Boucadair, M., Reddy.K, T., Doron, E., chenmeiling, c.,
-              and J. Shallow, "Distributed Denial-of-Service Open Threat
-              Signaling (DOTS) Telemetry", draft-ietf-dots-telemetry-15
-              (work in progress), December 2020.
 
    [IANA-MediaTypes]
               IANA, "Media Types",
@@ -2167,7 +2161,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         March 2021
 
 Appendix A.  Examples with Confirmable Messages
 
-   These examples assume NSTART has been increased to 3.
+   The following examples assume NSTART has been increased to 3.
 
    The notations provided in Figure 2 are used in the following
    subsections.
@@ -2176,6 +2170,12 @@ A.1.  Q-Block1 Option
 
    Let's now consider the use of Q-Block1 Option with a CON request as
    shown in Figure 17.  All the blocks are acknowledged (ACK).
+
+
+
+
+
+
 
 
 

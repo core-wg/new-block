@@ -85,6 +85,8 @@
 
     <keyword>Fast recovery</keyword>
 
+    <keyword>DOTS</keyword>
+
     <abstract>
       <t>This document specifies alternative Constrained Application Protocol
       (CoAP) Block-Wise transfer options: Q-Block1 and Q-Block2 Options.</t>
@@ -92,8 +94,8 @@
       <t>These options are similar to the CoAP Block1 and Block2 Options
       defined in RFC 7959, not a replacement for them, but do enable faster
       transmission rates for large amounts of data with less packet
-      interchanges. Also, they support faster recovery should any of the
-      blocks get lost in transmission.</t>
+      interchanges. Also, Q-Block1 and Q-Block2 Options support faster
+      recovery should any of the blocks get lost in transmission.</t>
     </abstract>
   </front>
 
@@ -121,10 +123,11 @@
       when a network is subject to a Distributed Denial of Service (DDoS)
       attack and there is a need for DDoS mitigation agents relying upon CoAP
       to communicate with each other (e.g., <xref
-      target="I-D.ietf-dots-telemetry"></xref>). As a reminder, <xref
-      target="RFC7959"></xref> recommends the use of Confirmable (CON)
-      responses to handle potential packet loss. However, such a
-      recommendation does not work with a flooded pipe DDoS situation.</t>
+      target="RFC8782"></xref><xref target="I-D.ietf-dots-telemetry"></xref>).
+      As a reminder, <xref target="RFC7959"></xref> recommends the use of
+      Confirmable (CON) responses to handle potential packet loss. However,
+      such a recommendation does not work with a flooded pipe DDoS
+      situation.</t>
 
       <section title="Alternative CoAP Block-Wise Transfer Options">
         <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options.
@@ -173,7 +176,7 @@
           </list></t>
 
         <t>Q-Block1 and Q-Block2 Options are designed to work in particular
-        with Non-confirmable requests and responses.</t>
+        with NON requests and responses.</t>
 
         <t>Using NON messages, the faster transmissions occur as all the
         blocks can be transmitted serially (as are IP fragmented packets)
@@ -199,9 +202,9 @@
 
         <t>There is little, if any, benefit of using these options with CoAP
         running over a reliable connection <xref target="RFC8323"></xref>. In
-        this case, there is no differentiation between Confirmable and NON as
-        they are not used. Some examples using a reliable transport are
-        provided in <xref target="REL"></xref>.</t>
+        this case, there is no differentiation between CON and NON as they are
+        not used. Some examples using a reliable transport are provided in
+        <xref target="REL"></xref>.</t>
 
         <t>Q-Block1 and Q-Block2 Options can be used instead of Block1 and
         Block2 Options when the different transmission properties are
@@ -239,10 +242,10 @@
         provides additional properties that are tailored towards the intended
         use case of Non-Confirmable transmission. Concretely, this mechanism
         primarily targets applications such as DDoS Open Threat Signaling
-        (DOTS) that cannot use Confirmable (CON) responses to handle potential
-        packet loss and that support application-specific mechanisms to assess
-        whether the remote peer is able to handle the messages sent by a CoAP
-        endpoint (e.g., DOTS heartbeats in Section 4.7 of <xref
+        (DOTS) that cannot use CON responses to handle potential packet loss
+        and that support application-specific mechanisms to assess whether the
+        remote peer is able to handle the messages sent by a CoAP endpoint
+        (e.g., DOTS heartbeats in Section 4.7 of <xref
         target="RFC8782"></xref>).</t>
 
         <t>The mechanism includes guards to prevent a CoAP agent from
@@ -571,7 +574,7 @@
 
         <t>Further considerations related to the transmission timings of 4.08
         (Request Entity Incomplete) and 2.31 (Continue) Response Codes are
-         discussed in <xref target="cc-non"></xref>.</t>
+        discussed in <xref target="cc-non"></xref>.</t>
 
         <t>If a server receives payloads with different Request-Tags for the
         same resource, it should continue to process all the bodies as it has
@@ -672,9 +675,9 @@
         <t>A client SHOULD only maintain a partial body (missing payloads) for
         up to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>) or as
         defined by the Max-Age Option (or its default of 60 seconds (Section
-        5.6.1 of <xref target="RFC7252"></xref>)), whichever is the less.
-        On release of the partial body, the client should then release all of
-        the tokens used for this body unless a resource is being observed.</t>
+        5.6.1 of <xref target="RFC7252"></xref>)), whichever is the less. On
+        release of the partial body, the client should then release all of the
+        tokens used for this body unless a resource is being observed.</t>
 
         <t>The ETag Option should not be used in the request for missing
         blocks as the server could respond with a 2.03 (Valid) response with
@@ -908,7 +911,7 @@ missing-block-number = uint
         retransmission of missing payloads can occur without a response from
         the remote peer. After this occurs, the local endpoint SHOULD consider
         the body stale, remove any body, release Tokens and Request-Tag on the
-        client and release the ETag on the server. By default,
+        client, and release the ETag on the server. By default,
         NON_MAX_RETRANSMIT has the same value as MAX_RETRANSMIT (Section 4.8
         of <xref target="RFC7252"></xref>).</t>
 
@@ -1116,7 +1119,9 @@ Table 3: Congestion Control Parameters]]></artwork>
     <section title="Examples with Non-confirmable Messages">
       <t>This section provides some sample flows to illustrate the use of
       Q-Block1 and Q-Block2 Options with NON. Examples with CON are provided
-      in <xref target="CON"></xref>. These examples assume MAX_PAYLOADS is set
+      in <xref target="CON"></xref>. </t>
+
+      <t>The examples in the following subsections assume MAX_PAYLOADS is set
       to 10 and NON_MAX_RETRANSMIT is set to 4.</t>
 
       <t><xref target="legend"></xref> lists the conventions that are used in
@@ -1640,6 +1645,11 @@ X<--: Message loss (response)
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
+      <t><list style="hanging">
+          <t hangText="RFC Editor Note:">Please replace [RFCXXXX] with the RFC
+          number to be assigned to this document. </t>
+        </list></t>
+
       <section title="CoAP Option Numbers Registry">
         <t>IANA is requested to add the following entries to the "CoAP Option
         Numbers" sub-registry <xref target="Options"></xref> defined in <xref
@@ -1647,12 +1657,12 @@ X<--: Message loss (response)
         (CoRE) Parameters" registry:</t>
 
         <t><figure align="center">
-            <artwork align="center"><![CDATA[+--------+--------------+-----------------+
-| Number | Name         | Reference       |
-+========+==============+=================+
-|  TBA1  | Q-Block1     | [This_Document] |
-|  TBA2  | Q-Block2     | [This_Document] |
-+--------+--------------+-----------------+
+            <artwork align="center"><![CDATA[+--------+------------------+-----------+
+| Number | Name             | Reference |
++========+==================+===========+
+|  TBA1  | Q-Block1         | [RFCXXXX] |
+|  TBA2  | Q-Block2         | [RFCXXXX] |
++--------+------------------+-----------+
 
 Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
           </figure></t>
@@ -1664,7 +1674,7 @@ Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
       <section title="Media Type Registration">
         <t>This document requests IANA to register the
         "application/missing-blocks+cbor-seq" media type in the "Media Types"
-        registry <xref target="IANA-MediaTypes"></xref>. This registration 
+        registry <xref target="IANA-MediaTypes"></xref>. This registration
         follows the procedures specified in <xref target="RFC6838"></xref>:
         <figure>
             <artwork><![CDATA[   Type name: application
@@ -1676,28 +1686,26 @@ Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
    Optional parameters: N/A
 
    Encoding considerations: Must be encoded as a CBOR 
-     sequence [RFC8742], as defined in Section 4 of
-     [This_Document].
+     sequence [RFC8742], as defined in Section 4 of [RFCXXXX].
 
-   Security considerations: See the Security Considerations Section 11
-      of [This_Document].
+   Security considerations: See Section 10 of [RFCXXXX].
 
    Interoperability considerations: N/A
 
-   Published specification: [This_Document]
+   Published specification: [RFCXXXX]
 
    Applications that use this media type: Data serialization and
       deserialization. In particular, the type is used by applications
       relying upon block-wise transfers, allowing a server to specify
       non-received blocks and request for their retransmission, as 
-      defined in Section 4 of [This_Document].
+      defined in Section 4 of [RFCXXXX].
 
    Fragment identifier considerations: N/A
 
    Additional information: N/A
 
    Person & email address to contact for further information: IETF,
-   iesg@ietf.org
+      iesg@ietf.org
 
    Intended usage: COMMON
 
@@ -1723,7 +1731,7 @@ Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
           <artwork><![CDATA[o  Media Type: application/missing-blocks+cbor-seq
 o  Encoding: -
 o  Id: TBA3
-o  Reference: [This_Document]]]></artwork>
+o  Reference: [RFCXXXX]]]></artwork>
         </figure>
 
         <t>This document suggests 272 (TBA3) as a value to be assigned for the
@@ -1815,7 +1823,7 @@ o  Reference: [This_Document]]]></artwork>
     </references>
 
     <section anchor="CON" title="Examples with Confirmable Messages">
-      <t>These examples assume NSTART has been increased to 3.</t>
+      <t>The following examples assume NSTART has been increased to 3.</t>
 
       <t>The notations provided in <xref target="legend"></xref> are used in
       the following subsections.</t>
@@ -2011,7 +2019,7 @@ o  Reference: [This_Document]]]></artwork>
       </section>
     </section>
 
-    <section title="Acknowledgements" toc="default" numbered="false">
+    <section numbered="false" title="Acknowledgements" toc="default">
       <t>Thanks to Achim Kraus, Jim Schaad, and Michael Richardson for their
       comments.</t>
 
@@ -2019,7 +2027,7 @@ o  Reference: [This_Document]]]></artwork>
       Tiloca for their suggestions and several reviews, which improved this
       specification significantly.</t>
 
-      <t>Some text from <xref target="RFC7959"></xref> is reused for readers
+      <t>Some text from <xref target="RFC7959" /> is reused for readers
       convenience.</t>
     </section>
   </back>
