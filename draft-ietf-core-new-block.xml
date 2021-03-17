@@ -59,7 +59,7 @@
 
     <date />
 
-    <workgroup>CORE Working Group</workgroup>
+    <workgroup>CoRE Working Group</workgroup>
 
     <keyword>Quick-Block</keyword>
 
@@ -493,10 +493,14 @@
             FETCH request body (Section 2 of <xref target="RFC8132"></xref>)
             and that the appropriate representation of the resource is being
             returned. The token used in the response SHOULD be from the last
-            received payload. If the FETCH request includes the Observe
-            Option, then the server MUST use the same token for returning any
-            Observe triggered responses so that the client can match them up.
-            The client should then release all of the tokens used for this
+            received payload.</t>
+
+            <t>If the FETCH request includes the Observe Option, then the
+            server MUST use the same token as used for the initial response
+            for returning any Observe triggered responses so that the client
+            can match them up.</t>
+
+            <t>The client should then release all of the tokens used for this
             body unless a resource is being observed.</t>
           </list></t>
 
@@ -508,16 +512,16 @@
 
             <t>A response using this Response Code SHOULD NOT be generated for
             every received Q-Block1 Option request. It SHOULD only be
-            generated when all the payload requests are Non-confirmable and
-            MAX_PAYLOADS (<xref target="cc-non"></xref>) payloads have been
-            received by the server.</t>
+            generated when all the payload requests are Non-confirmable and a
+            set of MAX_PAYLOADS (<xref target="cc-non"></xref>) payloads have
+            been received by the server.</t>
 
             <t>It SHOULD NOT be generated for CON.</t>
           </list></t>
 
         <t>4.00 (Bad Request)<list style="empty">
             <t>This Response Code MUST be returned if the request does not
-            include both a Request-Tag Option and a Size1 Option but does
+            include neither a Request-Tag Option nor a Size1 Option but does
             include a Q-Block1 option.</t>
           </list></t>
 
@@ -547,6 +551,11 @@
             <t>The token used in the response SHOULD be from the last received
             payload. See <xref target="code"></xref> for further
             information.</t>
+
+            <t>If the server has not received all the payloads of a body, but
+            one or more NON payloads have been received, it SHOULD wait for up
+            to NON_RECEIVE_TIMEOUT (<xref target="cc-non"></xref>) before
+            sending a 4.08 (Request Entity Incomplete) response.</t>
           </list></t>
 
         <t>4.13 (Request Entity Too Large)<list style="empty">
@@ -560,13 +569,9 @@
             case, the Size1 Option is not included in the response.</t>
           </list></t>
 
-        <t>If the server has not received all the payloads of a body, but one
-        or more NON payloads have been received, it SHOULD wait for up to
-        NON_RECEIVE_TIMEOUT (<xref target="cc-non"></xref>) before sending a
-        4.08 (Request Entity Incomplete) response. Further considerations
-        related to the transmission timings of 4.08 (Request Entity
-        Incomplete) and 2.31 (Continue) Response Codes are discussed in <xref
-        target="cc-non"></xref>.</t>
+        <t>Further considerations related to the transmission timings of 4.08
+        (Request Entity Incomplete) and 2.31 (Continue) Response Codes are
+         discussed in <xref target="cc-non"></xref>.</t>
 
         <t>If a server receives payloads with different Request-Tags for the
         same resource, it should continue to process all the bodies as it has
@@ -667,7 +672,9 @@
         <t>A client SHOULD only maintain a partial body (missing payloads) for
         up to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>) or as
         defined by the Max-Age Option (or its default of 60 seconds (Section
-        5.6.1 of <xref target="RFC7252"></xref>)), whichever is the less.</t>
+        5.6.1 of <xref target="RFC7252"></xref>)), whichever is the less.
+        On release of the partial body, the client should then release all of
+        the tokens used for this body unless a resource is being observed.</t>
 
         <t>The ETag Option should not be used in the request for missing
         blocks as the server could respond with a 2.03 (Valid) response with
@@ -900,7 +907,8 @@ missing-block-number = uint
         <t>NON_MAX_RETRANSMIT is the maximum number of times a request for the
         retransmission of missing payloads can occur without a response from
         the remote peer. After this occurs, the local endpoint SHOULD consider
-        the body stale and remove all references to it. By default,
+        the body stale, remove any body, release Tokens and Request-Tag on the
+        client and release the ETag on the server. By default,
         NON_MAX_RETRANSMIT has the same value as MAX_RETRANSMIT (Section 4.8
         of <xref target="RFC7252"></xref>).</t>
 
@@ -1649,14 +1657,16 @@ X<--: Message loss (response)
 Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
           </figure></t>
 
-        <t>This document suggests 19 (TBA1) and 51 (TBA2) as values to be
+        <t>This document suggests 19 (TBA1) and 31 (TBA2) as values to be
         assigned for the new option numbers.</t>
       </section>
 
       <section title="Media Type Registration">
         <t>This document requests IANA to register the
         "application/missing-blocks+cbor-seq" media type in the "Media Types"
-        registry <xref target="IANA-MediaTypes"></xref>:<figure>
+        registry <xref target="IANA-MediaTypes"></xref>. This registration 
+        follows the procedures specified in <xref target="RFC6838"></xref>:
+        <figure>
             <artwork><![CDATA[   Type name: application
 
    Subtype name: missing-blocks+cbor-seq
@@ -1666,7 +1676,8 @@ Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
    Optional parameters: N/A
 
    Encoding considerations: Must be encoded as a CBOR 
-     sequence [RFC8742], as defined in Section 4 of [This_Document].
+     sequence [RFC8742], as defined in Section 4 of
+     [This_Document].
 
    Security considerations: See the Security Considerations Section 11
       of [This_Document].
@@ -1683,12 +1694,7 @@ Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
 
    Fragment identifier considerations: N/A
 
-   Additional information:
-
-      Deprecated alias names for this type: N/A
-      Magic number(s): N/A
-      File extension(s): N/A
-      Macintosh file type code(s): N/A
+   Additional information: N/A
 
    Person & email address to contact for further information: IETF,
    iesg@ietf.org
@@ -1709,8 +1715,9 @@ Table 4: CoAP Q-Block1 and Q-Block2 Option Numbers]]></artwork>
         <t>This document requests IANA to register the following CoAP
         Content-Format for the "application/missing-blocks+cbor-seq" media
         type in the "CoAP Content-Formats" registry <xref
-        target="Format"></xref>, defined in [RFC7252], within the "Constrained
-        RESTful Environments (CoRE) Parameters" registry:</t>
+        target="Format"></xref>, defined in <xref target="RFC7252"></xref>,
+        within the "Constrained RESTful Environments (CoRE) Parameters"
+        registry:</t>
 
         <figure>
           <artwork><![CDATA[o  Media Type: application/missing-blocks+cbor-seq
@@ -1728,6 +1735,8 @@ o  Reference: [This_Document]]]></artwork>
   <back>
     <references title="Normative References">
       <?rfc include='reference.RFC.2119'?>
+
+      <?rfc include='reference.RFC.6838'?>
 
       <?rfc include='reference.RFC.7252'?>
 
