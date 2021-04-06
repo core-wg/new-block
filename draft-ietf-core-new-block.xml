@@ -255,7 +255,7 @@
         <t>See <xref target="code"></xref> for more details.</t>
       </section>
 
-      <section title="Applicability Scope">
+      <section anchor="scope" title="Applicability Scope">
         <t>The block-wise transfer specified in <xref target="RFC7959"></xref>
         covers the general case, but falls short in situations where packet
         loss is highly asymmetrical. The mechanism specified in this document
@@ -586,7 +586,7 @@
         any, the client is terminating the transmission for.</t>
 
         <t>If the client elects to stop the transmission of a complete body,
-        it SHOULD "forget" all tracked tokens associated with the body's
+        it MUST "forget" all tracked tokens associated with the body's
         Request-Tag so that a reset message is generated for the invalid token
         in the 4.08 (Request Entity Incomplete) response. The server on
         receipt of the reset message SHOULD delete the partial body.</t>
@@ -595,8 +595,8 @@
         it SHOULD ignore the payload of the packet, but MUST still respond as
         if the block was received for the first time.</t>
 
-        <t>A server SHOULD only maintain a partial body (missing payloads) for
-        up to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>).</t>
+        <t>A server MUST maintain a partial body (missing payloads) for up to
+        NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>).</t>
       </section>
 
       <section anchor="qblock2" title="Using the Q-Block2 Option">
@@ -657,7 +657,7 @@
         payloads before issuing a GET, POST, PUT, FETCH, PATCH, or iPATCH
         request that contains one or more Q-Block2 Options that define the
         missing blocks with the M bit unset. It is permissible to set the M
-        bit to request this and missing blocks from this MAX_PAYLOADS set.
+        bit to request this and later blocks from this MAX_PAYLOADS set.
         Further considerations related to the transmission timing for missing
         requests are discussed in <xref target="cc-non"></xref>.</t>
 
@@ -667,11 +667,12 @@
         adhering to this behavior.</t>
 
         <t>For Confirmable responses, the client continues to acknowledge each
-        packet. The server acknowledges the initial request using an ACK with
-        the payload, and then sends the subsequent payloads as CON responses.
-        The server will detect failure to send a packet, but the client can
-        issue, after a MAX_TRANSMIT_SPAN delay, a separate GET, POST, PUT,
-        FETCH, PATCH, or iPATCH for any missing blocks as needed.</t>
+        packet. Typically, the server acknowledges the initial request using
+        an ACK with the payload, and then sends the subsequent payloads as CON
+        responses. The server will detect failure to send a packet, but the
+        client can issue, after a MAX_TRANSMIT_SPAN delay, a separate GET,
+        POST, PUT, FETCH, PATCH, or iPATCH for any missing blocks as
+        needed.</t>
 
         <t>If the client receives a duplicate block with the same ETag, it
         SHOULD silently ignore the packet.</t>
@@ -772,11 +773,11 @@
 
       <t>The data payload of the 4.08 (Request Entity Incomplete) response is
       encoded as a CBOR Sequence <xref target="RFC8742"></xref>. It comprises
-      of one or more CBOR encoded <xref target="RFC8949"></xref> missing block
-      numbers. The missing block numbers MUST be unique in each 4.08 (Request
-      Entity Incomplete) response when created by the server; the client
-      SHOULD drop any duplicates in the same 4.08 (Request Entity Incomplete)
-      response.</t>
+      of one or more missing block numbers encoded as CBOR unsigned integers
+      <xref target="RFC8949"></xref>. The missing block numbers MUST be unique
+      in each 4.08 (Request Entity Incomplete) response when created by the
+      server; the client SHOULD ignore any duplicates in the same 4.08
+      (Request Entity Incomplete) response.</t>
 
       <t>The Content-Format Option (Section 5.10.3 of <xref
       target="RFC7252"></xref>) MUST be used in the 4.08 (Request Entity
@@ -803,10 +804,10 @@ missing-block-number = uint
       <t>The token to use for the response SHOULD be the token that was used
       in the last block number received so far with the same Request-Tag
       value. Note that the use of any received token with the same Request-Tag
-      would work, but providing the one used in the last received payload will
-      aid any troubleshooting. The client will use the token to determine what
-      was the previously sent request to obtain the Request-Tag value to be
-      used.</t>
+      would be acceptable, but providing the one used in the last received
+      payload will aid any troubleshooting. The client will use the token to
+      determine what was the previously sent request to obtain the Request-Tag
+      value to be used.</t>
 
       <t>If the size of the 4.08 (Request Entity Incomplete) response packet
       is larger than that defined by Section 4.6 <xref
@@ -842,13 +843,14 @@ missing-block-number = uint
       respond to.</t>
 
       <t><list style="hanging">
-          <t hangText="Implementation Note:">To minimize on the number of
-          tokens that have to be tracked by clients, it is suggested that the
-          bottom 32 bits is kept the same for the same body and the upper 32
-          bits contains the current body's request number (incrementing every
-          request, including every re-transmit). This allows the client to be
-          alleviated from keeping all the per-request-state, e.g., in Section
-          3 of <xref target="RFC8974"></xref>.</t>
+          <t hangText="Implementation Note for 8-byte Tokens:">To minimize on
+          the number of tokens that have to be tracked by clients, it is
+          suggested that the bottom 32 bits is kept the same for the same body
+          and the upper 32 bits contains the current body's request number
+          (incrementing every request, including every re-transmit). This
+          allows the client to be alleviated from keeping all the
+          per-request-state, e.g., in Section 3 of <xref
+          target="RFC8974"></xref>.</t>
         </list></t>
     </section>
 
@@ -867,7 +869,7 @@ missing-block-number = uint
         congestion control parameters will need to be tuned to cover this
         change. This tuning is out of scope of this document as it is expected
         that all requests and responses using Q-Block1 and Q-Block2 will be
-        Non-confirmable.</t>
+        Non-confirmable (<xref target="scope"></xref>).</t>
 
         <t>It is implementation specific as to whether there should be any
         further requests for missing data as there will have been significant
@@ -1384,7 +1386,7 @@ X<--: Message loss (response)
          |     [[Observe triggered]]
          |<---------+ NON 2.05 M:0xa1 T:0xf0 O:1236 ET=23 QB2:0/1/1024
          |     X<---+ NON 2.05 M:0xa2 T:0xf0 O:1236 ET=23 QB2:1/1/1024
-         |<---------+ [[Payloads 3 - 8 not detailed]]
+         |<---------+ [[Payloads 3 - 9 not detailed]]
          |     X<---+ NON 2.05 M:0xaa T:0xf0 O:1236 ET=23 QB2:9/1/1024
       [[MAX_PAYLOADS has been reached]]
          |   ...    |
