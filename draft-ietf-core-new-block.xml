@@ -129,101 +129,122 @@
       such a recommendation does not work with a flooded pipe DDoS
       situation.</t>
 
-      <section title="Alternative CoAP Block-Wise Transfer Options">
-        <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options.
-        These options are similar in operation to the CoAP Block1 and Block2
-        Options, respectively. They are not a replacement for them, but have
-        the following benefits:</t>
+      <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options
+      (<xref target="alt"></xref>).</t>
+    </section>
 
-        <t><list style="symbols">
-            <t>They can operate in environments where packet loss is highly
-            asymmetrical.</t>
+    <section anchor="notation" title="Terminology">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+      "OPTIONAL" in this document are to be interpreted as described in BCP 14
+      <xref target="RFC2119"></xref><xref target="RFC8174"></xref> when, and
+      only when, they appear in all capitals, as shown here.</t>
 
-            <t>They enable faster transmissions of sets of blocks of data with
-            less packet interchanges.</t>
+      <t>Readers should be familiar with the terms and concepts defined in
+      <xref target="RFC7252"></xref>, <xref target="RFC7959"></xref>, and
+      <xref target="RFC8132"></xref>.</t>
 
-            <t>They support faster recovery should any of the blocks get lost
-            in transmission.</t>
+      <t>The terms "payload" and "body" are defined in <xref
+      target="RFC7959"></xref>. The term "payload" is thus used for the
+      content of a single CoAP message (i.e., a single block being
+      transferred), while the term "body" is used for the entire resource
+      representation that is being transferred in a block-wise fashion.</t>
+    </section>
 
-            <t>They support sending an entire body using Non-confirmable (NON)
-            messages without requiring a response from the peer.</t>
-          </list></t>
+    <section anchor="alt" title="Alternative CoAP Block-Wise Transfer Options">
+      <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options.
+      These options are similar in operation to the CoAP Block1 and Block2
+      Options, respectively. They are not a replacement for them, but have the
+      following benefits:</t>
 
-        <t>There are the following disadvantages over using CoAP Block1 and
-        Block2 Options:<list style="symbols">
-            <t>Loss of lock-stepping so payloads are not always received in
-            the correct (block ascending) order.</t>
+      <t><list style="symbols">
+          <t>They can operate in environments where packet loss is highly
+          asymmetrical.</t>
 
-            <t>Additional congestion control measures need to be put in place
-            for NON messages (<xref target="cc-non"></xref>).</t>
+          <t>They enable faster transmissions of sets of blocks of data with
+          less packet interchanges.</t>
 
-            <t>To reduce the transmission times for CON transmission of large
-            bodies, NSTART needs to be increased from 1, but this affects
-            congestion control where other parameters need to be tuned
-            (Section 4.7 of <xref target="RFC7252"></xref>). Such tuning is
-            out of scope of this document.</t>
+          <t>They support faster recovery should any of the blocks get lost in
+          transmission.</t>
 
-            <t>Mixing of NON and CON during requests/responses using Q-Block
-            is not supported.</t>
+          <t>They support sending an entire body using Non-confirmable (NON)
+          messages without requiring a response from the peer.</t>
+        </list></t>
 
-            <t>The Q-Block Options do not support stateless operation/random
-            access.</t>
+      <t>There are the following disadvantages over using CoAP Block1 and
+      Block2 Options:<list style="symbols">
+          <t>Loss of lock-stepping so payloads are not always received in the
+          correct (block ascending) order.</t>
 
-            <t>Proxying of Q-Block is limited to caching full
-            representations.</t>
+          <t>Additional congestion control measures need to be put in place
+          for NON messages (<xref target="cc-non"></xref>).</t>
 
-            <t>There is no multicast support.</t>
-          </list></t>
+          <t>To reduce the transmission times for CON transmission of large
+          bodies, NSTART needs to be increased from 1, but this affects
+          congestion control where other parameters need to be tuned (Section
+          4.7 of <xref target="RFC7252"></xref>). Such tuning is out of scope
+          of this document.</t>
 
-        <t>Q-Block1 and Q-Block2 Options are designed to work in particular
-        with NON requests and responses.</t>
+          <t>Mixing of NON and CON during requests/responses using Q-Block is
+          not supported.</t>
 
-        <t>Using NON messages, the faster transmissions occur as all the
-        blocks can be transmitted serially (as are IP fragmented packets)
-        without having to wait for a response or next request from the remote
-        CoAP peer. Recovery of missing blocks is faster in that multiple
-        missing blocks can be requested in a single CoAP message. Even if
-        there is asymmetrical packet loss, a body can still be sent and
-        received by the peer whether the body comprises of a single or
-        multiple payloads assuming no recovery is required.</t>
+          <t>The Q-Block Options do not support stateless operation/random
+          access.</t>
 
-        <t>A CoAP endpoint can acknowledge all or a subset of the blocks.
-        Concretely, the receiving CoAP endpoint either informs the CoAP sender
-        endpoint of successful reception or reports on all blocks in the body
-        that have not yet been received. The CoAP sender endpoint will then
-        retransmit only the blocks that have been lost in transmission.</t>
+          <t>Proxying of Q-Block is limited to caching full
+          representations.</t>
 
-        <t>Note that similar performance benefits can be applied to
-        Confirmable messages if the value of NSTART is increased from 1
-        (Section 4.7 of <xref target="RFC7252"></xref>). However, the use of
-        Confirmable messages will not work if there is asymmetrical packet
-        loss. Some examples with Confirmable messages are provided in <xref
-        target="CON"></xref>.</t>
+          <t>There is no multicast support.</t>
+        </list></t>
 
-        <t>There is little, if any, benefit of using these options with CoAP
-        running over a reliable connection <xref target="RFC8323"></xref>. In
-        this case, there is no differentiation between CON and NON as they are
-        not used. Some examples using a reliable transport are provided in
-        <xref target="REL"></xref>.</t>
+      <t>Q-Block1 and Q-Block2 Options are designed to work in particular with
+      NON requests and responses.</t>
 
-        <t>Q-Block1 and Q-Block2 Options can be used instead of Block1 and
-        Block2 Options when the different transmission properties are
-        required. If the new options are not supported by a peer, then
-        transmissions can fall back to using Block1 and Block2 Options.</t>
+      <t>Using NON messages, the faster transmissions occur as all the blocks
+      can be transmitted serially (as are IP fragmented packets) without
+      having to wait for a response or next request from the remote CoAP peer.
+      Recovery of missing blocks is faster in that multiple missing blocks can
+      be requested in a single CoAP message. Even if there is asymmetrical
+      packet loss, a body can still be sent and received by the peer whether
+      the body comprises of a single or multiple payloads assuming no recovery
+      is required.</t>
 
-        <t>The deviations from Block1 and Block2 Options are specified in
-        <xref target="spec"></xref>. Pointers to appropriate <xref
-        target="RFC7959"></xref> sections are provided.</t>
+      <t>A CoAP endpoint can acknowledge all or a subset of the blocks.
+      Concretely, the receiving CoAP endpoint either informs the CoAP sender
+      endpoint of successful reception or reports on all blocks in the body
+      that have not yet been received. The CoAP sender endpoint will then
+      retransmit only the blocks that have been lost in transmission.</t>
 
-        <t>The specification refers to the base CoAP methods defined in
-        Section 5.8 of <xref target="RFC7252"></xref> and the new CoAP
-        methods, FETCH, PATCH, and iPATCH introduced in <xref
-        target="RFC8132"></xref>.</t>
+      <t>Note that similar performance benefits can be applied to Confirmable
+      messages if the value of NSTART is increased from 1 (Section 4.7 of
+      <xref target="RFC7252"></xref>). However, the use of Confirmable
+      messages will not work if there is asymmetrical packet loss. Some
+      examples with Confirmable messages are provided in <xref
+      target="CON"></xref>.</t>
 
-        <t>The No-Response Option was considered but was abandoned as it does
-        not apply to Q-Block2 responses. A unified solution is defined in the
-        document.</t>
-      </section>
+      <t>There is little, if any, benefit of using these options with CoAP
+      running over a reliable connection <xref target="RFC8323"></xref>. In
+      this case, there is no differentiation between CON and NON as they are
+      not used. Some examples using a reliable transport are provided in <xref
+      target="REL"></xref>.</t>
+
+      <t>Q-Block1 and Q-Block2 Options can be used instead of Block1 and
+      Block2 Options when the different transmission properties are required.
+      If the new options are not supported by a peer, then transmissions can
+      fall back to using Block1 and Block2 Options (<xref
+      target="prop"></xref>).</t>
+
+      <t>The deviations from Block1 and Block2 Options are specified in <xref
+      target="spec"></xref>. Pointers to appropriate <xref
+      target="RFC7959"></xref> sections are provided.</t>
+
+      <t>The specification refers to the base CoAP methods defined in Section
+      5.8 of <xref target="RFC7252"></xref> and the new CoAP methods, FETCH,
+      PATCH, and iPATCH introduced in <xref target="RFC8132"></xref>.</t>
+
+      <t>The No-Response Option <xref target="RFC7967"></xref> was considered
+      but was abandoned as it does not apply to Q-Block2 responses. A unified
+      solution is defined in the document.</t>
 
       <section title="CoAP Response Code (4.08) Usage">
         <t>This document adds a media type for the 4.08 (Request Entity
@@ -271,26 +292,9 @@
       </section>
     </section>
 
-    <section anchor="notation" title="Terminology">
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-      "OPTIONAL" in this document are to be interpreted as described in BCP 14
-      <xref target="RFC2119"></xref><xref target="RFC8174"></xref> when, and
-      only when, they appear in all capitals, as shown here.</t>
-
-      <t>Readers should be familiar with the terms and concepts defined in
-      <xref target="RFC7252"></xref>, <xref target="RFC7959"></xref>, and
-      <xref target="RFC8132"></xref>.</t>
-
-      <t>The terms "payload" and "body" are defined in <xref
-      target="RFC7959"></xref>. The term "payload" is thus used for the
-      content of a single CoAP message (i.e., a single block being
-      transferred), while the term "body" is used for the entire resource
-      representation that is being transferred in a block-wise fashion.</t>
-    </section>
-
     <section anchor="spec" title="The Q-Block1 and Q-Block2 Options">
-      <section title="Properties of Q-Block1 and Q-Block2 Options">
+      <section anchor="prop"
+               title="Properties of Q-Block1 and Q-Block2 Options">
         <t>The properties of the Q-Block1 and Q-Block2 Options are shown in
         Table 1. The formatting of this table follows the one used in Table 4
         of <xref target="RFC7252"></xref> (Section 5.10). The C, U, N, and R
@@ -432,11 +436,10 @@
         <t>When Q-Block1 Option is used, the client MUST include a Request-Tag
         Option <xref target="I-D.ietf-core-echo-request-tag"></xref>. The
         Request-Tag value MUST be the same for all of the requests for the
-        body of data that is being transferred. It is also used to identify a
-        particular payload of a body that needs to be retransmitted. The
-        Request-Tag is opaque, the server still treats it as opaque but the
-        client SHOULD ensure that it is unique for every different body of
-        transmitted data.<list style="empty">
+        body of data that is being transferred. The Request-Tag is opaque, the
+        server still treats it as opaque but the client SHOULD ensure that it
+        is unique for every different body of transmitted data.<list
+            style="empty">
             <t>Implementation Note: It is suggested that the client treats the
             Request-Tag as an unsigned integer of 8 bytes in length. An
             implementation may want to consider limiting this to 4 bytes to
@@ -1007,8 +1010,8 @@ Table 3: Congestion Control Parameters]]></artwork>
         <t>It is likely that the client will start transmitting the next set
         of MAX_PAYLOADS payloads before the server times out on waiting for
         the last of the previous MAX_PAYLOADS payloads. On receipt of the
-        first received payload from the new set of MAX_PAYLOADS payloads, the
-        server SHOULD send a 4.08 (Request Entity Incomplete) Response Code
+        first payload from the new set of MAX_PAYLOADS payloads, the server
+        SHOULD send a 4.08 (Request Entity Incomplete) Response Code
         indicating any missing payloads from any previous MAX_PAYLOADS
         payloads. Upon receipt of the 4.08 (Request Entity Incomplete)
         Response Code, the client SHOULD send the missing payloads before
@@ -1119,7 +1122,7 @@ Table 3: Congestion Control Parameters]]></artwork>
     <section title="Examples with Non-confirmable Messages">
       <t>This section provides some sample flows to illustrate the use of
       Q-Block1 and Q-Block2 Options with NON. Examples with CON are provided
-      in <xref target="CON"></xref>. </t>
+      in <xref target="CON"></xref>.</t>
 
       <t>The examples in the following subsections assume MAX_PAYLOADS is set
       to 10 and NON_MAX_RETRANSMIT is set to 4.</t>
@@ -1647,7 +1650,7 @@ X<--: Message loss (response)
     <section anchor="IANA" title="IANA Considerations">
       <t><list style="hanging">
           <t hangText="RFC Editor Note:">Please replace [RFCXXXX] with the RFC
-          number to be assigned to this document. </t>
+          number to be assigned to this document.</t>
         </list></t>
 
       <section title="CoAP Option Numbers Registry">
@@ -1781,6 +1784,8 @@ o  Reference: [RFCXXXX]]]></artwork>
       <?rfc include='reference.RFC.8782'?>
 
       <?rfc include='reference.RFC.8610'?>
+
+      <?rfc include='reference.RFC.7967'?>
 
       <reference anchor="Format"
                  target="https://www.iana.org/assignments/core-parameters/core-parameters.xhtml#content-formats">
