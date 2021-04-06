@@ -477,7 +477,7 @@
             body and that the resource was created. The token used SHOULD be
             from the last received payload. The client should then release all
             of the tokens used for this body. Note that the last received
-            payload may be the one with the highest block number. </t>
+            payload may not be the one with the highest block number. </t>
           </list></t>
 
         <t>2.02 (Deleted)<list style="empty">
@@ -586,7 +586,7 @@
         any, the client is terminating the transmission for.</t>
 
         <t>If the client elects to stop the transmission of a complete body,
-        it MUST "forget" all tracked tokens associated with the body's
+        it SHOULD "forget" all tracked tokens associated with the body's
         Request-Tag so that a reset message is generated for the invalid token
         in the 4.08 (Request Entity Incomplete) response. The server on
         receipt of the reset message SHOULD delete the partial body.</t>
