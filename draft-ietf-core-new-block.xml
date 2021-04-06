@@ -596,8 +596,8 @@
         it SHOULD ignore the payload of the packet, but MUST still respond as
         if the block was received for the first time.</t>
 
-        <t>A server MUST maintain a partial body (missing payloads) for up to
-        NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>).</t>
+        <t>A server SHOULD maintain a partial body (missing payloads) for up
+        to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>).</t>
       </section>
 
       <section anchor="qblock2" title="Using the Q-Block2 Option">
@@ -766,7 +766,7 @@
       <t>4.08 (Request Entity Incomplete) Response Code has a new Content-Type
       "application/missing-blocks+cbor-seq" used to indicate that the server
       has not received all of the blocks of the request body that it needs to
-      proceed. Such message must not be treated by the client as a fatal
+      proceed. Such messages must not be treated by the client as a fatal
       error.</t>
 
       <t>Likely causes are the client has not sent all blocks, some blocks
