@@ -542,7 +542,8 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
       This Response Code indicates successful receipt of the entire body
       and that the resource was created.  The token used SHOULD be from
       the last received payload.  The client should then release all of
-      the tokens used for this body.
+      the tokens used for this body.  Note that the last received
+      payload may be the one with the highest block number.
 
    2.02 (Deleted)
 
@@ -553,7 +554,6 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
       for this body.
 
    2.04 (Changed)
-
 
 
 

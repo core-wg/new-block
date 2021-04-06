@@ -476,7 +476,8 @@
             <t>This Response Code indicates successful receipt of the entire
             body and that the resource was created. The token used SHOULD be
             from the last received payload. The client should then release all
-            of the tokens used for this body.</t>
+            of the tokens used for this body. Note that the last received
+            payload may be the one with the highest block number. </t>
           </list></t>
 
         <t>2.02 (Deleted)<list style="empty">
