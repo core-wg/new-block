@@ -766,7 +766,7 @@
       <t>4.08 (Request Entity Incomplete) Response Code has a new Content-Type
       "application/missing-blocks+cbor-seq" used to indicate that the server
       has not received all of the blocks of the request body that it needs to
-      proceed. Such message must not treated by the client as a fatal
+      proceed. Such message must not be treated by the client as a fatal
       error.</t>
 
       <t>Likely causes are the client has not sent all blocks, some blocks
@@ -2035,10 +2035,11 @@ o  Reference: [RFCXXXX]]]></artwork>
 
       <t>Special thanks to Christian Ams&uuml;ss, Carsten Bormann, and Marco
       Tiloca for their suggestions and several reviews, which improved this
-      specification significantly.</t>
+      specification significantly. Thanks to Francesca Palombini for the AD
+      review. </t>
 
       <t>Some text from <xref target="RFC7959" /> is reused for readers
-      convenience.</t>
+      convenience. </t>
     </section>
   </back>
 </rfc>
