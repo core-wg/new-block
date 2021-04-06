@@ -403,9 +403,10 @@
         <t>Note that if Q-Block1 or Q-Block2 Options are included in a packet
         as Inner options, Block1 or Block2 Options MUST NOT be included as
         Inner options. Similarly there MUST NOT be a mix of Q-Block and Block
-        for the Outer options. Q-Block and Block Options can be mixed across
-        Inner and Outer options as these are handled independently of each
-        other.</t>
+        for the Outer options. Messages that do not adhere with this behavior
+        MUST be rejected with 4.02 (Bad Option). Q-Block and Block Options can
+        be mixed across Inner and Outer options as these are handled
+        independently of each other.</t>
       </section>
 
       <section title="Structure of Q-Block1 and Q-Block2 Options">
@@ -765,7 +766,8 @@
       <t>4.08 (Request Entity Incomplete) Response Code has a new Content-Type
       "application/missing-blocks+cbor-seq" used to indicate that the server
       has not received all of the blocks of the request body that it needs to
-      proceed.</t>
+      proceed. Such message must not treated by the client as a fatal
+      error.</t>
 
       <t>Likely causes are the client has not sent all blocks, some blocks
       were dropped during transmission, or the client has sent them
@@ -843,13 +845,13 @@ missing-block-number = uint
       respond to.</t>
 
       <t><list style="hanging">
-          <t hangText="Implementation Note for 8-byte Tokens:">To minimize on
-          the number of tokens that have to be tracked by clients, it is
-          suggested that the bottom 32 bits is kept the same for the same body
-          and the upper 32 bits contains the current body's request number
-          (incrementing every request, including every re-transmit). This
-          allows the client to be alleviated from keeping all the
-          per-request-state, e.g., in Section 3 of <xref
+          <t hangText="Implementation Note:">By using 8-byte tokens, it is
+          possible to easily minimize the number of tokens that have to be
+          tracked by clients, by keeping the bottom 32 bits the same for the
+          same body and the upper 32 bits containing the current body's
+          request number (incrementing every request, including every
+          re-transmit). This allows the client to be alleviated from keeping
+          all the per-request-state, e.g., in Section 3 of <xref
           target="RFC8974"></xref>.</t>
         </list></t>
     </section>
