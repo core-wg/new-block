@@ -661,11 +661,11 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    no way of determining which is the latest version, or which body, if
    any, the client is terminating the transmission for.
 
-   If the client elects to stop the transmission of a complete body, it
-   SHOULD "forget" all tracked tokens associated with the body's
-   Request-Tag so that a reset message is generated for the invalid
-   token in the 4.08 (Request Entity Incomplete) response.  The server
-   on receipt of the reset message SHOULD delete the partial body.
+   If the client elects to stop the transmission of a complete body, and
+   absent any local policy, the client MUST "forget" all tracked tokens
+   associated with the body's Request-Tag so that a reset message is
+   generated for the invalid token in the 4.08 (Request Entity
+
 
 
 
@@ -674,8 +674,11 @@ Boucadair & Shallow      Expires October 9, 2021               [Page 12]
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
+   Incomplete) response.  The server on receipt of the reset message
+   SHOULD delete the partial body.
+
    If the server receives a duplicate block with the same Request-Tag,
-   it SHOULD ignore the payload of the packet, but MUST still respond as
+   it MUST ignore the payload of the packet, but MUST still respond as
    if the block was received for the first time.
 
    A server SHOULD maintain a partial body (missing payloads) for up to
@@ -719,9 +722,6 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
       Implementation Note: It is suggested that the server treats the
       ETag as an unsigned integer of 8 bytes in length.  An
-      implementation may want to consider limiting this to 4 bytes to
-      reduce packet overhead size.  The initial ETag value should be
-
 
 
 
@@ -730,6 +730,8 @@ Boucadair & Shallow      Expires October 9, 2021               [Page 13]
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
+      implementation may want to consider limiting this to 4 bytes to
+      reduce packet overhead size.  The initial ETag value should be
       randomly generated and then subsequently incremented by the server
       whenever a new body of data is being transmitted between peers.
 
@@ -760,8 +762,8 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    GET, POST, PUT, FETCH, PATCH, or iPATCH for any missing blocks as
    needed.
 
-   If the client receives a duplicate block with the same ETag, it
-   SHOULD silently ignore the packet.
+   If the client receives a duplicate block with the same ETag, it MUST
+   silently ignore the packet.
 
    A client SHOULD maintain a partial body (missing payloads) for up to
    NON_PARTIAL_TIMEOUT (Section 7.2) or as defined by the Max-Age Option
@@ -775,9 +777,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    payload.  It can be used in the request if the client wants to check
    the freshness of the locally cached body response.
 
-   It is RECOMMENDED that the server maintains a cached copy of the body
-   when using the Q-Block2 Option to facilitate retransmission of any
-   missing payloads.
+
 
 
 
@@ -785,6 +785,10 @@ Boucadair & Shallow      Expires October 9, 2021               [Page 14]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
+
+   It is RECOMMENDED that the server maintains a cached copy of the body
+   when using the Q-Block2 Option to facilitate retransmission of any
+   missing payloads.
 
    If the server detects part way through a body transfer that the
    resource data has changed and the server is not maintaining a cached
@@ -830,10 +834,6 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    the data on the body so that any missing data can easily be
    determined.
 
-   The Size1 Option MUST be used with the Q-Block1 Option when used in a
-   request and MUST be present in all payloads of the request preserving
-   the same value.  The Size2 Option MUST be used with the Q-Block2
-
 
 
 
@@ -842,6 +842,9 @@ Boucadair & Shallow      Expires October 9, 2021               [Page 15]
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
+   The Size1 Option MUST be used with the Q-Block1 Option when used in a
+   request and MUST be present in all payloads of the request preserving
+   the same value.  The Size2 Option MUST be used with the Q-Block2
    Option when used in a response and MUST be present in all payloads of
    the response preserving the same value.
 
@@ -884,9 +887,6 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    The Concise Data Definition Language [RFC8610] (and see Section 4.1
    [RFC8742]) for the data describing these missing blocks is as
    follows:
-
-
-
 
 
 
@@ -1290,18 +1290,21 @@ Boucadair & Shallow      Expires October 9, 2021               [Page 23]
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
-                    T: Token value
-                    O: Observe Option value
-                    M: Message ID
-                   RT: Request-Tag
-                   ET: ETag
-                  QB1: Q-Block1 Option values NUM/More/SZX
-                  QB2: Q-Block2 Option values NUM/More/SZX
-                    \: Trimming long lines
-                 [[]]: Comments
-                 -->X: Message loss (request)
-                 X<--: Message loss (response)
-                  ...: Passage of time
+                  T: Token value
+                  O: Observe Option value
+                  M: Message ID
+                 RT: Request-Tag
+                 ET: ETag
+                QB1: Q-Block1 Option values NUM/More/SZX
+                QB2: Q-Block2 Option values NUM/More/SZX
+                  \: Trimming long lines
+               [[]]: Comments
+               -->X: Message loss (request)
+               X<--: Message loss (response)
+                ...: Passage of time
+          Payload N: Corresponds to the CoAP message that conveys
+                     a block number N-1 of a given block-wise
+                     exchange.
 
                   Figure 2: Notations Used in the Figures
 
@@ -1329,9 +1332,6 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    Figure 4 depicts an example of a NON PUT request conveying Q-Block1
    Option.  The number of payloads exceeds MAX_PAYLOADS.  All the blocks
    are received by the server.
-
-
-
 
 
 

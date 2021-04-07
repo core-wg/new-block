@@ -587,14 +587,15 @@
         any, the client is terminating the transmission for.</t>
 
         <t>If the client elects to stop the transmission of a complete body,
-        it SHOULD "forget" all tracked tokens associated with the body's
-        Request-Tag so that a reset message is generated for the invalid token
-        in the 4.08 (Request Entity Incomplete) response. The server on
-        receipt of the reset message SHOULD delete the partial body.</t>
+        and absent any local policy, the client MUST "forget" all tracked
+        tokens associated with the body's Request-Tag so that a reset message
+        is generated for the invalid token in the 4.08 (Request Entity
+        Incomplete) response. The server on receipt of the reset message
+        SHOULD delete the partial body.</t>
 
         <t>If the server receives a duplicate block with the same Request-Tag,
-        it SHOULD ignore the payload of the packet, but MUST still respond as
-        if the block was received for the first time.</t>
+        it MUST ignore the payload of the packet, but MUST still respond as if
+        the block was received for the first time.</t>
 
         <t>A server SHOULD maintain a partial body (missing payloads) for up
         to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>).</t>
@@ -676,7 +677,7 @@
         needed.</t>
 
         <t>If the client receives a duplicate block with the same ETag, it
-        SHOULD silently ignore the packet.</t>
+        MUST silently ignore the packet.</t>
 
         <t>A client SHOULD maintain a partial body (missing payloads) for up
         to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>) or as defined
@@ -1137,18 +1138,21 @@ Table 3: Congestion Control Parameters]]></artwork>
 
       <t><figure align="center" anchor="legend"
           title="Notations Used in the Figures">
-          <artwork align="center"><![CDATA[   T: Token value
-   O: Observe Option value
-   M: Message ID
-  RT: Request-Tag
-  ET: ETag
- QB1: Q-Block1 Option values NUM/More/SZX
- QB2: Q-Block2 Option values NUM/More/SZX
-   \: Trimming long lines
-[[]]: Comments
--->X: Message loss (request)
-X<--: Message loss (response)
- ...: Passage of time
+          <artwork align="center"><![CDATA[        T: Token value
+        O: Observe Option value
+        M: Message ID
+       RT: Request-Tag
+       ET: ETag
+      QB1: Q-Block1 Option values NUM/More/SZX
+      QB2: Q-Block2 Option values NUM/More/SZX
+        \: Trimming long lines
+     [[]]: Comments
+     -->X: Message loss (request)
+     X<--: Message loss (response)
+      ...: Passage of time
+Payload N: Corresponds to the CoAP message that conveys 
+           a block number N-1 of a given block-wise
+           exchange.
 ]]></artwork>
         </figure></t>
 
