@@ -478,7 +478,7 @@
             body and that the resource was created. The token used SHOULD be
             from the last received payload. The client should then release all
             of the tokens used for this body. Note that the last received
-            payload may not be the one with the highest block number. </t>
+            payload may not be the one with the highest block number.</t>
           </list></t>
 
         <t>2.02 (Deleted)<list style="empty">
@@ -540,7 +540,7 @@
           </list></t>
 
         <t>4.08 (Request Entity Incomplete)<list style="empty">
-            <t>This Response Code returned without Content-Type
+            <t>As a reminder, this Response Code returned without Content-Type
             "application/missing-blocks+cbor-seq" (<xref
             target="new-format"></xref>) is handled as in Section 2.9.2 <xref
             target="RFC7959"></xref>.</t>
@@ -678,12 +678,12 @@
         <t>If the client receives a duplicate block with the same ETag, it
         SHOULD silently ignore the packet.</t>
 
-        <t>A client SHOULD only maintain a partial body (missing payloads) for
-        up to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>) or as
-        defined by the Max-Age Option (or its default of 60 seconds (Section
-        5.6.1 of <xref target="RFC7252"></xref>)), whichever is the less. On
-        release of the partial body, the client should then release all of the
-        tokens used for this body unless a resource is being observed.</t>
+        <t>A client SHOULD maintain a partial body (missing payloads) for up
+        to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>) or as defined
+        by the Max-Age Option (or its default of 60 seconds (Section 5.6.1 of
+        <xref target="RFC7252"></xref>)), whichever is the less. On release of
+        the partial body, the client should then release all of the tokens
+        used for this body unless a resource is being observed.</t>
 
         <t>The ETag Option should not be used in the request for missing
         blocks as the server could respond with a 2.03 (Valid) response with
@@ -2036,10 +2036,10 @@ o  Reference: [RFCXXXX]]]></artwork>
       <t>Special thanks to Christian Ams&uuml;ss, Carsten Bormann, and Marco
       Tiloca for their suggestions and several reviews, which improved this
       specification significantly. Thanks to Francesca Palombini for the AD
-      review. </t>
+      review.</t>
 
       <t>Some text from <xref target="RFC7959" /> is reused for readers
-      convenience. </t>
+      convenience.</t>
     </section>
   </back>
 </rfc>

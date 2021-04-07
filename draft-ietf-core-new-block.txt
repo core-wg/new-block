@@ -620,9 +620,9 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
    4.08 (Request Entity Incomplete)
 
-      This Response Code returned without Content-Type "application/
-      missing-blocks+cbor-seq" (Section 12.3) is handled as in
-      Section 2.9.2 [RFC7959].
+      As a reminder, this Response Code returned without Content-Type
+      "application/missing-blocks+cbor-seq" (Section 12.3) is handled as
+      in Section 2.9.2 [RFC7959].
 
       This Response Code returned with Content-Type "application/
       missing-blocks+cbor-seq" indicates that some of the payloads are
@@ -763,9 +763,9 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    If the client receives a duplicate block with the same ETag, it
    SHOULD silently ignore the packet.
 
-   A client SHOULD only maintain a partial body (missing payloads) for
-   up to NON_PARTIAL_TIMEOUT (Section 7.2) or as defined by the Max-Age
-   Option (or its default of 60 seconds (Section 5.6.1 of [RFC7252])),
+   A client SHOULD maintain a partial body (missing payloads) for up to
+   NON_PARTIAL_TIMEOUT (Section 7.2) or as defined by the Max-Age Option
+   (or its default of 60 seconds (Section 5.6.1 of [RFC7252])),
    whichever is the less.  On release of the partial body, the client
    should then release all of the tokens used for this body unless a
    resource is being observed.
