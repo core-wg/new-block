@@ -438,8 +438,8 @@
         Option <xref target="I-D.ietf-core-echo-request-tag"></xref>. The
         Request-Tag value MUST be the same for all of the requests for the
         body of data that is being transferred. The Request-Tag is opaque, the
-        server still treats it as opaque but the client SHOULD ensure that it
-        is unique for every different body of transmitted data.<list
+        server still treats it as opaque but the client MUST ensure that it is
+        unique for every different body of transmitted data.<list
             style="empty">
             <t>Implementation Note: It is suggested that the client treats the
             Request-Tag as an unsigned integer of 8 bytes in length. An
@@ -635,7 +635,7 @@
         different representations of a resource.</t>
 
         <t>The ETag is opaque, the client still treats it as opaque but the
-        server SHOULD ensure that it is unique for every different body of
+        server MUST ensure that it is unique for every different body of
         transmitted data.</t>
 
         <t><list style="empty">
@@ -778,8 +778,8 @@
       of one or more missing block numbers encoded as CBOR unsigned integers
       <xref target="RFC8949"></xref>. The missing block numbers MUST be unique
       in each 4.08 (Request Entity Incomplete) response when created by the
-      server; the client SHOULD ignore any duplicates in the same 4.08
-      (Request Entity Incomplete) response.</t>
+      server; the client MUST ignore any duplicates in the same 4.08 (Request
+      Entity Incomplete) response.</t>
 
       <t>The Content-Format Option (Section 5.10.3 of <xref
       target="RFC7252"></xref>) MUST be used in the 4.08 (Request Entity
@@ -858,8 +858,8 @@ missing-block-number = uint
 
     <section anchor="cc" title="Congestion Control for Unreliable Transports">
       <t>The transmission of the payloads of a body over an unreliable
-      transport SHOULD either all be Confirmable or all be Non-confirmable.
-      This is meant to simplify the congestion control procedure.</t>
+      transport MUST either all be Confirmable or all be Non-confirmable. This
+      is meant to simplify the congestion control procedure.</t>
 
       <t>As a reminder, there is no need for CoAP-specific congestion control
       for reliable transports <xref target="RFC8323"></xref>.</t>
