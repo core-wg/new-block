@@ -482,7 +482,7 @@
 
         <t>2.01 (Created)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and that the resource was created.The token used MUST be any
+            body and that the resource was created. The token used MUST be any
             token that was received in a request using the same Request-Tag.
             However, it is desirable to provide the one used in the last
             received request, since that will aid any troubleshooting. The
@@ -699,7 +699,7 @@
         needed.</t>
 
         <t>If the client receives a duplicate block with the same ETag, it
-        MUST silently ignore the packet.</t>
+        MUST silently ignore the payload.</t>
 
         <t>A client SHOULD maintain a partial body (missing payloads) for up
         to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>) or as defined
@@ -1173,7 +1173,7 @@ Table 3: Congestion Control Parameters]]></artwork>
      X<--: Message loss (response)
       ...: Passage of time
 Payload N: Corresponds to the CoAP message that conveys 
-           a block number N-1 of a given block-wise exchange.
+           a block number (N-1) of a given block-wise exchange.
 ]]></artwork>
         </figure></t>
 
