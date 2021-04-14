@@ -320,9 +320,9 @@
         <t>The Q-Block1 and Q-Block2 Options can be present in both the
         request and response messages. The Q-Block1 Option pertains to the
         request payload and the Q-Block2 Option pertains to the response
-        payload. The Content-Format Option applies to the body, not to the
-        payload (i.e., it must be the same for all payloads of the same
-        body).</t>
+        payload. When the Content-Format Option is present, it applies to the
+        body not to the payload (i.e., it must be the same for all payloads of
+        the same body).</t>
 
         <t>Q-Block1 Option is useful with the payload-bearing POST, PUT,
         FETCH, PATCH, and iPATCH requests and their responses.</t>
@@ -342,13 +342,19 @@
         control on how that payload will be formed or was processed.</t>
 
         <t>To indicate support for Q-Block2 responses, the CoAP client MUST
-        include the Q-Block2 Option in a GET or similar request, the Q-Block2
-        Option in a PUT or similar request, or the Q-Block1 Option in a PUT or
-        similar request so that the server knows that the client supports this
-        Q-Block2 functionality should it need to send back a body that spans
-        multiple payloads. Otherwise, the server would use the Block2 Option
-        (if supported) to send back a message body that is too large to fit
-        into a single IP packet <xref target="RFC7959"></xref>.</t>
+        include the Q-Block2 Option in a GET or similar request (FETCH, for
+        example), the Q-Block2 Option in a PUT or similar request, or the
+        Q-Block1 Option in a PUT or similar request so that the server knows
+        that the client supports this Q-Block2 functionality should it need to
+        send back a body that spans multiple payloads. Otherwise, the server
+        would use the Block2 Option (if supported) to send back a message body
+        that is too large to fit into a single IP packet <xref
+        target="RFC7959"></xref>. </t>
+
+        <t>How a client decides whether it needs to include a Q-Block1 or
+        Q-Block2 Option can be driven by a local configuration knob, triggered
+        by an application (DOTS, for example), etc. Such considerations are
+        out of the scope of the document.</t>
 
         <t>Implementation of the Q-Block1 and Q-Block2 Options is intended to
         be optional. However, when it is present in a CoAP message, it MUST be
@@ -519,10 +525,12 @@
             used SHOULD be from the last received payload.</t>
 
             <t>A response using this Response Code SHOULD NOT be generated for
-            every received Q-Block1 Option request. It SHOULD only be
-            generated when all the payload requests are Non-confirmable and a
-            set of MAX_PAYLOADS (<xref target="cc-non"></xref>) payloads have
-            been received by the server.</t>
+            every received Q-Block1 Option request (<xref
+            target="cc-non"></xref>). It SHOULD only be generated when all the
+            payload requests are Non-confirmable and a set of MAX_PAYLOADS
+            payloads have been received by the server. More details about the
+            motivations for this optimization are discussed in <xref
+            target="cc-non"></xref>.</t>
 
             <t>It SHOULD NOT be generated for CON.</t>
           </list></t>
@@ -1151,8 +1159,7 @@ Table 3: Congestion Control Parameters]]></artwork>
      X<--: Message loss (response)
       ...: Passage of time
 Payload N: Corresponds to the CoAP message that conveys 
-           a block number N-1 of a given block-wise
-           exchange.
+           a block number N-1 of a given block-wise exchange.
 ]]></artwork>
         </figure></t>
 
