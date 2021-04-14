@@ -320,9 +320,10 @@
         <t>The Q-Block1 and Q-Block2 Options can be present in both the
         request and response messages. The Q-Block1 Option pertains to the
         request payload and the Q-Block2 Option pertains to the response
-        payload. When the Content-Format Option is present, it applies to the
-        body not to the payload (i.e., it must be the same for all payloads of
-        the same body).</t>
+        payload. When the Content-Format Option is present together with the
+        Q-Block1 or Q-Block2 Option, the option applies to the body not to the
+        payload (i.e., it must be the same for all payloads of the same
+        body).</t>
 
         <t>Q-Block1 Option is useful with the payload-bearing POST, PUT,
         FETCH, PATCH, and iPATCH requests and their responses.</t>
@@ -468,8 +469,8 @@
         target="RFC8323"></xref>), a response is not required until successful
         receipt of the body by the server.</t>
 
-        <t>Each individual payload of the body is treated as a new request
-        (<xref target="token"></xref>).</t>
+        <t>Each individual message that carries a block of the body is treated
+        as a new request (<xref target="token"></xref>).</t>
 
         <t>The client MUST send the payloads with the block numbers
         increasing, starting from zero, until the body is complete (subject to
@@ -481,33 +482,41 @@
 
         <t>2.01 (Created)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and that the resource was created. The token used SHOULD be
-            from the last received payload. The client should then release all
-            of the tokens used for this body. Note that the last received
-            payload may not be the one with the highest block number.</t>
+            body and that the resource was created.The token used MUST be any
+            token that was received in a request using the same Request-Tag.
+            However, it is desirable to provide the one used in the last
+            received request, since that will aid any troubleshooting. The
+            client should then release all of the tokens used for this body.
+            Note that the last received payload may not be the one with the
+            highest block number.</t>
           </list></t>
 
         <t>2.02 (Deleted)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
             body and that the resource was deleted when using POST (Section
-            5.8.2 <xref target="RFC7252"></xref>). The token used SHOULD be
-            from the last received payload. The client should then release all
-            of the tokens used for this body.</t>
+            5.8.2 <xref target="RFC7252"></xref>). The token used MUST be any
+            token that was received in a request using the same Request-Tag.
+            However, it is desirable to provide the one used in the last
+            received request. The client should then release all of the tokens
+            used for this body.</t>
           </list></t>
 
         <t>2.04 (Changed)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and that the resource was updated. The token used SHOULD be
-            from the last received payload. The client should then release all
-            of the tokens used for this body.</t>
+            body and that the resource was updated. The token used MUST be any
+            token that was received in a request using the same Request-Tag.
+            However, it is desirable to provide the one used in the last
+            received request. The client should then release all of the tokens
+            used for this body.</t>
           </list></t>
 
         <t>2.05 (Content)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
             FETCH request body (Section 2 of <xref target="RFC8132"></xref>)
             and that the appropriate representation of the resource is being
-            returned. The token used in the response SHOULD be from the last
-            received payload.</t>
+            returned. The token used MUST be any token that was received in a
+            request using the same Request-Tag. However, it is desirable to
+            provide the one used in the last received request.</t>
 
             <t>If the FETCH request includes the Observe Option, then the
             server MUST use the same token as used for the initial response
@@ -522,7 +531,9 @@
             <t>This Response Code can be used to indicate that all of the
             blocks up to and including the Q-Block1 Option block NUM (all
             having the M bit set) have been successfully received. The token
-            used SHOULD be from the last received payload.</t>
+            used MUST be any token that was received in a request using the
+            same Request-Tag. However, it is desirable to provide the one used
+            in the last received request.</t>
 
             <t>A response using this Response Code SHOULD NOT be generated for
             every received Q-Block1 Option request (<xref
@@ -564,11 +575,12 @@
             in the 4.08 (Request Entity Incomplete) response, locating the
             matching client request, and then using its Request-Tag.</t>
 
-            <t>The token used in the response SHOULD be from the last received
-            payload. See <xref target="code"></xref> for further
-            information.</t>
+            <t>The token used MUST be any token that was received in a request
+            using the same Request-Tag. However, it is desirable to provide
+            the one used in the last received request. See <xref
+            target="code"></xref> for further information.</t>
 
-            <t>If the server has not received all the payloads of a body, but
+            <t>If the server has not received all the blocks of a body, but
             one or more NON payloads have been received, it SHOULD wait for up
             to NON_RECEIVE_TIMEOUT (<xref target="cc-non"></xref>) before
             sending a 4.08 (Request Entity Incomplete) response.</t>
@@ -674,7 +686,9 @@
         <t>The requested missing block numbers MUST have an increasing block
         number in each additional Q-Block2 Option with no duplicates. The
         server SHOULD respond with a 4.00 (Bad Request) to requests not
-        adhering to this behavior.</t>
+        adhering to this behavior. Note that the ordering constraint is meant
+        to force the client to check for duplicates and remove them. This also
+        helps with troubleshooting.</t>
 
         <t>For Confirmable responses, the client continues to acknowledge each
         packet. Typically, the server acknowledges the initial request using
@@ -866,9 +880,9 @@ missing-block-number = uint
     </section>
 
     <section anchor="cc" title="Congestion Control for Unreliable Transports">
-      <t>The transmission of the payloads of a body over an unreliable
-      transport MUST either all be Confirmable or all be Non-confirmable. This
-      is meant to simplify the congestion control procedure.</t>
+      <t>The transmission of the blocks of a body over an unreliable transport
+      MUST either all be Confirmable or all be Non-confirmable. This is meant
+      to simplify the congestion control procedure.</t>
 
       <t>As a reminder, there is no need for CoAP-specific congestion control
       for reliable transports <xref target="RFC8323"></xref>.</t>
@@ -997,7 +1011,7 @@ Table 3: Congestion Control Parameters]]></artwork>
         of its MAX_PAYLOADS set may not have arrived. How the two peer values
         for MAX_PAYLOADS are synchronized is out of the scope.</t>
 
-        <t>The sending of a set of missing payloads of a body is subject to
+        <t>The sending of a set of missing blocks of a body is subject to
         MAX_PAYLOADS set of payloads.</t>
 
         <t>For Q-Block1 Option, if the server responds with a 2.31 (Continue)
