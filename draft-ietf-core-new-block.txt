@@ -5,7 +5,7 @@
 CoRE Working Group                                          M. Boucadair
 Internet-Draft                                                    Orange
 Intended status: Standards Track                              J. Shallow
-Expires: October 16, 2021                                 April 14, 2021
+Expires: October 28, 2021                                 April 26, 2021
 
 
 Constrained Application Protocol (CoAP) Block-Wise Transfer Options for
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 16, 2021.
+   This Internet-Draft will expire on October 28, 2021.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Boucadair & Shallow     Expires October 16, 2021                [Page 1]
+Boucadair & Shallow     Expires October 28, 2021                [Page 1]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Boucadair & Shallow     Expires October 16, 2021                [Page 2]
+Boucadair & Shallow     Expires October 28, 2021                [Page 2]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -165,7 +165,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021                [Page 3]
+Boucadair & Shallow     Expires October 28, 2021                [Page 3]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -221,7 +221,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021                [Page 4]
+Boucadair & Shallow     Expires October 28, 2021                [Page 4]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -277,7 +277,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021                [Page 5]
+Boucadair & Shallow     Expires October 28, 2021                [Page 5]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -333,7 +333,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021                [Page 6]
+Boucadair & Shallow     Expires October 28, 2021                [Page 6]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -389,7 +389,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021                [Page 7]
+Boucadair & Shallow     Expires October 28, 2021                [Page 7]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -445,7 +445,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021                [Page 8]
+Boucadair & Shallow     Expires October 28, 2021                [Page 8]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -501,7 +501,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021                [Page 9]
+Boucadair & Shallow     Expires October 28, 2021                [Page 9]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -547,17 +547,17 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    2.01 (Created)
 
       This Response Code indicates successful receipt of the entire body
-      and that the resource was created.  The token used MUST be any
-      token that was received in a request using the same Request-Tag.
-      However, it is desirable to provide the one used in the last
-      received request, since that will aid any troubleshooting.  The
-      client should then release all of the tokens used for this body.
-      Note that the last received payload may not be the one with the
-      highest block number.
+      and that the resource was created.  The token used MUST be one of
+      the tokens that were received in a request for this block-wise
+      exchange.  However, it is desirable to provide the one used in the
+      last received request, since that will aid any troubleshooting.
+      The client should then release all of the tokens used for this
+      body.  Note that the last received payload may not be the one with
+      the highest block number.
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 10]
+Boucadair & Shallow     Expires October 28, 2021               [Page 10]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -566,18 +566,19 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
       This Response Code indicates successful receipt of the entire body
       and that the resource was deleted when using POST (Section 5.8.2
-      [RFC7252]).  The token used MUST be any token that was received in
-      a request using the same Request-Tag.  However, it is desirable to
-      provide the one used in the last received request.  The client
-      should then release all of the tokens used for this body.
+      [RFC7252]).  The token used MUST be one of the tokens that were
+      received in a request for this block-wise exchange.  However, it
+      is desirable to provide the one used in the last received request.
+      The client should then release all of the tokens used for this
+      body.
 
    2.04 (Changed)
 
       This Response Code indicates successful receipt of the entire body
-      and that the resource was updated.  The token used MUST be any
-      token that was received in a request using the same Request-Tag.
-      However, it is desirable to provide the one used in the last
-      received request.  The client should then release all of the
+      and that the resource was updated.  The token used MUST be one of
+      the tokens that were received in a request for this block-wise
+      exchange.  However, it is desirable to provide the one used in the
+      last received request.  The client should then release all of the
       tokens used for this body.
 
    2.05 (Content)
@@ -585,9 +586,9 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
       This Response Code indicates successful receipt of the entire
       FETCH request body (Section 2 of [RFC8132]) and that the
       appropriate representation of the resource is being returned.  The
-      token used MUST be any token that was received in a request using
-      the same Request-Tag. However, it is desirable to provide the one
-      used in the last received request.
+      token used MUST be one of the tokens that were received in a
+      request for this block-wise exchange.  However, it is desirable to
+      provide the one used in the last received request.
 
       If the FETCH request includes the Observe Option, then the server
       MUST use the same token as used for the initial response for
@@ -602,22 +603,22 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
       This Response Code can be used to indicate that all of the blocks
       up to and including the Q-Block1 Option block NUM (all having the
       M bit set) have been successfully received.  The token used MUST
-      be any token that was received in a request using the same
-      Request-Tag. However, it is desirable to provide the one used in
-      the last received request.
+      be one of the tokens that were received in a request for this
+      block-wise exchange.  However, it is desirable to provide the one
+      used in the last received request.
 
       A response using this Response Code SHOULD NOT be generated for
       every received Q-Block1 Option request (Section 7.2).  It SHOULD
       only be generated when all the payload requests are Non-
-      confirmable and a set of MAX_PAYLOADS payloads have been received
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 11]
+Boucadair & Shallow     Expires October 28, 2021               [Page 11]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
+      confirmable and a set of MAX_PAYLOADS payloads have been received
       by the server.  More details about the motivations for this
       optimization are discussed in Section 7.2.
 
@@ -626,14 +627,14 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    4.00 (Bad Request)
 
       This Response Code MUST be returned if the request does not
-      include neither a Request-Tag Option nor a Size1 Option but does
-      include a Q-Block1 option.
+      include a Request-Tag Option or a Size1 Option but does include a
+      Q-Block1 option.
 
    4.02 (Bad Option)
 
-      Either this Response Code (in case of Confirmable request) or a
-      reset message (in case of Non-confirmable request) MUST be
-      returned if the server does not support the Q-Block Options.
+      This Response Code MUST be returned for a Confirmable request if
+      the server does not support the Q-Block Options.  Note that a
+      reset message must be sent in case of Non-confirmable request.
 
    4.08 (Request Entity Incomplete)
 
@@ -651,10 +652,10 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
       the 4.08 (Request Entity Incomplete) response, locating the
       matching client request, and then using its Request-Tag.
 
-      The token used MUST be any token that was received in a request
-      using the same Request-Tag. However, it is desirable to provide
-      the one used in the last received request.  See Section 5 for
-      further information.
+      The token used MUST be one of the tokens that were received in a
+      request for this block-wise exchange.  However, it is desirable to
+      provide the one used in the last received request.  See Section 5
+      for further information.
 
       If the server has not received all the blocks of a body, but one
       or more NON payloads have been received, it SHOULD wait for up to
@@ -668,8 +669,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-
-Boucadair & Shallow     Expires October 16, 2021               [Page 12]
+Boucadair & Shallow     Expires October 28, 2021               [Page 12]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -725,7 +725,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 13]
+Boucadair & Shallow     Expires October 28, 2021               [Page 13]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -762,17 +762,17 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    after the last received payload for NON payloads before issuing a
    GET, POST, PUT, FETCH, PATCH, or iPATCH request that contains one or
    more Q-Block2 Options that define the missing blocks with the M bit
-   unset.  It is permissible to set the M bit to request this and later
-   blocks from this MAX_PAYLOADS set.  Further considerations related to
-   the transmission timing for missing requests are discussed in
+   unset.  The client MAY set the M bit to request this and later blocks
+   from this MAX_PAYLOADS set.  Further considerations related to the
+   transmission timing for missing requests are discussed in
    Section 7.2.
 
-   The requested missing block numbers MUST have an increasing block
-   number in each additional Q-Block2 Option with no duplicates.  The
-   server SHOULD respond with a 4.00 (Bad Request) to requests not
-   adhering to this behavior.  Note that the ordering constraint is
-   meant to force the client to check for duplicates and remove them.
-   This also helps with troubleshooting.
+   The requested missing block numbers by the client MUST have an
+   increasing block number in each additional Q-Block2 Option with no
+   duplicates.  The server SHOULD respond with a 4.00 (Bad Request) to
+   requests not adhering to this behavior.  Note that the ordering
+   constraint is meant to force the client to check for duplicates and
+   remove them.  This also helps with troubleshooting.
 
    For Confirmable responses, the client continues to acknowledge each
    packet.  Typically, the server acknowledges the initial request using
@@ -781,7 +781,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 14]
+Boucadair & Shallow     Expires October 28, 2021               [Page 14]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -837,7 +837,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 15]
+Boucadair & Shallow     Expires October 28, 2021               [Page 15]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -851,8 +851,9 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    For a response that uses Q-Block2, the Observe value MUST be the same
    for all the payloads of the same body.  This includes payloads
    transmitted following receipt of the 'Continue' Q-Block2 Option
-   (Section 4.4) by the server.  If a missing payload is requested, then
-   both the request and response MUST NOT include the Observe Option.
+   (Section 4.4) by the server.  If a missing payload is requested by a
+   client, then both the request and response MUST NOT include the
+   Observe Option.
 
 4.6.  Using Size1 and Size2 Options
 
@@ -892,8 +893,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-
-Boucadair & Shallow     Expires October 16, 2021               [Page 16]
+Boucadair & Shallow     Expires October 28, 2021               [Page 16]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -949,7 +949,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 17]
+Boucadair & Shallow     Expires October 28, 2021               [Page 17]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1005,7 +1005,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 18]
+Boucadair & Shallow     Expires October 28, 2021               [Page 18]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1061,7 +1061,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 19]
+Boucadair & Shallow     Expires October 28, 2021               [Page 19]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1117,7 +1117,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 20]
+Boucadair & Shallow     Expires October 28, 2021               [Page 20]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1141,16 +1141,17 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
    For the server receiving NON Q-Block1 requests, it SHOULD send back a
    2.31 (Continue) Response Code on receipt of all of the MAX_PAYLOADS
-   payloads to prevent the client unnecessarily delaying.  Otherwise the
-   server SHOULD delay for NON_RECEIVE_TIMEOUT (exponentially scaled
-   based on the repeat request count for a payload), before sending the
-   4.08 (Request Entity Incomplete) Response Code for the missing
-   payload(s).  If this is a repeat for the 2.31 (Continue) response,
-   the server SHOULD send a 4.08 (Request Entity Incomplete) response
-   detailing the missing payloads after the block number that would have
-   been indicated in the 2.31 (Continue).  If the repeat request count
-   for a missing payload exceeds NON_MAX_RETRANSMIT, the server SHOULD
-   discard the partial body and stop requesting the missing payloads.
+   payloads to prevent the client unnecessarily delaying.  If not all of
+   the MAX_PAYLOADS payloads were received, the server SHOULD delay for
+   NON_RECEIVE_TIMEOUT (exponentially scaled based on the repeat request
+   count for a payload) before sending the 4.08 (Request Entity
+   Incomplete) Response Code for the missing payload(s).  If this is a
+   repeat for the 2.31 (Continue) response, the server SHOULD send a
+   4.08 (Request Entity Incomplete) response detailing the missing
+   payloads after the block number that would have been indicated in the
+   2.31 (Continue).  If the repeat request count for a missing payload
+   exceeds NON_MAX_RETRANSMIT, the server SHOULD discard the partial
+   body and stop requesting the missing payloads.
 
    It is likely that the client will start transmitting the next set of
    MAX_PAYLOADS payloads before the server times out on waiting for the
@@ -1169,15 +1170,15 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    the server unnecessarily delaying.  Otherwise the client SHOULD delay
    for NON_RECEIVE_TIMEOUT (exponentially scaled based on the repeat
    request count for a payload), before sending the request for the
-   missing payload(s).  If the repeat request count for a missing
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 21]
+Boucadair & Shallow     Expires October 28, 2021               [Page 21]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
+   missing payload(s).  If the repeat request count for a missing
    payload exceeds NON_MAX_RETRANSMIT, the client SHOULD discard the
    partial body and stop requesting the missing payloads.
 
@@ -1228,8 +1229,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-
-Boucadair & Shallow     Expires October 16, 2021               [Page 22]
+Boucadair & Shallow     Expires October 28, 2021               [Page 22]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1285,7 +1285,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 23]
+Boucadair & Shallow     Expires October 28, 2021               [Page 23]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1341,7 +1341,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 24]
+Boucadair & Shallow     Expires October 28, 2021               [Page 24]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1397,7 +1397,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 25]
+Boucadair & Shallow     Expires October 28, 2021               [Page 25]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1453,7 +1453,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 26]
+Boucadair & Shallow     Expires October 28, 2021               [Page 26]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1509,7 +1509,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 27]
+Boucadair & Shallow     Expires October 28, 2021               [Page 27]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1565,7 +1565,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 28]
+Boucadair & Shallow     Expires October 28, 2021               [Page 28]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1621,7 +1621,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 29]
+Boucadair & Shallow     Expires October 28, 2021               [Page 29]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1677,7 +1677,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 30]
+Boucadair & Shallow     Expires October 28, 2021               [Page 30]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1733,7 +1733,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 31]
+Boucadair & Shallow     Expires October 28, 2021               [Page 31]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1789,7 +1789,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 32]
+Boucadair & Shallow     Expires October 28, 2021               [Page 32]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1845,7 +1845,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 33]
+Boucadair & Shallow     Expires October 28, 2021               [Page 33]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1901,7 +1901,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 34]
+Boucadair & Shallow     Expires October 28, 2021               [Page 34]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -1957,7 +1957,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 35]
+Boucadair & Shallow     Expires October 28, 2021               [Page 35]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -2013,7 +2013,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 36]
+Boucadair & Shallow     Expires October 28, 2021               [Page 36]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -2069,7 +2069,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 37]
+Boucadair & Shallow     Expires October 28, 2021               [Page 37]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -2125,7 +2125,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 38]
+Boucadair & Shallow     Expires October 28, 2021               [Page 38]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -2181,7 +2181,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 39]
+Boucadair & Shallow     Expires October 28, 2021               [Page 39]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -2237,7 +2237,7 @@ A.1.  Q-Block1 Option
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 40]
+Boucadair & Shallow     Expires October 28, 2021               [Page 40]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -2293,7 +2293,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 41]
+Boucadair & Shallow     Expires October 28, 2021               [Page 41]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -2349,7 +2349,7 @@ A.2.  Q-Block2 Option
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 42]
+Boucadair & Shallow     Expires October 28, 2021               [Page 42]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -2405,7 +2405,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 43]
+Boucadair & Shallow     Expires October 28, 2021               [Page 43]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -2461,7 +2461,7 @@ B.2.  Q-Block2 Option
 
 
 
-Boucadair & Shallow     Expires October 16, 2021               [Page 44]
+Boucadair & Shallow     Expires October 28, 2021               [Page 44]
 
 Internet-Draft      Quick Block-Wise Transfer Options         April 2021
 
@@ -2496,6 +2496,8 @@ Acknowledgements
    specification significantly.  Thanks to Francesca Palombini for the
    AD review.
 
+   Thanks to Pete Resnick for the Gen-ART review.
+
    Some text from [RFC7959] is reused for readers convenience.
 
 Authors' Addresses
@@ -2515,6 +2517,4 @@ Authors' Addresses
 
 
 
-
-
-Boucadair & Shallow     Expires October 16, 2021               [Page 45]
+Boucadair & Shallow     Expires October 28, 2021               [Page 45]
