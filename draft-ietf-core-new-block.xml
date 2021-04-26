@@ -346,7 +346,7 @@
         include the Q-Block2 Option in a GET or similar request (FETCH, for
         example), the Q-Block2 Option in a PUT or similar request, or the
         Q-Block1 Option in a PUT or similar request so that the server knows
-        that the client supports this Q-Block2 functionality should it need to
+        that the client supports this Q-Block functionality should it need to
         send back a body that spans multiple payloads. Otherwise, the server
         would use the Block2 Option (if supported) to send back a message body
         that is too large to fit into a single IP packet <xref
@@ -544,7 +544,7 @@
             motivations for this optimization are discussed in <xref
             target="cc-non"></xref>.</t>
 
-            <t>It SHOULD NOT be generated for CON.</t>
+            <t>This Response Code SHOULD NOT be generated for CON.</t>
           </list></t>
 
         <t>4.00 (Bad Request)<list style="empty">
@@ -749,11 +749,13 @@
         retransmitted.</t>
 
         <t>For a response that uses Q-Block2, the Observe value MUST be the
-        same for all the payloads of the same body. This includes payloads
-        transmitted following receipt of the 'Continue' Q-Block2 Option (<xref
-        target="qblock2"></xref>) by the server. If a missing payload is
-        requested by a client, then both the request and response MUST NOT
-        include the Observe Option.</t>
+        same for all the payloads of the same body. This is different from
+        Block2 usage where the Observe value is only present in the first
+        block (Section 3.4 of <xref target="RFC7959"></xref>). This includes
+        payloads transmitted following receipt of the 'Continue' Q-Block2
+        Option (<xref target="qblock2"></xref>) by the server. If a missing
+        payload is requested by a client, then both the request and response
+        MUST NOT include the Observe Option.</t>
       </section>
 
       <section anchor="size" title="Using Size1 and Size2 Options">
@@ -882,9 +884,10 @@ missing-block-number = uint
     </section>
 
     <section anchor="cc" title="Congestion Control for Unreliable Transports">
-      <t>The transmission of the blocks of a body over an unreliable transport
-      MUST either all be Confirmable or all be Non-confirmable. This is meant
-      to simplify the congestion control procedure.</t>
+      <t>The transmission of all the blocks of a single body over an
+      unreliable transport MUST either all be Confirmable or all be
+      Non-confirmable. This is meant to simplify the congestion control
+      procedure.</t>
 
       <t>As a reminder, there is no need for CoAP-specific congestion control
       for reliable transports <xref target="RFC8323"></xref>.</t>
