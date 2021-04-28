@@ -556,8 +556,7 @@
         <t>4.02 (Bad Option)<list style="empty">
             <t>This Response Code MUST be returned for a Confirmable request
             if the server does not support the Q-Block Options. Note that a
-            reset message must be sent in case of Non-confirmable request.
-            </t>
+            reset message must be sent in case of Non-confirmable request.</t>
           </list></t>
 
         <t>4.08 (Request Entity Incomplete)<list style="empty">
@@ -685,12 +684,12 @@
         considerations related to the transmission timing for missing requests
         are discussed in <xref target="cc-non"></xref>.</t>
 
-        <t>The requested missing block numbers by the client MUST have an
+        <t>The missing block numbers requested by the client MUST have an
         increasing block number in each additional Q-Block2 Option with no
         duplicates. The server SHOULD respond with a 4.00 (Bad Request) to
         requests not adhering to this behavior. Note that the ordering
         constraint is meant to force the client to check for duplicates and
-        remove them. This also helps with troubleshooting. </t>
+        remove them. This also helps with troubleshooting.</t>
 
         <t>For Confirmable responses, the client continues to acknowledge each
         packet. Typically, the server acknowledges the initial request using
@@ -2071,7 +2070,7 @@ o  Reference: [RFCXXXX]]]></artwork>
       review.</t>
 
       <t>Some text from <xref target="RFC7959" /> is reused for readers
-      convenience. </t>
+      convenience.</t>
     </section>
   </back>
 </rfc>
