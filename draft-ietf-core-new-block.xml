@@ -344,13 +344,13 @@
 
         <t>To indicate support for Q-Block2 responses, the CoAP client MUST
         include the Q-Block2 Option in a GET or similar request (FETCH, for
-        example), the Q-Block2 Option in a PUT or similar request, or the
-        Q-Block1 Option in a PUT or similar request so that the server knows
-        that the client supports this Q-Block functionality should it need to
-        send back a body that spans multiple payloads. Otherwise, the server
-        would use the Block2 Option (if supported) to send back a message body
-        that is too large to fit into a single IP packet <xref
-        target="RFC7959"></xref>.</t>
+        example), the Q-Block2 Option in a PUT or similar request (POST, for
+        example), or the Q-Block1 Option in a PUT or similar request so that
+        the server knows that the client supports this Q-Block functionality
+        should it need to send back a body that spans multiple payloads.
+        Otherwise, the server would use the Block2 Option (if supported) to
+        send back a message body that is too large to fit into a single IP
+        packet <xref target="RFC7959"></xref>.</t>
 
         <t>How a client decides whether it needs to include a Q-Block1 or
         Q-Block2 Option can be driven by a local configuration knob, triggered
@@ -893,12 +893,14 @@ missing-block-number = uint
 
       <section anchor="cc-con" title="Confirmable (CON)">
         <t>Congestion control for CON requests and responses is specified in
-        Section 4.7 of <xref target="RFC7252"></xref>. For faster transmission
-        rates, NSTART will need to be increased from 1. However, the other CON
-        congestion control parameters will need to be tuned to cover this
-        change. This tuning is out of scope of this document as it is expected
-        that all requests and responses using Q-Block1 and Q-Block2 will be
-        Non-confirmable (<xref target="scope"></xref>).</t>
+        Section 4.7 of <xref target="RFC7252"></xref>. In order to benefit
+        from faster transmission rates, NSTART will need to be increased from
+        1. However, the other CON congestion control parameters will need to
+        be tuned to cover this change. This tuning is not specified in this
+        document given that the applicability scope of the current
+        specification assumes that all requests and responses using Q-Block1
+        and Q-Block2 will be Non-confirmable (<xref
+        target="scope"></xref>).</t>
 
         <t>It is implementation specific as to whether there should be any
         further requests for missing data as there will have been significant
@@ -1003,17 +1005,18 @@ Table 3: Congestion Control Parameters]]></artwork>
 
         <t>If the CoAP peer reports at least one payload has not arrived for
         each body for at least a 24 hour period and it is known that there are
-        no other network issues over that period, then the value of
-        MAX_PAYLOADS can be reduced by 1 at a time (to a minimum of 1) and the
-        situation re-evaluated for another 24 hour period until there is no
-        report of missing payloads under normal operating conditions. The
-        newly derived value for MAX_PAYLOADS should be used for both ends of
-        this particular CoAP peer link. Note that the CoAP peer will not know
-        about the MAX_PAYLOADS change until it is reconfigured. As a
-        consequence of the two peers having different MAX_PAYLOADS values, a
-        peer may continue indicate that there are some missing payloads as all
-        of its MAX_PAYLOADS set may not have arrived. How the two peer values
-        for MAX_PAYLOADS are synchronized is out of the scope.</t>
+        no other network issues over that period (e.g., DDoS attacks), then
+        the value of MAX_PAYLOADS can be reduced by 1 at a time (to a minimum
+        of 1) and the situation re-evaluated for another 24 hour period until
+        there is no report of missing payloads under normal operating
+        conditions. The newly derived value for MAX_PAYLOADS should be used
+        for both ends of this particular CoAP peer link. Note that the CoAP
+        peer will not know about the MAX_PAYLOADS change until it is
+        reconfigured. As a consequence of the two peers having different
+        MAX_PAYLOADS values, a peer may continue indicate that there are some
+        missing payloads as all of its MAX_PAYLOADS set may not have arrived.
+        How the two peer values for MAX_PAYLOADS are synchronized is out of
+        the scope.</t>
 
         <t>The sending of a set of missing blocks of a body is subject to
         MAX_PAYLOADS set of payloads.</t>
@@ -2067,7 +2070,7 @@ o  Reference: [RFCXXXX]]]></artwork>
       Tiloca for their suggestions and several reviews, which improved this
       specification significantly. Thanks to Francesca Palombini for the AD
       review. <vspace blankLines="1" />Thanks to Pete Resnick for the Gen-ART
-      review.</t>
+      review and Colin Perkins for the Tsvart review.</t>
 
       <t>Some text from <xref target="RFC7959" /> is reused for readers
       convenience.</t>
