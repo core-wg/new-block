@@ -142,13 +142,27 @@
 
       <t>Readers should be familiar with the terms and concepts defined in
       <xref target="RFC7252"></xref>, <xref target="RFC7959"></xref>, and
-      <xref target="RFC8132"></xref>.</t>
+      <xref target="RFC8132"></xref>. Particularly, the document uses the
+      following key concepts:<list style="hanging">
+          <t hangText="Token:">is used to match responses to requests
+          independently from the underlying messages (Section 5.3.1 of <xref
+          target="RFC7252"></xref>).</t>
+
+          <t hangText="ETag:">is used as a resource-local identifier for
+          differentiating between representations of the same resource that
+          vary over time (Section 5.10.6 of <xref
+          target="RFC7252"></xref>).</t>
+        </list></t>
 
       <t>The terms "payload" and "body" are defined in <xref
       target="RFC7959"></xref>. The term "payload" is thus used for the
       content of a single CoAP message (i.e., a single block being
       transferred), while the term "body" is used for the entire resource
       representation that is being transferred in a block-wise fashion.</t>
+
+      <t>Request-Tag refers an option that allows a CoAP server to match
+      message fragments belonging to the same request <xref
+      target="I-D.ietf-core-echo-request-tag"></xref>.</t>
     </section>
 
     <section anchor="alt" title="Alternative CoAP Block-Wise Transfer Options">
@@ -953,7 +967,7 @@ missing-block-number = uint
         target="RFC7252"></xref>).</t>
 
         <t>NON_PROBING_WAIT is used to limit the potential wait needed
-        calculated when using PROBING_WAIT. NON_PROBING_WAIT has the same
+        calculated when using PROBING_RATE. NON_PROBING_WAIT has the same
         value as computed for EXCHANGE_LIFETIME (Section 4.8.2 of <xref
         target="RFC7252"></xref>).</t>
 
@@ -2070,7 +2084,8 @@ o  Reference: [RFCXXXX]]]></artwork>
       Tiloca for their suggestions and several reviews, which improved this
       specification significantly. Thanks to Francesca Palombini for the AD
       review. <vspace blankLines="1" />Thanks to Pete Resnick for the Gen-ART
-      review and Colin Perkins for the Tsvart review.</t>
+      review and Colin Perkins for the Tsvart review. Thanks to Martin Duke
+      for the IESG review. </t>
 
       <t>Some text from <xref target="RFC7959" /> is reused for readers
       convenience.</t>
