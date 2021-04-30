@@ -1024,14 +1024,16 @@ Table 3: Congestion Control Parameters]]></artwork>
         the value of MAX_PAYLOADS can be reduced by 1 at a time (to a minimum
         of 1) and the situation re-evaluated for another 24 hour period until
         there is no report of missing payloads under normal operating
-        conditions. The newly derived value for MAX_PAYLOADS should be used
-        for both ends of this particular CoAP peer link. Note that the CoAP
-        peer will not know about the MAX_PAYLOADS change until it is
-        reconfigured. As a consequence of the two peers having different
-        MAX_PAYLOADS values, a peer may continue indicate that there are some
-        missing payloads as all of its MAX_PAYLOADS set may not have arrived.
-        How the two peer values for MAX_PAYLOADS are synchronized is out of
-        the scope.</t>
+        conditions. Following a period of 24 hours where no packet recovery
+        was required, the value of f MAX_PAYLOADS can be increased by 1 (but
+        without exceeding the default value) for a further 24 hour evaluation.
+        The newly derived value for MAX_PAYLOADS should be used for both ends
+        of this particular CoAP peer link. Note that the CoAP peer will not
+        know about the MAX_PAYLOADS change until it is reconfigured. As a
+        consequence of the two peers having different MAX_PAYLOADS values, a
+        peer may continue indicate that there are some missing payloads as all
+        of its MAX_PAYLOADS set may not have arrived. How the two peer values
+        for MAX_PAYLOADS are synchronized is out of the scope.</t>
 
         <t>The sending of a set of missing blocks of a body is subject to
         MAX_PAYLOADS set of payloads.</t>
