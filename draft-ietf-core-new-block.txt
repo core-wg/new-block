@@ -195,7 +195,7 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    used for the entire resource representation that is being transferred
    in a block-wise fashion.
 
-   Request-Tag refers an option that allows a CoAP server to match
+   Request-Tag refers to an option that allows a CoAP server to match
    message fragments belonging to the same request
    [I-D.ietf-core-echo-request-tag].
 
@@ -1041,7 +1041,8 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    of payloads that can be transmitted at any one time.
 
       Note: The default value of 10 is chosen for reasons similar to
-      those discussed in Section 5 of [RFC6928].
+      those discussed in Section 5 of [RFC6928], especially given the
+      target application discussed in Section 3.2.
 
    NON_TIMEOUT is the maximum period of delay between sending sets of
    MAX_PAYLOADS payloads for the same body.  By default, NON_TIMEOUT has
@@ -1057,7 +1058,6 @@ Internet-Draft      Quick Block-Wise Transfer Options         April 2021
    NON_RECEIVE_TIMEOUT has a default value of twice NON_TIMEOUT.
    NON_RECEIVE_TIMEOUT MUST always be greater than NON_TIMEOUT by at
    least one second so that the sender of the payloads has the
-
 
 
 

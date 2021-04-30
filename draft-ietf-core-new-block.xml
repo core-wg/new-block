@@ -160,7 +160,7 @@
       transferred), while the term "body" is used for the entire resource
       representation that is being transferred in a block-wise fashion.</t>
 
-      <t>Request-Tag refers an option that allows a CoAP server to match
+      <t>Request-Tag refers to an option that allows a CoAP server to match
       message fragments belonging to the same request <xref
       target="I-D.ietf-core-echo-request-tag"></xref>.</t>
     </section>
@@ -935,8 +935,9 @@ missing-block-number = uint
         number of payloads that can be transmitted at any one time.<list
             style="empty">
             <t>Note: The default value of 10 is chosen for reasons similar to
-            those discussed in Section 5 of <xref
-            target="RFC6928"></xref>.</t>
+            those discussed in Section 5 of <xref target="RFC6928"></xref>,
+            especially given the target application discussed in <xref
+            target="scope"></xref>.</t>
           </list></t>
 
         <t>NON_TIMEOUT is the maximum period of delay between sending sets of
