@@ -968,12 +968,12 @@ missing-block-number = uint
         target="RFC7252"></xref>).</t>
 
         <t>NON_PROBING_WAIT is used to limit the potential wait needed
-        calculated when using PROBING_RATE. NON_PROBING_WAIT has the same
-        value as computed for EXCHANGE_LIFETIME (Section 4.8.2 of <xref
+        calculated when using PROBING_RATE. By default, NON_PROBING_WAIT has
+        the same value as EXCHANGE_LIFETIME (Section 4.8.2 of <xref
         target="RFC7252"></xref>).</t>
 
         <t>NON_PARTIAL_TIMEOUT is used for expiring partially received bodies.
-        NON_PARTIAL_TIMEOUT has the same value as computed for
+        By default, NON_PARTIAL_TIMEOUT has the same value as
         EXCHANGE_LIFETIME (Section 4.8.2 of <xref
         target="RFC7252"></xref>).</t>
 
@@ -2088,7 +2088,8 @@ o  Reference: [RFCXXXX]]]></artwork>
       specification significantly. Thanks to Francesca Palombini for the AD
       review. <vspace blankLines="1" />Thanks to Pete Resnick for the Gen-ART
       review, Colin Perkins for the Tsvart review, and Emmanuel Baccelli for
-      the Iotdir review. Thanks to Martin Duke for the IESG review.</t>
+      the Iotdir review. Thanks to Martin Duke and Eric Vyncke for the IESG
+      review.</t>
 
       <t>Some text from <xref target="RFC7959" /> is reused for readers
       convenience.</t>
