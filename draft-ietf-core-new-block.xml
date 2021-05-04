@@ -126,11 +126,13 @@
       target="RFC8782"></xref><xref target="I-D.ietf-dots-telemetry"></xref>).
       As a reminder, <xref target="RFC7959"></xref> recommends the use of
       Confirmable (CON) responses to handle potential packet loss. However,
-      such a recommendation does not work with a flooded pipe DDoS
-      situation.</t>
+      such a recommendation does not work with a flooded pipe DDoS situation
+      (e.g., <xref target="RFC8782"></xref>).</t>
 
-      <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options
-      (<xref target="alt"></xref>).</t>
+      <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options which
+      allow block-wise transfer to work with series of Non-confirmable (NON)
+      messages, instead of lock-stepping using CON messages (<xref
+      target="alt"></xref>).</t>
     </section>
 
     <section anchor="notation" title="Terminology">
@@ -167,52 +169,8 @@
 
     <section anchor="alt" title="Alternative CoAP Block-Wise Transfer Options">
       <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options.
-      These options are similar in operation to the CoAP Block1 and Block2
-      Options, respectively. They are not a replacement for them, but have the
-      following benefits:</t>
-
-      <t><list style="symbols">
-          <t>They can operate in environments where packet loss is highly
-          asymmetrical.</t>
-
-          <t>They enable faster transmissions of sets of blocks of data with
-          less packet interchanges.</t>
-
-          <t>They support faster recovery should any of the blocks get lost in
-          transmission.</t>
-
-          <t>They support sending an entire body using Non-confirmable (NON)
-          messages without requiring a response from the peer.</t>
-        </list></t>
-
-      <t>There are the following disadvantages over using CoAP Block1 and
-      Block2 Options:<list style="symbols">
-          <t>Loss of lock-stepping so payloads are not always received in the
-          correct (block ascending) order.</t>
-
-          <t>Additional congestion control measures need to be put in place
-          for NON messages (<xref target="cc-non"></xref>).</t>
-
-          <t>To reduce the transmission times for CON transmission of large
-          bodies, NSTART needs to be increased from 1, but this affects
-          congestion control where other parameters need to be tuned (Section
-          4.7 of <xref target="RFC7252"></xref>). Such tuning is out of scope
-          of this document.</t>
-
-          <t>Mixing of NON and CON during requests/responses using Q-Block is
-          not supported.</t>
-
-          <t>The Q-Block Options do not support stateless operation/random
-          access.</t>
-
-          <t>Proxying of Q-Block is limited to caching full
-          representations.</t>
-
-          <t>There is no multicast support.</t>
-        </list></t>
-
-      <t>Q-Block1 and Q-Block2 Options are designed to work in particular with
-      NON requests and responses.</t>
+      These options are designed to work in particular with NON requests and
+      responses.</t>
 
       <t>Using NON messages, the faster transmissions occur as all the blocks
       can be transmitted serially (as are IP fragmented packets) without
@@ -241,6 +199,48 @@
       this case, there is no differentiation between CON and NON as they are
       not used. Some examples using a reliable transport are provided in <xref
       target="REL"></xref>.</t>
+
+      <t>Q-Block1 and Q-Block2 Options are similar in operation to the CoAP
+      Block1 and Block2 Options, respectively. They are not a replacement for
+      them, but have the following benefits:<list style="symbols">
+          <t>They can operate in environments where packet loss is highly
+          asymmetrical.</t>
+
+          <t>They enable faster transmissions of sets of blocks of data with
+          less packet interchanges.</t>
+
+          <t>They support faster recovery should any of the blocks get lost in
+          transmission.</t>
+
+          <t>They support sending an entire body using NON messages without
+          requiring a response from the peer.</t>
+        </list></t>
+
+      <t>There are the following disadvantages over using CoAP Block1 and
+      Block2 Options:<list style="symbols">
+          <t>Loss of lock-stepping so payloads are not always received in the
+          correct (block ascending) order.</t>
+
+          <t>Additional congestion control measures need to be put in place
+          for NON messages (<xref target="cc-non"></xref>).</t>
+
+          <t>To reduce the transmission times for CON transmission of large
+          bodies, NSTART needs to be increased from 1, but this affects
+          congestion control where other parameters need to be tuned (Section
+          4.7 of <xref target="RFC7252"></xref>). Such tuning is out of scope
+          of this document.</t>
+
+          <t>Mixing of NON and CON during requests/responses using Q-Block is
+          not supported.</t>
+
+          <t>The Q-Block Options do not support stateless operation/random
+          access.</t>
+
+          <t>Proxying of Q-Block is limited to caching full
+          representations.</t>
+
+          <t>There is no multicast support.</t>
+        </list></t>
 
       <t>Q-Block1 and Q-Block2 Options can be used instead of Block1 and
       Block2 Options when the different transmission properties are required.
@@ -1025,7 +1025,7 @@ Table 3: Congestion Control Parameters]]></artwork>
         of 1) and the situation re-evaluated for another 24 hour period until
         there is no report of missing payloads under normal operating
         conditions. Following a period of 24 hours where no packet recovery
-        was required, the value of f MAX_PAYLOADS can be increased by 1 (but
+        was required, the value of MAX_PAYLOADS can be increased by 1 (but
         without exceeding the default value) for a further 24 hour evaluation.
         The newly derived value for MAX_PAYLOADS should be used for both ends
         of this particular CoAP peer link. Note that the CoAP peer will not
@@ -2087,8 +2087,8 @@ o  Reference: [RFCXXXX]]]></artwork>
       Tiloca for their suggestions and several reviews, which improved this
       specification significantly. Thanks to Francesca Palombini for the AD
       review. <vspace blankLines="1" />Thanks to Pete Resnick for the Gen-ART
-      review and Colin Perkins for the Tsvart review. Thanks to Martin Duke
-      for the IESG review. </t>
+      review, Colin Perkins for the Tsvart review, and Emmanuel Baccelli for
+      the Iotdir review. Thanks to Martin Duke for the IESG review.</t>
 
       <t>Some text from <xref target="RFC7959" /> is reused for readers
       convenience.</t>
