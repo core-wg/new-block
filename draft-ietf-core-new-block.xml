@@ -1003,8 +1003,9 @@ Table 3: Congestion Control Parameters]]></artwork>
             other transmission parameters are negotiated between peers. Even
             when not negotiated, the DOTS application uses customized defaults
             as discussed in Section 4.5.2 of <xref target="RFC8782"></xref>.
-            Note that MAX_PAYLOADS, NON_MAX_RETRANSMIT, and NON_TIMEOUT can be
-            negotiated between DOTS peers as per <xref
+            Note that MAX_PAYLOADS, NON_MAX_RETRANSMIT, NON_TIMEOUT,
+            NON_PROBING_WAIT, and NON_PARTIAL_TIMEOUT can be negotiated
+            between DOTS peers as per <xref
             target="I-D.bosh-dots-quick-blocks"></xref>.</t>
           </list>Each NON 4.08 (Request Entity Incomplete) response is subject
         to PROBING_RATE.</t>
