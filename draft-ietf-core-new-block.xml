@@ -364,7 +364,7 @@
         should it need to send back a body that spans multiple payloads.
         Otherwise, the server would use the Block2 Option (if supported) to
         send back a message body that is too large to fit into a single IP
-        packet <xref target="RFC7959"></xref>. </t>
+        packet <xref target="RFC7959"></xref>.</t>
 
         <t>How a client decides whether it needs to include a Q-Block1 or
         Q-Block2 Option can be driven by a local configuration knob, triggered
@@ -388,7 +388,7 @@
         Options. This CON message can be sent under base CoAP congestion
         control setup specified in Section 4.7 of <xref
         target="RFC7252"></xref> (that is, NSTART does not need to be
-        increased). </t>
+        increased (<xref target="cc-con"></xref>)).</t>
 
         <t>The Q-Block1 and Q-Block2 Options are unsafe to forward. That is, a
         CoAP proxy that does not understand the Q-Block1 (or Q-Block2) Option
@@ -426,7 +426,7 @@
 
         <t>Note that if Q-Block1 or Q-Block2 Options are included in a packet
         as Inner options, Block1 or Block2 Options MUST NOT be included as
-        Inner options. Similarly there MUST NOT be a mix of Q-Block and Block
+        Inner options. Similarly, there MUST NOT be a mix of Q-Block and Block
         for the Outer options. Messages that do not adhere with this behavior
         MUST be rejected with 4.02 (Bad Option). Q-Block and Block Options can
         be mixed across Inner and Outer options as these are handled
@@ -818,7 +818,7 @@
 
       <t>The data payload of the 4.08 (Request Entity Incomplete) response is
       encoded as a CBOR Sequence <xref target="RFC8742"></xref>. It comprises
-      of one or more missing block numbers encoded as CBOR unsigned integers
+      one or more missing block numbers encoded as CBOR unsigned integers
       <xref target="RFC8949"></xref>. The missing block numbers MUST be unique
       in each 4.08 (Request Entity Incomplete) response when created by the
       server; the client MUST ignore any duplicates in the same 4.08 (Request
@@ -1035,9 +1035,9 @@ Table 3: Congestion Control Parameters]]></artwork>
         of this particular CoAP peer link. Note that the CoAP peer will not
         know about the MAX_PAYLOADS change until it is reconfigured. As a
         consequence of the two peers having different MAX_PAYLOADS values, a
-        peer may continue indicate that there are some missing payloads as all
-        of its MAX_PAYLOADS set may not have arrived. How the two peer values
-        for MAX_PAYLOADS are synchronized is out of the scope.</t>
+        peer may continue indicating that there are some missing payloads as
+        all of its MAX_PAYLOADS set may not have arrived. How the two peer
+        values for MAX_PAYLOADS are synchronized is out of the scope.</t>
 
         <t>The sending of a set of missing blocks of a body is subject to
         MAX_PAYLOADS set of payloads.</t>
@@ -1079,10 +1079,10 @@ Table 3: Congestion Control Parameters]]></artwork>
         <t>For the client receiving NON Q-Block2 responses, it SHOULD send a
         'Continue' Q-Block2 request (<xref target="qblock2"></xref>) for the
         next set of payloads on receipt of all of the MAX_PAYLOADS payloads to
-        prevent the server unnecessarily delaying. Otherwise the client SHOULD
-        delay for NON_RECEIVE_TIMEOUT (exponentially scaled based on the
-        repeat request count for a payload), before sending the request for
-        the missing payload(s). If the repeat request count for a missing
+        prevent the server unnecessarily delaying. Otherwise, the client
+        SHOULD delay for NON_RECEIVE_TIMEOUT (exponentially scaled based on
+        the repeat request count for a payload), before sending the request
+        for the missing payload(s). If the repeat request count for a missing
         payload exceeds NON_MAX_RETRANSMIT, the client SHOULD discard the
         partial body and stop requesting the missing payloads.</t>
 
