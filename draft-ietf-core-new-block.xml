@@ -285,8 +285,8 @@
         primarily targets applications such as DDoS Open Threat Signaling
         (DOTS) that cannot use CON responses to handle potential packet loss
         and that support application-specific mechanisms to assess whether the
-        remote peer is not overloaded and is able to process the messages sent
-        by a CoAP endpoint (e.g., DOTS heartbeats in Section 4.7 of <xref
+        remote peer is not overloaded and thus is able to process the messages
+        sent by a CoAP endpoint (e.g., DOTS heartbeats in Section 4.7 of <xref
         target="RFC8782"></xref>).</t>
 
         <t>The mechanism includes guards to prevent a CoAP agent from
@@ -506,39 +506,39 @@
 
         <t>2.01 (Created)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and that the resource was created. The token used MUST be one
-            of the tokens that were received in a request for this block-wise
-            exchange. However, it is desirable to provide the one used in the
-            last received request, since that will aid any troubleshooting.
-            The client should then release all of the tokens used for this
-            body. Note that the last received payload might not be the one
-            with the highest block number.</t>
+            body and that the resource was created. The token to use MUST be
+            one of the tokens that were received in a request for this
+            block-wise exchange. However, it is desirable to provide the one
+            used in the last received request, since that will aid any
+            troubleshooting. The client should then release all of the tokens
+            used for this body. Note that the last received payload might not
+            be the one with the highest block number.</t>
           </list></t>
 
         <t>2.02 (Deleted)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
             body and that the resource was deleted when using POST (Section
-            5.8.2 <xref target="RFC7252"></xref>). The token used MUST be one
-            of the tokens that were received in a request for this block-wise
-            exchange. However, it is desirable to provide the one used in the
-            last received request. The client should then release all of the
-            tokens used for this body.</t>
+            5.8.2 <xref target="RFC7252"></xref>). The token to use MUST be
+            one of the tokens that were received in a request for this
+            block-wise exchange. However, it is desirable to provide the one
+            used in the last received request. The client should then release
+            all of the tokens used for this body.</t>
           </list></t>
 
         <t>2.04 (Changed)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
-            body and that the resource was updated. The token used MUST be one
-            of the tokens that were received in a request for this block-wise
-            exchange. However, it is desirable to provide the one used in the
-            last received request. The client should then release all of the
-            tokens used for this body.</t>
+            body and that the resource was updated. The token to use MUST be
+            one of the tokens that were received in a request for this
+            block-wise exchange. However, it is desirable to provide the one
+            used in the last received request. The client should then release
+            all of the tokens used for this body.</t>
           </list></t>
 
         <t>2.05 (Content)<list style="empty">
             <t>This Response Code indicates successful receipt of the entire
             FETCH request body (Section 2 of <xref target="RFC8132"></xref>)
             and that the appropriate representation of the resource is being
-            returned. The token used MUST be one of the tokens that were
+            returned. The token to use MUST be one of the tokens that were
             received in a request for this block-wise exchange. However, it is
             desirable to provide the one used in the last received
             request.</t>
@@ -556,9 +556,9 @@
             <t>This Response Code can be used to indicate that all of the
             blocks up to and including the Q-Block1 Option block NUM (all
             having the M bit set) have been successfully received. The token
-            used MUST be one of the tokens that were received in a request for
-            this block-wise exchange. However, it is desirable to provide the
-            one used in the last received request.</t>
+            to use MUST be one of the tokens that were received in a request
+            for this block-wise exchange. However, it is desirable to provide
+            the one used in the last received request.</t>
 
             <t>A response using this Response Code SHOULD NOT be generated for
             every received Q-Block1 Option request (<xref
@@ -600,10 +600,10 @@
             in the 4.08 (Request Entity Incomplete) response, locating the
             matching client request, and then using its Request-Tag.</t>
 
-            <t>The token used MUST be one of the tokens that were received in
-            a request for this block-wise exchange. However, it is desirable
-            to provide the one used in the last received request. See <xref
-            target="code"></xref> for further information.</t>
+            <t>The token to use MUST be one of the tokens that were received
+            in a request for this block-wise exchange. However, it is
+            desirable to provide the one used in the last received request.
+            See <xref target="code"></xref> for further information.</t>
 
             <t>If the server has not received all the blocks of a body, but
             one or more NON payloads have been received, it SHOULD wait for up
@@ -852,13 +852,13 @@ missing-block-number = uint
 
       <t></t>
 
-      <t>The token to use for the response SHOULD be the token that was used
-      in the last block number received so far with the same Request-Tag
-      value. Note that the use of any received token with the same Request-Tag
-      would be acceptable, but providing the one used in the last received
-      payload will aid any troubleshooting. The client will use the token to
-      determine what was the previously sent request to obtain the Request-Tag
-      value that was used.</t>
+      <t>It is desirable tha the token to use for the response is the token
+      that was used in the last block number received so far with the same
+      Request-Tag value. Note that the use of any received token with the same
+      Request-Tag would be acceptable, but providing the one used in the last
+      received payload will aid any troubleshooting. The client will use the
+      token to determine what was the previously sent request to obtain the
+      Request-Tag value that was used.</t>
 
       <t>If the size of the 4.08 (Request Entity Incomplete) response packet
       is larger than that defined by Section 4.6 <xref
@@ -928,7 +928,7 @@ missing-block-number = uint
 
         <t>It is implementation specific as to whether there should be any
         further requests for missing data given that a high packet loss will
-        be encountered (<xref target="scope"></xref>).</t>
+        be encountered.</t>
       </section>
 
       <section anchor="cc-non" title="Non-confirmable (NON)">
@@ -1063,13 +1063,14 @@ Table 3: Congestion Control Parameters]]></artwork>
         the MAX_PAYLOADS payloads were received, the server SHOULD delay for
         NON_RECEIVE_TIMEOUT (exponentially scaled based on the repeat request
         count for a payload) before sending the 4.08 (Request Entity
-        Incomplete) Response Code for the missing payload(s). If this is a
-        repeat for the 2.31 (Continue) response, the server SHOULD send a 4.08
-        (Request Entity Incomplete) response detailing the missing payloads
-        after the block number that would have been indicated in the 2.31
-        (Continue). If the repeat request count for a missing payload exceeds
-        NON_MAX_RETRANSMIT, the server SHOULD discard the partial body and
-        stop requesting the missing payloads.</t>
+        Incomplete) Response Code for the missing payload(s). If all of the
+        MAX_PAYLOADS were received and a 2.31 (continue) had been sent, but no
+        more payloads were received for NON_RECEIVE_TIMEOUT (exponentially
+        scaled), the server SHOULD send a 4.08 (Request Entity Incomplete)
+        response detailing the missing payloads after the block number that
+        was indicated in the sent 2.31 (Continue). If the repeat request count
+        for missing payloads exceeds NON_MAX_RETRANSMIT, the server SHOULD
+        discard the partial body and stop requesting the missing payloads.</t>
 
         <t>It is likely that the client will start transmitting the next set
         of MAX_PAYLOADS payloads before the server times out on waiting for
@@ -1202,7 +1203,7 @@ Table 3: Congestion Control Parameters]]></artwork>
        ET: ETag
       QB1: Q-Block1 Option values NUM/More/Size
       QB2: Q-Block2 Option values NUM/More/Size
-     Size: Includes the actual size
+     Size: Actual block size encoded in SZX
         \: Trimming long lines
      [[]]: Comments
      -->X: Message loss (request)
@@ -1456,9 +1457,8 @@ Payload N: Corresponds to the CoAP message that conveys
       [[NON_TIMEOUT (server) delay expires]]
          |     [[Server sends next set of payloads]]
          |<---------+ NON 2.05 M:0xab T:0xf0 O:1236 ET=23 QB2:10/0/1024
-         |   ...    |
-      [[NON_RECEIVE_TIMEOUT (client) delay expires]]
-         |     [[Client realizes blocks are missing and asks for the
+         |     [[On seeing a payload from the next set of payloads, 
+         |      Client realizes blocks are missing and asks for the
          |       missing ones in one go]]
          +--------->| NON GET /path M:0x04 T:0xf3 QB2:1/0/1024\
          |          |                             QB2:9/0/1024
