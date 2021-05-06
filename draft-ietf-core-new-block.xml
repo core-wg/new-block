@@ -215,7 +215,7 @@
           transmission.</t>
 
           <t>They support sending an entire body using NON messages without
-          requiring an intermediate response from the peer.</t>
+          requiring a response from the peer.</t>
         </list></t>
 
       <t>There are the following disadvantages over using CoAP Block1 and
