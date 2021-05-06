@@ -168,6 +168,9 @@
       <t>Request-Tag refers to an option that allows a CoAP server to match
       message fragments belonging to the same request <xref
       target="I-D.ietf-core-echo-request-tag"></xref>.</t>
+
+      <t>MAX_PAYLOADS is the maximum number of payloads that can be
+      transmitted at any one time.</t>
     </section>
 
     <section anchor="alt" title="Alternative CoAP Block-Wise Transfer Options">
@@ -216,7 +219,7 @@
           transmission.</t>
 
           <t>They support sending an entire body using NON messages without
-          requiring a response from the peer.</t>
+          requiring an intermediate response from the peer.</t>
         </list></t>
 
       <t>There are the following disadvantages over using CoAP Block1 and
@@ -282,8 +285,8 @@
         primarily targets applications such as DDoS Open Threat Signaling
         (DOTS) that cannot use CON responses to handle potential packet loss
         and that support application-specific mechanisms to assess whether the
-        remote peer is able to handle the messages sent by a CoAP endpoint
-        (e.g., DOTS heartbeats in Section 4.7 of <xref
+        remote peer is not overloaded and is able to process the messages sent
+        by a CoAP endpoint (e.g., DOTS heartbeats in Section 4.7 of <xref
         target="RFC8782"></xref>).</t>
 
         <t>The mechanism includes guards to prevent a CoAP agent from
@@ -343,24 +346,23 @@
         payload (i.e., it must be the same for all payloads of the same
         body).</t>
 
-        <t>The Q-Block1 Option is useful with the payload-bearing POST, PUT,
-        FETCH, PATCH, and iPATCH requests and their responses.</t>
+        <t>The Q-Block1 Option is useful with the payload-bearing, e.g., POST,
+        PUT, FETCH, PATCH, and iPATCH requests and their responses.</t>
 
-        <t>The Q-Block2 Option is useful with GET, POST, PUT, FETCH, PATCH,
-        and iPATCH requests and their payload-bearing responses (2.01, 2.02,
-        2.03, 2.04, and 2.05) (Section 5.5 of <xref
+        <t>The Q-Block2 Option is useful, e.g., with GET, POST, PUT, FETCH,
+        PATCH, and iPATCH requests and their payload-bearing responses (2.01,
+        2.02, 2.03, 2.04, and 2.05) (Section 5.5 of <xref
         target="RFC7252"></xref>).</t>
 
         <t>A CoAP endpoint (or proxy) MUST support either both or neither of
         the Q-Block1 and Q-Block2 Options.</t>
 
         <t>If the Q-Block1 Option is present in a request or the Q-Block2
-        Option in a response (i.e., in that message to the payload of which it
-        pertains), it indicates a block-wise transfer and describes how this
-        specific block-wise payload forms part of the entire body being
-        transferred. If it is present in the opposite direction, it provides
-        additional control on how that payload will be formed or was
-        processed.</t>
+        Option is returned in a response, this indicates a block-wise transfer
+        and describes how this specific block-wise payload forms part of the
+        entire body being transferred. If it is present in the opposite
+        direction, it provides additional control on how that payload will be
+        formed or was processed.</t>
 
         <t>To indicate support for Q-Block2 responses, the CoAP client MUST
         include the Q-Block2 Option in a GET or similar request (FETCH, for
@@ -467,10 +469,9 @@
         <t>When Q-Block1 Option is used, the client MUST include a Request-Tag
         Option <xref target="I-D.ietf-core-echo-request-tag"></xref>. The
         Request-Tag value MUST be the same for all of the requests for the
-        body of data that is being transferred. The Request-Tag is opaque, the
-        server still treats it as opaque but the client MUST ensure that it is
-        unique for every different body of transmitted data.<list
-            style="empty">
+        body of data that is being transferred. The Request-Tag is opaque, but
+        the client MUST ensure that it is unique for every different body of
+        transmitted data.<list style="empty">
             <t>Implementation Note: It is suggested that the client treats the
             Request-Tag as an unsigned integer of 8 bytes in length. An
             implementation may want to consider limiting this to 4 bytes to
@@ -495,11 +496,11 @@
         <t>Each individual message that carries a block of the body is treated
         as a new request (<xref target="token"></xref>).</t>
 
-        <t>The client MUST send the payloads with the block numbers
-        increasing, starting from zero, until the body is complete (subject to
-        any congestion control (<xref target="cc"></xref>)). Any missing
-        payloads requested by the server must in addition be separately
-        transmitted with increasing block numbers.</t>
+        <t>The client MUST send the payloads in order of increasing block
+        number, starting from zero, until the body is complete (subject to any
+        congestion control (<xref target="cc"></xref>)). Any missing payloads
+        requested by the server must in addition be separately transmitted
+        with increasing block numbers.</t>
 
         <t>The following Response Codes are used:</t>
 
@@ -510,8 +511,8 @@
             exchange. However, it is desirable to provide the one used in the
             last received request, since that will aid any troubleshooting.
             The client should then release all of the tokens used for this
-            body. Note that the last received payload may not be the one with
-            the highest block number.</t>
+            body. Note that the last received payload might not be the one
+            with the highest block number.</t>
           </list></t>
 
         <t>2.02 (Deleted)<list style="empty">
@@ -679,9 +680,8 @@
         the same body. The server MUST NOT use the same ETag value for
         different representations of a resource.</t>
 
-        <t>The ETag is opaque, the client still treats it as opaque but the
-        server MUST ensure that it is unique for every different body of
-        transmitted data.</t>
+        <t>The ETag is opaque, but the server MUST ensure that it is unique
+        for every different body of transmitted data.</t>
 
         <t><list style="empty">
             <t>Implementation Note: It is suggested that the server treats the
@@ -737,9 +737,9 @@
         no payload. It can be used in the request if the client wants to check
         the freshness of the locally cached body response.</t>
 
-        <t>It is RECOMMENDED that the server maintains a cached copy of the
-        body when using the Q-Block2 Option to facilitate retransmission of
-        any missing payloads.</t>
+        <t>The server SHOULD maintain a cached copy of the body when using the
+        Q-Block2 Option to facilitate retransmission of any missing
+        payloads.</t>
 
         <t>If the server detects part way through a body transfer that the
         resource data has changed and the server is not maintaining a cached
@@ -862,11 +862,12 @@ missing-block-number = uint
 
       <t>If the size of the 4.08 (Request Entity Incomplete) response packet
       is larger than that defined by Section 4.6 <xref
-      target="RFC7252"></xref>, then the number of missing blocks MUST be
-      limited so that the response can fit into a single packet. If this is
-      the case, then the server can send subsequent 4.08 (Request Entity
-      Incomplete) responses containing the missing other blocks on receipt of
-      a new request providing a missing payload with the same Request-Tag.</t>
+      target="RFC7252"></xref>, then the number of reported missing blocks
+      MUST be limited so that the response can fit into a single packet. If
+      this is the case, then the server can send subsequent 4.08 (Request
+      Entity Incomplete) responses containing the missing other blocks on
+      receipt of a new request providing a missing payload with the same
+      Request-Tag.</t>
 
       <t>The missing blocks MUST be reported in ascending order without any
       duplicates. The client SHOULD silently drop 4.08 (Request Entity
@@ -926,9 +927,8 @@ missing-block-number = uint
         apart from the initial Q-Block functionality negotiation.</t>
 
         <t>It is implementation specific as to whether there should be any
-        further requests for missing data as there will have been significant
-        transmission failure as individual payloads will have failed after
-        MAX_TRANSMIT_SPAN.</t>
+        further requests for missing data given that a high packet loss will
+        be encountered (<xref target="scope"></xref>).</t>
       </section>
 
       <section anchor="cc-non" title="Non-confirmable (NON)">
@@ -1073,15 +1073,14 @@ Table 3: Congestion Control Parameters]]></artwork>
 
         <t>It is likely that the client will start transmitting the next set
         of MAX_PAYLOADS payloads before the server times out on waiting for
-        the last of the previous MAX_PAYLOADS payloads. On receipt of the
-        first payload from the new set of MAX_PAYLOADS payloads, the server
-        SHOULD send a 4.08 (Request Entity Incomplete) Response Code
-        indicating any missing payloads from any previous MAX_PAYLOADS
-        payloads. Upon receipt of the 4.08 (Request Entity Incomplete)
-        Response Code, the client SHOULD send the missing payloads before
-        continuing to send the remainder of the MAX_PAYLOADS payloads and then
-        go into another NON_TIMEOUT delay prior to sending the next set of
-        payloads.</t>
+        the last of the previous MAX_PAYLOADS payloads. On receipt of a
+        payload from the new set of MAX_PAYLOADS payloads, the server SHOULD
+        send a 4.08 (Request Entity Incomplete) Response Code indicating any
+        missing payloads from any previous MAX_PAYLOADS payloads. Upon receipt
+        of the 4.08 (Request Entity Incomplete) Response Code, the client
+        SHOULD send the missing payloads before continuing to send the
+        remainder of the MAX_PAYLOADS payloads and then go into another
+        NON_TIMEOUT delay prior to sending the next set of payloads.</t>
 
         <t>For the client receiving NON Q-Block2 responses, it SHOULD send a
         'Continue' Q-Block2 request (<xref target="qblock2"></xref>) for the
@@ -1100,12 +1099,12 @@ Table 3: Congestion Control Parameters]]></artwork>
 
         <t>It is likely that the server will start transmitting the next set
         of MAX_PAYLOADS payloads before the client times out on waiting for
-        the last of the previous MAX_PAYLOADS payloads. Upon receipt of the
-        first payload from the new set of MAX_PAYLOADS payloads, the client
-        SHOULD send a request indicating any missing payloads from any
-        previous set of MAX_PAYLOADS payloads. Upon receipt of such request,
-        the server SHOULD send the missing payloads before continuing to send
-        the remainder of the MAX_PAYLOADS payloads and then go into another
+        the last of the previous MAX_PAYLOADS payloads. Upon receipt of a
+        payload from the new set of MAX_PAYLOADS payloads, the client SHOULD
+        send a request indicating any missing payloads from any previous set
+        of MAX_PAYLOADS payloads. Upon receipt of such request, the server
+        SHOULD send the missing payloads before continuing to send the
+        remainder of the MAX_PAYLOADS payloads and then go into another
         NON_TIMEOUT delay prior to sending the next set of payloads.</t>
 
         <t>The client does not need to acknowledge the receipt of the entire
@@ -1201,8 +1200,9 @@ Table 3: Congestion Control Parameters]]></artwork>
         M: Message ID
        RT: Request-Tag
        ET: ETag
-      QB1: Q-Block1 Option values NUM/More/SZX
-      QB2: Q-Block2 Option values NUM/More/SZX
+      QB1: Q-Block1 Option values NUM/More/Size
+      QB2: Q-Block2 Option values NUM/More/Size
+     Size: Includes the actual size
         \: Trimming long lines
      [[]]: Comments
      -->X: Message loss (request)
@@ -1288,10 +1288,10 @@ Payload N: Corresponds to the CoAP message that conveys
           payloads and asks for the missing blocks in one go (<xref
           target="B3non2"></xref>). It does so by indicating which blocks from
           the previous MAX_PAYLOADS payloads have not been received in the
-          data portion of the response. The token used in the response should
-          be the token that was used in the last received payload. The client
-          can then derive the Request-Tag by matching the token with the sent
-          request.</t>
+          data portion of the response (<xref target="code"></xref>). The
+          token used in the response should be the token that was used in the
+          last received payload. The client can then derive the Request-Tag by
+          matching the token with the sent request.</t>
 
           <t><figure anchor="B3non2"
               title="Example of NON Request with Q-Block1 Option (Blocks Recovery)">
@@ -1706,8 +1706,8 @@ Payload N: Corresponds to the CoAP message that conveys
       target="RFC8613"></xref>, applications need to consider that certain
       message fields and messages types are not protected end-to-end and may
       be spoofed or manipulated. Therefore, it is NOT RECOMMENDED to use the
-      NoSec security mode if either the Q-Block1 or Q-Block2 Options is used.
-      </t>
+      NoSec security mode if either the Q-Block1 or Q-Block2 Options is
+      used.</t>
 
       <t>Security considerations related to the use of Request-Tag are
       discussed in Section 5 of <xref
@@ -2101,7 +2101,7 @@ o  Reference: [RFCXXXX]]]></artwork>
       review. <vspace blankLines="1" />Thanks to Pete Resnick for the Gen-ART
       review, Colin Perkins for the Tsvart review, and Emmanuel Baccelli for
       the Iotdir review. Thanks to Martin Duke, Eric Vyncke, Benjamin Kaduk,
-      and Roman Danyliw for the IESG review.</t>
+      Roman Danyliw, and John Scudder for the IESG review.</t>
 
       <t>Some text from <xref target="RFC7959" /> is reused for readers
       convenience.</t>
