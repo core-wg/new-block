@@ -426,7 +426,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    packet [RFC7959].
 
    How a client decides whether it needs to include a Q-Block1 or
-   Q-Block2 Option can be driven by a local configuration knob,
+   Q-Block2 Option can be driven by a local configuration parameter,
    triggered by an application (DOTS, for example), etc.  Such
    considerations are out of the scope of the document.
 
@@ -2024,8 +2024,8 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    attack amplification.  As discussed in Section 12.1 of [RFC8613],
    applications need to consider that certain message fields and
    messages types are not protected end-to-end and may be spoofed or
-   manipulated.  It is NOT RECOMMENDED that the NoSec security mode is
-   used if the Q-Block1 and Q-Block2 Options are to be used.
+   manipulated.  Therefore, it is NOT RECOMMENDED to use the NoSec
+   security mode if either the Q-Block1 or Q-Block2 Options is used.
 
    Security considerations related to the use of Request-Tag are
    discussed in Section 5 of [I-D.ietf-core-echo-request-tag].
@@ -2554,7 +2554,8 @@ Acknowledgements
 
    Thanks to Pete Resnick for the Gen-ART review, Colin Perkins for the
    Tsvart review, and Emmanuel Baccelli for the Iotdir review.  Thanks
-   to Martin Duke, Eric Vyncke, and Benjamin Kaduk for the IESG review.
+   to Martin Duke, Eric Vyncke, Benjamin Kaduk, and Roman Danyliw for
+   the IESG review.
 
    Some text from [RFC7959] is reused for readers convenience.
 
@@ -2566,7 +2567,6 @@ Authors' Addresses
    France
 
    Email: mohamed.boucadair@orange.com
-
 
 
 

@@ -373,9 +373,9 @@
         packet <xref target="RFC7959"></xref>.</t>
 
         <t>How a client decides whether it needs to include a Q-Block1 or
-        Q-Block2 Option can be driven by a local configuration knob, triggered
-        by an application (DOTS, for example), etc. Such considerations are
-        out of the scope of the document.</t>
+        Q-Block2 Option can be driven by a local configuration parameter,
+        triggered by an application (DOTS, for example), etc. Such
+        considerations are out of the scope of the document.</t>
 
         <t>Implementation of the Q-Block1 and Q-Block2 Options is intended to
         be optional. However, when it is present in a CoAP message, it MUST be
@@ -1705,8 +1705,9 @@ Payload N: Corresponds to the CoAP message that conveys
       causing attack amplification. As discussed in Section 12.1 of <xref
       target="RFC8613"></xref>, applications need to consider that certain
       message fields and messages types are not protected end-to-end and may
-      be spoofed or manipulated. It is NOT RECOMMENDED that the NoSec security
-      mode is used if the Q-Block1 and Q-Block2 Options are to be used.</t>
+      be spoofed or manipulated. Therefore, it is NOT RECOMMENDED to use the
+      NoSec security mode if either the Q-Block1 or Q-Block2 Options is used.
+      </t>
 
       <t>Security considerations related to the use of Request-Tag are
       discussed in Section 5 of <xref
@@ -2099,8 +2100,8 @@ o  Reference: [RFCXXXX]]]></artwork>
       specification significantly. Thanks to Francesca Palombini for the AD
       review. <vspace blankLines="1" />Thanks to Pete Resnick for the Gen-ART
       review, Colin Perkins for the Tsvart review, and Emmanuel Baccelli for
-      the Iotdir review. Thanks to Martin Duke, Eric Vyncke, and Benjamin
-      Kaduk for the IESG review.</t>
+      the Iotdir review. Thanks to Martin Duke, Eric Vyncke, Benjamin Kaduk,
+      and Roman Danyliw for the IESG review.</t>
 
       <t>Some text from <xref target="RFC7959" /> is reused for readers
       convenience.</t>
