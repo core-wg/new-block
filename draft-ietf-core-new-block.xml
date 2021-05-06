@@ -633,7 +633,7 @@
         <t>If the client elects to stop the transmission of a complete body,
         and absent any local policy, the client MUST "forget" all tracked
         tokens associated with the body's Request-Tag so that a reset message
-        is generated for the (now-)invalid token in the 4.08 (Request Entity
+        is generated for the invalid token in the 4.08 (Request Entity
         Incomplete) response. The server on receipt of the reset message
         SHOULD delete the partial body.</t>
 
