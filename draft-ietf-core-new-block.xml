@@ -925,7 +925,7 @@ missing-block-number = uint
         and Q-Block2 will be Non-confirmable (<xref target="scope"></xref>)
         apart from the initial Q-Block functionality negotiation.</t>
 
-        <t>It is implementation-specific as to whether there should be any
+        <t>It is implementation specific as to whether there should be any
         further requests for missing data as there will have been significant
         transmission failure as individual payloads will have failed after
         MAX_TRANSMIT_SPAN.</t>
