@@ -92,7 +92,7 @@
       (CoAP) Block-Wise transfer options: Q-Block1 and Q-Block2 Options.</t>
 
       <t>These options are similar to, but distinct from, the CoAP Block1 and Block2 Options
-      defined in RFC 7959. Q-Block1 and Q-Block2 are not intended to replace
+      defined in RFC 7959. Q-Block1 and Q-Block2 Options are not intended to replace
       Block1 and Block2, but rather have the goal of enabling faster
       transmission rates for large amounts of data with fewer packet
       interchanges. Also, the Q-Block1 and Q-Block2 Options support faster
