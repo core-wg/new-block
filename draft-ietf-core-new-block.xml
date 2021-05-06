@@ -1057,7 +1057,7 @@ Table 3: Congestion Control Parameters]]></artwork>
         payloads.</t>
 
         <t>For the server receiving NON Q-Block1 requests, it SHOULD send back
-        a 2.31 (Continue) Response Code on receipt of a complete group of MAX_PAYLOADS
+        a 2.31 (Continue) Response Code on receipt of all of the MAX_PAYLOADS
         payloads to prevent the client unnecessarily delaying. If not all of
         the MAX_PAYLOADS payloads were received, the server SHOULD delay for
         NON_RECEIVE_TIMEOUT (exponentially scaled based on the repeat request
