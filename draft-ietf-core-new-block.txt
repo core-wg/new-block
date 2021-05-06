@@ -19,11 +19,11 @@ Abstract
 
    These options are similar to, but distinct from, the CoAP Block1 and
    Block2 Options defined in RFC 7959.  Q-Block1 and Q-Block2 Options
-   are not intended to replace Block1 and Block2, but rather have the
-   goal of enabling faster transmission rates for large amounts of data
-   with fewer packet interchanges.  Also, the Q-Block1 and Q-Block2
-   Options support faster recovery should any of the blocks get lost in
-   transmission.
+   are not intended to replace Block1 and Block2 Options, but rather
+   have the goal of enabling faster transmission rates for large amounts
+   of data with fewer packet interchanges.  Also, the Q-Block1 and
+   Q-Block2 Options support faster recovery should any of the blocks get
+   lost in transmission.
 
 Status of This Memo
 
@@ -1137,11 +1137,11 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
    The PROBING_RATE parameter in CoAP indicates the average data rate
    that must not be exceeded by a CoAP endpoint in sending to a peer
-   endpoint that does not respond.  A single group of (MAX_PAYLOADS)
-   blocks will be subjected to PROBING_RATE (Section 4.7 of [RFC7252]),
-   not the individual packets.  If the wait time between sending bodies
-   that are not being responded to based on PROBING_RATE exceeds
-   NON_PROBING_WAIT, then the gap time is limited to NON_PROBING_WAIT.
+   endpoint that does not respond.  A single body will be subjected to
+   PROBING_RATE (Section 4.7 of [RFC7252]), not the individual packets.
+   If the wait time between sending bodies that are not being responded
+   to based on PROBING_RATE exceeds NON_PROBING_WAIT, then the gap time
+   is limited to NON_PROBING_WAIT.
 
       Note: For the particular DOTS application, PROBING_RATE and other
       transmission parameters are negotiated between peers.  Even when
@@ -2554,7 +2554,7 @@ Acknowledgements
 
    Thanks to Pete Resnick for the Gen-ART review, Colin Perkins for the
    Tsvart review, and Emmanuel Baccelli for the Iotdir review.  Thanks
-   to Martin Duke and Eric Vyncke for the IESG review.
+   to Martin Duke, Eric Vyncke, and Benjamin Kaduk for the IESG review.
 
    Some text from [RFC7959] is reused for readers convenience.
 
