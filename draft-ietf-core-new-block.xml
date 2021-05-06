@@ -1084,7 +1084,7 @@ Table 3: Congestion Control Parameters]]></artwork>
 
         <t>For the client receiving NON Q-Block2 responses, it SHOULD send a
         'Continue' Q-Block2 request (<xref target="qblock2"></xref>) for the
-        next set of payloads on receipt of the complete group of MAX_PAYLOADS payloads, to
+        next set of payloads on receipt of all of the MAX_PAYLOADS payloads, to
         prevent the server unnecessarily delaying. Otherwise the client SHOULD
         delay for NON_RECEIVE_TIMEOUT (exponentially scaled based on the
         repeat request count for a payload), before sending the request for
