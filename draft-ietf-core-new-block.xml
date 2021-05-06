@@ -91,10 +91,11 @@
       <t>This document specifies alternative Constrained Application Protocol
       (CoAP) Block-Wise transfer options: Q-Block1 and Q-Block2 Options.</t>
 
-      <t>These options are similar to the CoAP Block1 and Block2 Options
-      defined in RFC 7959, not a replacement for them, but do enable faster
-      transmission rates for large amounts of data with less packet
-      interchanges. Also, Q-Block1 and Q-Block2 Options support faster
+      <t>These options are similar to, but distinct from, the CoAP Block1 and Block2 Options
+      defined in RFC 7959. Q-Block1 and Q-Block2 Options are not intended to replace
+      Block1 and Block2, but rather have the goal of enabling faster
+      transmission rates for large amounts of data with fewer packet
+      interchanges. Also, the Q-Block1 and Q-Block2 Options support faster
       recovery should any of the blocks get lost in transmission.</t>
     </abstract>
   </front>
@@ -107,7 +108,7 @@
       for reliable delivery, simple congestion control, and flow control.
       <xref target="RFC7959"></xref> introduced the CoAP Block1 and Block2
       Options to handle data records that cannot fit in a single IP packet, so
-      not having to rely on IP fragmentation and was further updated by <xref
+      as to not rely on IP fragmentation, and was further updated by <xref
       target="RFC8323"></xref> for use over TCP, TLS, and WebSockets.</t>
 
       <t>The CoAP Block1 and Block2 Options work well in environments where
@@ -117,9 +118,10 @@
       the previous block has completed. Packet transmission rate, and hence
       block transmission rate, is controlled by Round Trip Times (RTTs).</t>
 
-      <t>There is a requirement for these blocks of data to be transmitted at
+      <t>There is a requirement for blocks of data larger than a single IP
+      datagram to be transmitted at
       higher rates under network conditions where there may be asymmetrical
-      transient packet loss (i.e., responses may get dropped). An example is
+      transient packet loss (e.g., responses may get dropped). An example is
       when a network is subject to a Distributed Denial of Service (DDoS)
       attack and there is a need for DDoS mitigation agents relying upon CoAP
       to communicate with each other (e.g., <xref
@@ -173,12 +175,12 @@
       responses.</t>
 
       <t>Using NON messages, the faster transmissions occur as all the blocks
-      can be transmitted serially (as are IP fragmented packets) without
+      can be transmitted serially (akin to fragmented IP packets) without
       having to wait for a response or next request from the remote CoAP peer.
       Recovery of missing blocks is faster in that multiple missing blocks can
       be requested in a single CoAP message. Even if there is asymmetrical
       packet loss, a body can still be sent and received by the peer whether
-      the body comprises of a single or multiple payloads assuming no recovery
+      the body comprises of a single or multiple payloads, assuming no recovery
       is required.</t>
 
       <t>A CoAP endpoint can acknowledge all or a subset of the blocks.
@@ -190,7 +192,7 @@
       <t>Note that similar performance benefits can be applied to Confirmable
       messages if the value of NSTART is increased from 1 (Section 4.7 of
       <xref target="RFC7252"></xref>). However, the use of Confirmable
-      messages will not work if there is asymmetrical packet loss. Some
+      messages will not work effectively if there is asymmetrical packet loss. Some
       examples with Confirmable messages are provided in <xref
       target="CON"></xref>.</t>
 
@@ -207,7 +209,7 @@
           asymmetrical.</t>
 
           <t>They enable faster transmissions of sets of blocks of data with
-          less packet interchanges.</t>
+          fewer packet interchanges.</t>
 
           <t>They support faster recovery should any of the blocks get lost in
           transmission.</t>
@@ -226,7 +228,8 @@
 
           <t>To reduce the transmission times for CON transmission of large
           bodies, NSTART needs to be increased from 1, but this affects
-          congestion control where other parameters need to be tuned (Section
+          congestion control and incurs a requirement to re-tune other
+          parameters (Section
           4.7 of <xref target="RFC7252"></xref>). Such tuning is out of scope
           of this document.</t>
 
@@ -300,8 +303,10 @@
         security mode (Section 9 of <xref target="RFC7252"></xref>) as the
         source endpoint needs to be trusted. Using OSCORE <xref
         target="RFC8613"></xref> does provide a security context and, hence, a
-        trust of the source endpoint. However, using a NoSec security mode may
-        still be inadequate for reasons discussed in <xref
+        trust of the source endpoint that prepared the inner OSCORE content.
+        However, even with OSCORE, using a NoSec security mode
+        with these options may
+        still be inadequate, for reasons discussed in <xref
         target="security"></xref>.</t>
       </section>
     </section>
@@ -339,17 +344,17 @@
         payload (i.e., it must be the same for all payloads of the same
         body).</t>
 
-        <t>Q-Block1 Option is useful with the payload-bearing POST, PUT,
+        <t>The Q-Block1 Option is useful with the payload-bearing POST, PUT,
         FETCH, PATCH, and iPATCH requests and their responses.</t>
 
-        <t>Q-Block2 Option is useful with GET, POST, PUT, FETCH, PATCH, and
+        <t>The Q-Block2 Option is useful with GET, POST, PUT, FETCH, PATCH, and
         iPATCH requests and their payload-bearing responses (2.01, 2.02, 2.03,
         2.04, and 2.05) (Section 5.5 of <xref target="RFC7252"></xref>).</t>
 
         <t>A CoAP endpoint (or proxy) MUST support either both or neither of
         the Q-Block1 and Q-Block2 Options.</t>
 
-        <t>If Q-Block1 Option is present in a request or Q-Block2 Option in a
+        <t>If the Q-Block1 Option is present in a request or the Q-Block2 Option in a
         response (i.e., in that message to the payload of which it pertains),
         it indicates a block-wise transfer and describes how this specific
         block-wise payload forms part of the entire body being transferred. If
@@ -401,7 +406,7 @@
         target="RFC7252"></xref>.</t>
 
         <t>The Q-Block1 and Q-Block2 Options, like the Block1 and Block2
-        Options, both of class E and class U for OSCORE processing (Table 2).
+        Options, are of both class E and class U for OSCORE processing (Table 2).
         The Q-Block1 (or Q-Block2) Option MAY be an Inner or Outer option
         (Section 4.1 of <xref target="RFC8613"></xref>). The Inner and Outer
         values are therefore independent of each other. The Inner option is
@@ -479,10 +484,11 @@
         <t>For Confirmable transmission, the server continues to acknowledge
         each packet, but a response is not required (whether separate or
         piggybacked) until successful receipt of the body by the server. For
-        Non-confirmable transmission, no response is required until the
-        successful receipt of the body by the server or some of the payloads
-        have not arrived after a timeout and a retransmit missing payloads
-        response is needed. For reliable transports (e.g., <xref
+        Non-confirmable transmission, no response is required until either the
+        successful receipt of the body by the server or a timer expires with
+        some of the payloads having not yet arrived.  In the latter case,
+        a "retransmit missing payloads" response is needed.
+        For reliable transports (e.g., <xref
         target="RFC8323"></xref>), a response is not required until successful
         receipt of the body by the server.</t>
 
@@ -785,10 +791,10 @@
         determined.</t>
 
         <t>The Size1 Option MUST be used with the Q-Block1 Option when used in
-        a request and MUST be present in all payloads of the request
+        a request and MUST be present in all payloads of the request,
         preserving the same value. The Size2 Option MUST be used with the
         Q-Block2 Option when used in a response and MUST be present in all
-        payloads of the response preserving the same value.</t>
+        payloads of the response, preserving the same value.</t>
       </section>
 
       <section title="Using Q-Block1 and Q-Block2 Options Together">
@@ -852,7 +858,7 @@ missing-block-number = uint
       would be acceptable, but providing the one used in the last received
       payload will aid any troubleshooting. The client will use the token to
       determine what was the previously sent request to obtain the Request-Tag
-      value to be used.</t>
+      value that was used.</t>
 
       <t>If the size of the 4.08 (Request Entity Incomplete) response packet
       is larger than that defined by Section 4.6 <xref
@@ -914,7 +920,7 @@ missing-block-number = uint
         from faster transmission rates, NSTART will need to be increased from
         1. However, the other CON congestion control parameters will need to
         be tuned to cover this change. This tuning is not specified in this
-        document given that the applicability scope of the current
+        document, given that the applicability scope of the current
         specification assumes that all requests and responses using Q-Block1
         and Q-Block2 will be Non-confirmable (<xref target="scope"></xref>)
         apart from the initial Q-Block functionality negotiation.</t>
@@ -971,7 +977,7 @@ missing-block-number = uint
         target="RFC7252"></xref>).</t>
 
         <t>NON_PROBING_WAIT is used to limit the potential wait needed
-        calculated when using PROBING_RATE. By default, NON_PROBING_WAIT has
+        when using PROBING_RATE. By default, NON_PROBING_WAIT has
         the same value as EXCHANGE_LIFETIME (Section 4.8.2 of <xref
         target="RFC7252"></xref>).</t>
 
@@ -995,9 +1001,9 @@ missing-block-number = uint
 Table 3: Congestion Control Parameters]]></artwork>
           </figure></t>
 
-        <t>PROBING_RATE parameter in CoAP indicates the average data rate that
+        <t>The PROBING_RATE parameter in CoAP indicates the average data rate that
         must not be exceeded by a CoAP endpoint in sending to a peer endpoint
-        that does not respond. The single body of blocks will be subjected to
+        that does not respond. A single group of (MAX_PAYLOADS) blocks will be subjected to
         PROBING_RATE (Section 4.7 of <xref target="RFC7252"></xref>), not the
         individual packets. If the wait time between sending bodies that are
         not being responded to based on PROBING_RATE exceeds NON_PROBING_WAIT,
@@ -1008,12 +1014,12 @@ Table 3: Congestion Control Parameters]]></artwork>
             as discussed in Section 4.5.2 of <xref target="RFC8782"></xref>.
             Note that MAX_PAYLOADS, NON_MAX_RETRANSMIT, NON_TIMEOUT,
             NON_PROBING_WAIT, and NON_PARTIAL_TIMEOUT can be negotiated
-            between DOTS peers as per <xref
+            between DOTS peers, e.g., as per <xref
             target="I-D.bosh-dots-quick-blocks"></xref>.</t>
           </list>Each NON 4.08 (Request Entity Incomplete) response is subject
         to PROBING_RATE.</t>
 
-        <t>Each NON GET or FETCH request using Q-Block2 Option is subject to
+        <t>Each NON GET or FETCH request using a Q-Block2 Option is subject to
         PROBING_RATE.</t>
 
         <t>As the sending of many payloads of a single body may itself cause
@@ -1022,7 +1028,7 @@ Table 3: Congestion Control Parameters]]></artwork>
         NON_TIMEOUT before sending the next set of payloads to manage
         potential congestion issues.</t>
 
-        <t>If the CoAP peer reports at least one payload has not arrived for
+        <t>If the CoAP peer reports that at least one payload has not arrived for
         each body for at least a 24 hour period and it is known that there are
         no other network issues over that period (e.g., DDoS attacks), then
         the value of MAX_PAYLOADS can be reduced by 1 at a time (to a minimum
@@ -1078,11 +1084,11 @@ Table 3: Congestion Control Parameters]]></artwork>
 
         <t>For the client receiving NON Q-Block2 responses, it SHOULD send a
         'Continue' Q-Block2 request (<xref target="qblock2"></xref>) for the
-        next set of payloads on receipt of all of the MAX_PAYLOADS payloads to
-        prevent the server unnecessarily delaying. Otherwise, the client
-        SHOULD delay for NON_RECEIVE_TIMEOUT (exponentially scaled based on
-        the repeat request count for a payload), before sending the request
-        for the missing payload(s). If the repeat request count for a missing
+        next set of payloads on receipt of all of the MAX_PAYLOADS payloads, to
+        prevent the server unnecessarily delaying. Otherwise the client SHOULD
+        delay for NON_RECEIVE_TIMEOUT (exponentially scaled based on the
+        repeat request count for a payload), before sending the request for
+        the missing payload(s). If the repeat request count for a missing
         payload exceeds NON_MAX_RETRANSMIT, the client SHOULD discard the
         partial body and stop requesting the missing payloads.</t>
 
@@ -1158,7 +1164,7 @@ Table 3: Congestion Control Parameters]]></artwork>
       GET or similar request indicating one or more missing blocks. The proxy
       will serve from its cache the missing blocks that are available in its
       cache in the same way a server would send all the appropriate Q-Block2
-      responses. If the cache key matching body is not available in the cache,
+      responses. If a body matching the  cache key is not available in the cache,
       the proxy MUST request the entire body from the CoAP server using the
       information in the cache key.</t>
 
@@ -1956,7 +1962,7 @@ o  Reference: [RFCXXXX]]]></artwork>
         new transmission of the payloads that have not been acknowledged under
         these adverse traffic conditions.</t>
 
-        <t>If there is likely to be the possibility of network transient
+        <t>If there is likely to be the possibility of transient network
         losses, then the use of NON should be considered.</t>
       </section>
 
@@ -2020,7 +2026,7 @@ o  Reference: [RFCXXXX]]]></artwork>
         new transmission of the payloads that have not been acknowledged under
         these adverse traffic conditions.</t>
 
-        <t>If there is likely to be the possibility of network transient
+        <t>If there is likely to be the possibility of transient network
         losses, then the use of NON should be considered.</t>
       </section>
     </section>
@@ -2049,7 +2055,7 @@ o  Reference: [RFCXXXX]]]></artwork>
 ]]></artwork>
           </figure></t>
 
-        <t>If there is likely to be the possibility of network transient
+        <t>If there is likely to be the possibility of transient network
         losses, then the use of unreliable transport with NON should be
         considered.</t>
       </section>
