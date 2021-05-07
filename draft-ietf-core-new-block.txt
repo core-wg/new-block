@@ -1040,9 +1040,10 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    and Q-Block2 will be Non-confirmable (Section 3.2) apart from the
    initial Q-Block functionality negotiation.
 
-   It is implementation specific as to whether there should be any
-   further requests for missing data given that a high packet loss will
-   be encountered.
+   Following the failure to transmit a packet due to packet loss after
+   MAX_TRANSMIT_SPAN time (Section 4.8.2 of [RFC7252]), whether there
+   should be any further requests for missing data is implementation
+   specific.
 
 7.2.  Non-confirmable (NON)
 
@@ -1056,7 +1057,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    between the endpoints to a common value by using a higher level
    protocol (out of scope of this document).  This is the maximum number
    of payloads that can be transmitted at any one time.
-
 
 
 

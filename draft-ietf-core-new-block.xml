@@ -929,9 +929,10 @@ missing-block-number = uint
         and Q-Block2 will be Non-confirmable (<xref target="scope"></xref>)
         apart from the initial Q-Block functionality negotiation.</t>
 
-        <t>It is implementation specific as to whether there should be any
-        further requests for missing data given that a high packet loss will
-        be encountered.</t>
+        <t>Following the failure to transmit a packet due to packet loss after
+        MAX_TRANSMIT_SPAN time (Section 4.8.2 of <xref
+        target="RFC7252"></xref>), whether there should be any further
+        requests for missing data is implementation specific. </t>
       </section>
 
       <section anchor="cc-non" title="Non-confirmable (NON)">
