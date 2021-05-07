@@ -606,9 +606,9 @@
             See <xref target="code"></xref> for further information.</t>
 
             <t>If the server has not received all the blocks of a body, but
-            one or more NON payloads have been received, it SHOULD wait for up
-            to NON_RECEIVE_TIMEOUT (<xref target="cc-non"></xref>) before
-            sending a 4.08 (Request Entity Incomplete) response.</t>
+            one or more NON payloads have been received, it SHOULD wait for
+            NON_RECEIVE_TIMEOUT (<xref target="cc-non"></xref>) before sending
+            a 4.08 (Request Entity Incomplete) response.</t>
           </list></t>
 
         <t>4.13 (Request Entity Too Large)<list style="empty">
@@ -698,14 +698,17 @@
         <t>The client may elect to request any detected missing blocks or just
         ignore the partial body. This decision is implementation specific.</t>
 
-        <t>The client SHOULD wait for up to NON_RECEIVE_TIMEOUT (<xref
-        target="cc-non"></xref>) after the last received payload for NON
-        payloads before issuing a GET, POST, PUT, FETCH, PATCH, or iPATCH
-        request that contains one or more Q-Block2 Options that define the
-        missing blocks with the M bit unset. The client MAY set the M bit to
-        request this and later blocks from this MAX_PAYLOADS set. Further
-        considerations related to the transmission timing for missing requests
-        are discussed in <xref target="cc-non"></xref>.</t>
+        <t>For NON payloads, the client SHOULD wait NON_RECEIVE_TIMEOUT (<xref
+        target="cc-non"></xref>) after the last received payload before
+        requesting retransmission of any missing blocks. Retransmission is
+        requested by issuing a GET, POST, PUT, FETCH, PATCH, or iPATCH request
+        that contains one or more Q-Block2 Options that define the missing
+        block(s). Generally the M bit on the Q-Block2 Option(s) SHOULD be
+        unset, although the M bit MAY be set to request this and later blocks
+        from this MAX_PAYLOADS set, see <xref target="sec-nonb411"></xref> for
+        an example of this in operation. Further considerations related to the
+        transmission timing for missing requests are discussed in <xref
+        target="cc-non"></xref>.</t>
 
         <t>The missing block numbers requested by the client MUST have an
         increasing block number in each additional Q-Block2 Option with no
@@ -949,14 +952,14 @@ missing-block-number = uint
             target="scope"></xref>.</t>
           </list></t>
 
-        <t>NON_TIMEOUT is the maximum period of delay between sending sets of
+        <t>NON_TIMEOUT is the period of delay between sending sets of
         MAX_PAYLOADS payloads for the same body. By default, NON_TIMEOUT has
         the same value as ACK_TIMEOUT (Section 4.8 of <xref
         target="RFC7252"></xref>).</t>
 
-        <t>NON_RECEIVE_TIMEOUT is the initial maximum time to wait for a
-        missing payload before requesting retransmission for the first time.
-        Every time the missing payload is re-requested, the time to wait value
+        <t>NON_RECEIVE_TIMEOUT is the initial time to wait for a missing
+        payload before requesting retransmission for the first time. Every
+        time the missing payload is re-requested, the time to wait value
         doubles. The time to wait is calculated as:<list style="empty">
             <t>Time-to-Wait = NON_RECEIVE_TIMEOUT * (2 ** (Re-Request-Count -
             1))</t>
@@ -1476,7 +1479,8 @@ Payload N: Corresponds to the CoAP message that conveys
             </figure></t>
         </section>
 
-        <section title="Handling Recovery using M-bit Set">
+        <section anchor="sec-nonb411"
+                 title="Handling Recovery using M-bit Set">
           <t><xref target="nonb411"></xref> shows the example of an Observe
           that is triggered but only the first two notification blocks reach
           the client. In order to retrieve the missing blocks, the client
