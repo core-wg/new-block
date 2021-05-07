@@ -189,6 +189,12 @@
 
       <t>MAX_PAYLOADS is the maximum number of payloads that can be
       transmitted at any one time.</t>
+
+      <t>MAX_PAYLOADS_SET is the set of blocks when the block numbers divided by
+      MAX_PAYLOADS have the same numeric result. E.g., if MAX_PAYLOADS is 10,
+      a MAX_PAYLOADS_SET could be blocks #0 to #9, or #10 to #19, etc.
+      Depending on the data size, the final MAX_PAYLOADS_SET may not comprise
+      of all of the MAX_PAYLOADS blocks.</t>
     </section>
 
     <section anchor="alt" title="Alternative CoAP Block-Wise Transfer Options">
@@ -581,8 +587,8 @@
             <t>A response using this Response Code SHOULD NOT be generated for
             every received Q-Block1 Option request (<xref
             target="cc-non"></xref>). It SHOULD only be generated when all the
-            payload requests are Non-confirmable and a set of MAX_PAYLOADS
-            payloads have been received by the server. More details about the
+            payload requests are Non-confirmable and a MAX_PAYLOADS_SET
+            has been received by the server. More details about the
             motivations for this optimization are discussed in <xref
             target="cc-non"></xref>.</t>
 
@@ -673,17 +679,17 @@
 
             <t
             hangText="'NUM modulo MAX_PAYLOADS' is zero, while NUM is not zero:">This
-            is used to confirm that the current set of MAX_PAYLOADS payloads
+            is used to confirm that the current MAX_PAYLOADS_SET
             (the latest one having block number NUM-1) has been successfully
             received and that, upon receipt of this request, the server can
-            continue to send the next set of payloads (the first one having
+            continue to send the next MAX_PAYLOADS_SET (the first one having
             block number NUM). This is the 'Continue' Q-Block-2 and
             conceptually has the same usage (i.e., continue sending the next
             set of data) as the use of 2.31 (Continue) for Q-Block1.</t>
 
             <t hangText="Any other value of NUM:">This is a request for that
             block and for all of the remaining blocks in the current
-            MAX_PAYLOADS set.</t>
+            MAX_PAYLOADS_SET.</t>
           </list></t>
 
         <t>If the request includes multiple Q-Block2 Options and these options
@@ -723,7 +729,7 @@
         that contains one or more Q-Block2 Options that define the missing
         block(s). Generally the M bit on the Q-Block2 Option(s) SHOULD be
         unset, although the M bit MAY be set to request this and later blocks
-        from this MAX_PAYLOADS set, see <xref target="sec-nonb411"></xref> for
+        from this MAX_PAYLOADS_SET, see <xref target="sec-nonb411"></xref> for
         an example of this in operation. Further considerations related to the
         transmission timing for missing requests are discussed in <xref
         target="cc-non"></xref>.</t>
@@ -973,8 +979,8 @@ missing-block-number = uint
             target="scope"></xref>.</t>
           </list></t>
 
-        <t>NON_TIMEOUT is the period of delay between sending sets of
-        MAX_PAYLOADS payloads for the same body. By default, NON_TIMEOUT has
+        <t>NON_TIMEOUT is the period of delay between sending MAX_PAYLOADS_SET
+        for the same body. By default, NON_TIMEOUT has
         the same value as ACK_TIMEOUT (Section 4.8 of <xref
         target="RFC7252"></xref>).</t>
 
@@ -989,7 +995,7 @@ missing-block-number = uint
         <t>NON_RECEIVE_TIMEOUT has a default value of twice NON_TIMEOUT.
         NON_RECEIVE_TIMEOUT MUST always be greater than NON_TIMEOUT by at
         least one second so that the sender of the payloads has the
-        opportunity to start sending the next set of payloads before the
+        opportunity to start sending the next MAX_PAYLOADS_SET before the
         receiver times out.</t>
 
         <t>NON_MAX_RETRANSMIT is the maximum number of times a request for the
@@ -1047,9 +1053,9 @@ Table 3: Congestion Control Parameters]]></artwork>
         PROBING_RATE.</t>
 
         <t>As the sending of many payloads of a single body may itself cause
-        congestion, it is RECOMMENDED that after transmission of every set of
-        MAX_PAYLOADS payloads of a single body, a delay is introduced of
-        NON_TIMEOUT before sending the next set of payloads to manage
+        congestion, it is RECOMMENDED that after transmission of every
+        MAX_PAYLOADS_SET of a single body, a delay is introduced of
+        NON_TIMEOUT before sending the next MAX_PAYLOADS_SET to manage
         potential congestion issues.</t>
 
         <t>If the CoAP peer reports that at least one payload has not arrived
@@ -1066,50 +1072,52 @@ Table 3: Congestion Control Parameters]]></artwork>
         peer will not know about the MAX_PAYLOADS change until it is
         reconfigured. As a consequence of the two peers having different
         MAX_PAYLOADS values, a peer may continue indicating that there are
-        some missing payloads as all of its MAX_PAYLOADS set may not have
+        some missing payloads as all of its MAX_PAYLOADS_SET may not have
         arrived. How the two peer values for MAX_PAYLOADS are synchronized is
         out of the scope.</t>
 
-        <t>The sending of a set of missing blocks of a body is subject to
-        MAX_PAYLOADS set of payloads.</t>
+        <t>The sending of a set of missing blocks of a body is those in a
+        MAX_PAYLOADS_SET at a time.</t>
 
         <t>For Q-Block1 Option, if the server responds with a 2.31 (Continue)
         Response Code for the latest payload sent, then the client can
-        continue to send the next set of payloads without any delay. If the
+        continue to send the next MAX_PAYLOADS_SET without any delay. If the
         server responds with a 4.08 (Request Entity Incomplete) Response Code,
         then the missing payloads SHOULD be retransmitted before going into
         another NON_TIMEOUT delay prior to sending the next set of
         payloads.</t>
 
         <t>For the server receiving NON Q-Block1 requests, it SHOULD send back
-        a 2.31 (Continue) Response Code on receipt of all of the MAX_PAYLOADS
-        payloads to prevent the client unnecessarily delaying. If not all of
-        the MAX_PAYLOADS payloads were received, the server SHOULD delay for
+        a 2.31 (Continue) Response Code on receipt of all of the
+        MAX_PAYLOADS_SET to prevent the client unnecessarily
+        delaying. If not all of the MAX_PAYLOADS_SET were
+        received, the server SHOULD delay for
         NON_RECEIVE_TIMEOUT (exponentially scaled based on the repeat request
         count for a payload) before sending the 4.08 (Request Entity
         Incomplete) Response Code for the missing payload(s). If all of the
-        MAX_PAYLOADS blocks were received and a 2.31 (continue) had been sent, but no
-        more payloads were received for NON_RECEIVE_TIMEOUT (exponentially
+        MAX_PAYLOADS_SET were received and a 2.31 (continue) had been sent, but
+        no more payloads were received for NON_RECEIVE_TIMEOUT (exponentially
         scaled), the server SHOULD send a 4.08 (Request Entity Incomplete)
         response detailing the missing payloads after the block number that
         was indicated in the sent 2.31 (Continue). If the repeat request count
         for missing payloads exceeds NON_MAX_RETRANSMIT, the server SHOULD
         discard the partial body and stop requesting the missing payloads.</t>
 
-        <t>It is likely that the client will start transmitting the next set
-        of MAX_PAYLOADS payloads before the server times out on waiting for
-        the last of the previous MAX_PAYLOADS payloads. On receipt of a
-        payload from the new set of MAX_PAYLOADS payloads, the server SHOULD
+        <t>It is likely that the client will start transmitting the next
+        MAX_PAYLOADS_SET before the server times out on waiting for
+        the last of the previous MAX_PAYLOADS_SET. On receipt of a
+        payload from the next MAX_PAYLOADS_SET, the server SHOULD
         send a 4.08 (Request Entity Incomplete) Response Code indicating any
-        missing payloads from any previous MAX_PAYLOADS payloads. Upon receipt
-        of the 4.08 (Request Entity Incomplete) Response Code, the client
-        SHOULD send the missing payloads before continuing to send the
-        remainder of the MAX_PAYLOADS payloads and then go into another
-        NON_TIMEOUT delay prior to sending the next set of payloads.</t>
+        missing payloads from any previous MAX_PAYLOADS_SET. Upon
+        receipt of the 4.08 (Request Entity Incomplete) Response Code, the
+        client SHOULD send the missing payloads before continuing to send the
+        remainder of the MAX_PAYLOADS_SET and then go into another
+        NON_TIMEOUT delay prior to sending the next MAX_PAYLOADS_SET.</t>
 
         <t>For the client receiving NON Q-Block2 responses, it SHOULD send a
         'Continue' Q-Block2 request (<xref target="qblock2"></xref>) for the
-        next set of payloads on receipt of all of the MAX_PAYLOADS payloads,
+        next MAX_PAYLOADS_SET on receipt of all of the
+        MAX_PAYLOADS_SET,
         to prevent the server unnecessarily delaying. Otherwise the client
         SHOULD delay for NON_RECEIVE_TIMEOUT (exponentially scaled based on
         the repeat request count for a payload), before sending the request
@@ -1122,15 +1130,15 @@ Table 3: Congestion Control Parameters]]></artwork>
         (including Observe Option, if appropriate for an unsolicited response)
         rather than as a request for the remaining missing blocks.</t>
 
-        <t>It is likely that the server will start transmitting the next set
-        of MAX_PAYLOADS payloads before the client times out on waiting for
-        the last of the previous MAX_PAYLOADS payloads. Upon receipt of a
-        payload from the new set of MAX_PAYLOADS payloads, the client SHOULD
-        send a request indicating any missing payloads from any previous set
-        of MAX_PAYLOADS payloads. Upon receipt of such request, the server
+        <t>It is likely that the server will start transmitting the next
+        MAX_PAYLOADS_SET before the client times out on waiting for
+        the last of the previous MAX_PAYLOADS_SET. Upon receipt of a
+        payload from the new MAX_PAYLOADS_SET, the client SHOULD
+        send a request indicating any missing payloads from any previous
+        MAX_PAYLOADS_SET. Upon receipt of such request, the server
         SHOULD send the missing payloads before continuing to send the
-        remainder of the MAX_PAYLOADS payloads and then go into another
-        NON_TIMEOUT delay prior to sending the next set of payloads.</t>
+        remainder of the MAX_PAYLOADS_SET and then go into another
+        NON_TIMEOUT delay prior to sending the next MAX_PAYLOADS_SET.</t>
 
         <t>The client does not need to acknowledge the receipt of the entire
         body.</t>
@@ -1138,7 +1146,8 @@ Table 3: Congestion Control Parameters]]></artwork>
         <t><list style="empty">
             <t>Note: If there is asymmetric traffic loss causing responses to
             never get received, a delay of NON_TIMEOUT after every
-            transmission of MAX_PAYLOADS blocks will be observed. The endpoint
+            transmission of MAX_PAYLOADS_SET will be observed. The
+            endpoint
             receiving the body is still likely to receive the entire body.</t>
           </list></t>
       </section>
@@ -1273,8 +1282,8 @@ Payload N: Corresponds to the CoAP message that conveys
          +--------->| NON PUT /path M:0x02 T:0xf2 RT=10 QB1:1/1/1024
          +--------->| [[Payloads 3 - 9 not detailed]]
          +--------->| NON PUT /path M:0x0a T:0xfa RT=10 QB1:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks receipt acknowledged by server]]
+      [[MAX_PAYLOADS_SET has been received]]
+         |     [[MAX_PAYLOADS_SET receipt acknowledged by server]]
          |<---------+ NON 2.31 M:0x81 T:0xfa
          +--------->| NON PUT /path M:0x0b T:0xfb RT=10 QB1:10/0/1024
          |<---------+ NON 2.04 M:0x82 T:0xfb
@@ -1298,22 +1307,22 @@ Payload N: Corresponds to the CoAP message that conveys
          +--------->| [[Payloads 3 - 8 not detailed]]
          +--------->| NON PUT /path M:0x19 T:0xe9 RT=11 QB1:8/1/1024
          +--->X     | NON PUT /path M:0x1a T:0xea RT=11 QB1:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
+      [[Some of MAX_PAYLOADS_SET have been received]]
          |   ...    |
       [[NON_TIMEOUT (client) delay expires]]
-         |     [[Client starts sending next set of payloads]]
+         |     [[Client starts sending next MAX_PAYLOAD_SET]]
          +--->X     | NON PUT /path M:0x1b T:0xeb RT=11 QB1:10/1/1024
          +--------->| NON PUT /path M:0x1c T:0xec RT=11 QB1:11/1/1024
          |          |
 ]]></artwork>
             </figure></t>
 
-          <t>On seeing a payload from the next set of payloads, the server
-          realizes that some blocks are missing from the previous MAX_PAYLOADS
-          payloads and asks for the missing blocks in one go (<xref
+          <t>On seeing a payload from the next MAX_PAYLOAD_SET, the server
+          realizes that some blocks are missing from the previous
+          MAX_PAYLOADS_SET and asks for the missing blocks in one go (<xref
           target="B3non2"></xref>). It does so by indicating which blocks from
-          the previous MAX_PAYLOADS payloads have not been received in the
-          data portion of the response (<xref target="code"></xref>). The
+          the previous MAX_PAYLOADS_SET have not been received in
+          the data portion of the response (<xref target="code"></xref>). The
           token used in the response should be the token that was used in the
           last received payload. The client can then derive the Request-Tag by
           matching the token with the sent request.</t>
@@ -1327,7 +1336,7 @@ Payload N: Corresponds to the CoAP message that conveys
          |     [[Client responds with missing payloads]]
          +--------->| NON PUT /path M:0x1d T:0xed RT=11 QB1:1/1/1024
          +--------->| NON PUT /path M:0x1e T:0xee RT=11 QB1:9/1/1024
-         |     [[Client continues sending next set of payloads]]
+         |     [[Client continues sending next MAX_PAYLOAD_SET]]
          +--------->| NON PUT /path M:0x1f T:0xef RT=11 QB1:12/0/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (server) delay expires]]
@@ -1436,8 +1445,8 @@ Payload N: Corresponds to the CoAP message that conveys
          |<---------+ NON 2.05 M:0x82 T:0xf0 O:1234 ET=21 QB2:1/1/1024
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0x8a T:0xf0 O:1234 ET=21 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using
+      [[MAX_PAYLOADS_SET has been received]]
+         |     [[MAX_PAYLOADS_SET acknowledged by client using
          |       'Continue' Q-Block2]]
          +--------->| NON GET /path M:0x02 T:0xf1 QB2:10/1/1024
          |<---------+ NON 2.05 M:0x8b T:0xf0 O:1234 ET=21 QB2:10/0/1024
@@ -1447,8 +1456,8 @@ Payload N: Corresponds to the CoAP message that conveys
          |<---------+ NON 2.05 M:0x92 T:0xf0 O:1235 ET=22 QB2:1/1/1024
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0x9a T:0xf0 O:1235 ET=22 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS blocks acknowledged by client using
+      [[MAX_PAYLOADS_SET has been received]]
+         |     [[MAX_PAYLOADS_SET acknowledged by client using
          |       'Continue' Q-Block2]]
          +--------->| NON GET /path M:0x03 T:0xf2 QB2:10/1/1024
          |<---------+ NON 2.05 M:0x9b T:0xf0 O:1235 ET=22 QB2:10/0/1024
@@ -1476,12 +1485,12 @@ Payload N: Corresponds to the CoAP message that conveys
          |     X<---+ NON 2.05 M:0xa2 T:0xf0 O:1236 ET=23 QB2:1/1/1024
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |     X<---+ NON 2.05 M:0xaa T:0xf0 O:1236 ET=23 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
+      [[Some of MAX_PAYLOADS_SET have been received]]
          |   ...    |
       [[NON_TIMEOUT (server) delay expires]]
-         |     [[Server sends next set of payloads]]
+         |     [[Server sends next MAX_PAYLOAD_SET]]
          |<---------+ NON 2.05 M:0xab T:0xf0 O:1236 ET=23 QB2:10/0/1024
-         |     [[On seeing a payload from the next set of payloads, 
+         |     [[On seeing a payload from the next MAX_PAYLOAD_SET, 
          |      Client realizes blocks are missing and asks for the
          |       missing ones in one go]]
          +--------->| NON GET /path M:0x04 T:0xf3 QB2:1/0/1024\
@@ -1519,10 +1528,10 @@ Payload N: Corresponds to the CoAP message that conveys
          |     X<---+ NON 2.05 M:0xb3 T:0xf0 O:1237 ET=24 QB2:2/1/1024
          |     X<---+ [[Payloads 4 - 9 not detailed]]
          |     X<---+ NON 2.05 M:0xb9 T:0xf0 O:1237 ET=24 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
+      [[Some of MAX_PAYLOADS_SET have been received]]
          |   ...    |
       [[NON_TIMEOUT (server) delay expires]]
-         |     [[Server sends next set of payloads]]
+         |     [[Server sends next MAX_PAYLOAD_SET]]
          |     X<---+ NON 2.05 M:0xba T:0xf0 O:1237 ET=24 QB2:10/0/1024
          |   ...    |
       [[NON_RECEIVE_TIMEOUT (client) delay expires]]
@@ -1532,8 +1541,8 @@ Payload N: Corresponds to the CoAP message that conveys
          |<---------+ NON 2.05 M:0xbb T:0xf5 ET=24 QB2:2/1/1024
          |<---------+ [[Payloads 3 - 9 not detailed]]
          |<---------+ NON 2.05 M:0xc2 T:0xf5 ET=24 QB2:9/1/1024
-      [[MAX_PAYLOADS has been reached]]
-         |     [[MAX_PAYLOADS acknowledged by client using 'Continue'
+      [[MAX_PAYLOADS_SET has been received]]
+         |     [[MAX_PAYLOADS_SET acknowledged by client using 'Continue'
          |       Q-Block2]]
          +--------->| NON GET /path M:0x87 T:0xf6 QB2:10/1/1024
          |<---------+ NON 2.05 M:0xc3 T:0xf0 O:1237 ET=24 QB2:10/0/1024
@@ -1590,16 +1599,16 @@ Payload N: Corresponds to the CoAP message that conveys
       +--------->| NON FETCH /path M:0x31 T:0xa1 O:0 RT=10 QB1:1/1/1024
       +--------->| [[Payloads 3 - 9 not detailed]]
       +--------->| NON FETCH /path M:0x39 T:0xa9 O:0 RT=10 QB1:9/1/1024
-   [[MAX_PAYLOADS has been reached]]
-      |     [[MAX_PAYLOADS blocks receipt acknowledged by server]]
+   [[MAX_PAYLOADS_SET has been received]]
+      |     [[MAX_PAYLOADS_SET acknowledged by server]]
       |<---------+ NON 2.31 M:0x80 T:0xa9
       +--------->| NON FETCH /path M:0x3a T:0xaa O:0 RT=10 QB1:10/0/1024
       |<---------+ NON 2.05 M:0x81 T:0xaa O:1334 ET=21 QB2:0/1/1024
       |<---------+ NON 2.05 M:0x82 T:0xaa O:1334 ET=21 QB2:1/1/1024
       |<---------+ [[Payloads 3 - 9 not detailed]]
       |<---------+ NON 2.05 M:0x8a T:0xaa O:1334 ET=21 QB2:9/1/1024
-   [[MAX_PAYLOADS has been reached]]
-      |     [[MAX_PAYLOADS blocks acknowledged by client using
+   [[MAX_PAYLOADS_SET has been received]]
+      |     [[MAX_PAYLOADS_SET acknowledged by client using
       |       'Continue' Q-Block2]]
       +--------->| NON FETCH /path M:0x3b T:0xab QB2:10/1/1024
       |<---------+ NON 2.05 M:0x8b T:0xaa O:1334 ET=21 QB2:10/0/1024
@@ -1609,8 +1618,8 @@ Payload N: Corresponds to the CoAP message that conveys
       |<---------+ NON 2.05 M:0x8d T:0xaa O:1335 ET=22 QB2:1/1/1024
       |<---------+ [[Payloads 3 - 9 not detailed]]
       |<---------+ NON 2.05 M:0x95 T:0xaa O:1335 ET=22 QB2:9/1/1024
-   [[MAX_PAYLOADS has been reached]]
-      |     [[MAX_PAYLOADS blocks acknowledged by client using
+   [[MAX_PAYLOADS_SET has been received]]
+      |     [[MAX_PAYLOADS_SET acknowledged by client using
       |       'Continue' Q-Block2]]
       +--------->| NON FETCH /path M:0x3c T:0xac QB2:10/1/1024
       |<---------+ NON 2.05 M:0x96 T:0xaa O:1335 ET=22 QB2:10/0/1024
