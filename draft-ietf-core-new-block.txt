@@ -226,11 +226,12 @@ Boucadair & Shallow     Expires November 8, 2021                [Page 4]
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
-   MAX_PAYLOADS_SET is the set of blocks when the block numbers divided
-   by MAX_PAYLOADS have the same numeric result.  E.g., if MAX_PAYLOADS
-   is 10, a MAX_PAYLOADS_SET could be blocks #0 to #9, or #10 to #19,
-   etc.  Depending on the data size, the final MAX_PAYLOADS_SET may not
-   comprise of all of the MAX_PAYLOADS blocks.
+   MAX_PAYLOADS_SET is the set of blocks identified by block numbers
+   that, when divided by MAX_PAYLOADS, they have the same numeric
+   result.  For example, if MAX_PAYLOADS is set to '10', a
+   MAX_PAYLOADS_SET could be blocks #0 to #9, #10 to #19, etc.
+   Depending on the data size, the MAX_PAYLOADS_SET may not comprise all
+   the MAX_PAYLOADS blocks.
 
 3.  Alternative CoAP Block-Wise Transfer Options
 
@@ -272,8 +273,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    o  They can operate in environments where packet loss is highly
       asymmetrical.
 
-   o  They enable faster transmissions of sets of blocks of data with
-      fewer packet interchanges.
+
 
 
 
@@ -281,6 +281,9 @@ Boucadair & Shallow     Expires November 8, 2021                [Page 5]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
+
+   o  They enable faster transmissions of sets of blocks of data with
+      fewer packet interchanges.
 
    o  They support faster recovery should any of the blocks get lost in
       transmission.
@@ -326,9 +329,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    Section 5.8 of [RFC7252] and the new CoAP methods, FETCH, PATCH, and
    iPATCH introduced in [RFC8132].
 
-   The No-Response Option [RFC7967] was considered but was abandoned as
-   it does not apply to Q-Block2 responses.  A unified solution is
-   defined in the document.
 
 
 
@@ -337,6 +337,10 @@ Boucadair & Shallow     Expires November 8, 2021                [Page 6]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
+
+   The No-Response Option [RFC7967] was considered but was abandoned as
+   it does not apply to Q-Block2 responses.  A unified solution is
+   defined in the document.
 
 3.1.  CoAP Response Code (4.08) Usage
 
@@ -382,10 +386,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    content.  However, even with OSCORE, using a NoSec security mode with
    these options may still be inadequate, for reasons discussed in
    Section 11.
-
-
-
-
 
 
 
