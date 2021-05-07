@@ -1088,7 +1088,7 @@ Table 3: Congestion Control Parameters]]></artwork>
         NON_RECEIVE_TIMEOUT (exponentially scaled based on the repeat request
         count for a payload) before sending the 4.08 (Request Entity
         Incomplete) Response Code for the missing payload(s). If all of the
-        MAX_PAYLOADS were received and a 2.31 (continue) had been sent, but no
+        MAX_PAYLOADS blocks were received and a 2.31 (continue) had been sent, but no
         more payloads were received for NON_RECEIVE_TIMEOUT (exponentially
         scaled), the server SHOULD send a 4.08 (Request Entity Incomplete)
         response detailing the missing payloads after the block number that
