@@ -351,7 +351,7 @@
 
         <t>The Q-Block2 Option is useful, e.g., with GET, POST, PUT, FETCH,
         PATCH, and iPATCH requests and their payload-bearing responses (2.01,
-        2.02, 2.03, 2.04, and 2.05) (Section 5.5 of <xref
+        2.02, 2.04, and 2.05) (Section 5.5 of <xref
         target="RFC7252"></xref>).</t>
 
         <t>A CoAP endpoint (or proxy) MUST support either both or neither of

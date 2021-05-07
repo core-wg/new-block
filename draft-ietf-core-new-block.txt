@@ -406,7 +406,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
    The Q-Block2 Option is useful, e.g., with GET, POST, PUT, FETCH,
    PATCH, and iPATCH requests and their payload-bearing responses (2.01,
-   2.02, 2.03, 2.04, and 2.05) (Section 5.5 of [RFC7252]).
+   2.02, 2.04, and 2.05) (Section 5.5 of [RFC7252]).
 
    A CoAP endpoint (or proxy) MUST support either both or neither of the
    Q-Block1 and Q-Block2 Options.
