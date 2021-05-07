@@ -148,7 +148,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    over TCP, TLS, and WebSockets.
 
    The CoAP Block1 and Block2 Options work well in environments where
-   there are no or minimal packet losses.  These options operate
+   there are no, or minimal, packet losses.  These options operate
    synchronously, i.e., each individual block has to be requested.  A
    CoAP endpoint can only ask for (or send) the next block when the
    transfer of the previous block has completed.  Packet transmission
@@ -248,11 +248,11 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    will then retransmit only the blocks that have been lost in
    transmission.
 
-   Note that similar performance benefits can be applied to Confirmable
-   messages if the value of NSTART is increased from 1 (Section 4.7 of
-   [RFC7252]).  However, the use of Confirmable messages will not work
-   effectively if there is asymmetrical packet loss.  Some examples with
-   Confirmable messages are provided in Appendix A.
+   Note that similar transmission rate benefits can be applied to
+   Confirmable messages if the value of NSTART is increased from 1
+   (Section 4.7 of [RFC7252]).  However, the use of Confirmable messages
+   will not work effectively if there is asymmetrical packet loss.  Some
+   examples with Confirmable messages are provided in Appendix A.
 
    There is little, if any, benefit of using these options with CoAP
    running over a reliable connection [RFC8323].  In this case, there is
@@ -750,7 +750,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    it MUST ignore the payload of the packet, but MUST still respond as
    if the block was received for the first time.
 
-   A server SHOULD maintain a partial body (missing payloads) for up to
+   A server SHOULD maintain a partial body (missing payloads) for
    NON_PARTIAL_TIMEOUT (Section 7.2).
 
 4.4.  Using the Q-Block2 Option
@@ -845,12 +845,12 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    If the client receives a duplicate block with the same ETag, it MUST
    silently ignore the payload.
 
-   A client SHOULD maintain a partial body (missing payloads) for up to
+   A client SHOULD maintain a partial body (missing payloads) for
    NON_PARTIAL_TIMEOUT (Section 7.2) or as defined by the Max-Age Option
    (or its default of 60 seconds (Section 5.6.1 of [RFC7252])),
    whichever is the less.  On release of the partial body, the client
-   should then release all of the tokens used for this body unless a
-   resource is being observed.
+   should then release all of the tokens used for this body apart from
+   the token that is used to track a resource that is being observed.
 
    The ETag Option should not be used in the request for missing blocks
    as the server could respond with a 2.03 (Valid) response with no
@@ -869,7 +869,8 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    If the server responds during a body update with a different ETag
    Option value (as the resource representation has changed), then the
    client should treat the partial body with the old ETag as no longer
-   being fresh.
+   being fresh.  The client may then request all of the new data by
+   specifying Q-Block2 with block number '0' and the M bit set.
 
    If the server transmits a new body of data (e.g., a triggered Observe
    notification) with a new ETag to the same client as an additional
@@ -888,8 +889,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    the same for all the payloads of the same body.  This includes any
    missing payloads that are retransmitted.
 
-   For a response that uses Q-Block2, the Observe value MUST be the same
-   for all the payloads of the same body.  This is different from Block2
+
 
 
 
@@ -898,6 +898,8 @@ Boucadair & Shallow     Expires November 8, 2021               [Page 16]
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
+   For a response that uses Q-Block2, the Observe value MUST be the same
+   for all the payloads of the same body.  This is different from Block2
    usage where the Observe value is only present in the first block
    (Section 3.4 of [RFC7959]).  This includes payloads transmitted
    following receipt of the 'Continue' Q-Block2 Option (Section 4.4) by
@@ -910,9 +912,9 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    the size of the representation transferred in requests and Size2 for
    indicating the size of the representation transferred in responses.
 
-   The Size1 or Size2 option values MUST exactly represent the size of
-   the data on the body so that any missing data can easily be
-   determined.
+   For Q-Block1 and Q-Block2 Options, the Size1 or Size2 Option values
+   MUST exactly represent the size of the data on the body so that any
+   missing data can easily be determined.
 
    The Size1 Option MUST be used with the Q-Block1 Option when used in a
    request and MUST be present in all payloads of the request,
@@ -944,8 +946,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    were dropped during transmission, or the client has sent them
    sufficiently long ago that the server has already discarded them.
 
-   The data payload of the 4.08 (Request Entity Incomplete) response is
-   encoded as a CBOR Sequence [RFC8742].  It comprises one or more
 
 
 
@@ -954,6 +954,8 @@ Boucadair & Shallow     Expires November 8, 2021               [Page 17]
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
+   The data payload of the 4.08 (Request Entity Incomplete) response is
+   encoded as a CBOR Sequence [RFC8742].  It comprises one or more
    missing block numbers encoded as CBOR unsigned integers [RFC8949].
    The missing block numbers MUST be unique in each 4.08 (Request Entity
    Incomplete) response when created by the server; the client MUST
@@ -976,7 +978,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
              Figure 1: Structure of the Missing Blocks Payload
 
-   It is desirable tha the token to use for the response is the token
+   It is desirable that the token to use for the response is the token
    that was used in the last block number received so far with the same
    Request-Tag value.  Note that the use of any received token with the
    same Request-Tag would be acceptable, but providing the one used in
@@ -1000,8 +1002,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
       payloads to MAX_PAYLOADS to minimize congestion control being
       needed.  The CBOR sequence does not include any array wrapper.
 
-   The 4.08 (Request Entity Incomplete) with Content-Type "application/
-   missing-blocks+cbor-seq" SHOULD NOT be used when using Confirmable
 
 
 
@@ -1010,6 +1010,8 @@ Boucadair & Shallow     Expires November 8, 2021               [Page 18]
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
+   The 4.08 (Request Entity Incomplete) with Content-Type "application/
+   missing-blocks+cbor-seq" SHOULD NOT be used when using Confirmable
    requests or a reliable connection [RFC8323] as the client will be
    able to determine that there is a transmission failure of a
    particular payload and hence that the server is missing that payload.
@@ -1051,11 +1053,9 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    initial Q-Block functionality negotiation.
 
    Following the failure to transmit a packet due to packet loss after
-   MAX_TRANSMIT_SPAN time (Section 4.8.2 of [RFC7252]), whether there
-   should be any further requests for missing data is implementation
-   specific.
-
-
+   MAX_TRANSMIT_SPAN time (Section 4.8.2 of [RFC7252]), it is
+   implementation specific as to whether there should be any further
+   requests for missing data.
 
 
 

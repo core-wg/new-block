@@ -120,10 +120,10 @@
       is designed to work exclusively with Confirmable messages (Section 1 of
       <xref target="RFC7959"></xref>). Note that the block-wise transfer was
       further updated by <xref target="RFC8323"></xref> for use over TCP, TLS,
-      and WebSockets. </t>
+      and WebSockets.</t>
 
       <t>The CoAP Block1 and Block2 Options work well in environments where
-      there are no or minimal packet losses. These options operate
+      there are no, or minimal, packet losses. These options operate
       synchronously, i.e., each individual block has to be requested. A CoAP
       endpoint can only ask for (or send) the next block when the transfer of
       the previous block has completed. Packet transmission rate, and hence
@@ -153,7 +153,7 @@
 
       <t>Similar to <xref target="RFC7959"></xref>, this specification does
       not remove any of the constraints posed by the base CoAP specification
-      <xref target="RFC7252"></xref> it is strictly layered on top of. </t>
+      <xref target="RFC7252"></xref> it is strictly layered on top of.</t>
     </section>
 
     <section anchor="notation" title="Terminology">
@@ -211,9 +211,9 @@
       that have not yet been received. The CoAP sender endpoint will then
       retransmit only the blocks that have been lost in transmission.</t>
 
-      <t>Note that similar performance benefits can be applied to Confirmable
-      messages if the value of NSTART is increased from 1 (Section 4.7 of
-      <xref target="RFC7252"></xref>). However, the use of Confirmable
+      <t>Note that similar transmission rate benefits can be applied to
+      Confirmable messages if the value of NSTART is increased from 1 (Section
+      4.7 of <xref target="RFC7252"></xref>). However, the use of Confirmable
       messages will not work effectively if there is asymmetrical packet loss.
       Some examples with Confirmable messages are provided in <xref
       target="CON"></xref>.</t>
@@ -660,8 +660,8 @@
         it MUST ignore the payload of the packet, but MUST still respond as if
         the block was received for the first time.</t>
 
-        <t>A server SHOULD maintain a partial body (missing payloads) for up
-        to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>).</t>
+        <t>A server SHOULD maintain a partial body (missing payloads) for
+        NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>).</t>
       </section>
 
       <section anchor="qblock2" title="Using the Q-Block2 Option">
@@ -746,12 +746,13 @@
         <t>If the client receives a duplicate block with the same ETag, it
         MUST silently ignore the payload.</t>
 
-        <t>A client SHOULD maintain a partial body (missing payloads) for up
-        to NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>) or as defined
-        by the Max-Age Option (or its default of 60 seconds (Section 5.6.1 of
+        <t>A client SHOULD maintain a partial body (missing payloads) for
+        NON_PARTIAL_TIMEOUT (<xref target="cc-non"></xref>) or as defined by
+        the Max-Age Option (or its default of 60 seconds (Section 5.6.1 of
         <xref target="RFC7252"></xref>)), whichever is the less. On release of
         the partial body, the client should then release all of the tokens
-        used for this body unless a resource is being observed.</t>
+        used for this body apart from the token that is used to track a
+        resource that is being observed.</t>
 
         <t>The ETag Option should not be used in the request for missing
         blocks as the server could respond with a 2.03 (Valid) response with
@@ -771,7 +772,8 @@
         <t>If the server responds during a body update with a different ETag
         Option value (as the resource representation has changed), then the
         client should treat the partial body with the old ETag as no longer
-        being fresh.</t>
+        being fresh. The client may then request all of the new data by
+        specifying Q-Block2 with block number '0' and the M bit set.</t>
 
         <t>If the server transmits a new body of data (e.g., a triggered
         Observe notification) with a new ETag to the same client as an
@@ -807,9 +809,9 @@
         transferred in requests and Size2 for indicating the size of the
         representation transferred in responses.</t>
 
-        <t>The Size1 or Size2 option values MUST exactly represent the size of
-        the data on the body so that any missing data can easily be
-        determined.</t>
+        <t>For Q-Block1 and Q-Block2 Options, the Size1 or Size2 Option values
+        MUST exactly represent the size of the data on the body so that any
+        missing data can easily be determined.</t>
 
         <t>The Size1 Option MUST be used with the Q-Block1 Option when used in
         a request and MUST be present in all payloads of the request,
@@ -873,7 +875,7 @@ missing-block-number = uint
 
       <t></t>
 
-      <t>It is desirable tha the token to use for the response is the token
+      <t>It is desirable that the token to use for the response is the token
       that was used in the last block number received so far with the same
       Request-Tag value. Note that the use of any received token with the same
       Request-Tag would be acceptable, but providing the one used in the last
@@ -949,8 +951,8 @@ missing-block-number = uint
 
         <t>Following the failure to transmit a packet due to packet loss after
         MAX_TRANSMIT_SPAN time (Section 4.8.2 of <xref
-        target="RFC7252"></xref>), whether there should be any further
-        requests for missing data is implementation specific. </t>
+        target="RFC7252"></xref>), it is implementation specific as to whether
+        there should be any further requests for missing data.</t>
       </section>
 
       <section anchor="cc-non" title="Non-confirmable (NON)">
