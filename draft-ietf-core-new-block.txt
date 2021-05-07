@@ -245,7 +245,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    peer.  Recovery of missing blocks is faster in that multiple missing
    blocks can be requested in a single CoAP message.  Even if there is
    asymmetrical packet loss, a body can still be sent and received by
-   the peer whether the body comprises of a single or multiple payloads,
+   the peer whether the body comprises a single or multiple payloads,
    assuming no recovery is required.
 
    A CoAP endpoint can acknowledge all or a subset of the blocks.
@@ -767,13 +767,13 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    NUM is zero:  This is a request for the entire body.
 
    'NUM modulo MAX_PAYLOADS' is zero, while NUM is not zero:  This is
-      used to confirm that the current MAX_PAYLOADS_SET (the latest one
-      having block number NUM-1) has been successfully received and
-      that, upon receipt of this request, the server can continue to
-      send the next MAX_PAYLOADS_SET (the first one having block number
-      NUM).  This is the 'Continue' Q-Block-2 and conceptually has the
-      same usage (i.e., continue sending the next set of data) as the
-      use of 2.31 (Continue) for Q-Block1.
+      used to confirm that the current MAX_PAYLOADS_SET (the latest
+      block having block number NUM-1) has been successfully received
+      and that, upon receipt of this request, the server can continue to
+      send the next MAX_PAYLOADS_SET (the first block having block
+      number NUM).  This is the 'Continue' Q-Block-2 and conceptually
+      has the same usage (i.e., continue sending the next set of data)
+      as the use of 2.31 (Continue) for Q-Block1.
 
    Any other value of NUM:  This is a request for that block and for all
       of the remaining blocks in the current MAX_PAYLOADS_SET.
@@ -1183,15 +1183,15 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    potential congestion issues.
 
    If the CoAP peer reports that at least one payload has not arrived
-   for each body for at least a 24 hour period and it is known that
+   for each body for at least a 24-hour period and it is known that
    there are no other network issues over that period (e.g., DDoS
    attacks), then the value of MAX_PAYLOADS can be reduced by 1 at a
    time (to a minimum of 1) and the situation re-evaluated for another
-   24 hour period until there is no report of missing payloads under
+   24-hour period until there is no report of missing payloads under
    normal operating conditions.  Following a period of 24 hours where no
    packet recovery was required, the value of MAX_PAYLOADS can be
    increased by 1 (but without exceeding the default value) for a
-   further 24 hour evaluation.  The newly derived value for MAX_PAYLOADS
+   further 24-hour evaluation.  The newly derived value for MAX_PAYLOADS
    should be used for both ends of this particular CoAP peer link.  Note
    that the CoAP peer will not know about the MAX_PAYLOADS change until
    it is reconfigured.  As a consequence of the two peers having
