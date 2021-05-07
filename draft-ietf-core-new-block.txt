@@ -5,7 +5,7 @@
 CoRE Working Group                                          M. Boucadair
 Internet-Draft                                                    Orange
 Intended status: Standards Track                              J. Shallow
-Expires: November 7, 2021                                    May 6, 2021
+Expires: November 8, 2021                                    May 7, 2021
 
 
 Constrained Application Protocol (CoAP) Block-Wise Transfer Options for
@@ -40,7 +40,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 7, 2021.
+   This Internet-Draft will expire on November 8, 2021.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Boucadair & Shallow     Expires November 7, 2021                [Page 1]
+Boucadair & Shallow     Expires November 8, 2021                [Page 1]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -69,33 +69,33 @@ Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
    2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   3.  Alternative CoAP Block-Wise Transfer Options  . . . . . . . .   4
+   3.  Alternative CoAP Block-Wise Transfer Options  . . . . . . . .   5
      3.1.  CoAP Response Code (4.08) Usage . . . . . . . . . . . . .   6
-     3.2.  Applicability Scope . . . . . . . . . . . . . . . . . . .   6
+     3.2.  Applicability Scope . . . . . . . . . . . . . . . . . . .   7
    4.  The Q-Block1 and Q-Block2 Options . . . . . . . . . . . . . .   7
      4.1.  Properties of Q-Block1 and Q-Block2 Options . . . . . . .   7
      4.2.  Structure of Q-Block1 and Q-Block2 Options  . . . . . . .  10
      4.3.  Using the Q-Block1 Option . . . . . . . . . . . . . . . .  10
      4.4.  Using the Q-Block2 Option . . . . . . . . . . . . . . . .  14
      4.5.  Using Observe Option  . . . . . . . . . . . . . . . . . .  16
-     4.6.  Using Size1 and Size2 Options . . . . . . . . . . . . . .  16
+     4.6.  Using Size1 and Size2 Options . . . . . . . . . . . . . .  17
      4.7.  Using Q-Block1 and Q-Block2 Options Together  . . . . . .  17
      4.8.  Using Q-Block2 Option With Multicast  . . . . . . . . . .  17
    5.  The Use of 4.08 (Request Entity Incomplete) Response Code . .  17
-   6.  The Use of Tokens . . . . . . . . . . . . . . . . . . . . . .  18
+   6.  The Use of Tokens . . . . . . . . . . . . . . . . . . . . . .  19
    7.  Congestion Control for Unreliable Transports  . . . . . . . .  19
      7.1.  Confirmable (CON) . . . . . . . . . . . . . . . . . . . .  19
-     7.2.  Non-confirmable (NON) . . . . . . . . . . . . . . . . . .  19
+     7.2.  Non-confirmable (NON) . . . . . . . . . . . . . . . . . .  20
    8.  Caching Considerations  . . . . . . . . . . . . . . . . . . .  23
-   9.  HTTP-Mapping Considerations . . . . . . . . . . . . . . . . .  24
+   9.  HTTP-Mapping Considerations . . . . . . . . . . . . . . . . .  25
    10. Examples with Non-confirmable Messages  . . . . . . . . . . .  25
      10.1.  Q-Block1 Option  . . . . . . . . . . . . . . . . . . . .  25
        10.1.1.  A Simple Example . . . . . . . . . . . . . . . . . .  25
        10.1.2.  Handling MAX_PAYLOADS Limits . . . . . . . . . . . .  26
        10.1.3.  Handling MAX_PAYLOADS with Recovery  . . . . . . . .  26
-       10.1.4.  Handling Recovery with Failure . . . . . . . . . . .  27
+       10.1.4.  Handling Recovery with Failure . . . . . . . . . . .  28
      10.2.  Q-Block2 Option  . . . . . . . . . . . . . . . . . . . .  28
-       10.2.1.  A Simple Example . . . . . . . . . . . . . . . . . .  28
+       10.2.1.  A Simple Example . . . . . . . . . . . . . . . . . .  29
        10.2.2.  Handling MAX_PAYLOADS Limits . . . . . . . . . . . .  29
        10.2.3.  Handling MAX_PAYLOADS with Recovery  . . . . . . . .  30
        10.2.4.  Handling Recovery using M-bit Set  . . . . . . . . .  31
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Boucadair & Shallow     Expires November 7, 2021                [Page 2]
+Boucadair & Shallow     Expires November 8, 2021                [Page 2]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -133,11 +133,19 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    The Constrained Application Protocol (CoAP) [RFC7252], although
    inspired by HTTP, was designed to use UDP instead of TCP.  The
    message layer of CoAP over UDP includes support for reliable
-   delivery, simple congestion control, and flow control.  [RFC7959]
-   introduced the CoAP Block1 and Block2 Options to handle data records
-   that cannot fit in a single IP packet, so as to not rely on IP
-   fragmentation, and was further updated by [RFC8323] for use over TCP,
-   TLS, and WebSockets.
+   delivery, simple congestion control, and flow control.  CoAP supports
+   two message types (Section 1.2 of [RFC7252]): Confirmable (CON) and
+   Non-confirmable (NON) messages.  Unlike NON messages, every CON
+   message will elect an acknowledgement or a reset.
+
+   The CoAP specification recommends that a CoAP message should fit
+   within a single IP packet (i.e., avoid IP fragmentation).  To handle
+   data records that cannot fit in a single IP packet, [RFC7959]
+   introduced the concept of block-wise transfer and the companion CoAP
+   Block1 and Block2 Options.  However, this concept is designed to work
+   exclusively with Confirmable messages (Section 1 of [RFC7959]).  Note
+   that the block-wise transfer was further updated by [RFC8323] for use
+   over TCP, TLS, and WebSockets.
 
    The CoAP Block1 and Block2 Options work well in environments where
    there are no or minimal packet losses.  These options operate
@@ -154,21 +162,30 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    to a Distributed Denial of Service (DDoS) attack and there is a need
    for DDoS mitigation agents relying upon CoAP to communicate with each
    other (e.g., [RFC8782][I-D.ietf-dots-telemetry]).  As a reminder,
-   [RFC7959] recommends the use of Confirmable (CON) responses to handle
-   potential packet loss.  However, such a recommendation does not work
-   with a flooded pipe DDoS situation (e.g., [RFC8782]).
-
-   This document introduces the CoAP Q-Block1 and Q-Block2 Options which
-   allow block-wise transfer to work with series of Non-confirmable
-   (NON) messages, instead of lock-stepping using CON messages
-   (Section 3).
 
 
 
-Boucadair & Shallow     Expires November 7, 2021                [Page 3]
+Boucadair & Shallow     Expires November 8, 2021                [Page 3]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
+
+   [RFC7959] recommends the use of CON responses to handle potential
+   packet loss.  However, such a recommendation does not work with a
+   flooded pipe DDoS situation (e.g., [RFC8782]).
+
+   This document introduces the CoAP Q-Block1 and Q-Block2 Options which
+   allow block-wise transfer to work with series of Non-confirmable
+   messages, instead of lock-stepping using Confirmable messages
+   (Section 3).  In other words, this document provides a missing piece
+   of [RFC7959], namely the support of block-wise transfer using Non-
+   confirmable where an entire body of data can be transmitted without
+   the requirement for an acknowledgement (but recovery is available
+   should it be needed).
+
+   Similar to [RFC7959], this specification does not remove any of the
+   constraints posed by the base CoAP specification [RFC7252] it is
+   strictly layered on top of.
 
 2.  Terminology
 
@@ -202,6 +219,13 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    MAX_PAYLOADS is the maximum number of payloads that can be
    transmitted at any one time.
 
+
+
+Boucadair & Shallow     Expires November 8, 2021                [Page 4]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
 3.  Alternative CoAP Block-Wise Transfer Options
 
    This document introduces the CoAP Q-Block1 and Q-Block2 Options.
@@ -216,15 +240,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    asymmetrical packet loss, a body can still be sent and received by
    the peer whether the body comprises of a single or multiple payloads,
    assuming no recovery is required.
-
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021                [Page 4]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
    A CoAP endpoint can acknowledge all or a subset of the blocks.
    Concretely, the receiving CoAP endpoint either informs the CoAP
@@ -260,6 +275,13 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    o  They support sending an entire body using NON messages without
       requiring an intermediate response from the peer.
 
+
+
+Boucadair & Shallow     Expires November 8, 2021                [Page 5]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    There are the following disadvantages over using CoAP Block1 and
    Block2 Options:
 
@@ -274,13 +296,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
       congestion control and incurs a requirement to re-tune other
       parameters (Section 4.7 of [RFC7252]).  Such tuning is out of
       scope of this document.
-
-
-
-Boucadair & Shallow     Expires November 7, 2021                [Page 5]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
    o  Mixing of NON and CON during requests/responses using Q-Block is
       not supported.
@@ -316,6 +331,13 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    reporting on payloads using the Q-Block1 Option that are not received
    by the server.
 
+
+
+Boucadair & Shallow     Expires November 8, 2021                [Page 6]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    See Section 5 for more details.
 
 3.2.  Applicability Scope
@@ -330,14 +352,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    (DOTS) that cannot use CON responses to handle potential packet loss
    and that support application-specific mechanisms to assess whether
    the remote peer is not overloaded and thus is able to process the
-
-
-
-Boucadair & Shallow     Expires November 7, 2021                [Page 6]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
-
    messages sent by a CoAP endpoint (e.g., DOTS heartbeats in
    Section 4.7 of [RFC8782]).
 
@@ -372,6 +386,14 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    indicate the properties Critical, UnSafe, NoCacheKey, and Repeatable
    defined in Section 5.4 of [RFC7252].  Only Critical and UnSafe
    columns are marked for the Q-Block1 Option.  Critical, UnSafe, and
+
+
+
+Boucadair & Shallow     Expires November 8, 2021                [Page 7]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    Repeatable columns are marked for the Q-Block2 Option.  As these
    options are UnSafe, NoCacheKey has no meaning and so is marked with a
    dash.
@@ -384,15 +406,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    +--------+---+---+---+---+--------------+--------+--------+---------+
 
          Table 1: CoAP Q-Block1 and Q-Block2 Option Properties
-
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021                [Page 7]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
    The Q-Block1 and Q-Block2 Options can be present in both the request
    and response messages.  The Q-Block1 Option pertains to the request
@@ -428,6 +441,15 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    send back a message body that is too large to fit into a single IP
    packet [RFC7959].
 
+
+
+
+
+Boucadair & Shallow     Expires November 8, 2021                [Page 8]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    How a client decides whether it needs to include a Q-Block1 or
    Q-Block2 Option can be driven by a local configuration parameter,
    triggered by an application (DOTS, for example), etc.  Such
@@ -442,14 +464,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    critical options depends on the message type.  A Confirmable message
    with an unrecognized critical option is rejected with a 4.02 (Bad
    Option) response (Section 5.4.1 of [RFC7252]).  A Non-confirmable
-
-
-
-Boucadair & Shallow     Expires November 7, 2021                [Page 8]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
-
    message with an unrecognized critical option is either rejected with
    a Reset message or just silently ignored (Sections 5.4.1 and 4.3 of
    [RFC7252]).  To reliably get a rejection message, it is therefore
@@ -479,6 +493,19 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    and labels message bodies in case of hop-by-hop fragmentation of
    requests.
 
+
+
+
+
+
+
+
+
+Boucadair & Shallow     Expires November 8, 2021                [Page 9]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
                        +--------+-----------------+---+---+
                        | Number | Name            | E | U |
                        +========+=================+===+===+
@@ -494,17 +521,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    MUST be rejected with 4.02 (Bad Option).  Q-Block and Block Options
    can be mixed across Inner and Outer options as these are handled
    independently of each other.
-
-
-
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021                [Page 9]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
 4.2.  Structure of Q-Block1 and Q-Block2 Options
 
@@ -538,6 +554,14 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    ensure that it is unique for every different body of transmitted
    data.
 
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 10]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
       Implementation Note: It is suggested that the client treats the
       Request-Tag as an unsigned integer of 8 bytes in length.  An
       implementation may want to consider limiting this to 4 bytes to
@@ -554,14 +578,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    Non-confirmable transmission, no response is required until either
    the successful receipt of the body by the server or a timer expires
    with some of the payloads having not yet arrived.  In the latter
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 10]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
-
    case, a "retransmit missing payloads" response is needed.  For
    reliable transports (e.g., [RFC8323]), a response is not required
    until successful receipt of the body by the server.
@@ -594,6 +610,14 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
       and that the resource was deleted when using POST (Section 5.8.2
       [RFC7252]).  The token to use MUST be one of the tokens that were
       received in a request for this block-wise exchange.  However, it
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 11]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
       is desirable to provide the one used in the last received request.
       The client should then release all of the tokens used for this
       body.
@@ -608,15 +632,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
       tokens used for this body.
 
    2.05 (Content)
-
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 11]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
       This Response Code indicates successful receipt of the entire
       FETCH request body (Section 2 of [RFC8132]) and that the
@@ -651,6 +666,14 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
       This Response Code SHOULD NOT be generated for CON.
 
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 12]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    4.00 (Bad Request)
 
       This Response Code MUST be returned if the request does not
@@ -664,15 +687,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
       reset message must be sent in case of Non-confirmable request.
 
    4.08 (Request Entity Incomplete)
-
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 12]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
       As a reminder, this Response Code returned without Content-Type
       "application/missing-blocks+cbor-seq" (Section 12.3) is handled as
@@ -708,6 +722,14 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
       to send back all the response options as appropriate.  In this
       case, the Size1 Option is not included in the response.
 
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 13]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    Further considerations related to the transmission timings of 4.08
    (Request Entity Incomplete) and 2.31 (Continue) Response Codes are
    discussed in Section 7.2.
@@ -721,15 +743,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    absent any local policy, the client MUST "forget" all tracked tokens
    associated with the body's Request-Tag so that a reset message is
    generated for the invalid token in the 4.08 (Request Entity
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 13]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
-
    Incomplete) response.  The server on receipt of the reset message
    SHOULD delete the partial body.
 
@@ -764,6 +777,15 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    overlap (e.g., combination of M being set (this and later blocks) and
    being unset (this individual block)) resulting in an individual block
    being requested multiple times, the server MUST only send back one
+
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 14]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    instance of that block.  This behavior is meant to prevent
    amplification attacks.
 
@@ -778,14 +800,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
       Implementation Note: It is suggested that the server treats the
       ETag as an unsigned integer of 8 bytes in length.  An
       implementation may want to consider limiting this to 4 bytes to
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 14]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
-
       reduce packet overhead size.  The initial ETag value should be
       randomly generated and then subsequently incremented by the server
       whenever a new body of data is being transmitted between peers.
@@ -821,6 +835,13 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    GET, POST, PUT, FETCH, PATCH, or iPATCH for any missing blocks as
    needed.
 
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 15]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    If the client receives a duplicate block with the same ETag, it MUST
    silently ignore the payload.
 
@@ -833,15 +854,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
    The ETag Option should not be used in the request for missing blocks
    as the server could respond with a 2.03 (Valid) response with no
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 15]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
-
    payload.  It can be used in the request if the client wants to check
    the freshness of the locally cached body response.
 
@@ -878,6 +890,14 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
    For a response that uses Q-Block2, the Observe value MUST be the same
    for all the payloads of the same body.  This is different from Block2
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 16]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    usage where the Observe value is only present in the first block
    (Section 3.4 of [RFC7959]).  This includes payloads transmitted
    following receipt of the 'Continue' Q-Block2 Option (Section 4.4) by
@@ -889,14 +909,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    Section 4 of [RFC7959] defines two CoAP options: Size1 for indicating
    the size of the representation transferred in requests and Size2 for
    indicating the size of the representation transferred in responses.
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 16]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
    The Size1 or Size2 option values MUST exactly represent the size of
    the data on the body so that any missing data can easily be
@@ -934,6 +946,14 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
    The data payload of the 4.08 (Request Entity Incomplete) response is
    encoded as a CBOR Sequence [RFC8742].  It comprises one or more
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 17]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    missing block numbers encoded as CBOR unsigned integers [RFC8949].
    The missing block numbers MUST be unique in each 4.08 (Request Entity
    Incomplete) response when created by the server; the client MUST
@@ -943,16 +963,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    The Content-Format Option (Section 5.10.3 of [RFC7252]) MUST be used
    in the 4.08 (Request Entity Incomplete) response.  It MUST be set to
    "application/missing-blocks+cbor-seq" (Section 12.3).
-
-
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 17]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
    The Concise Data Definition Language [RFC8610] (and see Section 4.1
    [RFC8742]) for the data describing these missing blocks is as
@@ -992,6 +1002,14 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
    The 4.08 (Request Entity Incomplete) with Content-Type "application/
    missing-blocks+cbor-seq" SHOULD NOT be used when using Confirmable
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 18]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    requests or a reliable connection [RFC8323] as the client will be
    able to determine that there is a transmission failure of a
    particular payload and hence that the server is missing that payload.
@@ -1001,14 +1019,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    Each new request generally uses a new Token (and sometimes must, see
    Section 4 of [I-D.ietf-core-echo-request-tag]).  Additional responses
    to a request all use the token of the request they respond to.
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 18]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
    Implementation Note:  By using 8-byte tokens, it is possible to
       easily minimize the number of tokens that have to be tracked by
@@ -1045,6 +1055,17 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    should be any further requests for missing data is implementation
    specific.
 
+
+
+
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 19]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
 7.2.  Non-confirmable (NON)
 
    This document introduces new parameters MAX_PAYLOADS, NON_TIMEOUT,
@@ -1057,14 +1078,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    between the endpoints to a common value by using a higher level
    protocol (out of scope of this document).  This is the maximum number
    of payloads that can be transmitted at any one time.
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 19]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
       Note: The default value of 10 is chosen for reasons similar to
       those discussed in Section 5 of [RFC6928], especially given the
@@ -1099,28 +1112,19 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    using PROBING_RATE.  By default, NON_PROBING_WAIT has the same value
    as EXCHANGE_LIFETIME (Section 4.8.2 of [RFC7252]).
 
-   NON_PARTIAL_TIMEOUT is used for expiring partially received bodies.
-   By default, NON_PARTIAL_TIMEOUT has the same value as
-   EXCHANGE_LIFETIME (Section 4.8.2 of [RFC7252]).
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 20]
+Boucadair & Shallow     Expires November 8, 2021               [Page 20]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
+
+   NON_PARTIAL_TIMEOUT is used for expiring partially received bodies.
+   By default, NON_PARTIAL_TIMEOUT has the same value as
+   EXCHANGE_LIFETIME (Section 4.8.2 of [RFC7252]).
 
                   +---------------------+---------------+
                   | Parameter Name      | Default Value |
@@ -1166,18 +1170,18 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    If the CoAP peer reports that at least one payload has not arrived
    for each body for at least a 24 hour period and it is known that
    there are no other network issues over that period (e.g., DDoS
-   attacks), then the value of MAX_PAYLOADS can be reduced by 1 at a
-   time (to a minimum of 1) and the situation re-evaluated for another
-   24 hour period until there is no report of missing payloads under
-   normal operating conditions.  Following a period of 24 hours where no
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 21]
+Boucadair & Shallow     Expires November 8, 2021               [Page 21]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
+   attacks), then the value of MAX_PAYLOADS can be reduced by 1 at a
+   time (to a minimum of 1) and the situation re-evaluated for another
+   24 hour period until there is no report of missing payloads under
+   normal operating conditions.  Following a period of 24 hours where no
    packet recovery was required, the value of MAX_PAYLOADS can be
    increased by 1 (but without exceeding the default value) for a
    further 24 hour evaluation.  The newly derived value for MAX_PAYLOADS
@@ -1222,17 +1226,18 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    from the new set of MAX_PAYLOADS payloads, the server SHOULD send a
    4.08 (Request Entity Incomplete) Response Code indicating any missing
    payloads from any previous MAX_PAYLOADS payloads.  Upon receipt of
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 22]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
    the 4.08 (Request Entity Incomplete) Response Code, the client SHOULD
    send the missing payloads before continuing to send the remainder of
    the MAX_PAYLOADS payloads and then go into another NON_TIMEOUT delay
    prior to sending the next set of payloads.
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 22]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
    For the client receiving NON Q-Block2 responses, it SHOULD send a
    'Continue' Q-Block2 request (Section 4.4) for the next set of
@@ -1277,18 +1282,17 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    appropriate CoAP endpoint.  This does not preclude an implementation
    doing a more complex per payload caching, but how to do this is out
    of the scope of this document.  The onward transmission of the body
-   does not require the use of the Q-Block1 or Q-Block2 Options as these
-   options may not be supported in that link.  This means that the proxy
-   must fully support the Q-Block1 and Q-Block2 Options.
 
 
 
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 23]
+Boucadair & Shallow     Expires November 8, 2021               [Page 23]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
+
+   does not require the use of the Q-Block1 or Q-Block2 Options as these
+   options may not be supported in that link.  This means that the proxy
+   must fully support the Q-Block1 and Q-Block2 Options.
 
    How the body is cached in the CoAP client (for Q-Block1
    transmissions) or the CoAP server (for Q-Block2 transmissions) is
@@ -1331,6 +1335,17 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    How long a CoAP endpoint (or proxy) keeps the body in its cache is
    implementation specific (e.g., it may be based on Max-Age).
 
+
+
+
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 24]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
 9.  HTTP-Mapping Considerations
 
    As a reminder, the basic normative requirements on HTTP/CoAP mappings
@@ -1338,13 +1353,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    guidelines for HTTP/CoAP mappings are elaborated in [RFC8075].
 
    The rules defined in Section 5 of [RFC7959] are to be followed.
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 24]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
 10.  Examples with Non-confirmable Messages
 
@@ -1383,6 +1391,17 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    Figure 3 depicts an example of a NON PUT request conveying Q-Block1
    Option.  All the blocks are received by the server.
 
+
+
+
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 25]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
            CoAP        CoAP
           Client      Server
             |          |
@@ -1394,13 +1413,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
             |   ...    |
 
    Figure 3: Example of NON Request with Q-Block1 Option (Without Loss)
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 25]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
 10.1.2.  Handling MAX_PAYLOADS Limits
 
@@ -1431,6 +1443,21 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    client, but some blocks are dropped in transmission as illustrated in
    Figure 5.
 
+
+
+
+
+
+
+
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 26]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
            CoAP        CoAP
           Client      Server
             |          |
@@ -1449,14 +1476,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
     Figure 5: Example of MAX_PAYLOADS NON Request with Q-Block1 Option
                                 (With Loss)
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 26]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
    On seeing a payload from the next set of payloads, the server
    realizes that some blocks are missing from the previous MAX_PAYLOADS
@@ -1488,31 +1507,17 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
        Figure 6: Example of NON Request with Q-Block1 Option (Blocks
                                  Recovery)
 
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 27]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
 10.1.4.  Handling Recovery with Failure
 
    Figure 7 depicts an example of a NON PUT request conveying Q-Block1
    Option where recovery takes place, but eventually fails.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 27]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
 
           CoAP        CoAP
          Client      Server
@@ -1555,6 +1560,16 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    option is used.  Note that the Observe Option is not required for
    Q-Block2; the observe detail can thus be ignored.
 
+
+
+
+
+
+Boucadair & Shallow     Expires November 8, 2021               [Page 28]
+
+Internet-Draft      Quick Block-Wise Transfer Options           May 2021
+
+
 10.2.1.  A Simple Example
 
    Figure 8 illustrates the example of Q-Block2 Option.  The client
@@ -1562,14 +1577,6 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    Option indicates a block size hint (1024 bytes).  This request is
    replied to by the server using four (4) blocks that are transmitted
    to the client without any loss.  Each of these blocks carries a
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 28]
-
-Internet-Draft      Quick Block-Wise Transfer Options           May 2021
-
-
    Q-Block2 Option.  The same process is repeated when an Observe is
    triggered, but no loss is experienced by any of the notification
    blocks.
@@ -1614,14 +1621,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-
-
-
-
-
-
-
-Boucadair & Shallow     Expires November 7, 2021               [Page 29]
+Boucadair & Shallow     Expires November 8, 2021               [Page 29]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -1677,7 +1677,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 30]
+Boucadair & Shallow     Expires November 8, 2021               [Page 30]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -1733,7 +1733,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 31]
+Boucadair & Shallow     Expires November 8, 2021               [Page 31]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -1789,7 +1789,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 32]
+Boucadair & Shallow     Expires November 8, 2021               [Page 32]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -1845,7 +1845,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 33]
+Boucadair & Shallow     Expires November 8, 2021               [Page 33]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -1901,7 +1901,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 34]
+Boucadair & Shallow     Expires November 8, 2021               [Page 34]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -1957,7 +1957,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 35]
+Boucadair & Shallow     Expires November 8, 2021               [Page 35]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2013,7 +2013,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 36]
+Boucadair & Shallow     Expires November 8, 2021               [Page 36]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2069,7 +2069,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 37]
+Boucadair & Shallow     Expires November 8, 2021               [Page 37]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2125,7 +2125,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 38]
+Boucadair & Shallow     Expires November 8, 2021               [Page 38]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2181,7 +2181,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 39]
+Boucadair & Shallow     Expires November 8, 2021               [Page 39]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2237,7 +2237,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 40]
+Boucadair & Shallow     Expires November 8, 2021               [Page 40]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2293,7 +2293,7 @@ A.1.  Q-Block1 Option
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 41]
+Boucadair & Shallow     Expires November 8, 2021               [Page 41]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2349,7 +2349,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 42]
+Boucadair & Shallow     Expires November 8, 2021               [Page 42]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2405,7 +2405,7 @@ A.2.  Q-Block2 Option
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 43]
+Boucadair & Shallow     Expires November 8, 2021               [Page 43]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2461,7 +2461,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 44]
+Boucadair & Shallow     Expires November 8, 2021               [Page 44]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2517,7 +2517,7 @@ B.2.  Q-Block2 Option
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 45]
+Boucadair & Shallow     Expires November 8, 2021               [Page 45]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2573,7 +2573,7 @@ Authors' Addresses
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 46]
+Boucadair & Shallow     Expires November 8, 2021               [Page 46]
 
 Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
@@ -2629,4 +2629,4 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
 
 
 
-Boucadair & Shallow     Expires November 7, 2021               [Page 47]
+Boucadair & Shallow     Expires November 8, 2021               [Page 47]

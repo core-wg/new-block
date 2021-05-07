@@ -106,11 +106,21 @@
       <t>The Constrained Application Protocol (CoAP) <xref
       target="RFC7252"></xref>, although inspired by HTTP, was designed to use
       UDP instead of TCP. The message layer of CoAP over UDP includes support
-      for reliable delivery, simple congestion control, and flow control.
-      <xref target="RFC7959"></xref> introduced the CoAP Block1 and Block2
-      Options to handle data records that cannot fit in a single IP packet, so
-      as to not rely on IP fragmentation, and was further updated by <xref
-      target="RFC8323"></xref> for use over TCP, TLS, and WebSockets.</t>
+      for reliable delivery, simple congestion control, and flow control. CoAP
+      supports two message types (Section 1.2 of <xref
+      target="RFC7252"></xref>): Confirmable (CON) and Non-confirmable (NON)
+      messages. Unlike NON messages, every CON message will elect an
+      acknowledgement or a reset.</t>
+
+      <t>The CoAP specification recommends that a CoAP message should fit
+      within a single IP packet (i.e., avoid IP fragmentation). To handle data
+      records that cannot fit in a single IP packet, <xref
+      target="RFC7959"></xref> introduced the concept of block-wise transfer
+      and the companion CoAP Block1 and Block2 Options. However, this concept
+      is designed to work exclusively with Confirmable messages (Section 1 of
+      <xref target="RFC7959"></xref>). Note that the block-wise transfer was
+      further updated by <xref target="RFC8323"></xref> for use over TCP, TLS,
+      and WebSockets. </t>
 
       <t>The CoAP Block1 and Block2 Options work well in environments where
       there are no or minimal packet losses. These options operate
@@ -127,15 +137,23 @@
       mitigation agents relying upon CoAP to communicate with each other
       (e.g., <xref target="RFC8782"></xref><xref
       target="I-D.ietf-dots-telemetry"></xref>). As a reminder, <xref
-      target="RFC7959"></xref> recommends the use of Confirmable (CON)
-      responses to handle potential packet loss. However, such a
-      recommendation does not work with a flooded pipe DDoS situation (e.g.,
-      <xref target="RFC8782"></xref>).</t>
+      target="RFC7959"></xref> recommends the use of CON responses to handle
+      potential packet loss. However, such a recommendation does not work with
+      a flooded pipe DDoS situation (e.g., <xref
+      target="RFC8782"></xref>).</t>
 
       <t>This document introduces the CoAP Q-Block1 and Q-Block2 Options which
-      allow block-wise transfer to work with series of Non-confirmable (NON)
-      messages, instead of lock-stepping using CON messages (<xref
-      target="alt"></xref>).</t>
+      allow block-wise transfer to work with series of Non-confirmable
+      messages, instead of lock-stepping using Confirmable messages (<xref
+      target="alt"></xref>). In other words, this document provides a missing
+      piece of <xref target="RFC7959"></xref>, namely the support of
+      block-wise transfer using Non-confirmable where an entire body of data
+      can be transmitted without the requirement for an acknowledgement (but
+      recovery is available should it be needed).</t>
+
+      <t>Similar to <xref target="RFC7959"></xref>, this specification does
+      not remove any of the constraints posed by the base CoAP specification
+      <xref target="RFC7252"></xref> it is strictly layered on top of. </t>
     </section>
 
     <section anchor="notation" title="Terminology">
