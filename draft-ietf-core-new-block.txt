@@ -701,7 +701,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
       This Response Code returned with Content-Type "application/
       missing-blocks+cbor-seq" indicates that some of the payloads are
       missing and need to be resent.  The client then retransmits the
-      individual missing payloads using the same Request-Tag, Size1 and
+      individual missing payloads using the same Request-Tag, Size1, and
       Q-Block1 Option to specify the same NUM, SZX, and M bit as sent
       initially in the original, but not received, packet.
 
