@@ -1631,7 +1631,7 @@ Payload N: Corresponds to the CoAP message that conveys
 
         <t>Note that as 'Continue' was used, the server continues to use the
         same token T:0xaa as the 'Continue' is not being used as a request for
-        new set of packets, but rather is being used to instruct the server
+        a new set of packets, but rather is being used to instruct the server
         to continue its transmission (<xref target="cc-non"></xref>).</t>
         </section>
 
