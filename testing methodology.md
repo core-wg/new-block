@@ -35,7 +35,7 @@ During these core WG meetings, potential design challenges ware raised and mutua
 
 Interoperability testing was key for checking out DOTS implementations and throwing up any potential misunderstanding of the drafts issues. The primary interoperability testing was done between a proprietary DOTS solution (NCC) and an open source implementation [go-dots](https://github.com/nttdots/go-dots).
 
-The later interoperability tests covered DOTS telemetry (draft-ietf-dots-telemetry). Initially this was done with both ends using RFC7959 (requests were Non-Confirmable which RFC7959 cautions about using) and highlighted some implementation issues of draft-ietf-dots-telemetry as well as the RFC7959 implementation, all of which were fixed and draft-ietf-dots-telemetry text tightened.  Use of RFC7959 was stable apart from handling packet loss.
+The later interoperability tests covered DOTS telemetry (draft-ietf-dots-telemetry). Initially this was done with both ends using RFC7959 (<em>requests were Non-Confirmable which RFC7959 cautions about using</em>) and highlighted some implementation issues of draft-ietf-dots-telemetry as well as the RFC7959 implementation, all of which were fixed and the corresponding text in draft-ietf-dots-telemetry tightened. The use of RFC7959 was stable apart from handling packet loss.
 
 draft-ietf-core-quick-block was added to the proprietary DOTS solution, but has not yet been added to go-dots. Interoperability tests continued, requests for Q-Block support were rebuffed and both sides continued using RFC7959 (with Non-confirmable). As there were no packet losses, all behaved as expected.
 
