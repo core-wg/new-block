@@ -62,7 +62,7 @@ It should be noted however that this regression test suite initially highlighted
 
 Libcoap provides the testing capability of one or more specific packets dropped or a packet randomly dropped. Testing was done with one or more packets missing from the start, around the MAX_PAYLOADS pause point, at the end of the body as well as in the middle of a MAX_PAYLOADS sequence for both CON and NON.  Lessons learnt about, e.g., the recoveries triggered updates to the draft. <strong>Recovery for any packet loss combination was fully tested out with no instability detected.</strong>
 
-Libcoap was tested with complete packet loss in one direction (for NON, <strong>CON fails here</strong>) confirming data still gets through, albeit more slowly with the NON_TIMEOUT timeout for every MAX_PAYLOADS packets adding to the overall transmission time.
+Libcoap was tested with complete packet loss in one direction (for NON) confirming data still gets through, albeit more slowly with the NON_TIMEOUT timeout for every MAX_PAYLOADS packets adding to the overall transmission time. <strong>Note that CON fails under these conditions, and as such RFC7959 fails to retrieve the body.</strong>
 
 Multiple concurrent clients were run in parallel - including with enforced packet loss to verify correct ‘session’ separation in the server.
 
