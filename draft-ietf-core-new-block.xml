@@ -463,7 +463,7 @@
         MUST be rejected with 4.02 (Bad Option). Q-Block and Block Options can
         be mixed across Inner and Outer options as these are handled
         independently of each other.  For clarity, if OSCORE is not being used,
-        there MUST NOT be a mix of Q-Block and Block options in the same
+        there MUST NOT be a mix of Q-Block and Block Options in the same
         packet.</t>
       </section>
 
