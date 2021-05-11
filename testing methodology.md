@@ -20,22 +20,22 @@ DOTS interoperability tests highlighted that this telemetry information must use
 
 A design goal was to use as much of the existing CoAP RFCs functionality as possible, and any work done would not require the need to update any of the existing CoAP RFCs. <strong>To date there has been no need for any updating of existing CoAP RFCs.</strong>
 
-During these core WG meetings, potential design challenges ware raised and mutually agreed solutions were suggested. Some of these solutions turned out to be unworkable, but triggered other solutions which worked when handling Congestion Control, Recovery, etc. This is captured in the WG minutes and presentations (see next).
+During these core WG meetings, potential design challenges ware raised and mutually agreed solutions were suggested. Some of these solutions turned out to be unworkable, but triggered other solutions which worked when handling Congestion Control, Recovery, etc. This is captured in the WG presentations and minutes (see next).
 
-## Core Meetings Presentations (Minutes may give extra information)
+## Core Meetings Presentations and Minutes
 
-* 2021-03-10 https://datatracker.ietf.org/meeting/110/materials/slides-110-core-sessa-draft-ietf-core-quick-block-01.pdf  
-* 2020-11-17 https://datatracker.ietf.org/meeting/109/materials/slides-109-core-sessa-draft-ietf-core-new-block-01.pdf       
-* 2020-10-22 https://datatracker.ietf.org/meeting/interim-2020-core-11/materials/slides-interim-2020-core-11-sessa-coap-block-wise-transfer-options-for-faster-transmission-draft-ietf-core-new-block-01-00        
-* 2020-07-28 https://datatracker.ietf.org/meeting/108/materials/slides-108-core-sessb-coap-block-wise-transfer-options-for-faster-transmission-00.pdf              
-* 2020-06-10 https://datatracker.ietf.org/meeting/interim-2020-core-06/materials/slides-interim-2020-core-06-sessa-coap-block-wise-transfer-options-for-faster-transmission-01.pdf   
-* 2020-05-13 https://datatracker.ietf.org/meeting/interim-2020-core-04/materials/slides-interim-2020-core-04-sessa-new-coap-block-wise-transfer-options-draft-bosh-core-new-block-01.pdf  
+* 2021-03-10 IETF 110 [Presentation](https://datatracker.ietf.org/meeting/110/materials/slides-110-core-sessa-draft-ietf-core-quick-block-01.pdf) [Minutes]( https://datatracker.ietf.org/meeting/110/materials/minutes-110-core-202103121300-01)
+* 2020-11-17 IETF 109 [Presentation](https://datatracker.ietf.org/meeting/109/materials/slides-109-core-sessa-draft-ietf-core-new-block-01.pdf) [Minutes](https://datatracker.ietf.org/doc/minutes-109-core-202011201600/)
+* 2020-10-22 Interim Core [Presentation](https://datatracker.ietf.org/meeting/interim-2020-core-11/materials/slides-interim-2020-core-11-sessa-coap-block-wise-transfer-options-for-faster-transmission-draft-ietf-core-new-block-01-00) [Minutes](https://datatracker.ietf.org/meeting/interim-2020-core-11/materials/minutes-interim-2020-core-11-202010221600-00)
+* 2020-07-28 IETF 108 [Presentation](https://datatracker.ietf.org/meeting/108/materials/slides-108-core-sessb-coap-block-wise-transfer-options-for-faster-transmission-00.pdf) [Minutes](https://datatracker.ietf.org/doc/minutes-108-core-202007281410/)
+* 2020-06-10 Interim Core [Presentation](https://datatracker.ietf.org/meeting/interim-2020-core-06/materials/slides-interim-2020-core-06-sessa-coap-block-wise-transfer-options-for-faster-transmission-01.pdf) [Minutes](https://www.ietf.org/proceedings/interim-2020-core-06/minutes/minutes-interim-2020-core-06-202006101600-00)
+* 2020-05-13 Interim Core [Presentation](https://datatracker.ietf.org/meeting/interim-2020-core-04/materials/slides-interim-2020-core-04-sessa-new-coap-block-wise-transfer-options-draft-bosh-core-new-block-01.pdf) [Minutes](https://datatracker.ietf.org/doc/minutes-interim-2020-core-04-202005131600/)
 
 # DOTS Interoperability Testing
 
 Interoperability testing was key for checking out DOTS implementations and throwing up any potential misunderstanding of the drafts issues. The primary interoperability testing was done between a proprietary DOTS solution (NCC) and an open source implementation [go-dots](https://github.com/nttdots/go-dots).
 
-The later interoperability tests covered DOTS telemetry (draft-ietf-dots-telemetry). Initially this was done with both ends only supporting RFC7959 (using the not recommended Non-Confirmable) and highlighted some implementation issues of draft-ietf-dots-telemetry as well as the RFC7959 implementation, all of which were fixed and draft-ietf-dots-telemetry text tightened.  Use of RFC7959 was stable apart from handling packet loss.
+The later interoperability tests covered DOTS telemetry (draft-ietf-dots-telemetry). Initially this was done with both ends using RFC7959 (requests were Non-Confirmable which RFC7959 cautions about using) and highlighted some implementation issues of draft-ietf-dots-telemetry as well as the RFC7959 implementation, all of which were fixed and draft-ietf-dots-telemetry text tightened.  Use of RFC7959 was stable apart from handling packet loss.
 
 draft-ietf-core-quick-block was added to the proprietary DOTS solution, but has not yet been added to go-dots. Interoperability tests continued, requests for Q-Block support were rebuffed and both sides continued using RFC7959 (with Non-confirmable). As there were no packet losses, all behaved as expected.
 
@@ -49,10 +49,22 @@ The propriety DOTS implementation has a lot of regression tests which include te
 
 ## Implementation Testing using Libcoap
 
-Libcoap is used for the CoAP implementation for the proprietary DOTS implementation.  RFC7959 is handled within the libcoap layer (depending on the configuration option) and the body of the data is presented to the application layer.
+Libcoap is used for the CoAP implementation for the proprietary DOTS implementation.  RFC7959 is handled within the libcoap layer and the body of the data is presented to the application layer.
 draft-ietf-core-quick-block is also implemented within the libcoap layer (see https://github.com/obgm/libcoap/pull/611) 
 
-There are also a lot of libcoap regression test suites for checking out libcoap. Unfortunately, these are not publically available as they compare output from a good run with the current run to highlight changes/issues but the good run output varies between build environments (different autotool messages, required security by later TLS libraries (e.g., warnings about SHA1), etc.).  Different good run outputs means that if publically available there could be a lot of false positives. These regression tests can take hours – especially if utilities such as valgrind are being used.
+There are a lot of libcoap regression test suites for checking out libcoap.
+These compare output from a known good run with the current run to highlight
+changes/issues. These regression tests can take hours - diagnostic tools such
+as valgrind are being used to check for memory leaks, memory access errors etc.
+
+These are not included in the libcoap distributions as a good run output varies
+between build environments (e.g., different autotool messages, required
+security by later TLS libraries (e.g., warnings about SHA1), etc.).  As
+the known good run outputs are different, a lot of potential false positives are
+created in different build environments.
+
+These regression test do not modify any of the base CoAP parameters (e.g.,
+ACK_TIMEOUT).
 
 There is a specific regression test suite where traffic uses (Q-)Block1 for large requests and (Q-)Block2 for large responses along with Observe large responses.  The block SZX was also made smaller in some cases to stimulate many packets being required for a single body. The tests cover Confirmable, Non-Confirmable, and TCP traffic but do not include any packet loss. The Clients cycle through using BlockX and Q-BlockX (which may fail, reverting back to BlockX) and the servers cycling through only supporting BlockX or supporting both BlockX and Q-BlockX to test out all 4 combinations.
 
