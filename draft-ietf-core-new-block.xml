@@ -462,7 +462,7 @@
         for the Outer options. Messages that do not adhere with this behavior
         MUST be rejected with 4.02 (Bad Option). Q-Block and Block Options can
         be mixed across Inner and Outer options as these are handled
-        independently of each other.  For clarity, if OSCORE is not being used,
+        independently of each other. For clarity, if OSCORE is not being used,
         there MUST NOT be a mix of Q-Block and Block Options in the same
         packet.</t>
       </section>
@@ -619,19 +619,19 @@
             "application/missing-blocks+cbor-seq" indicates that some of the
             payloads are missing and need to be resent. The client then
             retransmits the individual missing payloads using the same
-            Request-Tag, Size1, and, Q-Block1 Option to specify the same NUM, SZX,
-            and M bit as sent initially in the original, but not received,
-            packet.</t>
+            Request-Tag, Size1, and, Q-Block1 Option to specify the same NUM,
+            SZX, and M bit as sent initially in the original, but not
+            received, packet.</t>
 
             <t>The Request-Tag value to use is determined by taking the token
             in the 4.08 (Request Entity Incomplete) response, locating the
             matching client request, and then using its Request-Tag.</t>
 
             <t>The token to use in the 4.08 (Request Entity Incomplete)
-            response MUST be one of the tokens that were received
-            in a request for this block-wise body exchange. However, it is
-            desirable to provide the one used in the last received request.
-            See <xref target="code"></xref> for further information.</t>
+            response MUST be one of the tokens that were received in a request
+            for this block-wise body exchange. However, it is desirable to
+            provide the one used in the last received request. See <xref
+            target="code"></xref> for further information.</t>
 
             <t>If the server has not received all the blocks of a body, but
             one or more NON payloads have been received, it SHOULD wait for
@@ -1040,7 +1040,7 @@ Table 3: Congestion Control Parameters]]></artwork>
         PROBING_RATE (Section 4.7 of <xref target="RFC7252"></xref>), not the
         individual packets. If the wait time between sending bodies that are
         not being responded to based on PROBING_RATE exceeds NON_PROBING_WAIT,
-        then the gap time is limited to NON_PROBING_WAIT.<list style="empty">
+        then the wait time is limited to NON_PROBING_WAIT.<list style="empty">
             <t>Note: For the particular DOTS application, PROBING_RATE and
             other transmission parameters are negotiated between peers. Even
             when not negotiated, the DOTS application uses customized defaults
@@ -1079,16 +1079,17 @@ Table 3: Congestion Control Parameters]]></artwork>
         arrived. How the two peer values for MAX_PAYLOADS are synchronized is
         out of the scope.</t>
 
-        <t>The sending of a set of missing blocks of a body is those in a
-        MAX_PAYLOADS_SET at a time.</t>
+        <t>The sending of a set of missing blocks of a body is restricted to
+        those in a MAX_PAYLOADS_SET at a time. In other words, a NON_TIMEOUT
+        delay is still observed between each MAX_PAYLOAD_SET.</t>
 
         <t>For Q-Block1 Option, if the server responds with a 2.31 (Continue)
         Response Code for the latest payload sent, then the client can
-        continue to send the next MAX_PAYLOADS_SET without any delay. If the
-        server responds with a 4.08 (Request Entity Incomplete) Response Code,
-        then the missing payloads SHOULD be retransmitted before going into
-        another NON_TIMEOUT delay prior to sending the next set of
-        payloads.</t>
+        continue to send the next MAX_PAYLOADS_SET without any further delay.
+        If the server responds with a 4.08 (Request Entity Incomplete)
+        Response Code, then the missing payloads SHOULD be retransmitted
+        before going into another NON_TIMEOUT delay prior to sending the next
+        set of payloads.</t>
 
         <t>For the server receiving NON Q-Block1 requests, it SHOULD send back
         a 2.31 (Continue) Response Code on receipt of all of the
@@ -1097,14 +1098,14 @@ Table 3: Congestion Control Parameters]]></artwork>
         NON_RECEIVE_TIMEOUT (exponentially scaled based on the repeat request
         count for a payload) before sending the 4.08 (Request Entity
         Incomplete) Response Code for the missing payload(s). If all of the
-        MAX_PAYLOADS_SET were received and a 2.31 (continue) had been sent,
+        MAX_PAYLOADS_SET were received and a 2.31 (Continue) had been sent,
         but no more payloads were received for NON_RECEIVE_TIMEOUT
         (exponentially scaled), the server SHOULD send a 4.08 (Request Entity
         Incomplete) response detailing the missing payloads after the block
         number that was indicated in the sent 2.31 (Continue). If the repeat
-        request count for missing payloads exceeds NON_MAX_RETRANSMIT, the
-        server SHOULD discard the partial body and stop requesting the missing
-        payloads.</t>
+        request count for the 4.08 (Request Entity Incomplete) exceeds
+        NON_MAX_RETRANSMIT, the server SHOULD discard the partial body and
+        stop requesting the missing payloads.</t>
 
         <t>It is likely that the client will start transmitting the next
         MAX_PAYLOADS_SET before the server times out on waiting for the last
@@ -1629,10 +1630,11 @@ Payload N: Corresponds to the CoAP message that conveys
 ]]></artwork>
             </figure></t>
 
-        <t>Note that as 'Continue' was used, the server continues to use the
-        same token T:0xaa as the 'Continue' is not being used as a request for
-        a new set of packets, but rather is being used to instruct the server
-        to continue its transmission (<xref target="cc-non"></xref>).</t>
+          <t>Note that as 'Continue' was used, the server continues to use the
+          same token T:0xaa as the 'Continue' is not being used as a request
+          for a new set of packets, but rather is being used to instruct the
+          server to continue its transmission (<xref
+          target="cc-non"></xref>).</t>
         </section>
 
         <section title="Handling Recovery">
