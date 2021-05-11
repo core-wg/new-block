@@ -526,7 +526,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    MUST be rejected with 4.02 (Bad Option).  Q-Block and Block Options
    can be mixed across Inner and Outer options as these are handled
    independently of each other.  For clarity, if OSCORE is not being
-   used, there MUST NOT be a mix of Q-Block and Block options in the
+   used, there MUST NOT be a mix of Q-Block and Block Options in the
    same packet.
 
 4.2.  Structure of Q-Block1 and Q-Block2 Options
