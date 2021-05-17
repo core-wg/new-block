@@ -1089,7 +1089,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    NON_RECEIVE_TIMEOUT, NON_MAX_RETRANSMIT, NON_PROBING_WAIT, and
    NON_PARTIAL_TIMEOUT primarily for use with NON (Table 3).
 
-   MAX_PAYLOADS should be configured with a default value of 10.  Both
+   MAX_PAYLOADS should be configurable with a default value of 10.  Both
    CoAP endpoints MUST have the same value (otherwise there will be
    transmission delays in one direction) and the value MAY be negotiated
    between the endpoints to a common value by using a higher level
