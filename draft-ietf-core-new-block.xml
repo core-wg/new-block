@@ -94,7 +94,7 @@
       <t>These options are similar to, but distinct from, the CoAP Block1 and
       Block2 Options defined in RFC 7959. Q-Block1 and Q-Block2 Options are
       not intended to replace Block1 and Block2 Options, but rather have the
-      goal of supporting Non-Confirmable messages for large amounts of data
+      goal of supporting Non-confirmable messages for large amounts of data
       with fewer packet interchanges. Also, the Q-Block1 and Q-Block2 Options
       support faster recovery should any of the blocks get lost in
       transmission.</t>
@@ -311,7 +311,7 @@
         <t>The mechanism specified in this document
         provides roughly similar features to the Block1/Block2 Options. It
         provides additional properties that are tailored towards the intended
-        use case of Non-Confirmable transmission. Concretely, this mechanism
+        use case of Non-confirmable transmission. Concretely, this mechanism
         primarily targets applications such as DDoS Open Threat Signaling
         (DOTS) that cannot use CON requests/responses because of potential
         packet loss
