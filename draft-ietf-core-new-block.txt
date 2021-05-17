@@ -9,7 +9,7 @@ Expires: November 18, 2021                                  May 17, 2021
 
 
   Constrained Application Protocol (CoAP) Block-Wise Transfer Options
-                     supporting Robust Transmission
+                     Supporting Robust Transmission
                     draft-ietf-core-new-block-latest
 
 Abstract
