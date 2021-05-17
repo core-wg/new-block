@@ -575,7 +575,8 @@
             so that the client can match them up.</t>
 
             <t>The client should then release all of the tokens used for this
-            body apart from the one used for tracking observing a resource.</t>
+            body apart from the one used for tracking an observed resource.
+            </t>
           </list></t>
 
         <t>2.31 (Continue)<list style="empty">
@@ -1068,11 +1069,11 @@ Table 3: Congestion Control Parameters]]></artwork>
         MAX_PAYLOADS_SET of a single body, a delay is introduced of
         NON_TIMEOUT before sending the next MAX_PAYLOADS_SET to manage
         potential congestion issues.<list style="empty">
-            <t>Note: Assuming 1500 byte packets, the MAX_PAYLOADS_SET having 10
-            payloads, this is 1500 * 10 * 8 = 120Kbits.  With a maximum delay of
-            2 seconds between MAX_PAYLOADS_SET, this indicates an average
-            minimum speed requirement of 60Kbps for a single body should there
-            be no responses. This is transmission rate is further reduced by
+            <t>Note: Assuming 1500-byte packets and the MAX_PAYLOADS_SET having
+            10 payloads, this corresponds to 1500 * 10 * 8 = 120 Kbits.  With a
+            maximum delay of 2 seconds between MAX_PAYLOADS_SET, this indicates
+            an average speed requirement of 60 Kbps for a single body should
+            there be no responses. This transmission rate is further reduced by
             being subject to PROBING_RATE.</t>
           </list></t>
 
@@ -1748,7 +1749,7 @@ Payload N: Corresponds to the CoAP message that conveys
       NoSec security mode if either the Q-Block1 or Q-Block2 Options is
       used.</t>
 
-      <t>If OSCORE is not in use, it is also NOT RECOMMENDED to use the
+      <t>If OSCORE is not used, it is also NOT RECOMMENDED to use the
       NoSec security mode if either the Q-Block1 or Q-Block2 Options is
       used.</t>
 
@@ -1877,6 +1878,8 @@ o  Reference: [RFCXXXX]]]></artwork>
 
       <?rfc include='reference.RFC.8323'?>
 
+      <?rfc include='reference.RFC.8610'?>
+
       <?rfc include='reference.RFC.8613'?>
 
       <?rfc include='reference.RFC.8742'?>
@@ -1896,8 +1899,6 @@ o  Reference: [RFCXXXX]]]></artwork>
       <?rfc include='reference.RFC.6928'?>
 
       <?rfc include='reference.RFC.8782'?>
-
-      <?rfc include='reference.RFC.8610'?>
 
       <?rfc include='reference.RFC.7967'?>
 
