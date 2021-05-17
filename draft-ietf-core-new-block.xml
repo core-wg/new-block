@@ -14,7 +14,7 @@
      ipr="trust200902">
   <front>
     <title abbrev="Quick Block-Wise Transfer Options">Constrained Application
-    Protocol (CoAP) Block-Wise Transfer Options for Faster
+    Protocol (CoAP) Block-Wise Transfer Options Supporting Robust
     Transmission</title>
 
     <author fullname="Mohamed Boucadair" initials="M." surname="Boucadair">
@@ -94,7 +94,7 @@
       <t>These options are similar to, but distinct from, the CoAP Block1 and
       Block2 Options defined in RFC 7959. Q-Block1 and Q-Block2 Options are
       not intended to replace Block1 and Block2 Options, but rather have the
-      goal of enabling faster transmission rates for large amounts of data
+      goal of supporting Non-Confirmable messages for large amounts of data
       with fewer packet interchanges. Also, the Q-Block1 and Q-Block2 Options
       support faster recovery should any of the blocks get lost in
       transmission.</t>
@@ -130,9 +130,10 @@
       block transmission rate, is controlled by Round Trip Times (RTTs).</t>
 
       <t>There is a requirement for blocks of data larger than a single IP
-      datagram to be transmitted at higher rates under network conditions
-      where there may be asymmetrical transient packet loss (e.g., responses
-      may get dropped). An example is when a network is subject to a
+      datagram to be transmitted under network conditions
+      where there may be asymmetrical transient packet loss (e.g.,
+      acknowledgment responses may get dropped). An example is when a network
+      is subject to a
       Distributed Denial of Service (DDoS) attack and there is a need for DDoS
       mitigation agents relying upon CoAP to communicate with each other
       (e.g., <xref target="RFC8782"></xref><xref
@@ -193,8 +194,8 @@
       <t>MAX_PAYLOADS_SET is the set of blocks identified by block numbers
       that, when divided by MAX_PAYLOADS, they have the same numeric result.
       For example, if MAX_PAYLOADS is set to '10', a MAX_PAYLOADS_SET could be
-      blocks #0 to #9, #10 to #19, etc. Depending on the data size, the
-      MAX_PAYLOADS_SET may not comprise all the MAX_PAYLOADS blocks.</t>
+      blocks #0 to #9, #10 to #19, etc. Depending on the overall data size, the
+      final MAX_PAYLOADS_SET may not comprise all the MAX_PAYLOADS blocks.</t>
     </section>
 
     <section anchor="alt" title="Alternative CoAP Block-Wise Transfer Options">
@@ -202,7 +203,7 @@
       These options are designed to work in particular with NON requests and
       responses.</t>
 
-      <t>Using NON messages, the faster transmissions occur as all the blocks
+      <t>Using NON messages, faster transmissions can occur as all the blocks
       can be transmitted serially (akin to fragmented IP packets) without
       having to wait for a response or next request from the remote CoAP peer.
       Recovery of missing blocks is faster in that multiple missing blocks can
@@ -301,17 +302,25 @@
 
       <section anchor="scope" title="Applicability Scope">
         <t>The block-wise transfer specified in <xref target="RFC7959"></xref>
-        covers the general case, but falls short in situations where packet
-        loss is highly asymmetrical. The mechanism specified in this document
+        covers the general case using Confirmable messages, but falls short in
+        situations where packet
+        loss is highly asymmetrical or there is no need for an
+        acknowledgement. In other words, there is a need for Non-confirmable
+        support.</t>
+
+        <t>The mechanism specified in this document
         provides roughly similar features to the Block1/Block2 Options. It
         provides additional properties that are tailored towards the intended
         use case of Non-Confirmable transmission. Concretely, this mechanism
         primarily targets applications such as DDoS Open Threat Signaling
-        (DOTS) that cannot use CON responses to handle potential packet loss
+        (DOTS) that cannot use CON requests/responses because of potential
+        packet loss
         and that support application-specific mechanisms to assess whether the
         remote peer is not overloaded and thus is able to process the messages
         sent by a CoAP endpoint (e.g., DOTS heartbeats in Section 4.7 of <xref
-        target="RFC8782"></xref>).</t>
+        target="RFC8782"></xref>). Other use cases are when an application
+        sends data but has no need for an acknowledgement of
+        receipt and, any data transmission loss is not critical.</t>
 
         <t>The mechanism includes guards to prevent a CoAP agent from
         overloading the network by adopting an aggressive sending rate. These
@@ -319,9 +328,10 @@
         control as specified in Section 4.7 of <xref target="RFC7252"></xref>.
         See <xref target="cc"></xref> for more details.</t>
 
-        <t>This mechanism is not intended for general CoAP usage, and any use
-        outside the intended use case should be carefully weighed against the
-        loss of interoperability with generic CoAP applications. It is hoped
+        <t>Any usage outside the primary use case of Non-confirmable with block
+        transfers should be carefully weighed against the potential loss of
+        interoperability with generic CoAP applications (See the disadvantages
+        listed in <xref target="alt"></xref>). It is hoped
         that the experience gained with this mechanism can feed future
         extensions of the block-wise mechanism that will both be generally
         applicable and serve this particular use case.</t>
@@ -599,7 +609,8 @@
             for this optimization are discussed in <xref
             target="cc-non"></xref>.</t>
 
-            <t>This Response Code SHOULD NOT be generated for CON.</t>
+            <t>This Response Code SHOULD NOT be generated for CON as this
+            may cause duplicated payloads to unnecessarily be sent.</t>
           </list></t>
 
         <t>4.00 (Bad Request)<list style="empty">
