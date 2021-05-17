@@ -362,7 +362,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    The mechanism specified in this document provides roughly similar
    features to the Block1/Block2 Options.  It provides additional
    properties that are tailored towards the intended use case of Non-
-   Confirmable transmission.  Concretely, this mechanism primarily
+   confirmable transmission.  Concretely, this mechanism primarily
    targets applications such as DDoS Open Threat Signaling (DOTS) that
    cannot use CON requests/responses because of potential packet loss
    and that support application-specific mechanisms to assess whether
@@ -2610,8 +2610,8 @@ Acknowledgements
 
    Thanks to Pete Resnick for the Gen-ART review, Colin Perkins for the
    Tsvart review, and Emmanuel Baccelli for the Iotdir review.  Thanks
-   to Martin Duke, Eric Vyncke, Benjamin Kaduk, Roman Danyliw, and John
-   Scudder for the IESG review.
+   to Martin Duke, Eric Vyncke, Benjamin Kaduk, Roman Danyliw, John
+   Scudder, and Lars Eggert for the IESG review.
 
    Some text from [RFC7959] is reused for readers convenience.
 
