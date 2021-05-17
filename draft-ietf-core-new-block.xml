@@ -109,7 +109,7 @@
       for reliable delivery, simple congestion control, and flow control. CoAP
       supports two message types (Section 1.2 of <xref
       target="RFC7252"></xref>): Confirmable (CON) and Non-confirmable (NON)
-      messages. Unlike NON messages, every CON message will elect an
+      messages. Unlike NON messages, every CON message will elicit an
       acknowledgement or a reset.</t>
 
       <t>The CoAP specification recommends that a CoAP message should fit
@@ -417,7 +417,7 @@
         and 4.3 of <xref target="RFC7252"></xref>). To reliably get a
         rejection message, it is therefore REQUIRED that clients use a
         Confirmable message for determining support for Q-Block1 and Q-Block2
-        Options. This CON message can be sent under base CoAP congestion
+        Options. This CON message can be sent under the base CoAP congestion
         control setup specified in Section 4.7 of <xref
         target="RFC7252"></xref> (that is, NSTART does not need to be
         increased (<xref target="cc-con"></xref>)).</t>
