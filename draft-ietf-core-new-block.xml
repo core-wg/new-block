@@ -570,12 +570,13 @@
             request.</t>
 
             <t>If the FETCH request includes the Observe Option, then the
-            server MUST use the same token as used for the initial response
-            for returning any Observe triggered responses so that the client
-            can match them up.</t>
+            server MUST use the same token as used for the 2.05
+            (Content) response for returning any Observe triggered responses
+            so that the client can match them up.</t>
 
             <t>The client should then release all of the tokens used for this
-            body unless a resource is being observed.</t>
+            body apart from the one used for tracking an observed resource.
+            </t>
           </list></t>
 
         <t>2.31 (Continue)<list style="empty">
@@ -583,8 +584,12 @@
             blocks up to and including the Q-Block1 Option block NUM (all
             having the M bit set) have been successfully received. The token
             to use MUST be one of the tokens that were received in a request
-            for this block-wise exchange. However, it is desirable to provide
-            the one used in the last received request.</t>
+            for this latest MAX_PAYLOADS_SET block-wise exchange. However, it
+            is desirable to provide the one used in the last received
+            request.</t>
+
+            <t>The client should then release all of the tokens used for this
+            MAX_PAYLOADS_SET.</t>
 
             <t>A response using this Response Code SHOULD NOT be generated for
             every received Q-Block1 Option request (<xref
@@ -606,7 +611,7 @@
         <t>4.02 (Bad Option)<list style="empty">
             <t>This Response Code MUST be returned for a Confirmable request
             if the server does not support the Q-Block Options. Note that a
-            reset message must be sent in case of Non-confirmable request.</t>
+            reset message may be sent in case of Non-confirmable request.</t>
           </list></t>
 
         <t>4.08 (Request Entity Incomplete)<list style="empty">
@@ -745,14 +750,6 @@
         constraint is meant to force the client to check for duplicates and
         remove them. This also helps with troubleshooting.</t>
 
-        <t>For Confirmable responses, the client continues to acknowledge each
-        packet. Typically, the server acknowledges the initial request using
-        an ACK with the payload, and then sends the subsequent payloads as CON
-        responses. The server will detect failure to send a packet, but the
-        client can issue, after a MAX_TRANSMIT_SPAN delay, a separate GET,
-        POST, PUT, FETCH, PATCH, or iPATCH for any missing blocks as
-        needed.</t>
-
         <t>If the client receives a duplicate block with the same ETag, it
         MUST silently ignore the payload.</t>
 
@@ -795,6 +792,15 @@
         block size of 16 bytes (SZX = 0) to send back all the response options
         as appropriate, a 4.13 (Request Entity Too Large) is returned without
         the Size1 Option.</t>
+
+        <t>For Confirmable traffic, the server typically acknowledges the
+        initial request using an ACK with a piggybacked payload, and then sends
+        the subsequent payloads of the MAX_PAYLOADS_SET as CON responses. These
+        CON responses are individually ACKed by the client. The server will
+        detect failure to send a packet and SHOULD terminate the body transfer,
+        but the client can issue, after a MAX_TRANSMIT_SPAN delay, a separate
+        GET, POST, PUT, FETCH, PATCH, or iPATCH for any missing blocks as
+        needed.</t>
       </section>
 
       <section title="Using Observe Option">
@@ -855,8 +861,9 @@
       were dropped during transmission, or the client has sent them
       sufficiently long ago that the server has already discarded them.</t>
 
-      <t>The data payload of the 4.08 (Request Entity Incomplete) response is
-      encoded as a CBOR Sequence <xref target="RFC8742"></xref>. It comprises
+      <t>The new data payload of the 4.08 (Request Entity Incomplete) response
+      with Content-Type set to "application/missing-blocks+cbor-seq"
+      is encoded as a CBOR Sequence <xref target="RFC8742"></xref>. It comprises
       one or more missing block numbers encoded as CBOR unsigned integers
       <xref target="RFC8949"></xref>. The missing block numbers MUST be unique
       in each 4.08 (Request Entity Incomplete) response when created by the
@@ -875,7 +882,7 @@
 
       <figure align="center" anchor="cddl"
               title="Structure of the Missing Blocks Payload">
-        <artwork align="center"><![CDATA[; A notional array, the elements of which are to be used
+        <artwork align="center"><![CDATA[; This defines an array, the elements of which are to be used
 ; in a CBOR Sequence:
 payload = [+ missing-block-number]
 ; A unique block number not received:
@@ -883,7 +890,7 @@ missing-block-number = uint
 ]]></artwork>
       </figure>
 
-      <t></t>
+      <t>This CDDL syntax MUST be followed.</t>
 
       <t>It is desirable that the token to use for the response is the token
       that was used in the last block number received so far with the same
@@ -935,7 +942,9 @@ missing-block-number = uint
           request number (incrementing every request, including every
           re-transmit). This allows the client to be alleviated from keeping
           all the per-request-state, e.g., in Section 3 of <xref
-          target="RFC8974"></xref>.</t>
+          target="RFC8974"></xref>. However, if using NoSec, Section 5.2 of
+          <xref target="RFC8974"></xref> needs to be considered for security
+          implications.</t>
         </list></t>
     </section>
 
@@ -970,8 +979,8 @@ missing-block-number = uint
         NON_RECEIVE_TIMEOUT, NON_MAX_RETRANSMIT, NON_PROBING_WAIT, and
         NON_PARTIAL_TIMEOUT primarily for use with NON (Table 3).</t>
 
-        <t>MAX_PAYLOADS should be configurable with a default value of 10.
-        Both CoAP endpoints SHOULD have the same value (otherwise there will
+        <t>MAX_PAYLOADS should be configured with a default value of 10.
+        Both CoAP endpoints MUST have the same value (otherwise there will
         be transmission delays in one direction) and the value MAY be
         negotiated between the endpoints to a common value by using a higher
         level protocol (out of scope of this document). This is the maximum
@@ -1059,25 +1068,14 @@ Table 3: Congestion Control Parameters]]></artwork>
         congestion, it is RECOMMENDED that after transmission of every
         MAX_PAYLOADS_SET of a single body, a delay is introduced of
         NON_TIMEOUT before sending the next MAX_PAYLOADS_SET to manage
-        potential congestion issues.</t>
-
-        <t>If the CoAP peer reports that at least one payload has not arrived
-        for each body for at least a 24-hour period and it is known that there
-        are no other network issues over that period (e.g., DDoS attacks),
-        then the value of MAX_PAYLOADS can be reduced by 1 at a time (to a
-        minimum of 1) and the situation re-evaluated for another 24-hour
-        period until there is no report of missing payloads under normal
-        operating conditions. Following a period of 24 hours where no packet
-        recovery was required, the value of MAX_PAYLOADS can be increased by 1
-        (but without exceeding the default value) for a further 24-hour
-        evaluation. The newly derived value for MAX_PAYLOADS should be used
-        for both ends of this particular CoAP peer link. Note that the CoAP
-        peer will not know about the MAX_PAYLOADS change until it is
-        reconfigured. As a consequence of the two peers having different
-        MAX_PAYLOADS values, a peer may continue indicating that there are
-        some missing payloads as all of its MAX_PAYLOADS_SET may not have
-        arrived. How the two peer values for MAX_PAYLOADS are synchronized is
-        out of the scope.</t>
+        potential congestion issues.<list style="empty">
+            <t>Note: Assuming 1500-byte packets and the MAX_PAYLOADS_SET having
+            10 payloads, this corresponds to 1500 * 10 * 8 = 120 Kbits.  With a
+            maximum delay of 2 seconds between MAX_PAYLOADS_SET, this indicates
+            an average speed requirement of 60 Kbps for a single body should
+            there be no responses. This transmission rate is further reduced by
+            being subject to PROBING_RATE.</t>
+          </list></t>
 
         <t>The sending of a set of missing blocks of a body is restricted to
         those in a MAX_PAYLOADS_SET at a time. In other words, a NON_TIMEOUT
@@ -1102,8 +1100,8 @@ Table 3: Congestion Control Parameters]]></artwork>
         but no more payloads were received for NON_RECEIVE_TIMEOUT
         (exponentially scaled), the server SHOULD send a 4.08 (Request Entity
         Incomplete) response detailing the missing payloads after the block
-        number that was indicated in the sent 2.31 (Continue). If the repeat
-        request count for the 4.08 (Request Entity Incomplete) exceeds
+        number that was indicated in the sent 2.31 (Continue). If the repeated
+        response count of the 4.08 (Request Entity Incomplete) exceeds
         NON_MAX_RETRANSMIT, the server SHOULD discard the partial body and
         stop requesting the missing payloads.</t>
 
@@ -1631,7 +1629,7 @@ Payload N: Corresponds to the CoAP message that conveys
             </figure></t>
 
           <t>Note that as 'Continue' was used, the server continues to use the
-          same token T:0xaa as the 'Continue' is not being used as a request
+          same token (0xaa) since the 'Continue' is not being used as a request
           for a new set of packets, but rather is being used to instruct the
           server to continue its transmission (<xref
           target="cc-non"></xref>).</t>
@@ -1750,6 +1748,14 @@ Payload N: Corresponds to the CoAP message that conveys
       be spoofed or manipulated. Therefore, it is NOT RECOMMENDED to use the
       NoSec security mode if either the Q-Block1 or Q-Block2 Options is
       used.</t>
+
+      <t>If OSCORE is not used, it is also NOT RECOMMENDED to use the
+      NoSec security mode if either the Q-Block1 or Q-Block2 Options is
+      used.</t>
+
+      <t>If NoSec is being used, Section D.5 of <xref target="RFC8613"></xref>
+      discusses the security analysis and considerations for unprotected message
+      fields even if OSCORE is not being used.</t>
 
       <t>Security considerations related to the use of Request-Tag are
       discussed in Section 5 of <xref
@@ -1872,6 +1878,8 @@ o  Reference: [RFCXXXX]]]></artwork>
 
       <?rfc include='reference.RFC.8323'?>
 
+      <?rfc include='reference.RFC.8610'?>
+
       <?rfc include='reference.RFC.8613'?>
 
       <?rfc include='reference.RFC.8742'?>
@@ -1891,8 +1899,6 @@ o  Reference: [RFCXXXX]]]></artwork>
       <?rfc include='reference.RFC.6928'?>
 
       <?rfc include='reference.RFC.8782'?>
-
-      <?rfc include='reference.RFC.8610'?>
 
       <?rfc include='reference.RFC.7967'?>
 
