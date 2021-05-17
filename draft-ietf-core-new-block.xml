@@ -14,7 +14,7 @@
      ipr="trust200902">
   <front>
     <title abbrev="Quick Block-Wise Transfer Options">Constrained Application
-    Protocol (CoAP) Block-Wise Transfer Options supporting Robust
+    Protocol (CoAP) Block-Wise Transfer Options Supporting Robust
     Transmission</title>
 
     <author fullname="Mohamed Boucadair" initials="M." surname="Boucadair">
