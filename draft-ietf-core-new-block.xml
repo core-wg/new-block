@@ -599,12 +599,11 @@
             <t>The client should then release all of the tokens used for this
             MAX_PAYLOADS_SET.</t>
 
-            <t>A response using this Response Code SHOULD NOT be generated for
-            every received Q-Block1 Option request (<xref
-            target="cc-non"></xref>). It SHOULD only be generated when all the
-            payload requests are Non-confirmable and a MAX_PAYLOADS_SET has
-            been received by the server. More details about the motivations
-            for this optimization are discussed in <xref
+            <t>A response using this Response Code MUST NOT be generated for
+            every received Q-Block1 Option request. It SHOULD only be
+            generated when all the payload requests are Non-confirmable and a
+            MAX_PAYLOADS_SET has been received by the server. More details
+            about the motivations for this optimization are discussed in <xref
             target="cc-non"></xref>.</t>
 
             <t>This Response Code SHOULD NOT be generated for CON as this may

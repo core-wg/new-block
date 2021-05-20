@@ -684,12 +684,12 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
       The client should then release all of the tokens used for this
       MAX_PAYLOADS_SET.
 
-      A response using this Response Code SHOULD NOT be generated for
-      every received Q-Block1 Option request (Section 7.2).  It SHOULD
-      only be generated when all the payload requests are Non-
-      confirmable and a MAX_PAYLOADS_SET has been received by the
-      server.  More details about the motivations for this optimization
-      are discussed in Section 7.2.
+      A response using this Response Code MUST NOT be generated for
+      every received Q-Block1 Option request.  It SHOULD only be
+      generated when all the payload requests are Non-confirmable and a
+      MAX_PAYLOADS_SET has been received by the server.  More details
+      about the motivations for this optimization are discussed in
+      Section 7.2.
 
       This Response Code SHOULD NOT be generated for CON as this may
       cause duplicated payloads to unnecessarily be sent.
