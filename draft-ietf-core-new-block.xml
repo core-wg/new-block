@@ -190,8 +190,8 @@
       transmitted at any one time.</t>
 
       <t>MAX_PAYLOADS_SET is the set of blocks identified by block numbers
-      that, when divided by MAX_PAYLOADS, they have the same numeric result.
-      For example, if MAX_PAYLOADS is set to '10', a MAX_PAYLOADS_SET could be
+      that, when divided by MAX_PAYLOADS, have the same numeric result. For
+      example, if MAX_PAYLOADS is set to '10', a MAX_PAYLOADS_SET could be
       blocks #0 to #9, #10 to #19, etc. Depending on the overall data size,
       the final MAX_PAYLOADS_SET may not comprise all the MAX_PAYLOADS
       blocks.</t>
@@ -381,8 +381,8 @@
         PUT, FETCH, PATCH, and iPATCH requests and their responses.</t>
 
         <t>The Q-Block2 Option is useful, e.g., with GET, POST, PUT, FETCH,
-        PATCH, and iPATCH requests and their payload-bearing responses (2.01,
-        2.02, 2.04, and 2.05) (Section 5.5 of <xref
+        PATCH, and iPATCH requests and their payload-bearing responses
+        (response codes 2.01, 2.02, 2.04, and 2.05) (Section 5.5 of <xref
         target="RFC7252"></xref>).</t>
 
         <t>A CoAP endpoint (or proxy) MUST support either both or neither of
@@ -431,7 +431,8 @@
 
         <t>The Q-Block1 and Q-Block2 Options are unsafe to forward. That is, a
         CoAP proxy that does not understand the Q-Block1 (or Q-Block2) Option
-        MUST reject the request or response that uses either option.</t>
+        must reject the request or response that uses either option (See
+        Section 5.7.1 of <xref target="RFC7252"></xref>).</t>
 
         <t>The Q-Block2 Option is repeatable when requesting retransmission of
         missing blocks, but not otherwise. Except that case, any request
