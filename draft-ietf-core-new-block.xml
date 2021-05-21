@@ -1029,19 +1029,25 @@ missing-block-number = uint
         target="RFC7252"></xref>).</t>
 
         <t>NON_PROBING_WAIT is used to limit the potential wait needed when
-        using PROBING_RATE. By default, NON_PROBING_WAIT has the same value as
-        EXCHANGE_LIFETIME (Section 4.8.2 of <xref
-        target="RFC7252"></xref>).</t>
+        using PROBING_RATE. By default, NON_PROBING_WAIT is computed in the
+        same way as EXCHANGE_LIFETIME (Section 4.8.2 of <xref
+        target="RFC7252"></xref>) but with ACK_TIMEOUT and MAX_RETRANSMIT
+        substituted with NON_TIMEOUT and NON_MAX_RETRANSMIT,
+        respectively:<list style="empty">
+            <t>NON_PROBING_WAIT = NON_TIMEOUT * ((2 ** NON_MAX_RETRANSMIT) -
+            1) * ACK_RANDOM_FACTOR + (2 * MAX_LATENCY) + NON_TIMEOUT</t>
+          </list></t>
 
         <t>NON_PARTIAL_TIMEOUT is used for expiring partially received bodies.
-        By default, NON_PARTIAL_TIMEOUT has the same value as
-        EXCHANGE_LIFETIME (Section 4.8.2 of <xref
-        target="RFC7252"></xref>).</t>
+        By default, NON_PARTIAL_TIMEOUT is computed in the same way as
+        EXCHANGE_LIFETIME (Section 4.8.2 of <xref target="RFC7252"></xref>).
+        This default value is calculated in the same way as
+        NON_PROBING_WAIT.</t>
 
         <t><figure align="center">
             <artwork align="center"><![CDATA[+---------------------+---------------+
 | Parameter Name      | Default Value |
-+=====================+===============|
++=====================+===============+
 | MAX_PAYLOADS        |            10 |
 | NON_MAX_RETRANSMIT  |             4 |
 | NON_TIMEOUT         |           2 s |
