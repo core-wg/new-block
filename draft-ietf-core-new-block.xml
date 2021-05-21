@@ -147,8 +147,9 @@
       target="alt"></xref>). In other words, this document provides a missing
       piece of <xref target="RFC7959"></xref>, namely the support of
       block-wise transfer using Non-confirmable where an entire body of data
-      can be transmitted without the requirement for an acknowledgement (but
-      recovery is available should it be needed).</t>
+      can be transmitted without the requirement that intermediate
+      acknowledgments be received from the peer (but recovery is available
+      should it be needed).</t>
 
       <t>Similar to <xref target="RFC7959"></xref>, this specification does
       not remove any of the constraints posed by the base CoAP specification
@@ -193,8 +194,8 @@
       that, when divided by MAX_PAYLOADS, have the same numeric result. For
       example, if MAX_PAYLOADS is set to '10', a MAX_PAYLOADS_SET could be
       blocks #0 to #9, #10 to #19, etc. Depending on the overall data size,
-      the final MAX_PAYLOADS_SET may not comprise all the MAX_PAYLOADS
-      blocks.</t>
+      there could be fewer than MAX_PAYLOADS blocks in the final
+      MAX_PAYLOADS_SET.</t>
     </section>
 
     <section anchor="alt" title="Alternative CoAP Block-Wise Transfer Options">
@@ -243,7 +244,8 @@
           transmission.</t>
 
           <t>They support sending an entire body using NON messages without
-          requiring an intermediate response from the peer.</t>
+          requiring that an intermediate response be received from the
+          peer.</t>
         </list></t>
 
       <t>There are the following disadvantages over using CoAP Block1 and
@@ -1065,7 +1067,9 @@ Table 3: Congestion Control Parameters]]></artwork>
             Note that MAX_PAYLOADS, NON_MAX_RETRANSMIT, NON_TIMEOUT,
             NON_PROBING_WAIT, and NON_PARTIAL_TIMEOUT can be negotiated
             between DOTS peers, e.g., as per <xref
-            target="I-D.bosh-dots-quick-blocks"></xref>.</t>
+            target="I-D.bosh-dots-quick-blocks"></xref>. When non-default
+            values of NON_PROBING_WAIT and NON_PARTIAL_TIMEOUT are configured,
+            these values are used without applying any jitter.</t>
           </list>Each NON 4.08 (Request Entity Incomplete) response is subject
         to PROBING_RATE.</t>
 
@@ -1073,10 +1077,13 @@ Table 3: Congestion Control Parameters]]></artwork>
         PROBING_RATE.</t>
 
         <t>As the sending of many payloads of a single body may itself cause
-        congestion, it is RECOMMENDED that after transmission of every
-        MAX_PAYLOADS_SET of a single body, a delay is introduced of
-        NON_TIMEOUT before sending the next MAX_PAYLOADS_SET to manage
-        potential congestion issues.<list style="empty">
+        congestion, after transmission of every MAX_PAYLOADS_SET of a single
+        body, a delay MUST be introduced of NON_TIMEOUT before sending the
+        next MAX_PAYLOADS_SET unless a 'Continue' is received from the peer
+        for the current MAX_PAYLOADS_SET, in which case the next
+        MAX_PAYLOADS_SET MAY start transmission immediately. </t>
+
+        <t><list style="empty">
             <t>Note: Assuming 1500-byte packets and the MAX_PAYLOADS_SET
             having 10 payloads, this corresponds to 1500 * 10 * 8 = 120 Kbits.
             With a maximum delay of 2 seconds between MAX_PAYLOADS_SET, this
