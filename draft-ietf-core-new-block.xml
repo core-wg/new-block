@@ -1073,9 +1073,9 @@ Table 3: Congestion Control Parameters]]></artwork>
             Note that MAX_PAYLOADS, NON_MAX_RETRANSMIT, NON_TIMEOUT,
             NON_PROBING_WAIT, and NON_PARTIAL_TIMEOUT can be negotiated
             between DOTS peers, e.g., as per <xref
-            target="I-D.bosh-dots-quick-blocks"></xref>. When non-default
-            values of NON_PROBING_WAIT and NON_PARTIAL_TIMEOUT are configured,
-            these values are used without applying any jitter.</t>
+            target="I-D.bosh-dots-quick-blocks"></xref>. When explicit values
+            are configured for NON_PROBING_WAIT and NON_PARTIAL_TIMEOUT, these
+            values are used without applying any jitter. </t>
           </list>Each NON 4.08 (Request Entity Incomplete) response is subject
         to PROBING_RATE.</t>
 
