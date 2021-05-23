@@ -986,8 +986,15 @@ missing-block-number = uint
 
       <section anchor="cc-non" title="Non-confirmable (NON)">
         <t>This document introduces new parameters MAX_PAYLOADS, NON_TIMEOUT,
-        NON_RECEIVE_TIMEOUT, NON_MAX_RETRANSMIT, NON_PROBING_WAIT, and
-        NON_PARTIAL_TIMEOUT primarily for use with NON (Table 3).</t>
+        NON_TIMEOUT_RANDOM, NON_RECEIVE_TIMEOUT, NON_MAX_RETRANSMIT,
+        NON_PROBING_WAIT, and NON_PARTIAL_TIMEOUT primarily for use with NON
+        (Table 3).<list style="empty">
+            <t>Note: Randomness may naturally be provided based on the traffic
+            profile, how probing-rate is computed (as this is an average) and
+            when the peer responds. Randomness is explicitly added for some of
+            the congestion control parameters to handle situations where every
+            thing is in sync when retrying.</t>
+          </list></t>
 
         <t>MAX_PAYLOADS should be configurable with a default value of 10.
         Both CoAP endpoints MUST have the same value (otherwise there will be
@@ -1002,9 +1009,17 @@ missing-block-number = uint
             target="scope"></xref>.</t>
           </list></t>
 
-        <t>NON_TIMEOUT is the period of delay between sending MAX_PAYLOADS_SET
-        for the same body. By default, NON_TIMEOUT has the same value as
-        ACK_TIMEOUT (Section 4.8 of <xref target="RFC7252"></xref>).</t>
+        <t>NON_TIMEOUT is used to compute the delay between sending
+        MAX_PAYLOADS_SET for the same body. By default, NON_TIMEOUT has the
+        same value as ACK_TIMEOUT (Section 4.8 of <xref
+        target="RFC7252"></xref>).</t>
+
+        <t>NON_TIMEOUT_RANDOM is the initial actual delay between sending the
+        first two MAX_PAYLOADS_SETs of the same body. The same delay is then
+        used between the subsequent MAX_PAYLOADS_SETs. It is a random duration
+        (not an integral number of seconds) between NON_TIMEOUT and (NON_TIMEOUT
+        * ACK_RANDOM_FACTOR). ACK_RANDOM_FACTOR is set to 1.5 as discussed in
+        Section 4.8 of <xref target="RFC7252"></xref>.</t>
 
         <t>NON_RECEIVE_TIMEOUT is the initial time to wait for a missing
         payload before requesting retransmission for the first time. Every
@@ -1015,8 +1030,8 @@ missing-block-number = uint
           </list></t>
 
         <t>NON_RECEIVE_TIMEOUT has a default value of twice NON_TIMEOUT.
-        NON_RECEIVE_TIMEOUT MUST always be greater than NON_TIMEOUT by at
-        least one second so that the sender of the payloads has the
+        NON_RECEIVE_TIMEOUT MUST always be greater than NON_TIMEOUT_RANDOM by
+        at least one second so that the sender of the payloads has the
         opportunity to start sending the next MAX_PAYLOADS_SET before the
         receiver times out.</t>
 
@@ -1029,32 +1044,36 @@ missing-block-number = uint
         target="RFC7252"></xref>).</t>
 
         <t>NON_PROBING_WAIT is used to limit the potential wait needed when
-        using PROBING_RATE. By default, NON_PROBING_WAIT is computed in the
-        same way as EXCHANGE_LIFETIME (Section 4.8.2 of <xref
-        target="RFC7252"></xref>) but with ACK_TIMEOUT and MAX_RETRANSMIT
-        substituted with NON_TIMEOUT and NON_MAX_RETRANSMIT,
-        respectively:<list style="empty">
+        using PROBING_RATE. By default, NON_PROBING_WAIT is computed in a
+        similar way as EXCHANGE_LIFETIME (Section 4.8.2 of <xref
+        target="RFC7252"></xref>) but with ACK_TIMEOUT, MAX_RETRANSMIT, and
+        PROCESSING_DELAY substituted with NON_TIMEOUT, NON_MAX_RETRANSMIT, and
+        NON_TIMEOUT_RANDOM, respectively:<list style="empty">
             <t>NON_PROBING_WAIT = NON_TIMEOUT * ((2 ** NON_MAX_RETRANSMIT) -
-            1) * ACK_RANDOM_FACTOR + (2 * MAX_LATENCY) + NON_TIMEOUT</t>
+            1) * ACK_RANDOM_FACTOR + (2 * MAX_LATENCY) + NON_TIMEOUT_RANDOM</t>
           </list></t>
 
         <t>NON_PARTIAL_TIMEOUT is used for expiring partially received bodies.
         By default, NON_PARTIAL_TIMEOUT is computed in the same way as
-        EXCHANGE_LIFETIME (Section 4.8.2 of <xref target="RFC7252"></xref>).
-        This default value is calculated in the same way as
-        NON_PROBING_WAIT.</t>
+        EXCHANGE_LIFETIME (Section 4.8.2 of <xref target="RFC7252"></xref>) but
+        with ACK_TIMEOUT and MAX_RETRANSMIT substituted with NON_TIMEOUT and
+        NON_MAX_RETRANSMIT, respectively:<list style="empty">
+            <t>NON_PARTIAL_TIMEOUT = NON_TIMEOUT * ((2 ** NON_MAX_RETRANSMIT) -
+            1) * ACK_RANDOM_FACTOR + (2 * MAX_LATENCY) + NON_TIMEOUT</t>
+          </list></t>
 
         <t><figure align="center">
-            <artwork align="center"><![CDATA[+---------------------+---------------+
-| Parameter Name      | Default Value |
-+=====================+===============+
-| MAX_PAYLOADS        |            10 |
-| NON_MAX_RETRANSMIT  |             4 |
-| NON_TIMEOUT         |           2 s |
-| NON_RECEIVE_TIMEOUT |           4 s |
-| NON_PROBING_WAIT    |         247 s |
-| NON_PARTIAL_TIMEOUT |         247 s |
-+---------------------+---------------+
+            <artwork align="center"><![CDATA[+---------------------+-------------------+
+| Parameter Name      |     Default Value |
++=====================+===================+
+| MAX_PAYLOADS        |                10 |
+| NON_MAX_RETRANSMIT  |                 4 |
+| NON_TIMEOUT         |               2 s |
+| NON_TIMEOUT_RANDOM  |     between 2-3 s |
+| NON_RECEIVE_TIMEOUT |               4 s |
+| NON_PROBING_WAIT    | between 247-248 s |
+| NON_PARTIAL_TIMEOUT |             247 s |
++---------------------+-------------------+
 
 Table 3: Congestion Control Parameters]]></artwork>
           </figure></t>
@@ -1084,31 +1103,32 @@ Table 3: Congestion Control Parameters]]></artwork>
 
         <t>As the sending of many payloads of a single body may itself cause
         congestion, after transmission of every MAX_PAYLOADS_SET of a single
-        body, a delay MUST be introduced of NON_TIMEOUT before sending the
-        next MAX_PAYLOADS_SET unless a 'Continue' is received from the peer
+        body, a delay MUST be introduced of NON_TIMEOUT_RANDOM before sending
+        the next MAX_PAYLOADS_SET unless a 'Continue' is received from the peer
         for the current MAX_PAYLOADS_SET, in which case the next
         MAX_PAYLOADS_SET MAY start transmission immediately. </t>
 
         <t><list style="empty">
             <t>Note: Assuming 1500-byte packets and the MAX_PAYLOADS_SET
             having 10 payloads, this corresponds to 1500 * 10 * 8 = 120 Kbits.
-            With a maximum delay of 2 seconds between MAX_PAYLOADS_SET, this
+            With a delay of 2 seconds between MAX_PAYLOADS_SET, this
             indicates an average speed requirement of 60 Kbps for a single
             body should there be no responses. This transmission rate is
             further reduced by being subject to PROBING_RATE.</t>
           </list></t>
 
         <t>The sending of a set of missing blocks of a body is restricted to
-        those in a MAX_PAYLOADS_SET at a time. In other words, a NON_TIMEOUT
-        delay is still observed between each MAX_PAYLOAD_SET.</t>
+        those in a MAX_PAYLOADS_SET at a time. In other words, a
+        NON_TIMEOUT_RANDOM delay is still observed between each
+        MAX_PAYLOAD_SET.</t>
 
         <t>For Q-Block1 Option, if the server responds with a 2.31 (Continue)
         Response Code for the latest payload sent, then the client can
         continue to send the next MAX_PAYLOADS_SET without any further delay.
         If the server responds with a 4.08 (Request Entity Incomplete)
         Response Code, then the missing payloads SHOULD be retransmitted
-        before going into another NON_TIMEOUT delay prior to sending the next
-        set of payloads.</t>
+        before going into another NON_TIMEOUT_RANDOM delay prior to sending the
+        next set of payloads.</t>
 
         <t>For the server receiving NON Q-Block1 requests, it SHOULD send back
         a 2.31 (Continue) Response Code on receipt of all of the
@@ -1134,7 +1154,7 @@ Table 3: Congestion Control Parameters]]></artwork>
         previous MAX_PAYLOADS_SET. Upon receipt of the 4.08 (Request Entity
         Incomplete) Response Code, the client SHOULD send the missing payloads
         before continuing to send the remainder of the MAX_PAYLOADS_SET and
-        then go into another NON_TIMEOUT delay prior to sending the next
+        then go into another NON_TIMEOUT_RANDOM delay prior to sending the next
         MAX_PAYLOADS_SET.</t>
 
         <t>For the client receiving NON Q-Block2 responses, it SHOULD send a
@@ -1159,7 +1179,7 @@ Table 3: Congestion Control Parameters]]></artwork>
         missing payloads from any previous MAX_PAYLOADS_SET. Upon receipt of
         such request, the server SHOULD send the missing payloads before
         continuing to send the remainder of the MAX_PAYLOADS_SET and then go
-        into another NON_TIMEOUT delay prior to sending the next
+        into another NON_TIMEOUT_RANDOM delay prior to sending the next
         MAX_PAYLOADS_SET.</t>
 
         <t>The client does not need to acknowledge the receipt of the entire
@@ -1167,7 +1187,7 @@ Table 3: Congestion Control Parameters]]></artwork>
 
         <t><list style="empty">
             <t>Note: If there is asymmetric traffic loss causing responses to
-            never get received, a delay of NON_TIMEOUT after every
+            never get received, a delay of NON_TIMEOUT_RANDOM after every
             transmission of MAX_PAYLOADS_SET will be observed. The endpoint
             receiving the body is still likely to receive the entire body.</t>
           </list></t>
@@ -1330,7 +1350,7 @@ Payload N: Corresponds to the CoAP message that conveys
          +--->X     | NON PUT /path M:0x1a T:0xea RT=11 QB1:9/1/1024
       [[Some of MAX_PAYLOADS_SET have been received]]
          |   ...    |
-      [[NON_TIMEOUT (client) delay expires]]
+      [[NON_TIMEOUT_RANDOM (client) delay expires]]
          |     [[Client starts sending next MAX_PAYLOAD_SET]]
          +--->X     | NON PUT /path M:0x1b T:0xeb RT=11 QB1:10/1/1024
          +--------->| NON PUT /path M:0x1c T:0xec RT=11 QB1:11/1/1024
@@ -1508,7 +1528,7 @@ Payload N: Corresponds to the CoAP message that conveys
          |     X<---+ NON 2.05 M:0xaa T:0xf0 O:1236 ET=23 QB2:9/1/1024
       [[Some of MAX_PAYLOADS_SET have been received]]
          |   ...    |
-      [[NON_TIMEOUT (server) delay expires]]
+      [[NON_TIMEOUT_RANDOM (server) delay expires]]
          |     [[Server sends next MAX_PAYLOAD_SET]]
          |<---------+ NON 2.05 M:0xab T:0xf0 O:1236 ET=23 QB2:10/0/1024
          |     [[On seeing a payload from the next MAX_PAYLOAD_SET, 
@@ -1551,7 +1571,7 @@ Payload N: Corresponds to the CoAP message that conveys
          |     X<---+ NON 2.05 M:0xb9 T:0xf0 O:1237 ET=24 QB2:9/1/1024
       [[Some of MAX_PAYLOADS_SET have been received]]
          |   ...    |
-      [[NON_TIMEOUT (server) delay expires]]
+      [[NON_TIMEOUT_RANDOM (server) delay expires]]
          |     [[Server sends next MAX_PAYLOAD_SET]]
          |     X<---+ NON 2.05 M:0xba T:0xf0 O:1237 ET=24 QB2:10/0/1024
          |   ...    |
