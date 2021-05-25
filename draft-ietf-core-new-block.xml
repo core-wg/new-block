@@ -990,7 +990,7 @@ missing-block-number = uint
         NON_PROBING_WAIT, and NON_PARTIAL_TIMEOUT primarily for use with NON
         (Table 3).<list style="empty">
             <t>Note: Randomness may naturally be provided based on the traffic
-            profile, how probing-rate is computed (as this is an average) and
+            profile, how probing-rate is computed (as this is an average), and
             when the peer responds. Randomness is explicitly added for some of
             the congestion control parameters to handle situations where every
             thing is in sync when retrying.</t>
