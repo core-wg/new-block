@@ -1109,7 +1109,7 @@ Internet-Draft      Quick Block-Wise Transfer Options           May 2021
    (Table 3).
 
       Note: Randomness may naturally be provided based on the traffic
-      profile, how probing-rate is computed (as this is an average) and
+      profile, how probing-rate is computed (as this is an average), and
       when the peer responds.  Randomness is explicitly added for some
       of the congestion control parameters to handle situations where
       every thing is in sync when retrying.
